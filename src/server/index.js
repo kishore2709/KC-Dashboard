@@ -6,9 +6,25 @@ const moment = require("moment");
 const io = require("socket.io")(server);
 const bodyParser = require("body-parser");
 const path = require("path");
+const fs = require("fs");
 
-app.use(express.static('dist'));
+app.use(express.static("dist"));
+app.use("/media", express.static(path.resolve("media")));
+///
 
+/*
+app.get("/*", (req, res) => {
+  const indexFile = path.resolve("/dist/index.html");
+  fs.readFile(indexFile, "utf8", (err, data) => {
+    if (err) {
+      console.error("Something went wrong:", err);
+      return res.status(500).send("Oops, better luck next time!");
+    }
+    return res.send(data);
+  });
+});
+*/
+///
 
 let timeInterval = 3000;
 var urlencodedParser = bodyParser.urlencoded({ extended: false });

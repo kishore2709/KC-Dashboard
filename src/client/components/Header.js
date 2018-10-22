@@ -1,8 +1,7 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
 import { Navbar, Nav } from 'react-bootstrap'
-import logo from '../icon/ptit70x50-01.jpg'
-import settingIcon from '../icon/baseline-settings-20px.svg'
+import {logo, settingIcon} from '../icon/Icon'
 import './App.css'
 const Header = () => (
     <div>

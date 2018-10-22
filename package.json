@@ -2,16 +2,18 @@
   "name": "simple-react-full-stack",
   "version": "1.0.0",
   "description": "Boilerplate to build a full stack web application using React, Node.js, Express and Webpack.",
-  "main": "src/babelServer/index.js",
+  "main": "src/babelViews/server/index.js",
   "scripts": {
-    "babel": "babel src/server -d src/babelServer",
+    "babel": "babel src/client src/server -d src/babelViews --env-name server",
     "pack": "webpack --config webpack.config.js",
-    "build": "npm run pack && npm run babel",
-    "start": "npm run build && node src/babelServer/index.js"
+    "build": "npm run pack",
+    "start": "npm run build && node src/server/index.js"
   },
   "author": "ExpressMikel",
   "license": "ISC",
   "dependencies": {
+    "babel-plugin-css-modules-transform": "^1.6.1",
+    "babel-plugin-transform-assets": "^1.0.2",
     "bootstrap": "^4.1.3",
     "chart.js": "^2.7.2",
     "express": "^4.16.3",
@@ -31,8 +33,8 @@
     "@babel/core": "^7.1.2",
     "@babel/preset-env": "^7.1.0",
     "@babel/preset-react": "^7.0.0",
-    "babel-loader": "^8.0.4",
     "babel-eslint": "^10.0.0",
+    "babel-loader": "^8.0.4",
     "clean-webpack-plugin": "^0.1.19",
     "concurrently": "^4.0.1",
     "css-loader": "^1.0.0",
