@@ -7,7 +7,10 @@
     "babel": "babel src/client src/server -d src/babelViews --env-name server",
     "pack": "webpack --config webpack.config.js",
     "build": "npm run pack",
-    "start": "npm run build && node src/server/index.js"
+    "server": "nodemon src/server/index.js",
+    "client": "webpack-dev-server --mode development --devtool inline-source-map --hot",
+    "start": "npm run build && node src/server/index.js",
+    "dev": "npx concurrently \"npm run server\" \"npm run client\""
   },
   "author": "ExpressMikel",
   "license": "ISC",
