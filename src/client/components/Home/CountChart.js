@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import openSocket from 'socket.io-client'
 
-const socket = openSocket('http://192.168.0.106:8000');
+const socket = openSocket('http://localhost:8000');
 
 function subscribeToServer(att_type, callback){
     socket.on(att_type, res => callback(null, res));

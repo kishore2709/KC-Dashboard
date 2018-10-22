@@ -52,7 +52,7 @@ class Setting extends Component {
                             </div>
                             </div>
                             <div className="col-md-6 mb-3">
-                                <label htmlFor="validationCustom04">Thời gian cập nhậtt</label>
+                                <label htmlFor="validationCustom04">Thời gian cập nhật</label>
                                 <input type="number" name="timeInterval"  onChange={this.handleChange} className="form-control" id="validationCustom04" placeholder="Đơn vị: Giây" required />
                                 <div className="invalid-feedback">
                                     Please provide a valid input. For ex: 5

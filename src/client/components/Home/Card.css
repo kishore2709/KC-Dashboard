@@ -22,13 +22,25 @@ p {
   color: black;
 }
 
+#container{
+  display: flex;
+  justify-content: space-around; /* Can be changed in the live sample */
+}
+
+#containerItems{
+  display: flex;
+  justify-content: space-between; /* Can be changed in the live sample */
+}
 #thumbnail {
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
 }
 
+.prettyBox {
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+}
 .fullCard {
   height: 500px;
-  width: 305px;
+  width: 330px;
   border: 1px solid #ccc;
   border-radius: 1px;
   margin: 10px 5px;
