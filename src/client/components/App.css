@@ -44,12 +44,13 @@
   }
 }
 
-h4{
+.h4Title{
     text-align: center;
     color: var(--lineTextBr-color);
     background-color: var(--main-bg-color);
     padding: 10px;
     font-size: 27px;
+    font-weight: bold;
 }
 
 .title {

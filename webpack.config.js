@@ -37,6 +37,7 @@ module.exports = {
     }
   },
   plugins: [
+    
     new CleanWebpackPlugin([outputDirectory]),
     new HtmlWebpackPlugin({
       template: './public/index.html',

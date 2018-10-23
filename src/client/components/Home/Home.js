@@ -133,7 +133,7 @@ class Test extends Component {
 
 const Home = () => (
     <div>
-        <h4>IT Operation</h4>
+        <h4 className="h4Title">IT Operation</h4>
             <div id="container">
                 <div className="prettyBox fullCard "> <Card /></div>
                 <div className="prettyBox fullCardLog "><Card_Log /></div>

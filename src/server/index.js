@@ -79,7 +79,7 @@ io.on("connection", client => {
   });
 
   client.on("sub_UserAccess", att_type => {
-    console.log("client is subscribing ..", client);
+    //console.log("client is subscribing ..", client);
     setInterval(() => {
       //console.log(countAccess);
       client.emit(att_type, {

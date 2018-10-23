@@ -4,7 +4,7 @@ import ServiceAccessChart from './ServiceAccessChart'
 import './Log.css'
 const LogManagement = () => (
     <div>
-        <h4>Quản lý log truy cập theo thời gian thực</h4>
+        <h4 className="h4Title">Quản lý log truy cập theo thời gian thực</h4>
         <br />
         <div class="container">
             <div class="row" style={{ marginLeft: "100px" }}>

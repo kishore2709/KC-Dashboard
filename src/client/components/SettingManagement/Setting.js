@@ -1,6 +1,11 @@
 import React, { Component } from 'react'
 import './setting.css'
 import '../App.css'
+import {message} from 'antd';
+
+const success = () => {
+    message.success('This is a message of success');
+  };
 class Setting extends Component {
     constructor(props){
         super(props);
@@ -11,6 +16,8 @@ class Setting extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChange = this.handleChange.bind(this);
     }
+
+    
 
     handleSubmit(event){
         fetch("http://" + "localhost:8000" + "/api/setting",{
@@ -29,6 +36,7 @@ class Setting extends Component {
             alert(err);
         });
         event.preventDefault();
+        message.info('This is a normal message');
     }
 
     handleChange(event){
@@ -40,7 +48,7 @@ class Setting extends Component {
     render() {
         return (
             <div>
-                <h4>Thiết lập</h4>
+                <h4 className="h4Title">Thiết lập</h4>
                 <div id='formSubmitSetting'>
                     <form className="needs-validation"  onSubmit={this.handleSubmit} noValidate>
                         <div className="form-row">

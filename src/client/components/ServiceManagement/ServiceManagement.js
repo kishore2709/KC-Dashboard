@@ -6,7 +6,7 @@ import FormSubmitServiceQuery from './FormSubmitServiceQuery'
 
 const ServiceManagement = () => (
     <div>
-        <h4>Dự báo dịch chuyển xu hướng truy cập dịch vụ web được giám sát</h4>
+        <h4 className="h4Title">Dự báo dịch chuyển xu hướng truy cập dịch vụ web được giám sát</h4>
         <br />
         <div id='formSubmitService'>
             <FormSubmitServiceQuery/>

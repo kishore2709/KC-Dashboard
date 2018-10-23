@@ -1,12 +1,30 @@
 import React, { Component } from 'react'
 import { Line } from 'react-chartjs-2';
 import openSocket from 'socket.io-client'
-
+import { notification } from 'antd';
 const socket = openSocket('http://localhost:8000');
+
+const openNotificationWithIcon = (type) => {
+  if (type === 'success'){
+    notification[type]({
+      message: 'Websocket đã kết nối với máy chủ',
+      description: 'Dữ liệu sẽ được gửi về liên tục',
+    });
+  }
+  if (type === 'error'){
+    notification[type]({
+      message: 'Kết nối tới máy chủ thất bại',
+      description: 'Reload lại trang web',
+    });
+  }
+};
 
 function subscribeToServer(att_type, callback) {
   socket.on(att_type, res => callback(null, res));
   socket.emit('sub_' + att_type, att_type);
+  socket.on('connect', ()=>{
+    openNotificationWithIcon('success');
+  })
 }
 
 const options = {
