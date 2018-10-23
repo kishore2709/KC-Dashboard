@@ -41,8 +41,8 @@ const Card_Service = () => (
                 <hr />
                 
                 <Items firstImg={Search_Logo} figure_1={'Search'}
-                    secondImg={Web_Logo} figure_2={'Web Services'}
-                    thirdImg={DNS_Logo} figure_3={'DNS Services'}
+                    secondImg={Web_Logo} figure_2={'Web'}
+                    thirdImg={DNS_Logo} figure_3={'DNS'}
                     showChart={0}
                 />
                 
@@ -57,9 +57,9 @@ const Card_Boardcast = () => (
             <div className="cardText">
                 <h1>Quảng bá cảnh báo</h1>
                 <hr />
-                <Items firstImg={ListAlert_Logo} figure_1={'DS Cảnh báo'}
-                    secondImg={Email_Logo} figure_2={'Gửi qua Email'}
-                    thirdImg={Sms_Logo} figure_3={'Gửi qua SMS'}
+                <Items firstImg={ListAlert_Logo} figure_1={'Danh sách'}
+                    secondImg={Email_Logo} figure_2={'Gửi Email'}
+                    thirdImg={Sms_Logo} figure_3={'Gửi SMS'}
                     showChart={0}
                 />
             </div>
