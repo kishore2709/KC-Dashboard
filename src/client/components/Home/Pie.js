@@ -6,8 +6,13 @@ import openSocket from 'socket.io-client'
 const socket = openSocket('http://localhost:8000');
 
 function subscribeToServer(att_type, callback) {
-	socket.on(att_type, res => callback(null, res));
-	socket.emit('sub_' + att_type, att_type);
+	//socket.on(att_type, res => callback(null, res));
+	//socket.emit('sub_' + att_type, att_type);
+	setInterval(()=>{
+		callback(null,
+		  Array.from({ length: 9 }, () => Math.floor(Math.random() * 40))
+		)
+	  }, 3000);
 }
 
 const makeData = function (arrDataFromServer) {

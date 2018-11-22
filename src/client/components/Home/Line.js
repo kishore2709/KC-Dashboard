@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Line } from 'react-chartjs-2';
 import openSocket from 'socket.io-client'
 import { notification } from 'antd';
+import moment from 'moment'
 const socket = openSocket('http://localhost:8000');
 
 const openNotificationWithIcon = (type) => {
@@ -20,11 +21,21 @@ const openNotificationWithIcon = (type) => {
 };
 
 function subscribeToServer(att_type, callback) {
+  /*
   socket.on(att_type, res => callback(null, res));
   socket.emit('sub_' + att_type, att_type);
-  socket.on('connect', ()=>{
+  socket.on('connect', ()(=>{
     openNotificationWithIcon('success');
   })
+  */
+  setInterval(()=>{
+    callback(null,{
+      newData : Math.floor(Math.random() * 100),
+      newLabel :  moment()
+      .format("hh:mm:ss")
+      .toString()
+    })
+  }, 1000);
 }
 
 const options = {
@@ -82,7 +93,11 @@ class LineExample extends Component {
     [0,0,0,0,0,0,0]));
   }
   componentDidMount() {
+    //notification
 
+    
+
+    //////////////
     var _this = this;
     subscribeToServer('UserAccess', (err, res) => {
       var oldDataSet = _this.state.datasets[0];

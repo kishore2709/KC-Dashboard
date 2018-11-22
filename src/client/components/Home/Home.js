@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import './Card.css'
 import Footer from './Footer'
+import { notification } from 'antd';
 import {Row, Col, Container} from 'react-bootstrap'
 import { Items, Items_Log, Items_Dectects } from './Items'
 import {
@@ -43,7 +44,7 @@ const Card_Service = () => (
                 <Items firstImg={Search_Logo} figure_1={'Search'}
                     secondImg={Web_Logo} figure_2={'Web'}
                     thirdImg={DNS_Logo} figure_3={'DNS'}
-                    showChart={0}
+                    showChart={1}
                 />
                 
             </div>
@@ -60,7 +61,7 @@ const Card_Boardcast = () => (
                 <Items firstImg={ListAlert_Logo} figure_1={'Danh sách'}
                     secondImg={Email_Logo} figure_2={'Gửi Email'}
                     thirdImg={Sms_Logo} figure_3={'Gửi SMS'}
-                    showChart={0}
+                    showChart={1}
                 />
             </div>
         </div>
@@ -130,30 +131,34 @@ class Test extends Component {
 }
 
 
-
-const Home = () => (
-    <div>
-        <h4 className="h4Title">IT Operation</h4>
-            <div id="container">
-                <div className="prettyBox fullCard "> <Card /></div>
-                <div className="prettyBox fullCardLog "><Card_Log /></div>
-                <div className="prettyBox fullCard  "><Card_Service /></div>
-                <div className="prettyBox fullCard "><Card_Boardcast /></div>
+class Home extends Component{
+    render(){
+        return (
+            <div>
+                <h4 className="h4Title">IT Operation</h4>
+                    <div id="container">
+                        <div className="prettyBox fullCard "> <Card /></div>
+                        <div className="prettyBox fullCardLog "><Card_Log /></div>
+                        <div className="prettyBox fullCard  "><Card_Service /></div>
+                        <div className="prettyBox fullCard "><Card_Boardcast /></div>
+                    </div>
+                <h4></h4>
+                <h4 className="title">Phát hiện tấn công</h4>
+        
+                <div id="container">
+                <div className="prettyBox fullCardDetection"><Card_Botnet /></div>
+                <div className="prettyBox fullCardDetection"><Card_WebServiceAtt /></div>
+                <div className="prettyBox fullCardDetection"><Card_APT /></div>
+                <div className="prettyBox fullCardDetection"><Card_AccessAtt /></div>
+                </div>
+        
+        
+                <Footer />
             </div>
-        <h4></h4>
-        <h4 className="title">Phát hiện tấn công</h4>
+        );
+    }
+}
 
-        <div id="container">
-        <div className="prettyBox fullCardDetection"><Card_Botnet /></div>
-        <div className="prettyBox fullCardDetection"><Card_WebServiceAtt /></div>
-        <div className="prettyBox fullCardDetection"><Card_APT /></div>
-        <div className="prettyBox fullCardDetection"><Card_AccessAtt /></div>
-        </div>
-
-
-        <Footer />
-    </div>
-)
 
 
 export default Home;
