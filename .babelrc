@@ -1,28 +1,10 @@
 {
   "presets": [
     "@babel/preset-env",
-    "@babel/preset-react"
+    "@babel/preset-react",
   ],
   "plugins": [
-    ["import", { "libraryName": "antd", "libraryDirectory": "lib", "style": "css"}, "ant"],
-    "@babel/plugin-proposal-class-properties"
-  ],
-  "env": {
-    "server": {
-        "plugins": [
-            [
-                "css-modules-transform", {
-                    "generateScopedName": "[hash:8]",
-                    "extensions": [".css"]
-                }
-            ],
-            [
-                "transform-assets", {
-                    "extensions": ["svg", "jpg"],
-                    "name": "[name].[ext]?[sha512:hash:base64:7]",
-                }
-            ]
-        ]
-    }
-    }
+    "@babel/plugin-proposal-class-properties",
+    ["import", { "libraryName": "antd", "libraryDirectory": "lib", "style": "css"}, "ant"]
+  ]
 }
