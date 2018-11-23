@@ -5,7 +5,7 @@ const webpack = require("webpack");
 const outputDirectory = "dist";
 
 module.exports = {
-  entry: {app:["./src/client/index.js"]},
+  entry: { app: ["./src/client/index.js"] },
   devtool: "inline-source-map",
   output: {
     path: path.join(__dirname, outputDirectory),
@@ -28,8 +28,8 @@ module.exports = {
         use: ["style-loader", "css-loader"]
       },
       {
-        test: /\.(png|woff|woff2|eot|ttf|svg|jpg)$/,
-        loader: "url-loader?limit=100000"
+        test: /\.(png|svg|jpg|gif)$/,
+        use: ["file-loader"]
       }
     ]
   },
@@ -45,6 +45,7 @@ module.exports = {
     historyApiFallback: true,
     hot: true,
     inline: true,
+    open:true,
     proxy: {
       "/api": {
         target: "http://localhost:8081/",

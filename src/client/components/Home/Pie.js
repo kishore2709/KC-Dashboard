@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import { Pie } from 'react-chartjs-2';
-import openSocket from 'socket.io-client'
 
-
-const socket = openSocket('http://localhost:8000');
+import {socketServer as socket} from "./Home"
 
 function subscribeToServer(att_type, callback) {
 	//socket.on(att_type, res => callback(null, res));

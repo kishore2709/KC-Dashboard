@@ -7,8 +7,6 @@ import { BrowserRouter, HashRouter } from "react-router-dom";
 
 import { Provider } from "react-redux";
 import { store } from "./_helpers";
-// setup fake backend
-import { configureFakeBackend } from "./_helpers";
 
 ReactDOM.render(
   

@@ -16,6 +16,24 @@ app.post("/api/users/register", jsonParser, function(req, res) {
   res.send({"status":"okkkkkkkkkk"});
   res.end();
 });
+app.post("/api/users/authenticate", jsonParser, function(req, res) {
+  //console.log(req.body);
+  let user = {
+    id:"id",
+    username:"admin",
+    lastName:"dat"
+  }
+  let responseJson = {
+    id: 'user.id',
+    username: user.username,
+    firstName: user.firstName,
+    lastName: user.lastName,
+    token: 'fake-jwt-token'
+  };
+  res.status(200);
+  res.send(responseJson);
+  res.end();
+});
 
 app.get("/api/status", (req, res)=>{
   res.send("ok");

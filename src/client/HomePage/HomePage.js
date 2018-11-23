@@ -6,7 +6,7 @@ import { userActions } from '../_actions';
 
 class HomePage extends React.Component {
     componentDidMount() {
-        this.props.dispatch(userActions.getAll());
+        //this.props.dispatch(userActions.getAll());
     }
 
     handleDeleteUser(id) {
@@ -15,6 +15,8 @@ class HomePage extends React.Component {
 
     render() {
         const { user, users } = this.props;
+        console.log('in HomePageeee');
+        console.log(user, users);
         return (
             <div className="col-md-6 col-md-offset-3">
                 <h1>Hi {user.firstName}!</h1>

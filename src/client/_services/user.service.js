@@ -93,8 +93,12 @@ function handleResponse(res) {
         resolve(res.json());
     }).then(res=>{
         console.log("debung in Server HandleRes", res);
+        return res;
     }).catch(err=>{
         console.log("errrrrrrrrrrrrrrrrrrr",err);
+        logout();
+        location.reload(true);
+        return Promise.reject(err);
     });
     /*
     return response.text().then(text => {

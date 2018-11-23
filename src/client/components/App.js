@@ -9,7 +9,7 @@ import LogManagement from "./LogManagement/LogManagement";
 import ServiceManagement from "./ServiceManagement/ServiceManagement";
 import Setting from "./SettingManagement/Setting";
 
-import { HashRouter } from "react-router-dom";
+import { HashRouter, Router } from "react-router-dom";
 import { connect } from "react-redux";
 
 import { history } from "../_helpers";
@@ -100,15 +100,24 @@ class App extends React.Component {
   render() {
     const { alert } = this.props;
     return (
-      <div className="jumbotron">
-        <div className="container">
-          <div className="col-sm-8 col-sm-offset-2">
+      <div >
+        <div >
+          <div >
             {alert.message && (
               <div className={`alert ${alert.type}`}>{alert.message}</div>
             )}
-            <HashRouter history={history}>
+            {
+              /*
+              <HashRouter>
+                <Switch>
+                  <Route exact path="/" component={Home} />
+                </Switch>
+              </HashRouter>
+              */
+              
+            <Router history={history}>
               <div>
-                <PrivateRoute exact path="/" component={Home} />
+                <PrivateRoute exact path="/" component={HomePage} />
                 <PrivateRoute
                   exact
                   path="/log_management"
@@ -124,7 +133,9 @@ class App extends React.Component {
                 <Route path="/login" component={LoginPage} />
                 <Route path="/register" component={RegisterPage} />
               </div>
-            </HashRouter>
+            </Router>
+            
+            }
           </div>
         </div>
       </div>
