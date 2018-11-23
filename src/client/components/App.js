@@ -18,6 +18,7 @@ import { PrivateRoute } from "../_components";
 import { HomePage } from "../HomePage";
 import { LoginPage } from "../LoginPage";
 import { RegisterPage } from "../RegisterPage";
+import {withRouter} from 'react-router-dom';
 
 /*
 const App = () => (
@@ -39,53 +40,6 @@ const Main = () => (
   </main>
 );
 
-const Roster = () => (
-  <div>
-    <h2>This is a roster page!</h2>
-    <Switch>
-      <Route exact path="/roster" component={FullRoster} />
-      <Route path="/roster/:number" component={Player} />
-    </Switch>
-  </div>
-);
-
-const Player = props => {
-  const player = PlayerAPI.get(parseInt(props.match.params.number, 10));
-  if (!player) {
-    return <div>Sorry, but the player was not found</div>;
-  }
-  return (
-    <div>
-      <h1>
-        {player.name} (#{player.number})
-      </h1>
-      <h2>{player.position}</h2>
-    </div>
-  );
-};
-
-const FullRoster = () => (
-  <div>
-    <ul>
-      {PlayerAPI.all().map(p => (
-        <li key={p.number}>
-          <Link to={`/roster/${p.number}`}>{p.name}</Link>
-        </li>
-      ))}
-    </ul>
-  </div>
-);
-
-const Schedule = () => (
-  <div>
-    <ul>
-      <li>6/5 @ Evergreens</li>
-      <li>6/8 vs Kickers</li>
-      <li>6/14 @ United</li>
-    </ul>
-  </div>
-);
-
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -99,10 +53,16 @@ class App extends React.Component {
 
   render() {
     const { alert } = this.props;
+    const showHeader = (history) => {
+      if (history.location.pathname == '/login' || history.location.pathname == '/register')
+        return <div></div>
+      else return <Header/>
+    }
+    
     return (
-      <div >
-        <div >
-          <div >
+      <div>
+        <div>
+          <div>
             {alert.message && (
               <div className={`alert ${alert.type}`}>{alert.message}</div>
             )}
@@ -114,28 +74,31 @@ class App extends React.Component {
                 </Switch>
               </HashRouter>
               */
-              
-            <Router history={history}>
-              <div>
-                <PrivateRoute exact path="/" component={HomePage} />
-                <PrivateRoute
-                  exact
-                  path="/log_management"
-                  component={LogManagement}
-                />
-                <PrivateRoute
-                  exact
-                  path="/service_management"
-                  component={ServiceManagement}
-                />
-                <PrivateRoute exact path="/setting" component={Setting} />
-
-                <Route path="/login" component={LoginPage} />
-                <Route path="/register" component={RegisterPage} />
-              </div>
-            </Router>
-            
             }
+              <Router history={history}>
+                <div>
+                  {showHeader(history)}
+                  
+                  <Switch>
+                    <PrivateRoute exact path="/" component={Home} />
+                    <PrivateRoute
+                      exact
+                      path="/log_management"
+                      component={LogManagement}
+                    />
+                    <PrivateRoute
+                      exact
+                      path="/service_management"
+                      component={ServiceManagement}
+                    />
+                    <PrivateRoute exact path="/setting" component={Setting} />
+
+                    <Route path="/login" component={LoginPage} />
+                    <Route path="/register" component={RegisterPage} />
+                  </Switch>
+                </div>
+              </Router>
+            
           </div>
         </div>
       </div>

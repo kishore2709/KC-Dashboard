@@ -145,6 +145,16 @@ class Header extends Component {
                   height="25"
                 />
               </NavLink>
+              <NavLink to="/login">
+                <form class="form-inline my-2 my-lg-0">
+                  <button
+                    class="btn btn-outline-success my-2 my-sm-0"
+                    type="submit"
+                  >
+                    Logout
+                  </button>
+                </form>
+              </NavLink>
             </div>
           </div>
         </Nav>
