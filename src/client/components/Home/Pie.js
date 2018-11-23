@@ -43,31 +43,29 @@ class PieExample extends Component {
     this.state = {
       data: makeData([0, 0, 0, 0, 0, 0, 0, 0, 0])
     };
-
-    
-		this.subscribeToServer = this.subscribeToServer.bind(this);
+    this.subscribeToServer = this.subscribeToServer.bind(this);
   }
-	subscribeToServer(att_type, callback) {
-		//socket.on(att_type, res => callback(null, res));
-		//socket.emit('sub_' + att_type, att_type);
-		this.myInterval = setInterval(()=>{
-			callback(null,
-				Array.from({ length: 9 }, () => Math.floor(Math.random() * 40))
-			)
-			}, 3000);
-	}
-	componentDidMount(){
-		this.subscribeToServer("AA", (err, res) => {
+  subscribeToServer(att_type, callback) {
+    //socket.on(att_type, res => callback(null, res));
+    //socket.emit('sub_' + att_type, att_type);
+    this.myInterval = setInterval(() => {
+      callback(
+        null,
+        Array.from({ length: 9 }, () => Math.floor(Math.random() * 40))
+      );
+    }, 3000);
+  }
+  componentDidMount() {
+    this.subscribeToServer("AA", (err, res) => {
       //console.log(res);
       this.setState({
         data: makeData(res)
       });
-		});
-		
-	}
-	componentWillUnmount(){
-		clearInterval(this.myInterval);
-	}
+    });
+  }
+  componentWillUnmount() {
+    clearInterval(this.myInterval);
+  }
   render() {
     return (
       <div>

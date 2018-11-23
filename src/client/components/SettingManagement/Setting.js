@@ -67,10 +67,10 @@ class Setting extends Component {
                             </div>
                             </div>
                         </div>
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-12 text-center">
-                                    <button type="submit" class="btn btn-primary">Submit</button>
+                        <div className="container">
+                            <div className="row">
+                                <div className="col-12 text-center">
+                                    <button type="submit" className="btn btn-primary">Submit</button>
                                 </div>
                             </div>
                         </div>

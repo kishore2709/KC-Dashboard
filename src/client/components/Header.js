@@ -13,7 +13,7 @@ class Header extends Component {
     });
   }
   render() {
-    console.log(this.state);
+    console.log(this.props);
     return (
       <div>
         <Nav
@@ -43,7 +43,7 @@ class Header extends Component {
             <span className="navbar-toggler-icon" />
           </button>
           <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
-            <div className="navbar-nav">
+            <div className="navbar-nav mr-auto">
               <NavLink
                 style={{ color: "black", fontWeight: "bold" }}
                 className="nav-item nav-link"
@@ -146,17 +146,25 @@ class Header extends Component {
                   height="25"
                 />
               </NavLink>
-              <NavLink to="/login">
-                <form className="form-inline my-2 my-lg-0">
-                
-                  <button
-                    className="btn btn-outline-success my-2 my-sm-0"
-                    type="submit"
-                  >
-                    Logout
+            </div>
+            <div className="navbar-nav" style={{ marginRight: "30px" }}>
+              <div class="dropleft">
+                <button
+                  class="btn btn-secondary dropdown-toggle"
+                  type="button"
+                  id="dropdownMenu2"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                >
+                  {this.props.user.authentication.user.username}
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                  <button class="dropdown-item" type="button">
+                  <a class="dropdown-item" href="/logout">Logout</a>
                   </button>
-                </form>
-              </NavLink>
+                </div>
+              </div>
             </div>
           </div>
         </Nav>
@@ -166,7 +174,7 @@ class Header extends Component {
 }
 
 function mapStateToProps(state) {
-  const user  = state.user;
+  const user = state;
   return {
     user
   };

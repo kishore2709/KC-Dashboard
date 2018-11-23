@@ -20,25 +20,6 @@ import { LoginPage } from "../LoginPage";
 import { RegisterPage } from "../RegisterPage";
 import {withRouter} from 'react-router-dom';
 
-/*
-const App = () => (
-  <div>
-    <Header />
-    <Main />
-  </div>
-)
-*/
-
-const Main = () => (
-  <main>
-    <Switch>
-      <Route exact path="/" component={Home} />
-      <Route path="/log_management" component={LogManagement} />
-      <Route path="/service_management" component={ServiceManagement} />
-      <Route path="/setting" component={Setting} />
-    </Switch>
-  </main>
-);
 
 class App extends React.Component {
   constructor(props) {
@@ -66,15 +47,7 @@ class App extends React.Component {
             {alert.message && (
               <div className={`alert ${alert.type}`}>{alert.message}</div>
             )}
-            {
-              /*
-              <HashRouter>
-                <Switch>
-                  <Route exact path="/" component={Home} />
-                </Switch>
-              </HashRouter>
-              */
-            }
+        
               <Router history={history}>
                 <div>
                   {showHeader(history)}
