@@ -4,7 +4,7 @@ import { Navbar, Nav } from "react-bootstrap";
 import { logo, settingIcon } from "../icon/Icon";
 import "./App.css";
 import { notification } from "antd";
-
+import { connect } from "react-redux";
 class Header extends Component {
   componentDidMount() {
     notification["success"]({
@@ -13,6 +13,7 @@ class Header extends Component {
     });
   }
   render() {
+    console.log(this.state);
     return (
       <div>
         <Nav
@@ -21,7 +22,7 @@ class Header extends Component {
           variant="tabs"
           defaultActiveKey="/"
         >
-          <a class="navbar-brand" href="/">
+          <a className="navbar-brand" href="/">
             <img
               src={logo}
               width="70"
@@ -31,7 +32,7 @@ class Header extends Component {
             />
           </a>
           <button
-            class="navbar-toggler"
+            className="navbar-toggler"
             type="button"
             data-toggle="collapse"
             data-target="#navbarNavAltMarkup"
@@ -39,10 +40,10 @@ class Header extends Component {
             aria-expanded="false"
             aria-label="Toggle navigation"
           >
-            <span class="navbar-toggler-icon" />
+            <span className="navbar-toggler-icon" />
           </button>
-          <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-            <div class="navbar-nav">
+          <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div className="navbar-nav">
               <NavLink
                 style={{ color: "black", fontWeight: "bold" }}
                 className="nav-item nav-link"
@@ -139,16 +140,17 @@ class Header extends Component {
                 }}
               >
                 <img
-                  class="pull-right"
+                  className="pull-right"
                   src={settingIcon}
                   width="50"
                   height="25"
                 />
               </NavLink>
               <NavLink to="/login">
-                <form class="form-inline my-2 my-lg-0">
+                <form className="form-inline my-2 my-lg-0">
+                
                   <button
-                    class="btn btn-outline-success my-2 my-sm-0"
+                    className="btn btn-outline-success my-2 my-sm-0"
                     type="submit"
                   >
                     Logout
@@ -163,4 +165,12 @@ class Header extends Component {
   }
 }
 
-export default Header;
+function mapStateToProps(state) {
+  const user  = state.user;
+  return {
+    user
+  };
+}
+
+const connectedHeaderPage = connect(mapStateToProps)(Header);
+export { connectedHeaderPage };

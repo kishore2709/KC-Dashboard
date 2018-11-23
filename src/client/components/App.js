@@ -3,7 +3,7 @@ import { Switch, Route } from "react-router-dom";
 import "./App.css";
 import PlayerAPI from "../api";
 import { Link } from "react-router-dom";
-import Header from "./Header";
+import {connectedHeaderPage as Header} from "./Header";
 import Home from "./Home/Home";
 import LogManagement from "./LogManagement/LogManagement";
 import ServiceManagement from "./ServiceManagement/ServiceManagement";

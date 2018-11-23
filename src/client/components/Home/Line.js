@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Line } from "react-chartjs-2";
 import { notification } from "antd";
 import moment from "moment";
-import {socketServer as socket} from "./Home"
+import { socketServer as socket } from "./Home";
 
 const openNotificationWithIcon = type => {
   if (type === "success") {
@@ -18,24 +18,6 @@ const openNotificationWithIcon = type => {
     });
   }
 };
-
-function subscribeToServer(att_type, callback) {
-  /*
-  socket.on(att_type, res => callback(null, res));
-  socket.emit('sub_' + att_type, att_type);
-  socket.on('connect', ()(=>{
-    openNotificationWithIcon('success');
-  })
-  */
-  setInterval(() => {
-    callback(null, {
-      newData: Math.floor(Math.random() * 100),
-      newLabel: moment()
-        .format("hh:mm:ss")
-        .toString()
-    });
-  }, 1000);
-}
 
 const options = {
   scales: {
@@ -87,6 +69,8 @@ const initialState = function(arrLabels, arrData) {
 class LineExample extends Component {
   constructor(props) {
     super(props);
+
+    this.subscribeToServer = this.subscribeToServer.bind(this);
   }
   componentWillMount() {
     this.setState(
@@ -96,12 +80,30 @@ class LineExample extends Component {
       )
     );
   }
+
+  subscribeToServer(att_type, callback) {
+    /*
+    socket.on(att_type, res => callback(null, res));
+    socket.emit('sub_' + att_type, att_type);
+    socket.on('connect', ()(=>{
+      openNotificationWithIcon('success');
+    })
+    */
+    this.myInterval = setInterval(() => {
+      callback(null, {
+        newData: Math.floor(Math.random() * 100),
+        newLabel: moment()
+          .format("hh:mm:ss")
+          .toString()
+      });
+    }, 1000);
+  }
   componentDidMount() {
     //notification
     //console.log('wtffffffffffffffffffffffffffffffffffff');
     //////////////
     var _this = this;
-    subscribeToServer("UserAccess", (err, res) => {
+    this.subscribeToServer("UserAccess", (err, res) => {
       var oldDataSet = _this.state.datasets[0];
       var oldLabels = _this.state.labels;
       var newData = [];
@@ -129,7 +131,9 @@ class LineExample extends Component {
       _this.setState(newState);
     });
   }
-
+  componentWillUnmount() {
+    clearInterval(this.myInterval);
+  }
   render() {
     return (
       <div>
