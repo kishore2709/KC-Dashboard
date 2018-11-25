@@ -161,7 +161,7 @@ class Header extends Component {
                 </button>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
                   <button class="dropdown-item" type="button">
-                  <a class="dropdown-item" href="/logout">Logout</a>
+                  <a class="dropdown-item" href="/login">Logout</a>
                   </button>
                 </div>
               </div>

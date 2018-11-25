@@ -17,11 +17,11 @@ app.post("/api/users/register", jsonParser, function(req, res) {
   res.end();
 });
 app.post("/api/users/authenticate", jsonParser, function(req, res) {
-  //console.log(req.body);
+  console.log(req.body);
   let user = {
     id:"id",
-    username:"admin",
-    lastName:"dat"
+    username:req.body.username,
+    lastName:req.body.username
   }
   let responseJson = {
     id: 'user.id',
