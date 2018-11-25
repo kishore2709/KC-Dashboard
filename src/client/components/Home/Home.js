@@ -1,8 +1,6 @@
 import React, { Component } from 'react'
 import './Card.css'
 import Footer from './Footer'
-import { notification } from 'antd';
-import {Row, Col, Container} from 'react-bootstrap'
 import { Items, Items_Log, Items_Dectects } from './Items'
 import {
     Alert_Logo, ListAlert_Logo, DNS_Logo, Group_Logo, Agent_Logo, ArrowDown_Logo

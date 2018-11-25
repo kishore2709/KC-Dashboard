@@ -1,24 +1,42 @@
 import React, { Component } from "react";
 import { NavLink } from "react-router-dom";
-import { Navbar, Nav } from "react-bootstrap";
 import { logo, settingIcon } from "../icon/Icon";
 import "./App.css";
-import { notification } from "antd";
+
 import { connect } from "react-redux";
+
+const ItemLink = (props) => {
+  return (
+    
+    <NavLink
+      style={{ color: "black", fontWeight: "bold" }}
+      className="nav-item nav-link"
+      exact
+      to={props.to}
+      activeStyle={{
+        fontWeight: "bold",
+        color: "red",
+        textDecoration: "underline"
+      }}
+      
+    >
+      {props.titleName}
+    </NavLink>
+    
+  );
+};
+
 class Header extends Component {
   componentDidMount() {
-    notification["success"]({
-      message: "Chào mừng đến với giao diện quản lý và phân tích Log.",
-      description: "Hiện tại dữ liệu được sinh ngẫu nhiên"
-    });
+    //notification
   }
   render() {
     console.log(this.props);
     return (
       <div>
-        <Nav
+        <nav
           className="navbar navbar-expand-lg bg-light"
-          fill
+          fill="true"
           variant="tabs"
           defaultActiveKey="/"
         >
@@ -44,91 +62,13 @@ class Header extends Component {
           </button>
           <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div className="navbar-nav mr-auto">
-              <NavLink
-                style={{ color: "black", fontWeight: "bold" }}
-                className="nav-item nav-link"
-                exact
-                to="/"
-                activeStyle={{
-                  fontWeight: "bold",
-                  color: "red",
-                  textDecoration: "underline"
-                }}
-              >
-                Trang chủ{" "}
-              </NavLink>
-              <NavLink
-                style={{ color: "black", fontWeight: "bold" }}
-                className="nav-item nav-link"
-                to="/user_management"
-                activeStyle={{
-                  fontWeight: "bold",
-                  color: "red",
-                  textDecoration: "underline"
-                }}
-              >
-                Quản lý người dùng
-              </NavLink>
-              <NavLink
-                style={{ color: "black", fontWeight: "bold" }}
-                className="nav-item nav-link"
-                to="/log_management"
-                activeStyle={{
-                  fontWeight: "bold",
-                  color: "red",
-                  textDecoration: "underline"
-                }}
-              >
-                Quản lý log truy cập
-              </NavLink>
-              <NavLink
-                style={{ color: "black", fontWeight: "bold" }}
-                className="nav-item nav-link"
-                to="/service_management"
-                activeStyle={{
-                  fontWeight: "bold",
-                  color: "red",
-                  textDecoration: "underline"
-                }}
-              >
-                Quản lý dịch vụ truy cập
-              </NavLink>
-              <NavLink
-                style={{ color: "black", fontWeight: "bold" }}
-                className="nav-item nav-link"
-                to="/alert_broadcast"
-                activeStyle={{
-                  fontWeight: "bold",
-                  color: "red",
-                  textDecoration: "underline"
-                }}
-              >
-                Quảng bá cảnh báo
-              </NavLink>
-              <NavLink
-                style={{ color: "black", fontWeight: "bold" }}
-                className="nav-item nav-link"
-                to="/attack_detection"
-                activeStyle={{
-                  fontWeight: "bold",
-                  color: "red",
-                  textDecoration: "underline"
-                }}
-              >
-                Phát hiện tấn công
-              </NavLink>
-              <NavLink
-                style={{ color: "black", fontWeight: "bold" }}
-                className="nav-item nav-link"
-                to="/search"
-                activeStyle={{
-                  fontWeight: "bold",
-                  color: "red",
-                  textDecoration: "underline"
-                }}
-              >
-                Tìm kiếm thông tin
-              </NavLink>
+              <ItemLink to="/" titleName='Trang chủ'/>
+              <ItemLink to="/user_management" titleName='Quản lý người dùng'/>
+              <ItemLink to="/log_management" titleName='Quản lý log truy cập'/>
+              <ItemLink to="/service_management" titleName='Quản lý dịch vụ truy cập'/>
+              <ItemLink to="/alert_broadcast" titleName='Quảng bá cảnh báo'/>
+              <ItemLink to="/attack_detection" titleName='Phát hiện tấn công'/>
+              <ItemLink to="/search" titleName='Tìm kiếm thông tin'/>
               <NavLink
                 style={{ color: "black", fontWeight: "bold" }}
                 className="nav-item nav-link"
@@ -147,27 +87,9 @@ class Header extends Component {
                 />
               </NavLink>
             </div>
-            <div className="navbar-nav" style={{ marginRight: "30px" }}>
-              <div class="dropleft">
-                <button
-                  class="btn btn-secondary dropdown-toggle"
-                  type="button"
-                  id="dropdownMenu2"
-                  data-toggle="dropdown"
-                  aria-haspopup="true"
-                  aria-expanded="false"
-                >
-                  {this.props.user.authentication.user.username}
-                </button>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                  <button class="dropdown-item" type="button">
-                  <a class="dropdown-item" href="/login">Logout</a>
-                  </button>
-                </div>
-              </div>
-            </div>
+            
           </div>
-        </Nav>
+        </nav>
       </div>
     );
   }

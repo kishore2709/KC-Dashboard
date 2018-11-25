@@ -1,11 +1,8 @@
 import React, { Component } from 'react'
 import './setting.css'
 import '../App.css'
-import {message} from 'antd';
 
-const success = () => {
-    message.success('This is a message of success');
-  };
+
 class Setting extends Component {
     constructor(props){
         super(props);
@@ -36,7 +33,7 @@ class Setting extends Component {
             alert(err);
         });
         event.preventDefault();
-        message.info('This is a normal message');
+        //message.info('This is a normal message');
     }
 
     handleChange(event){

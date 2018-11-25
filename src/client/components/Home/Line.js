@@ -1,23 +1,9 @@
 import React, { Component } from "react";
 import { Line } from "react-chartjs-2";
-import { notification } from "antd";
 import moment from "moment";
 import { socketServer as socket } from "./Home";
 
-const openNotificationWithIcon = type => {
-  if (type === "success") {
-    notification[type]({
-      message: "Websocket đã kết nối với máy chủ",
-      description: "Dữ liệu sẽ được gửi về liên tục"
-    });
-  }
-  if (type === "error") {
-    notification[type]({
-      message: "Kết nối tới máy chủ thất bại",
-      description: "Reload lại trang web"
-    });
-  }
-};
+
 
 const options = {
   scales: {

@@ -4,7 +4,6 @@
     "@babel/preset-react"
   ],
   "plugins": [
-    ["import", { "libraryName": "antd", "libraryDirectory": "lib", "style": "css"}, "ant"],
     "@babel/plugin-proposal-class-properties"
   ],
   "env": {
