@@ -1,9 +1,8 @@
 import React from "react";
 import { Switch, Route } from "react-router-dom";
 import "./App.css";
-import PlayerAPI from "../api";
 import { Link } from "react-router-dom";
-import {connectedHeaderPage as Header} from "./Header";
+import { connectedHeaderPage as Header } from "./Header";
 import Home from "./Home/Home";
 import LogManagement from "./LogManagement/LogManagement";
 import ServiceManagement from "./ServiceManagement/ServiceManagement";
@@ -18,8 +17,8 @@ import { PrivateRoute } from "../_components";
 import { HomePage } from "../HomePage";
 import { LoginPage } from "../LoginPage";
 import { RegisterPage } from "../RegisterPage";
-import {withRouter} from 'react-router-dom';
-
+import { withRouter } from "react-router-dom";
+import TemporaryDrawer from "./SettingManagement/Drawers";
 
 class App extends React.Component {
   constructor(props) {
@@ -34,12 +33,14 @@ class App extends React.Component {
 
   render() {
     const { alert } = this.props;
-    const showHeader = (history) => {
-      if (history.location.pathname == '/login' || history.location.pathname == '/register')
-        return <div></div>
-      else return <Header/>
-    }
-    
+    const showHeader = history => {
+      if (
+        history.location.pathname == "/login" ||
+        history.location.pathname == "/register"
+      )
+        return <div />;
+      else return <Header />;
+    };
     return (
       <div>
         <div>
@@ -47,31 +48,32 @@ class App extends React.Component {
             {alert.message && (
               <div className={`alert ${alert.type}`}>{alert.message}</div>
             )}
-        
-              <Router history={history}>
-                <div>
-                  {showHeader(history)}
-                  
-                  <Switch>
-                    <PrivateRoute exact path="/" component={Home} />
-                    <PrivateRoute
-                      exact
-                      path="/log_management"
-                      component={LogManagement}
-                    />
-                    <PrivateRoute
-                      exact
-                      path="/service_management"
-                      component={ServiceManagement}
-                    />
-                    <PrivateRoute exact path="/setting" component={Setting} />
+            <Router history={history}>
+              <div>
+                {showHeader(history)}
+                <Switch>
+                  <PrivateRoute exact path="/" component={Home} />
+                  <PrivateRoute
+                    exact
+                    path="/log_management"
+                    component={LogManagement}
+                  />
+                  <PrivateRoute
+                    exact
+                    path="/service_management"
+                    component={ServiceManagement}
+                  />
+                  <PrivateRoute
+                    exact
+                    path="/setting"
+                    component={TemporaryDrawer}
+                  />
 
-                    <Route path="/login" component={LoginPage} />
-                    <Route path="/register" component={RegisterPage} />
-                  </Switch>
-                </div>
-              </Router>
-            
+                  <Route path="/login" component={LoginPage} />
+                  <Route path="/register" component={RegisterPage} />
+                </Switch>
+              </div>
+            </Router>
           </div>
         </div>
       </div>

@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { NavLink } from "react-router-dom";
 import { logo, settingIcon } from "../icon/Icon";
 import "./App.css";
-
 import { connect } from "react-redux";
 
 const ItemLink = (props) => {
