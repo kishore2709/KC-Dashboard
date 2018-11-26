@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import {
     Alert_Logo, ListAlert_Logo, DNS_Logo, Group_Logo, Agent_Logo, ArrowDown_Logo
     , Analyze_Logo, Sms_Logo, Statitic_Logo, Search_Logo, Transfer_Logo, User_Logo, Web_Logo, Email_Logo
-} from '../../icon/Icon'
+} from '../icon/Icon'
 import PieExample from './Pie'
 import LineExample from './Line'
 import CountChart from './CountChart'

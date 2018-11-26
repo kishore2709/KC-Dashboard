@@ -7,16 +7,13 @@ import Home from "./Home/Home";
 import LogManagement from "./LogManagement/LogManagement";
 import ServiceManagement from "./ServiceManagement/ServiceManagement";
 import Setting from "./SettingManagement/Setting";
-
 import { HashRouter, Router } from "react-router-dom";
 import { connect } from "react-redux";
-
 import { history } from "../_helpers";
 import { alertActions } from "../_actions";
-import { PrivateRoute } from "../_components";
-import { HomePage } from "../HomePage";
-import { LoginPage } from "../LoginPage";
-import { RegisterPage } from "../RegisterPage";
+import { PrivateRoute } from "./PrivateRoute";
+import { LoginPage } from "./LoginPage";
+import { RegisterPage } from "./RegisterPage";
 import { withRouter } from "react-router-dom";
 import connectedDrawers from "./SettingManagement/Drawers";
 
@@ -81,8 +78,6 @@ function mapStateToProps(state) {
     alert
   };
 }
-
-
 
 const connectedApp = connect(mapStateToProps)(App);
 export { connectedApp as App };
