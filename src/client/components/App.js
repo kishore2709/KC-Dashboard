@@ -18,7 +18,7 @@ import { HomePage } from "../HomePage";
 import { LoginPage } from "../LoginPage";
 import { RegisterPage } from "../RegisterPage";
 import { withRouter } from "react-router-dom";
-import TemporaryDrawer from "./SettingManagement/Drawers";
+import connectedDrawers from "./SettingManagement/Drawers";
 
 class App extends React.Component {
   constructor(props) {
@@ -63,12 +63,6 @@ class App extends React.Component {
                     path="/service_management"
                     component={ServiceManagement}
                   />
-                  <PrivateRoute
-                    exact
-                    path="/setting"
-                    component={TemporaryDrawer}
-                  />
-
                   <Route path="/login" component={LoginPage} />
                   <Route path="/register" component={RegisterPage} />
                 </Switch>
@@ -87,6 +81,8 @@ function mapStateToProps(state) {
     alert
   };
 }
+
+
 
 const connectedApp = connect(mapStateToProps)(App);
 export { connectedApp as App };

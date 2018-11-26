@@ -3,10 +3,11 @@ import { NavLink } from "react-router-dom";
 import { logo, settingIcon } from "../icon/Icon";
 import "./App.css";
 import { connect } from "react-redux";
-
-const ItemLink = (props) => {
+import ConnectedDrawers from "./SettingManagement/Drawers";
+import { drawerActions } from "../_actions/drawer.actions";
+import { map } from "rsvp";
+const ItemLink = props => {
   return (
-    
     <NavLink
       style={{ color: "black", fontWeight: "bold" }}
       className="nav-item nav-link"
@@ -17,11 +18,9 @@ const ItemLink = (props) => {
         color: "red",
         textDecoration: "underline"
       }}
-      
     >
       {props.titleName}
     </NavLink>
-    
   );
 };
 
@@ -33,6 +32,7 @@ class Header extends Component {
     console.log(this.props);
     return (
       <div>
+        <ConnectedDrawers/>
         <nav
           className="navbar navbar-expand-lg bg-light"
           fill="true"
@@ -61,32 +61,28 @@ class Header extends Component {
           </button>
           <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div className="navbar-nav mr-auto">
-              <ItemLink to="/" titleName='Trang chủ'/>
-              <ItemLink to="/user_management" titleName='Quản lý người dùng'/>
-              <ItemLink to="/log_management" titleName='Quản lý log truy cập'/>
-              <ItemLink to="/service_management" titleName='Quản lý dịch vụ truy cập'/>
-              <ItemLink to="/alert_broadcast" titleName='Quảng bá cảnh báo'/>
-              <ItemLink to="/attack_detection" titleName='Phát hiện tấn công'/>
-              <ItemLink to="/search" titleName='Tìm kiếm thông tin'/>
-              <NavLink
-                style={{ color: "black", fontWeight: "bold" }}
-                className="nav-item nav-link"
-                to="/setting"
-                activeStyle={{
-                  fontWeight: "bold",
-                  color: "red",
-                  textDecoration: "underline"
+              <ItemLink to="/" titleName="Trang chủ" />
+              <ItemLink to="/user_management" titleName="Quản lý người dùng" />
+              <ItemLink to="/log_management" titleName="Quản lý log truy cập" />
+              <ItemLink
+                to="/service_management"
+                titleName="Quản lý dịch vụ truy cập"
+              />
+              <ItemLink to="/alert_broadcast" titleName="Quảng bá cảnh báo" />
+              <ItemLink to="/attack_detection" titleName="Phát hiện tấn công" />
+              <ItemLink to="/search" titleName="Tìm kiếm thông tin" />
+
+              <img
+                className="pull-right"
+                src={settingIcon}
+                width="50"
+                height="25"
+                onClick={() => {
+                  //console.log(this.props.dispatch);
+                  this.props.opened(true);
                 }}
-              >
-                <img
-                  className="pull-right"
-                  src={settingIcon}
-                  width="50"
-                  height="25"
-                />
-              </NavLink>
+              />
             </div>
-            
           </div>
         </nav>
       </div>
@@ -101,5 +97,15 @@ function mapStateToProps(state) {
   };
 }
 
-const connectedHeaderPage = connect(mapStateToProps)(Header);
+const mapDispatchToProps = dispatch => {
+  return {
+    opened: newStatus => {
+      dispatch(drawerActions.opened(newStatus));
+    },
+    closed: newStatus => {
+      dispatch(drawerActions.closed(newStatus));
+    }
+  };
+};
+const connectedHeaderPage = connect(mapStateToProps, mapDispatchToProps)(Header);
 export { connectedHeaderPage };

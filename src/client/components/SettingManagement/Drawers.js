@@ -9,7 +9,8 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import InboxIcon from "@material-ui/icons/MoveToInbox";
 import MailIcon from "@material-ui/icons/Mail";
-
+import { connect } from "react-redux";
+import { drawerActions } from "../../_actions";
 const styles = {
   list: {
     width: 250
@@ -22,49 +23,16 @@ const styles = {
 class TemporaryDrawer extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      right: true
-    };
+    this.props.closed(false);
   }
 
   toggleDrawer = (side, open) => () => {
-    this.setState({
-      [side]: open
-    });
+    if (open == true) this.props.opened(true);
+    else this.props.closed(false);
   };
 
-  componentWillReceiveProps(props){
-    this.setState({right:true});
-  }
   render() {
     const { classes } = this.props;
-
-    const sideList = (
-      <div className={classes.list}>
-        <List>
-          {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
-        </List>
-        <Divider />
-        <List>
-          {["All mail", "Trash", "Spam"].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
-        </List>
-      </div>
-    );
-
     const fullList = (
       <div className={classes.fullList}>
         <List>
@@ -80,22 +48,22 @@ class TemporaryDrawer extends React.Component {
         <Divider />
         <List>
           {["Logout"].map((text, index) => (
-            <ListItem button key={text} component="a" href='/login'>
+            <ListItem button key={text} component="a" href="/login">
               <ListItemIcon>
                 {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
               </ListItemIcon>
-              <ListItemText primary={text}/>
+              <ListItemText primary={text} />
             </ListItem>
           ))}
         </List>
       </div>
     );
-
+    console.log('in Drawerssssssssssssss state=', this.props.message);
     return (
       <div>
         <Drawer
           anchor="right"
-          open={this.state.right}
+          open={this.props.message}
           onClose={this.toggleDrawer("right", false)}
         >
           <div
@@ -116,4 +84,26 @@ TemporaryDrawer.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(TemporaryDrawer);
+const mapDispatchToProps = dispatch => {
+  return {
+    opened: newStatus => {
+      dispatch(drawerActions.opened(newStatus));
+    },
+    closed: newStatus => {
+      dispatch(drawerActions.closed(newStatus));
+    }
+  };
+};
+
+function mapStateToProps(state) {
+  const { message } = state.drawer;
+  return {
+    message
+  };
+}
+
+const ConnectedDrawers = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(TemporaryDrawer);
+export default withStyles(styles)(ConnectedDrawers);
