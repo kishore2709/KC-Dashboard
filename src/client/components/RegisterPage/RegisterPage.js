@@ -1,8 +1,10 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { connect } from "react-redux";
-
-import { userActions } from "../../_actions";
+/* eslint-disable jsx-a11y/label-has-for */
+/* eslint-disable jsx-a11y/label-has-associated-control */
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import { userActions } from '../../_actions';
 
 class RegisterPage extends React.Component {
   constructor(props) {
@@ -10,12 +12,12 @@ class RegisterPage extends React.Component {
 
     this.state = {
       user: {
-        firstName: "",
-        lastName: "",
-        username: "",
-        password: ""
+        firstName: '',
+        lastName: '',
+        username: '',
+        password: '',
       },
-      submitted: false
+      submitted: false,
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -28,16 +30,16 @@ class RegisterPage extends React.Component {
     this.setState({
       user: {
         ...user,
-        [name]: value
-      }
+        [name]: value,
+      },
     });
   }
 
   handleSubmit(event) {
     event.preventDefault();
-    fetch("/api/status")
+    fetch('/api/status')
       .then(res => res.text())
-      .then(res => console.log(res, "=?//////////////////"));
+      .then(res => console.log(res, '=?//////////////////'));
 
     this.setState({ submitted: true });
     const { user } = this.state;
@@ -54,19 +56,18 @@ class RegisterPage extends React.Component {
     return (
       <div
         style={{
-          display: "flex",
-          justifyContent: "space-around",
-          marginTop: "100px"
+          display: 'flex',
+          justifyContent: 'space-around',
+          marginTop: '100px',
         }}
       >
         <div className="col-md-3 col-md-offset-3">
           <h2>Register</h2>
           <form name="form" onSubmit={this.handleSubmit}>
             <div
-              className={
-                "form-group" +
-                (submitted && !user.firstName ? " has-error" : "")
-              }
+              className={`form-group${
+                submitted && !user.firstName ? ' has-error' : ''
+              }`}
             >
               <label htmlFor="firstName">First Name</label>
               <input
@@ -81,9 +82,9 @@ class RegisterPage extends React.Component {
               )}
             </div>
             <div
-              className={
-                "form-group" + (submitted && !user.lastName ? " has-error" : "")
-              }
+              className={`form-group${
+                submitted && !user.lastName ? ' has-error' : ''
+              }`}
             >
               <label htmlFor="lastName">Last Name</label>
               <input
@@ -98,9 +99,9 @@ class RegisterPage extends React.Component {
               )}
             </div>
             <div
-              className={
-                "form-group" + (submitted && !user.username ? " has-error" : "")
-              }
+              className={`form-group${
+                submitted && !user.username ? ' has-error' : ''
+              }`}
             >
               <label htmlFor="username">Username</label>
               <input
@@ -115,9 +116,9 @@ class RegisterPage extends React.Component {
               )}
             </div>
             <div
-              className={
-                "form-group" + (submitted && !user.password ? " has-error" : "")
-              }
+              className={`form-group${
+                submitted && !user.password ? ' has-error' : ''
+              }`}
             >
               <label htmlFor="password">Password</label>
               <input
@@ -132,9 +133,14 @@ class RegisterPage extends React.Component {
               )}
             </div>
             <div className="form-group">
-              <button className="btn btn-primary">Register</button>
+              <button type="submit" className="btn btn-primary">
+                Register
+              </button>
               {registering && (
-                <img src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+                <img
+                  alt=""
+                  src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA=="
+                />
               )}
               <Link to="/login" className="btn btn-link">
                 Cancel
@@ -146,11 +152,14 @@ class RegisterPage extends React.Component {
     );
   }
 }
-
+RegisterPage.propTypes = {
+  dispatch: PropTypes.func.isRequired,
+  registering: PropTypes.any.isRequired,
+};
 function mapStateToProps(state) {
   const { registering } = state.registration;
   return {
-    registering
+    registering,
   };
 }
 

@@ -11,7 +11,7 @@ const rootReducer = combineReducers({
   registration,
   users,
   alert,
-  drawer
+  drawer,
 });
 
 export default rootReducer;

@@ -1,28 +1,28 @@
-import React from "react";
-import { Switch, Route } from "react-router-dom";
-import "./App.css";
-import { Link } from "react-router-dom";
-import { connectedHeaderPage as Header } from "./Header";
-import Home from "./Home/Home";
-import LogManagement from "./LogManagement/LogManagement";
-import ServiceManagement from "./ServiceManagement/ServiceManagement";
-import Setting from "./SettingManagement/Setting";
-import { HashRouter, Router } from "react-router-dom";
-import { connect } from "react-redux";
-import { history } from "../_helpers";
-import { alertActions } from "../_actions";
-import { PrivateRoute } from "./PrivateRoute";
-import { LoginPage } from "./LoginPage";
-import { RegisterPage } from "./RegisterPage";
-import { withRouter } from "react-router-dom";
-import connectedDrawers from "./SettingManagement/Drawers";
-
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-shadow */
+import React from 'react';
+import { Switch, Route, Router } from 'react-router-dom';
+import './App.css';
+// import { Link, withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import { connectedHeaderPage as Header } from './Header';
+import Home from './Home/Home';
+import LogManagement from './LogManagement/LogManagement';
+import ServiceManagement from './ServiceManagement/ServiceManagement';
+// import Setting from './SettingManagement/Setting';
+import { history } from '../_helpers';
+import { alertActions } from '../_actions';
+import { PrivateRoute } from './PrivateRoute';
+import { LoginPage } from './LoginPage';
+import { RegisterPage } from './RegisterPage';
+// import connectedDrawers from './SettingManagement/Drawers';
 class App extends React.Component {
   constructor(props) {
     super(props);
 
     const { dispatch } = this.props;
-    history.listen((location, action) => {
+    history.listen((_location, _action) => {
       // clear alert on location change
       dispatch(alertActions.clear());
     });
@@ -32,11 +32,11 @@ class App extends React.Component {
     const { alert } = this.props;
     const showHeader = history => {
       if (
-        history.location.pathname == "/login" ||
-        history.location.pathname == "/register"
+        history.location.pathname === '/login' ||
+        history.location.pathname === '/register'
       )
         return <div />;
-      else return <Header />;
+      return <Header />;
     };
     return (
       <div>
@@ -72,10 +72,14 @@ class App extends React.Component {
   }
 }
 
+App.propTypes = {
+  dispatch: PropTypes.func.isRequired,
+  alert: PropTypes.object.isRequired,
+};
 function mapStateToProps(state) {
   const { alert } = state;
   return {
-    alert
+    alert,
   };
 }
 
