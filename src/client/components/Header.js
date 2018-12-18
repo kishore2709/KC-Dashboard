@@ -1,38 +1,47 @@
-import React, { Component } from "react";
-import { NavLink } from "react-router-dom";
-import { logo, settingIcon } from "./icon/Icon";
-import "./App.css";
-import { connect } from "react-redux";
-import ConnectedDrawers from "./SettingManagement/Drawers";
-import { drawerActions } from "../_actions/drawer.actions";
-import { map } from "rsvp";
-const ItemLink = props => {
-  return (
-    <NavLink
-      style={{ color: "black", fontWeight: "bold" }}
-      className="nav-item nav-link"
-      exact
-      to={props.to}
-      activeStyle={{
-        fontWeight: "bold",
-        color: "red",
-        textDecoration: "underline"
-      }}
-    >
-      {props.titleName}
-    </NavLink>
-  );
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
+import React, { Component } from 'react';
+import { NavLink } from 'react-router-dom';
+import { connect } from 'react-redux';
+import './App.css';
+import PropTypes from 'prop-types';
+import ConnectedDrawers from './SettingManagement/Drawers';
+import { drawerActions } from '../_actions/drawer.actions';
+import { logo, settingIcon } from './icon/Icon';
+// import { map } from 'rsvp';
+
+const ItemLink = ({ to, titleName }) => (
+  <NavLink
+    style={{ color: 'black', fontWeight: 'bold' }}
+    className="nav-item nav-link"
+    exact
+    to={to}
+    activeStyle={{
+      fontWeight: 'bold',
+      color: 'red',
+      textDecoration: 'underline',
+    }}
+  >
+    {titleName}
+  </NavLink>
+);
+
+ItemLink.propTypes = {
+  to: PropTypes.string.isRequired,
+  titleName: PropTypes.string.isRequired,
 };
 
 class Header extends Component {
   componentDidMount() {
-    //notification
+    // notification
   }
+
   render() {
+    const { opened } = this.props;
     console.log(this.props);
     return (
       <div>
-        <ConnectedDrawers/>
+        <ConnectedDrawers />
         <nav
           className="navbar navbar-expand-lg bg-light"
           fill="true"
@@ -73,13 +82,14 @@ class Header extends Component {
               <ItemLink to="/search" titleName="Tìm kiếm thông tin" />
 
               <img
+                alt=""
                 className="pull-right"
                 src={settingIcon}
                 width="50"
                 height="25"
                 onClick={() => {
-                  //console.log(this.props.dispatch);
-                  this.props.opened(true);
+                  // console.log(this.props.dispatch);
+                  opened(true);
                 }}
               />
             </div>
@@ -90,22 +100,26 @@ class Header extends Component {
   }
 }
 
+Header.propTypes = {
+  opened: PropTypes.func.isRequired,
+};
 function mapStateToProps(state) {
   const user = state;
   return {
-    user
+    user,
   };
 }
 
-const mapDispatchToProps = dispatch => {
-  return {
-    opened: newStatus => {
-      dispatch(drawerActions.opened(newStatus));
-    },
-    closed: newStatus => {
-      dispatch(drawerActions.closed(newStatus));
-    }
-  };
-};
-const connectedHeaderPage = connect(mapStateToProps, mapDispatchToProps)(Header);
+const mapDispatchToProps = dispatch => ({
+  opened: newStatus => {
+    dispatch(drawerActions.opened(newStatus));
+  },
+  closed: newStatus => {
+    dispatch(drawerActions.closed(newStatus));
+  },
+});
+const connectedHeaderPage = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Header);
 export { connectedHeaderPage };
