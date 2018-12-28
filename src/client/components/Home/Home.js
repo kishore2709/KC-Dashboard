@@ -1,159 +1,173 @@
-import React, { Component } from 'react'
-import './Card.css'
-import Footer from './Footer'
-import {Row, Col, Container} from 'react-bootstrap'
-import { Items, Items_Log, Items_Dectects } from './Items'
+/* eslint-disable jsx-a11y/heading-has-content */
+import React, { Component } from 'react';
+import './Card.css';
+// import openSocket from 'socket.io-client';
+import Footer from './Footer';
+import { Items, ItemsLog, ItemsDectects } from './Items';
 import {
-    Alert_Logo, ListAlert_Logo, DNS_Logo, Group_Logo, Agent_Logo, ArrowDown_Logo
-    , Analyze_Logo, Sms_Logo, Statitic_Logo, Search_Logo, Transfer_Logo, User_Logo, Web_Logo, Email_Logo
-} from '../../icon/Icon'
+  alertLogo,
+  listAlertLogo,
+  dnsLogo,
+  groupLogo,
+  smsLogo,
+  searchLogo,
+  userLogo,
+  webLogo,
+  emailLogo,
+} from '../icon/Icon';
+
+export const socketServer = undefined; // openSocket("http://localhost:8000");
 const Card = () => (
-    
-        <div className="cardContent">
-            <div className="cardText">
-                <h1>Quản lý người dùng</h1>
-                <hr />
-                <Items firstImg={User_Logo} figure_1={'User'}
-                    secondImg={Group_Logo} figure_2={'Group'}
-                    thirdImg={Alert_Logo} figure_3={'Alert'}
-                />
-            </div>
-        </div>
-    
-)
+  <div className="cardContent">
+    <div className="cardText">
+      <h1>Quản lý người dùng</h1>
+      <hr />
+      <Items
+        firstImg={userLogo}
+        figure1="User"
+        secondImg={groupLogo}
+        figure2="Group"
+        thirdImg={alertLogo}
+        figure3="Alert"
+      />
+    </div>
+  </div>
+);
 
-const Card_Log = () => (
-        <div className="cardContent">
-            <div className="cardText">
-                <h1>Quản lý log truy cập</h1>
-                <hr />
-                <Items_Log />
-            </div>
-        </div>
-    
-)
+const CardLog = () => (
+  <div className="cardContent">
+    <div className="cardText">
+      <h1>Quản lý log truy cập</h1>
+      <hr />
+      <ItemsLog />
+    </div>
+  </div>
+);
 
-const Card_Service = () => (
-    
-        <div className="cardContent">
-            <div className="cardText">
-                <h1>Quản lý dịch vụ truy cập</h1>
-                <hr />
-                
-                <Items firstImg={Search_Logo} figure_1={'Search'}
-                    secondImg={Web_Logo} figure_2={'Web'}
-                    thirdImg={DNS_Logo} figure_3={'DNS'}
-                    showChart={0}
-                />
-                
-            </div>
-        </div>
-    
-)
+const CardService = () => (
+  <div className="cardContent">
+    <div className="cardText">
+      <h1>Quản lý dịch vụ truy cập</h1>
+      <hr />
 
-const Card_Boardcast = () => (
-    
-        <div className="cardContent">
-            <div className="cardText">
-                <h1>Quảng bá cảnh báo</h1>
-                <hr />
-                <Items firstImg={ListAlert_Logo} figure_1={'Danh sách'}
-                    secondImg={Email_Logo} figure_2={'Gửi Email'}
-                    thirdImg={Sms_Logo} figure_3={'Gửi SMS'}
-                    showChart={0}
-                />
-            </div>
-        </div>
-    
-)
+      <Items
+        firstImg={searchLogo}
+        figure_1="Search"
+        secondImg={webLogo}
+        figure_2="Web"
+        thirdImg={dnsLogo}
+        figure_3="DNS"
+        showChart={1}
+      />
+    </div>
+  </div>
+);
 
+const CardBoardcast = () => (
+  <div className="cardContent">
+    <div className="cardText">
+      <h1>Quảng bá cảnh báo</h1>
+      <hr />
+      <Items
+        firstImg={listAlertLogo}
+        figure_1="Danh sách"
+        secondImg={emailLogo}
+        figure_2="Gửi Email"
+        thirdImg={smsLogo}
+        figure_3="Gửi SMS"
+        showChart={1}
+      />
+    </div>
+  </div>
+);
 
+// ///////////////////////////////////////////////////////////////
+// ///////////////////////////////////////////////////////////////
+// ///////////////////Phat hien tan cong///////////////////////////
+// ///////////////////////////////////////////////////////////////
+// ///////////////////////////////////////////////////////////////
 
-/////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////
-/////////////////////Phat hien tan cong///////////////////////////
-/////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////
+const CardBotnet = () => (
+  <div className="cardContent">
+    <div className="cardText">
+      <h1>Botnet</h1>
+      <hr />
+      <ItemsDectects />
+    </div>
+  </div>
+);
 
+const CardWebServiceAtt = () => (
+  <div className="cardContent">
+    <div className="cardText">
+      <h1>Web Service Attack</h1>
+      <hr />
+      <ItemsDectects />
+    </div>
+  </div>
+);
+const CardAPT = () => (
+  <div className="cardContent">
+    <div className="cardText">
+      <h1>APT</h1>
+      <hr />
+      <ItemsDectects />
+    </div>
+  </div>
+);
 
-const Card_Botnet = () => (
-      <div className="cardContent">
-            <div className="cardText">
-                <h1>Botnet</h1>
-                <hr />
-                <Items_Dectects />
-            </div>
-        </div>
-  
-)
+const CardAccessAtt = () => (
+  <div className="cardContent">
+    <div className="cardText">
+      <h1>Access Attack</h1>
+      <hr />
+      <ItemsDectects />
+    </div>
+  </div>
+);
 
-const Card_WebServiceAtt = () => (
-        <div className="cardContent">
-            <div className="cardText">
-                <h1>Web Service Attack</h1>
-                <hr />
-                <Items_Dectects />
-            </div>
-        </div>
-
-)
-const Card_APT = () => (
-        <div className="cardContent">
-            <div className="cardText">
-                <h1>APT</h1>
-                <hr />
-                <Items_Dectects />
-            </div>
-        </div>
-)
-
-const Card_AccessAtt = () => (
-    
-        <div className="cardContent">
-            <div className="cardText">
-                <h1>Access Attack</h1>
-                <hr />
-                <Items_Dectects />
-            </div>
-        </div>
-    
-)
-
-class Test extends Component {
-    render() {
-        return (
-            <div>
-                {this.props.x}
-            </div>
-        );
-    }
-}
-
-
-
-const Home = () => (
-    <div>
+class Home extends Component {
+  render() {
+    return (
+      <div>
         <h4 className="h4Title">IT Operation</h4>
-            <div id="container">
-                <div className="prettyBox fullCard "> <Card /></div>
-                <div className="prettyBox fullCardLog "><Card_Log /></div>
-                <div className="prettyBox fullCard  "><Card_Service /></div>
-                <div className="prettyBox fullCard "><Card_Boardcast /></div>
-            </div>
-        <h4></h4>
+        <div id="container">
+          <div className="prettyBox fullCard ">
+            {' '}
+            <Card />
+          </div>
+          <div className="prettyBox fullCardLog ">
+            <CardLog />
+          </div>
+          <div className="prettyBox fullCard  ">
+            <CardService />
+          </div>
+          <div className="prettyBox fullCard ">
+            <CardBoardcast />
+          </div>
+        </div>
+        <h4 />
         <h4 className="title">Phát hiện tấn công</h4>
 
         <div id="container">
-        <div className="prettyBox fullCardDetection"><Card_Botnet /></div>
-        <div className="prettyBox fullCardDetection"><Card_WebServiceAtt /></div>
-        <div className="prettyBox fullCardDetection"><Card_APT /></div>
-        <div className="prettyBox fullCardDetection"><Card_AccessAtt /></div>
+          <div className="prettyBox fullCardDetection">
+            <CardBotnet />
+          </div>
+          <div className="prettyBox fullCardDetection">
+            <CardWebServiceAtt />
+          </div>
+          <div className="prettyBox fullCardDetection">
+            <CardAPT />
+          </div>
+          <div className="prettyBox fullCardDetection">
+            <CardAccessAtt />
+          </div>
         </div>
 
-
         <Footer />
-    </div>
-)
-
+      </div>
+    );
+  }
+}
 
 export default Home;

@@ -1,42 +1,23 @@
-// Init Socket
-const express = require("express");
+const express = require('express');
+const os = require('os');
+const bodyParser = require('body-parser');
+
+const jsonParser = bodyParser.json();
+const urlencodedParser = bodyParser.urlencoded({ extended: false });
+
 const app = express();
-const server = require("http").Server(app);
-const moment = require("moment");
-const io = require("socket.io")(server);
-const bodyParser = require("body-parser");
-const path = require("path");
-const fs = require("fs");
 
-app.use(express.static("dist"));
-app.use("/media", express.static(path.resolve("media")));
-///
+app.use(express.static('dist'));
 
-/*
-app.get("/*", (req, res) => {
-  const indexFile = path.resolve("/dist/index.html");
-  fs.readFile(indexFile, "utf8", (err, data) => {
-    if (err) {
-      console.error("Something went wrong:", err);
-      return res.status(500).send("Oops, better luck next time!");
-    }
-    return res.send(data);
-  });
-});
-*/
-///
-
-let timeInterval = 3000;
-var urlencodedParser = bodyParser.urlencoded({ extended: false });
-var jsonParser = bodyParser.json();
-
-app.post("/api/setting", jsonParser, (req, res) => {
+app.post('/api/users/register', jsonParser, (req, res) => {
+  // console.log(req.body);
+  const { firstName, lastName, username, password } = req.body;
+  console.log(firstName, lastName, username, password);
   res.status(200);
-
-  timeInterval = req.body.timeInterval;
-  //console.log("Time Interval has beeen update: ", timeInterval);
-  res.end("ok");
+  res.send({ status: 'okkkkkkkkkk' });
+  res.end();
 });
+<<<<<<< HEAD
 
 // Init database = Mongodb
 
@@ -92,82 +73,28 @@ io.on("connection", client => {
       countAccess = 0;
     }, timeInterval);
   });
+=======
+app.post('/api/users/authenticate', jsonParser, (req, res) => {
+  console.log(req.body);
+  const user = {
+    id: 'id',
+    username: req.body.username,
+    lastName: req.body.username,
+  };
+  const responseJson = {
+    id: 'user.id',
+    username: user.username,
+    firstName: user.firstName,
+    lastName: user.lastName,
+    token: 'fake-jwt-token',
+  };
+  res.status(200);
+  res.send(responseJson);
+  res.end();
+>>>>>>> a11a5487451e704ef4044703f55a036a4a4f49a5
 });
 
-server.listen(8000);
-
-///////////////////////
-
-db.once("open", () => {
-  console.log("Connect successfully to mongodb!");
-
-  const taskCollection = db.collection("logs");
-  const changeStream = taskCollection.watch();
-  const accessCollection = db.collection("accessmodels");
-  const changeStreamAccess = accessCollection.watch();
-  const logSchema = new mongoose.Schema({
-    date: Date,
-    ip_src: String,
-    port_src: String,
-    ip_dst: String,
-    port_dst: String,
-    att_type: String
-  });
-
-  const Log = mongoose.model("Log", logSchema);
-
-  getInitData(Log);
-
-  changeStream.on("change", change => {
-    //console.log(change);
-    if (change.operationType === "insert") {
-      const task = change.fullDocument;
-      switch (task.malware) {
-        case "Mirai":
-          malwares.Mirai++;
-          break;
-
-        case "Bashlite":
-          malwares.Bashlite++;
-          break;
-
-        case "B2":
-          malwares.B2++;
-          break;
-
-        case "B4":
-          malwares.B4++;
-          break;
-
-        case "B5":
-          malwares.B5++;
-          break;
-
-        case "B6":
-          malwares.B6++;
-          break;
-
-        case "B7":
-          malwares.B7++;
-          break;
-
-        case "B8":
-          malwares.B8++;
-          break;
-
-        case "B9":
-          malwares.B9++;
-          break;
-      }
-      //console.log(malwares);
-      //io.sockets.emit('AA', Object.values(malwares));
-    }
-  });
-
-  changeStreamAccess.on("change", change => {
-    if (change.operationType === "insert") {
-      countAccess++;
-      console.log(countAccess);
-    }
-  });
+app.get('/api/status', (req, res) => {
+  res.send('ok');
 });
+app.listen(8081, () => console.log('Listening on port 8081!'));

@@ -1,38 +1,36 @@
-import React, { Component } from 'react'
-import openSocket from 'socket.io-client'
+/* eslint-disable react/destructuring-assignment */
+import React, { Component } from 'react';
+// import openSocket from 'socket.io-client';
 
-const socket = openSocket('http://localhost:8000');
+const socket = undefined; // openSocket('http://localhost:8000');
 
-function subscribeToServer(att_type, callback){
-    socket.on(att_type, res => callback(null, res));
-    socket.emit('sub_' + att_type, att_type);
+function subscribeToServer(attType, callback) {
+  socket.on(attType, res => callback(null, res));
+  socket.emit(`sub_${attType}`, attType);
 }
 
-class CountChart extends Component{
-    
-    constructor(props){
-        super(props);
-    }
-    componentDidMount(){
-        console.log('Component Did mount...');
-        subscribeToServer('AA', (err, res) =>{
-            console.log(res);
-            this.setState({
-                res:res
-            });
-        })
-    }
-    state ={
-        res:1
-    };
+class CountChart extends Component {
+  state = {
+    res: 1,
+  };
 
-    render(){
-        return (
-            <div>
-                <p>{this.state.res}</p>
-            </div>
-        );
-    }
+  componentDidMount() {
+    console.log('Component Did mount...');
+    subscribeToServer('AA', (err, res) => {
+      console.log(res);
+      this.setState({
+        res,
+      });
+    });
+  }
+
+  render() {
+    return (
+      <div>
+        <p>{this.state.res}</p>
+      </div>
+    );
+  }
 }
 
 export default CountChart;

@@ -1,14 +1,18 @@
-const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
-
-const outputDirectory = 'dist';
+const path = require("path");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+const CleanWebpackPlugin = require("clean-webpack-plugin");
+const webpack = require("webpack");
+const outputDirectory = "dist";
 
 module.exports = {
-  entry: './src/client/index.js',
+  entry: { app: ["./src/client/index.js"] },
+  devtool: "inline-source-map",
   output: {
     path: path.join(__dirname, outputDirectory),
-    filename: 'bundle.js'
+    filename: "bundle.js"
+  },
+  resolve: {
+    extensions: [".js", "jsx"]
   },
   module: {
     rules: [
@@ -16,32 +20,37 @@ module.exports = {
         test: /\.js$/,
         exclude: /node_modules/,
         use: {
-          loader: 'babel-loader'
+          loader: "babel-loader"
         }
       },
       {
         test: /\.css$/,
-        use: ['style-loader', 'css-loader']
+        use: ["style-loader", "css-loader"]
       },
       {
-        test: /\.(png|woff|woff2|eot|ttf|svg|jpg)$/,
-        loader: 'url-loader?limit=100000'
+        test: /\.(png|svg|jpg|gif)$/,
+        use: ["file-loader"]
       }
     ]
   },
-  devServer: {
-    port: 3000,
-    open: true,
-    proxy: {
-      '/api': 'http://localhost:8080'
-    }
-  },
   plugins: [
-    
     new CleanWebpackPlugin([outputDirectory]),
     new HtmlWebpackPlugin({
-      template: './public/index.html',
-      favicon: './public/favicon.ico'
-    })
-  ]
+      template: "./public/index.html",
+      favicon: "./public/favicon.ico"
+    }),
+    new webpack.HotModuleReplacementPlugin()
+  ],
+  devServer: {
+    historyApiFallback: true,
+    hot: true,
+    inline: true,
+    open:true,
+    proxy: {
+      "/api": {
+        target: "http://localhost:8081/",
+        secure: false
+      }
+    }
+  }
 };
