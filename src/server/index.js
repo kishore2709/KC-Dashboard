@@ -88,6 +88,7 @@ io.on("connection", client => {
           .toString(),
         newData: countAccess
       });
+      console.log(countAccess + 'log');
       countAccess = 0;
     }, timeInterval);
   });
