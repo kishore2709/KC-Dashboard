@@ -10,6 +10,7 @@ import { connectedHeaderPage as Header } from './Header';
 import Home from './Home/Home';
 import LogManagement from './LogManagement/LogManagement';
 import ServiceManagement from './ServiceManagement/ServiceManagement';
+import PermanentDrawerLeft from './AdminManagement/ManageUser';
 // import Setting from './SettingManagement/Setting';
 import { history } from '../_helpers';
 import { alertActions } from '../_actions';
@@ -54,6 +55,11 @@ class App extends React.Component {
                     exact
                     path="/log_management"
                     component={LogManagement}
+                  />
+                  <PrivateRoute
+                    exact
+                    path="/manageUser"
+                    component={PermanentDrawerLeft}
                   />
                   <PrivateRoute
                     exact

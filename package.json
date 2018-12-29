@@ -12,6 +12,9 @@
     "dev": "npx concurrently \"npm run server\" \"npm run client\"",
     "eslint": "eslint --fix --ext .js,.vue src/client"
   },
+  "resolutions": {
+    "**/event-stream": "^4.0.1"
+  },
   "author": "ExpressMikel",
   "license": "ISC",
   "dependencies": {
@@ -43,7 +46,10 @@
     "cors": "^2.8.4",
     "express-jwt": "^5.3.1",
     "jsonwebtoken": "^8.2.2",
-    "rootpath": "^0.1.2"
+    "rootpath": "^0.1.2",
+    "namor": "1.0.1",
+    "chance": "1.0.12",
+    "react-table": "6.7.5"
   },
   "devDependencies": {
     "@babel/cli": "^7.1.2",
