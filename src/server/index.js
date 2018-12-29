@@ -1,13 +1,24 @@
+require('rootpath')();
 const express = require('express');
 const os = require('os');
 const bodyParser = require('body-parser');
+const cors = require('cors');
+const errorHandler = require('./_helpers/error-handler');
+const jwt = require('./_helpers/jwt');
 
 const jsonParser = bodyParser.json();
+
 const urlencodedParser = bodyParser.urlencoded({ extended: false });
 
 const app = express();
-
+app.use(jsonParser);
+app.use(urlencodedParser);
 app.use(express.static('dist'));
+app.use(cors());
+app.use(jwt());
+app.use('/api/users', require('./users/users.controller'));
+
+app.use(errorHandler);
 
 app.post('/api/users/register', jsonParser, (req, res) => {
   console.log(req.body);
@@ -17,6 +28,7 @@ app.post('/api/users/register', jsonParser, (req, res) => {
   res.send({ status: 'okkkkkkkkkk' });
   res.end();
 });
+/*
 app.post('/api/users/authenticate', jsonParser, (req, res) => {
   console.log(req.body);
   const user = {
@@ -35,7 +47,7 @@ app.post('/api/users/authenticate', jsonParser, (req, res) => {
   res.send(responseJson);
   res.end();
 });
-
+*/
 app.get('/api/status', (req, res) => {
   res.send('ok');
 });
