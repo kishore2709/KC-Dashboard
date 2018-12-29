@@ -15,12 +15,7 @@ const styles = theme => ({
   },
 });
 
-const options = [
-  'Show some love to Material-UI',
-  'Show all notification content',
-  'Hide sensitive notification content',
-  'Hide all notification content',
-];
+const options = ['Nhóm 1', 'Nhóm 2', 'Nhóm 3'];
 
 class SelectedCell extends React.Component {
   constructor(props) {

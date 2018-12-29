@@ -82,7 +82,7 @@ class Table extends React.Component {
             );
           },
         });
-      } else if (key === 'view1') {
+      } else if (key.includes('view')) {
         columns.push({
           accessor: key,
           Header: key,
