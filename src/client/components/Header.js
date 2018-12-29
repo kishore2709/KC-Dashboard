@@ -46,7 +46,6 @@ class Header extends Component {
           className="navbar navbar-expand-lg bg-light"
           fill="true"
           variant="tabs"
-          defaultActiveKey="/"
         >
           <a className="navbar-brand" href="/">
             <img

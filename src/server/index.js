@@ -10,7 +10,7 @@ const app = express();
 app.use(express.static('dist'));
 
 app.post('/api/users/register', jsonParser, (req, res) => {
-  // console.log(req.body);
+  console.log(req.body);
   const { firstName, lastName, username, password } = req.body;
   console.log(firstName, lastName, username, password);
   res.status(200);

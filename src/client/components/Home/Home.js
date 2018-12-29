@@ -29,6 +29,7 @@ const Card = () => (
         figure2="Group"
         thirdImg={alertLogo}
         figure3="Alert"
+        showChart={1}
       />
     </div>
   </div>
@@ -52,11 +53,11 @@ const CardService = () => (
 
       <Items
         firstImg={searchLogo}
-        figure_1="Search"
+        figure1="Search"
         secondImg={webLogo}
-        figure_2="Web"
+        figure2="Web"
         thirdImg={dnsLogo}
-        figure_3="DNS"
+        figure3="DNS"
         showChart={1}
       />
     </div>
@@ -70,11 +71,11 @@ const CardBoardcast = () => (
       <hr />
       <Items
         firstImg={listAlertLogo}
-        figure_1="Danh sách"
+        figure1="Danh sách"
         secondImg={emailLogo}
-        figure_2="Gửi Email"
+        figure2="Gửi Email"
         thirdImg={smsLogo}
-        figure_3="Gửi SMS"
+        figure3="Gửi SMS"
         showChart={1}
       />
     </div>
