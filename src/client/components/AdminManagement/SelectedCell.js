@@ -15,7 +15,7 @@ const styles = theme => ({
   },
 });
 
-const options = ['Nhóm 1', 'Nhóm 2', 'Nhóm 3'];
+const options = ['Administrator', 'Moderator', 'User'];
 
 class SelectedCell extends React.Component {
   constructor(props) {

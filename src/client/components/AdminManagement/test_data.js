@@ -1,14 +1,32 @@
 export default [
   {
     username: 'dat',
-    group: 1,
-    view1: false,
-    view2: false,
+    password: 'abc123',
+    status: true,
+    group: 0,
   },
   {
     username: 'ddd',
+    password: 'abc123',
+    status: false,
+    group: 1,
+  },
+  {
+    username: 'Tom',
+    password: '123',
+    status: true,
     group: 2,
-    view1: true,
-    view2: true,
+  },
+  {
+    username: 'Jerri',
+    password: 'abc123',
+    status: false,
+    group: 2,
+  },
+  {
+    username: 'Long',
+    password: 'abc123',
+    status: false,
+    group: 1,
   },
 ];

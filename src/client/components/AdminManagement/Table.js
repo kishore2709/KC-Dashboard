@@ -54,6 +54,7 @@ class Table extends React.Component {
     };
   }
 
+  // this.state.data[cellInfo.index][cellInfo.column.id];
   getColumns(data) {
     const columns = [];
     const sample = data[0];
@@ -62,45 +63,24 @@ class Table extends React.Component {
         columns.push({
           accessor: key,
           Header: key,
-          Cell: cellInfo => {
-            const defaultKey = this.state.data[cellInfo.index][
-              cellInfo.column.id
-            ];
-
-            return (
-              <SelectedCell
-                onChange={value => {
-                  const data = [...this.state.data];
-                  data[cellInfo.index][cellInfo.column.id] =
-                    value.selectedIndex;
-                  this.setState({ data }, () => {
-                    console.log(this.state.data);
-                  });
-                }}
-                defaultKey={defaultKey}
-              />
-            );
-          },
+          Cell: cellInfo => (
+            <SelectedCell
+              onChange={value => {
+                const data = [...this.state.data];
+                data[cellInfo.index][cellInfo.column.id] = value.selectedIndex;
+                this.setState({ data }, () => {
+                  console.log(this.state.data);
+                });
+              }}
+              defaultKey={cellInfo.value}
+            />
+          ),
         });
-      } else if (key.includes('view')) {
+      } else if (key.includes('status')) {
         columns.push({
           accessor: key,
           Header: key,
-          Cell: cellInfo => {
-            const status = this.state.data[cellInfo.index][cellInfo.column.id];
-            return (
-              <Switches
-                onChange={value => {
-                  const data = [...this.state.data];
-                  data[cellInfo.index][cellInfo.column.id] = value;
-                  this.setState({ data }, () => {
-                    console.log(this.state.data);
-                  });
-                }}
-                status={status}
-              />
-            );
-          },
+          Cell: this.renderProgress,
         });
       } else if (key !== '_id') {
         columns.push({
@@ -182,6 +162,46 @@ class Table extends React.Component {
   logSelection = () => {
     console.log('selection:', this.state.selection);
   };
+
+  renderProgress(row) {
+    const val = row.value ? 1 : 0;
+    return (
+      <div
+        style={{
+          width: '100%',
+          height: '100%',
+          backgroundColor: '#dadada',
+          borderRadius: '2px',
+        }}
+      >
+        <div
+          style={{
+            width: `${val}%`,
+            height: '100%',
+            backgroundColor:
+              row.value > 66 ? '#85cc00' : val > 33 ? '#ffbf00' : '#ff2e00',
+            borderRadius: '2px',
+            transition: 'all .2s ease-out',
+          }}
+        />
+      </div>
+    );
+  }
+
+  renderSwitches(cellInfo) {
+    return (
+      <Switches
+        onChange={value => {
+          const data = [...this.state.data];
+          data[cellInfo.index][cellInfo.column.id] = value;
+          this.setState({ data }, () => {
+            console.log(this.state.data);
+          });
+        }}
+        status={cellInfo.value}
+      />
+    );
+  }
 
   renderEditable(cellInfo) {
     return (
