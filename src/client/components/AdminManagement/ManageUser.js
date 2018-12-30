@@ -16,6 +16,7 @@ import MailIcon from '@material-ui/icons/Mail';
 import { NavLink } from 'react-router-dom';
 import Avatar from '@material-ui/core/Avatar';
 import SvgIcon from '@material-ui/core/SvgIcon';
+import Button from '@material-ui/core/Button';
 import { logo } from '../icon/Icon';
 // import Table from './Table';
 import Demo from './DevTable';
@@ -60,6 +61,12 @@ const styles = theme => ({
     marginRight: 'auto',
     width: 60,
     height: 60,
+  },
+  button: {
+    display: 'block',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    marginBottom: '10px',
   },
 });
 
@@ -115,6 +122,13 @@ function PermanentDrawerLeft(props) {
       </Drawer>
       <main className={classes.content}>
         <div className={classes.toolbar} />
+        <Button
+          variant="contained"
+          color="secondary"
+          className={classes.button}
+        >
+          Cập nhật lên cơ sở dữ liệu
+        </Button>
         <Demo />
       </main>
     </div>
