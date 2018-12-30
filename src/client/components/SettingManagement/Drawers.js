@@ -44,7 +44,7 @@ class TemporaryDrawer extends React.Component {
     const fullList = (
       <div className={classes.fullList}>
         <List>
-          {['Manage User'].map((text, index) => (
+          {['Quản lý người dùng'].map((text, index) => (
             <NavLink to="/manageUser" key={text}>
               <ListItem button key={text}>
                 <ListItemIcon>

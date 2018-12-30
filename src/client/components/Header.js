@@ -56,21 +56,12 @@ class Header extends Component {
               alt=""
             />
           </a>
-          <button
-            className="navbar-toggler"
-            type="button"
-            data-toggle="collapse"
-            data-target="#navbarNavAltMarkup"
-            aria-controls="navbarNavAltMarkup"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-          >
-            <span className="navbar-toggler-icon" />
-          </button>
           <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
-            <div className="navbar-nav mr-auto">
+            <ul className="navbar-nav mr-auto">
               <ItemLink to="/" titleName="Trang chủ" />
-              <ItemLink to="/user_management" titleName="Quản lý người dùng" />
+              {
+                // <ItemLink to="/user_management" titleName="Quản lý người dùng" />
+              }
               <ItemLink to="/log_management" titleName="Quản lý log truy cập" />
               <ItemLink
                 to="/service_management"
@@ -79,19 +70,18 @@ class Header extends Component {
               <ItemLink to="/alert_broadcast" titleName="Quảng bá cảnh báo" />
               <ItemLink to="/attack_detection" titleName="Phát hiện tấn công" />
               <ItemLink to="/search" titleName="Tìm kiếm thông tin" />
-
-              <img
-                alt=""
-                className="pull-right"
-                src={settingIcon}
-                width="50"
-                height="25"
-                onClick={() => {
-                  // console.log(this.props.dispatch);
-                  opened(true);
-                }}
-              />
-            </div>
+            </ul>
+            <img
+              alt=""
+              className="pull-right"
+              src={settingIcon}
+              width="50"
+              height="25"
+              onClick={() => {
+                // console.log(this.props.dispatch);
+                opened(true);
+              }}
+            />
           </div>
         </nav>
       </div>

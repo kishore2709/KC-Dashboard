@@ -34,7 +34,8 @@ class App extends React.Component {
     const showHeader = history => {
       if (
         history.location.pathname === '/login' ||
-        history.location.pathname === '/register'
+        history.location.pathname === '/register' ||
+        history.location.pathname === '/manageUser'
       )
         return <div />;
       return <Header />;
