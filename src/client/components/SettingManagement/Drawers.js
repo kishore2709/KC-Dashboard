@@ -47,7 +47,8 @@ class TemporaryDrawer extends React.Component {
   };
 
   render() {
-    const { classes } = this.props;
+    const { classes, authentication } = this.props;
+    const currentUser = JSON.parse(localStorage.getItem('user'));
     const fullList = (
       <div className={classes.fullList}>
         <List>
@@ -56,7 +57,7 @@ class TemporaryDrawer extends React.Component {
               <ListItemIcon>
                 <HomeIcon className={classes.icon} color="primary" />
               </ListItemIcon>
-              <ListItemText primary="username" />
+              <ListItemText primary={`Chào ${currentUser.username}`} />
             </ListItem>
           </NavLink>
           <NavLink to="/editInfo">
@@ -127,6 +128,7 @@ TemporaryDrawer.propTypes = {
   closed: PropTypes.func.isRequired,
   opened: PropTypes.func.isRequired,
   message: PropTypes.bool.isRequired,
+  authentication: PropTypes.any.isRequired,
 };
 
 const mapDispatchToProps = dispatch => ({
@@ -140,8 +142,10 @@ const mapDispatchToProps = dispatch => ({
 
 function mapStateToProps(state) {
   const { message } = state.drawer;
+  const { authentication } = state;
   return {
     message,
+    authentication,
   };
 }
 
