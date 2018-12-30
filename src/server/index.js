@@ -28,10 +28,9 @@ app.post('/api/users/register', jsonParser, (req, res) => {
   res.send({ status: 'okkkkkkkkkk' });
   res.end();
 });
-<<<<<<< HEAD
+// <<<<<<< HEAD
 /*
 =======
-<<<<<<< HEAD
 
 // Init database = Mongodb
 
@@ -87,8 +86,6 @@ io.on("connection", client => {
       countAccess = 0;
     }, timeInterval);
   });
-=======
->>>>>>> master
 app.post('/api/users/authenticate', jsonParser, (req, res) => {
   console.log(req.body);
   const user = {
