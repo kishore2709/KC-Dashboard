@@ -14,8 +14,19 @@ import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
 import { NavLink } from 'react-router-dom';
+import Avatar from '@material-ui/core/Avatar';
+import SvgIcon from '@material-ui/core/SvgIcon';
+import { logo } from '../icon/Icon';
 // import Table from './Table';
 import Demo from './DevTable';
+
+function HomeIcon(props) {
+  return (
+    <SvgIcon {...props}>
+      <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
+    </SvgIcon>
+  );
+}
 
 const drawerWidth = 240;
 
@@ -40,6 +51,16 @@ const styles = theme => ({
     backgroundColor: theme.palette.background.default,
     padding: theme.spacing.unit * 3,
   },
+  icon: {
+    margin: theme.spacing.unit * 2,
+  },
+  bigAvatar: {
+    display: 'block',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    width: 60,
+    height: 60,
+  },
 });
 
 function PermanentDrawerLeft(props) {
@@ -51,7 +72,7 @@ function PermanentDrawerLeft(props) {
       <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
           <Typography variant="h6" color="inherit" noWrap>
-            Permanent drawer
+            Quản lý người dùng
           </Typography>
         </Toolbar>
       </AppBar>
@@ -63,14 +84,17 @@ function PermanentDrawerLeft(props) {
         }}
         anchor="left"
       >
-        <div className={classes.toolbar} />
+        {
+          // <div className={classes.toolbar} />
+        }
+        <Avatar alt="PTIT" src={logo} className={classes.bigAvatar} />
         <Divider />
         <List>
-          {['Dashboard'].map((text, index) => (
+          {['Trang chủ'].map((text, index) => (
             <NavLink to="/" key={text}>
               <ListItem button key={text}>
                 <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                  <HomeIcon color="secondary" />
                 </ListItemIcon>
                 <ListItemText primary={text} />
               </ListItem>
