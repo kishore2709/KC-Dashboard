@@ -7,10 +7,11 @@ import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
 import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
+import SvgIcon from '@material-ui/core/SvgIcon';
+import FaceIcon from '@material-ui/icons/Face';
+import SupervisedUserCircle from '@material-ui/icons/SupervisedUserCircle';
 import { drawerActions } from '../../_actions';
 
 const styles = {
@@ -21,7 +22,13 @@ const styles = {
     width: 'auto',
   },
 };
-
+function HomeIcon(props) {
+  return (
+    <SvgIcon {...props}>
+      <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
+    </SvgIcon>
+  );
+}
 class TemporaryDrawer extends React.Component {
   constructor(props) {
     super(props);
@@ -44,11 +51,30 @@ class TemporaryDrawer extends React.Component {
     const fullList = (
       <div className={classes.fullList}>
         <List>
+          <NavLink to="/">
+            <ListItem button>
+              <ListItemIcon>
+                <HomeIcon className={classes.icon} color="primary" />
+              </ListItemIcon>
+              <ListItemText primary="username" />
+            </ListItem>
+          </NavLink>
+          <NavLink to="/editInfo">
+            <ListItem button>
+              <ListItemIcon>
+                <FaceIcon />
+              </ListItemIcon>
+              <ListItemText primary="Chỉnh sửa thông tin" />
+            </ListItem>
+          </NavLink>
+        </List>
+        <Divider />
+        <List>
           {['Quản lý người dùng'].map((text, index) => (
             <NavLink to="/manageUser" key={text}>
               <ListItem button key={text}>
                 <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                  <SupervisedUserCircle />
                 </ListItemIcon>
                 <ListItemText primary={text} />
               </ListItem>
