@@ -8,6 +8,8 @@ import PropTypes from 'prop-types';
 import ConnectedDrawers from './SettingManagement/Drawers';
 import { drawerActions } from '../_actions/drawer.actions';
 import { logo, settingIcon } from './icon/Icon';
+import { history } from '../_helpers';
+
 // import { map } from 'rsvp';
 
 const ItemLink = ({ to, titleName }) => (
@@ -39,6 +41,11 @@ class Header extends Component {
   render() {
     const { opened } = this.props;
     console.log(this.props);
+    if (
+      history.location.pathname === '/login' ||
+      history.location.pathname === '/register'
+    )
+      return <div>{this.props.children}</div>;
     return (
       <div>
         <ConnectedDrawers />
@@ -84,6 +91,7 @@ class Header extends Component {
             />
           </div>
         </nav>
+        {this.props.children}
       </div>
     );
   }

@@ -31,15 +31,7 @@ class App extends React.Component {
 
   render() {
     const { alert } = this.props;
-    const showHeader = history => {
-      if (
-        history.location.pathname === '/login' ||
-        history.location.pathname === '/register' ||
-        history.location.pathname === '/manageUser'
-      )
-        return <div />;
-      return <Header />;
-    };
+
     return (
       <div>
         <div>
@@ -49,27 +41,28 @@ class App extends React.Component {
             )}
             <Router history={history}>
               <div>
-                {showHeader(history)}
-                <Switch>
-                  <PrivateRoute exact path="/" component={Home} />
-                  <PrivateRoute
-                    exact
-                    path="/log_management"
-                    component={LogManagement}
-                  />
-                  <PrivateRoute
-                    exact
-                    path="/manageUser"
-                    component={PermanentDrawerLeft}
-                  />
-                  <PrivateRoute
-                    exact
-                    path="/service_management"
-                    component={ServiceManagement}
-                  />
-                  <Route path="/login" component={LoginPage} />
-                  <Route path="/register" component={RegisterPage} />
-                </Switch>
+                <Header>
+                  <Switch>
+                    <PrivateRoute exact path="/" component={Home} />
+                    <PrivateRoute
+                      exact
+                      path="/log_management"
+                      component={LogManagement}
+                    />
+                    <PrivateRoute
+                      exact
+                      path="/manageUser"
+                      component={PermanentDrawerLeft}
+                    />
+                    <PrivateRoute
+                      exact
+                      path="/service_management"
+                      component={ServiceManagement}
+                    />
+                    <Route path="/login" component={LoginPage} />
+                    <Route path="/register" component={RegisterPage} />
+                  </Switch>
+                </Header>
               </div>
             </Router>
           </div>

@@ -22,6 +22,7 @@ async function authenticate({ username, password }) {
     u => u.username === username && u.password === password
   );
   if (user) {
+    // console.log('match?/');
     const token = jwt.sign({ sub: user.id }, config.secret);
     const { password, ...userWithoutPassword } = user;
     return {

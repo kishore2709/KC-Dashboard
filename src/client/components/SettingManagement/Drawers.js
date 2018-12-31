@@ -49,6 +49,8 @@ class TemporaryDrawer extends React.Component {
   render() {
     const { classes, authentication } = this.props;
     const currentUser = JSON.parse(localStorage.getItem('user'));
+    if (currentUser == null) return <div />;
+    // console.log(currentUser);
     const fullList = (
       <div className={classes.fullList}>
         <List>

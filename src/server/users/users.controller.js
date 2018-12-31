@@ -10,7 +10,7 @@ router.get('/', getAll);
 module.exports = router;
 
 function authenticate(req, res, next) {
-  console.log('helsasdl');
+  // console.log('helsasdl');
   console.log(req.body);
   userService
     .authenticate(req.body)
