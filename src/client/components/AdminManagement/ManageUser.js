@@ -17,6 +17,7 @@ import { NavLink } from 'react-router-dom';
 import Avatar from '@material-ui/core/Avatar';
 import SvgIcon from '@material-ui/core/SvgIcon';
 import Button from '@material-ui/core/Button';
+import { withToastManager } from 'react-toast-notifications';
 import { logo } from '../icon/Icon';
 // import Table from './Table';
 import Demo from './DevTable';
@@ -71,7 +72,7 @@ const styles = theme => ({
 });
 
 function PermanentDrawerLeft(props) {
-  const { classes } = props;
+  const { classes, toastManager } = props;
 
   return (
     <div className={classes.root}>
@@ -126,6 +127,9 @@ function PermanentDrawerLeft(props) {
           variant="contained"
           color="secondary"
           className={classes.button}
+          onClick={() => {
+            toastManager.add('Saved Successfully', { appearance: 'success' });
+          }}
         >
           Cập nhật lên cơ sở dữ liệu
         </Button>
@@ -139,4 +143,4 @@ PermanentDrawerLeft.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(PermanentDrawerLeft);
+export default withToastManager(withStyles(styles)(PermanentDrawerLeft));

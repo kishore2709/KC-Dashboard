@@ -6,7 +6,7 @@ import './App.css';
 // import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { connectedHeaderPage as Header } from './Header';
+import { connectedHeaderPage as Header } from './Header/Header';
 import Home from './Home/Home';
 import LogManagement from './LogManagement/LogManagement';
 import ServiceManagement from './ServiceManagement/ServiceManagement';

@@ -10,6 +10,13 @@ const users = [
     firstName: 'Test',
     lastName: 'User',
   },
+  {
+    id: 1,
+    username: 'admin',
+    password: 'admin',
+    firstName: 'admin',
+    lastName: 'admin',
+  },
 ];
 
 module.exports = {
