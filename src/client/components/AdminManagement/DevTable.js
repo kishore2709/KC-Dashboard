@@ -13,7 +13,7 @@ import {
   TableEditColumn,
 } from '@devexpress/dx-react-grid-material-ui';
 import { PostApi } from '../../_helpers/Utils';
-// import { generateRows, globalSalesValues } from '../../demo-data/generator';
+import { generateRows, globalSalesValues } from '../../demo-data/generator';
 
 const getRowId = row => row.id;
 
@@ -79,9 +79,17 @@ export default class Demo extends React.PureComponent {
       roleColumns: ['role'],
       rows: [
         {
+          id: 1,
           username: 'mikelhpdatke',
           password: 'abc@123',
           role: 'Admin',
+          status: true,
+        },
+        {
+          id: 2,
+          username: 'ad',
+          password: 'aa@123',
+          role: 'dd',
           status: true,
         },
       ],
@@ -113,11 +121,16 @@ export default class Demo extends React.PureComponent {
     };
   }
 
-  componentDidMount() {
+  componentWillMount() {
     PostApi('/api/users/getUsers', {})
       .then(res => {
         console.log(res);
-        this.setState({ rows: res });
+        const result = res.map(x => {
+          const { _id, ...rest } = x;
+          return { id: _id, ...rest };
+        });
+        // console.log(res);
+        this.setState({ rows: result });
       })
       .catch(err => {
         console.log('get data from database err');

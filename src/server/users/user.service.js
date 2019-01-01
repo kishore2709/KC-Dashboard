@@ -45,9 +45,11 @@ async function getUsers() {
     if (err) console.log('get db users error');
     else {
       console.log('get db users ok');
-      ret = users;
+      ret = [...users];
     }
   });
+  // console.log('wtf');
+  // console.log(ret);
   return ret;
 }
 async function updateDb(obj) {
@@ -60,7 +62,7 @@ async function updateDb(obj) {
       ret = 1;
     }
   });
-  return ret;
+  return { id: _id, ...ret };
 }
 
 async function authenticate({ username, password }) {
