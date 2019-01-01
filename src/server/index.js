@@ -3,11 +3,16 @@ const express = require('express');
 const os = require('os');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const md5 = require('md5');
+
 const errorHandler = require('./_helpers/error-handler');
 const jwt = require('./_helpers/jwt');
 
 const jsonParser = bodyParser.json();
 
+// >>>###################################
+
+// Nodejs
 const urlencodedParser = bodyParser.urlencoded({ extended: false });
 
 const app = express();
@@ -28,6 +33,9 @@ app.post('/api/users/register', jsonParser, (req, res) => {
   res.send({ status: 'okkkkkkkkkk' });
   res.end();
 });
+
+// ////////#$################
+
 // <<<<<<< HEAD
 /*
 =======
@@ -106,7 +114,4 @@ app.post('/api/users/authenticate', jsonParser, (req, res) => {
 >>>>>>> a11a5487451e704ef4044703f55a036a4a4f49a5
 });
 */
-app.get('/api/status', (req, res) => {
-  res.send('ok');
-});
 app.listen(8081, () => console.log('Listening on port 8081!'));

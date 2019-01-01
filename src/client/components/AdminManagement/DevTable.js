@@ -12,8 +12,8 @@ import {
   TableEditRow,
   TableEditColumn,
 } from '@devexpress/dx-react-grid-material-ui';
-
-import { generateRows, globalSalesValues } from '../../demo-data/generator';
+import { PostApi } from '../../_helpers/Utils';
+// import { generateRows, globalSalesValues } from '../../demo-data/generator';
 
 const getRowId = row => row.id;
 
@@ -111,6 +111,17 @@ export default class Demo extends React.PureComponent {
       }
       this.setState({ rows });
     };
+  }
+
+  componentDidMount() {
+    PostApi('/api/users/getUsers', {})
+      .then(res => {
+        console.log(res);
+        this.setState({ rows: res });
+      })
+      .catch(err => {
+        console.log('get data from database err');
+      });
   }
 
   render() {
