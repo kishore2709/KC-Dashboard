@@ -12,7 +12,8 @@ import { NavLink } from 'react-router-dom';
 import SvgIcon from '@material-ui/core/SvgIcon';
 import FaceIcon from '@material-ui/icons/Face';
 import SupervisedUserCircle from '@material-ui/icons/SupervisedUserCircle';
-import { drawerActions } from '../../_actions';
+import { drawerActions, dialogActions } from '../../_actions';
+import UserDialog from './UserDialog';
 
 const styles = {
   list: {
@@ -47,7 +48,7 @@ class TemporaryDrawer extends React.Component {
   };
 
   render() {
-    const { classes, authentication } = this.props;
+    const { classes, authentication, openDialog } = this.props;
     const currentUser = JSON.parse(localStorage.getItem('user'));
     if (currentUser == null) return <div />;
     // console.log(currentUser);
@@ -62,14 +63,18 @@ class TemporaryDrawer extends React.Component {
               <ListItemText primary={`Chào ${currentUser.username}`} />
             </ListItem>
           </NavLink>
-          <NavLink to="/editInfo">
-            <ListItem button>
-              <ListItemIcon>
-                <FaceIcon />
-              </ListItemIcon>
-              <ListItemText primary="Chỉnh sửa thông tin" />
-            </ListItem>
-          </NavLink>
+
+          <ListItem
+            button
+            onClick={() => {
+              openDialog(true);
+            }}
+          >
+            <ListItemIcon>
+              <FaceIcon />
+            </ListItemIcon>
+            <ListItemText primary="Chỉnh sửa thông tin" />
+          </ListItem>
         </List>
         <Divider />
         <List>
@@ -103,6 +108,7 @@ class TemporaryDrawer extends React.Component {
     // console.log('in Drawerssssssssssssss state=', this.props.message);
     return (
       <div>
+        <UserDialog />
         <Drawer
           anchor="right"
           // eslint-disable-next-line react/destructuring-assignment
@@ -139,6 +145,9 @@ const mapDispatchToProps = dispatch => ({
   },
   closed: newStatus => {
     dispatch(drawerActions.closed(newStatus));
+  },
+  openDialog: newStatus => {
+    dispatch(dialogActions.openDialog(newStatus));
   },
 });
 
