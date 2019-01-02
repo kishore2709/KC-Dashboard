@@ -53,16 +53,17 @@ async function getUsers() {
   return ret;
 }
 async function updateDb(obj) {
-  const { _id, ...rest } = obj;
+  const { id, ...rest } = obj;
   let ret = 0;
-  await User.findByIdAndUpdate(_id, rest, err => {
+  console.log(id, rest);
+  await User.findByIdAndUpdate(id, rest, err => {
     if (err) console.log('Update db error');
     else {
       console.log('update ok');
       ret = 1;
     }
   });
-  return { id: _id, ...ret };
+  return ret;
 }
 
 async function authenticate({ username, password }) {

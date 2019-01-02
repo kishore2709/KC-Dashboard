@@ -4,6 +4,7 @@ import Chip from '@material-ui/core/Chip';
 import Input from '@material-ui/core/Input';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
+import { withToastManager } from 'react-toast-notifications';
 import { DataTypeProvider, EditingState } from '@devexpress/dx-react-grid';
 import {
   Grid,
@@ -64,10 +65,10 @@ const BooleanTypeProvider = props => (
   />
 );
 
-export default class Demo extends React.PureComponent {
+class Demo extends React.PureComponent {
   constructor(props) {
     super(props);
-
+    const { toastManager } = this.props;
     this.state = {
       columns: [
         { name: 'username', title: 'Username' },
@@ -109,9 +110,27 @@ export default class Demo extends React.PureComponent {
         ];
       }
       if (changed) {
-        rows = rows.map(row =>
-          changed[row.id] ? { ...row, ...changed[row.id] } : row
-        );
+        rows = rows.map(row => {
+          if (changed[row.id]) {
+            PostApi('/api/users/updateDb', { ...row, ...changed[row.id] })
+              .then(res => {
+                toastManager.add('Updated Successfully', {
+                  appearance: 'success',
+                  autoDismiss: true,
+                });
+              })
+              .catch(err => {
+                console.log('update data from database err');
+                toastManager.add(`Something went wrong: "${error.message}"`, {
+                  appearance: 'error',
+                  autoDismiss: true,
+                });
+              });
+            return { ...row, ...changed[row.id] };
+          }
+
+          return row;
+        });
       }
       if (deleted) {
         const deletedSet = new Set(deleted);
@@ -158,3 +177,4 @@ export default class Demo extends React.PureComponent {
     );
   }
 }
+export default withToastManager(Demo);
