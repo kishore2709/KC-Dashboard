@@ -99,6 +99,8 @@ class Demo extends React.PureComponent {
     this.commitChanges = ({ added, changed, deleted }) => {
       let { rows } = this.state;
       if (added) {
+        // console.log(added);
+
         const startingAddedId =
           rows.length > 0 ? rows[rows.length - 1].id + 1 : 0;
         rows = [
@@ -133,8 +135,27 @@ class Demo extends React.PureComponent {
         });
       }
       if (deleted) {
+        // console.log(deleted);
         const deletedSet = new Set(deleted);
-        rows = rows.filter(row => !deletedSet.has(row.id));
+        rows = rows.filter(row => {
+          if (deletedSet.has(row.id)) {
+            PostApi('/api/users/deleteDb', row)
+              .then(res => {
+                toastManager.add('Deleted Successfully', {
+                  appearance: 'success',
+                  autoDismiss: true,
+                });
+              })
+              .catch(err => {
+                console.log('delete data from database err');
+                toastManager.add(`Something went wrong: "${error.message}"`, {
+                  appearance: 'error',
+                  autoDismiss: true,
+                });
+              });
+          }
+          return !deletedSet.has(row.id);
+        });
       }
       this.setState({ rows });
     };

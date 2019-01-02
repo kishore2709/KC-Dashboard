@@ -36,6 +36,7 @@ module.exports = {
   authenticate,
   getAll,
   updateDb,
+  deleteDb,
   getUsers,
 };
 
@@ -50,6 +51,20 @@ async function getUsers() {
   });
   // console.log('wtf');
   // console.log(ret);
+  return ret;
+}
+
+async function deleteDb(obj) {
+  const { id, ...rest } = obj;
+  let ret = 0;
+  console.log(id, rest);
+  await User.findByIdAndRemove(id, err => {
+    if (err) console.log('Update db error');
+    else {
+      console.log('update ok');
+      ret = 1;
+    }
+  });
   return ret;
 }
 async function updateDb(obj) {

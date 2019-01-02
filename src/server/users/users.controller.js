@@ -8,8 +8,21 @@ router.post('/authenticate', authenticate);
 router.get('/', getAll);
 router.post('/updateDb', updateDb);
 router.post('/getUsers', getUsers);
+router.post('/deleteDb', deleteDb);
 module.exports = router;
 
+function deleteDb(req, res, next) {
+  userService
+    .deleteDb(req.body)
+    .then(ret => {
+      if (ret === 0) {
+        res.status(400).json({ message: 'delete db error' });
+      } else {
+        res.json({ message: 'ok' });
+      }
+    })
+    .catch(err => next(err));
+}
 function getUsers(req, res, next) {
   userService
     .getUsers()
