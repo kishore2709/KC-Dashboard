@@ -9,8 +9,23 @@ router.get('/', getAll);
 router.post('/updateDb', updateDb);
 router.post('/getUsers', getUsers);
 router.post('/deleteDb', deleteDb);
+router.post('/addDb', addDb);
 module.exports = router;
 
+function addDb(req, res, next) {
+  userService
+    .addDb(req.body)
+    .then(ret => {
+      // console.log(ret);
+      if (ret === 0) {
+        res.status(400).json({ message: 'delete db error' });
+      } else {
+        console.log(ret);
+        res.json(ret);
+      }
+    })
+    .catch(err => next(err));
+}
 function deleteDb(req, res, next) {
   userService
     .deleteDb(req.body)

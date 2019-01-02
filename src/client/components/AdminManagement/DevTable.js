@@ -13,6 +13,7 @@ import {
   TableEditRow,
   TableEditColumn,
 } from '@devexpress/dx-react-grid-material-ui';
+import md5 from 'md5';
 import { PostApi } from '../../_helpers/Utils';
 import { generateRows, globalSalesValues } from '../../demo-data/generator';
 
@@ -98,24 +99,57 @@ class Demo extends React.PureComponent {
 
     this.commitChanges = ({ added, changed, deleted }) => {
       let { rows } = this.state;
+      const alertErr = () => {
+        toastManager.add(`Something went wrong: `, {
+          appearance: 'error',
+          autoDismiss: true,
+        });
+      };
       if (added) {
         // console.log(added);
+        added.forEach(x => {
+          const { password, ...rest } = x;
 
-        const startingAddedId =
-          rows.length > 0 ? rows[rows.length - 1].id + 1 : 0;
-        rows = [
-          ...rows,
-          ...added.map((row, index) => ({
-            id: startingAddedId + index,
-            ...row,
-          })),
-        ];
+          PostApi('/api/users/addDb', { password: md5(password), ...rest })
+            .then(res => {
+              // console.log(`${res.username} ??? `);
+              if (res === 'err') {
+                alertErr();
+                return 'err';
+              }
+              const newAdd = [res];
+              console.log(newAdd);
+              const startingAddedId =
+                rows.length > 0 ? rows[rows.length - 1].id + 1 : 0;
+              rows = [
+                ...rows,
+                ...newAdd.map((row, index) => ({
+                  id: startingAddedId + index,
+                  ...row,
+                })),
+              ];
+              this.setState({ rows }, () => {
+                toastManager.add('Added Successfully', {
+                  appearance: 'success',
+                  autoDismiss: true,
+                });
+              });
+            })
+            .catch(err => {
+              console.log('added data from database err', err);
+              alertErr();
+            });
+        });
       }
       if (changed) {
         rows = rows.map(row => {
           if (changed[row.id]) {
             PostApi('/api/users/updateDb', { ...row, ...changed[row.id] })
               .then(res => {
+                if (res === 'err') {
+                  alertErr();
+                  return 'err';
+                }
                 toastManager.add('Updated Successfully', {
                   appearance: 'success',
                   autoDismiss: true,
@@ -123,10 +157,7 @@ class Demo extends React.PureComponent {
               })
               .catch(err => {
                 console.log('update data from database err');
-                toastManager.add(`Something went wrong: "${error.message}"`, {
-                  appearance: 'error',
-                  autoDismiss: true,
-                });
+                alertErr();
               });
             return { ...row, ...changed[row.id] };
           }
@@ -141,6 +172,10 @@ class Demo extends React.PureComponent {
           if (deletedSet.has(row.id)) {
             PostApi('/api/users/deleteDb', row)
               .then(res => {
+                if (res === 'err') {
+                  alertErr();
+                  return 'err';
+                }
                 toastManager.add('Deleted Successfully', {
                   appearance: 'success',
                   autoDismiss: true,
@@ -148,10 +183,7 @@ class Demo extends React.PureComponent {
               })
               .catch(err => {
                 console.log('delete data from database err');
-                toastManager.add(`Something went wrong: "${error.message}"`, {
-                  appearance: 'error',
-                  autoDismiss: true,
-                });
+                alertErr();
               });
           }
           return !deletedSet.has(row.id);

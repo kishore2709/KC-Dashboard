@@ -37,6 +37,7 @@ module.exports = {
   getAll,
   updateDb,
   deleteDb,
+  addDb,
   getUsers,
 };
 
@@ -54,6 +55,26 @@ async function getUsers() {
   return ret;
 }
 
+async function addDb(obj) {
+  let ret = 0;
+  // console.log(obj);
+  const user = new User(obj);
+  await new Promise(resolve =>
+    user.save((err, newUser) => {
+      if (err) {
+        console.log('add db err');
+      } else {
+        console.log('add ok');
+        ret = newUser;
+        console.log(ret);
+        resolve(ret);
+      }
+    })
+  );
+  console.log('wtf');
+  console.log(ret);
+  return ret;
+}
 async function deleteDb(obj) {
   const { id, ...rest } = obj;
   let ret = 0;

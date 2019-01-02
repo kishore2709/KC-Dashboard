@@ -12,11 +12,14 @@ export async function PostApi(url, json) {
   });
   const result = fetch(myRequest)
     .then(response => {
+      // console.log(response);
       if (response.status === 200) {
         return response.json();
       }
-      return Promise.reject(new Error('err status != 200'));
-      console.log('Something went wrong on api server!');
+      console.log('err');
+      return 'err';
+      // return Promise.reject(new Error('err status != 200'));
+      // console.log('Something went wrong on api server!');
     })
     .then(response => response)
     .catch(error => {
