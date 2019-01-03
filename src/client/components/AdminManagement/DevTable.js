@@ -108,11 +108,12 @@ class Demo extends React.PureComponent {
       if (added) {
         // console.log(added);
         added.forEach(x => {
+          if (!('status' in x)) x.status = false;
           const { password, ...rest } = x;
-
+          // console.log(x);
           PostApi('/api/users/addDb', { password: md5(password), ...rest })
             .then(res => {
-              // console.log(`${res.username} ??? `);
+              console.log(res);
               if (res === 'err') {
                 alertErr();
                 return 'err';
@@ -142,54 +143,89 @@ class Demo extends React.PureComponent {
         });
       }
       if (changed) {
-        rows = rows.map(row => {
-          if (changed[row.id]) {
-            PostApi('/api/users/updateDb', { ...row, ...changed[row.id] })
-              .then(res => {
-                if (res === 'err') {
-                  alertErr();
-                  return 'err';
-                }
-                toastManager.add('Updated Successfully', {
-                  appearance: 'success',
-                  autoDismiss: true,
-                });
-              })
-              .catch(err => {
-                console.log('update data from database err');
-                alertErr();
-              });
-            return { ...row, ...changed[row.id] };
-          }
-
-          return row;
+        const asyncUpdateFunction = async function delFunc(rows) {
+          const ret = [];
+          await Promise.all(
+            rows.map(async row => {
+              if (changed[row.id]) {
+                let newRow = { ...row, ...changed[row.id] };
+                const { password, ...rest } = newRow;
+                newRow = { password: md5(password), ...rest };
+                console.log(newRow);
+                await PostApi('/api/users/updateDb', newRow)
+                  .then(res => {
+                    // console.log('in then proomse');
+                    if (res === 'err') {
+                      alertErr();
+                      ret.push(row);
+                      // ret = 'err';
+                    } else {
+                      ret.push(newRow);
+                      toastManager.add('Updated Successfully', {
+                        appearance: 'success',
+                        autoDismiss: true,
+                      });
+                    }
+                  })
+                  .catch(err => {
+                    // ret = 'err';
+                    ret.push(row);
+                    console.log('update data from database err');
+                    alertErr();
+                  });
+                // console.log(ret);
+                // return ret;
+                // return { ...row, ...changed[row.id] };
+              } else {
+                ret.push(row);
+              }
+            })
+          );
+          console.log(ret);
+          return ret;
+        };
+        asyncUpdateFunction(rows).then(ret => {
+          if (ret !== 'err') this.setState({ rows: ret });
         });
       }
       if (deleted) {
         // console.log(deleted);
         const deletedSet = new Set(deleted);
-        rows = rows.filter(row => {
-          if (deletedSet.has(row.id)) {
-            PostApi('/api/users/deleteDb', row)
-              .then(res => {
-                if (res === 'err') {
-                  alertErr();
-                  return 'err';
-                }
-                toastManager.add('Deleted Successfully', {
-                  appearance: 'success',
-                  autoDismiss: true,
-                });
-              })
-              .catch(err => {
-                console.log('delete data from database err');
-                alertErr();
-              });
-          }
-          return !deletedSet.has(row.id);
-        });
+        const asyncDeleteFunction = async function delFunc(rows) {
+          const ret = [];
+          let status = true;
+          await Promise.all(
+            rows.map(async row => {
+              if (deletedSet.has(row.id)) {
+                await PostApi('/api/users/deleteDb', row)
+                  .then(res => {
+                    if (res === 'err') {
+                      alertErr();
+                      status = false;
+                      return 'err';
+                    }
+                    toastManager.add('Deleted Successfully', {
+                      appearance: 'success',
+                      autoDismiss: true,
+                    });
+                  })
+                  .catch(err => {
+                    status = false;
+                    console.log('delete data from database err');
+                    alertErr();
+                  });
+              } else {
+                console.log(row);
+                if (status) ret.push(row);
+              }
+              // return true;
+            })
+          );
+          console.log(ret);
+          return ret;
+        };
+        asyncDeleteFunction(rows).then(res => this.setState({ rows: res }));
       }
-      this.setState({ rows });
     };
   }
 

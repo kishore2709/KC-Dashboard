@@ -80,9 +80,9 @@ async function deleteDb(obj) {
   let ret = 0;
   console.log(id, rest);
   await User.findByIdAndRemove(id, err => {
-    if (err) console.log('Update db error');
+    if (err) console.log(err);
     else {
-      console.log('update ok');
+      console.log('Delete ok');
       ret = 1;
     }
   });
