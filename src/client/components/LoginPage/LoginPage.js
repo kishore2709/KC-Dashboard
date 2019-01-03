@@ -4,6 +4,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import md5 from 'md5';
 import { userActions } from '../../_actions';
 
 class LoginPage extends React.Component {
@@ -35,7 +36,7 @@ class LoginPage extends React.Component {
     const { username, password } = this.state;
     const { dispatch } = this.props;
     if (username && password) {
-      dispatch(userActions.login(username, password));
+      dispatch(userActions.login(username, md5(password)));
     }
   }
 

@@ -51,7 +51,8 @@ class TemporaryDrawer extends React.Component {
     const { classes, authentication, openDialog } = this.props;
     const currentUser = JSON.parse(localStorage.getItem('user'));
     if (currentUser == null) return <div />;
-    // console.log(currentUser);
+    console.log('currenttttttttttttttttttt');
+    console.log(currentUser);
     const fullList = (
       <div className={classes.fullList}>
         <List>
@@ -60,7 +61,7 @@ class TemporaryDrawer extends React.Component {
               <ListItemIcon>
                 <HomeIcon className={classes.icon} color="primary" />
               </ListItemIcon>
-              <ListItemText primary={`Chào ${currentUser.username}`} />
+              <ListItemText primary={`Chào ${currentUser._doc.username}`} />
             </ListItem>
           </NavLink>
 

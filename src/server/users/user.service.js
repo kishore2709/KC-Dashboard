@@ -26,7 +26,7 @@ const users = [
   {
     id: 1,
     username: 'admin',
-    password: 'admin',
+    password: '21232f297a57a5a743894a0e4a801fc3',
     firstName: 'admin',
     lastName: 'admin',
   },
@@ -103,6 +103,7 @@ async function updateDb(obj) {
 }
 
 async function authenticate({ username, password }) {
+  /*
   const user = users.find(
     u => u.username === username && u.password === password
   );
@@ -115,6 +116,34 @@ async function authenticate({ username, password }) {
       token,
     };
   }
+  */
+  const tmpFunction = function findDb() {
+    return new Promise((resolve, reject) => {
+      User.find({ username, password }, (err, docs) => {
+        if (err) console.log(err);
+        else {
+          // console.log('wtf');
+          console.log(docs);
+          // console.log(docs.length);
+          if (docs.length === 0) {
+            reject(new Error('err'));
+            return;
+          }
+          // console.log(docs.length);
+          const user = docs[0];
+          console.log(user);
+          const token = jwt.sign({ sub: user.id }, config.secret);
+          const { password, ...userWithoutPassword } = user;
+          console.log(user);
+          resolve({
+            ...userWithoutPassword,
+            token,
+          });
+        }
+      });
+    });
+  };
+  return tmpFunction();
 }
 
 async function getAll() {
