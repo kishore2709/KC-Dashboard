@@ -66,7 +66,6 @@ async function addDb(obj) {
       } else {
         console.log('add ok');
         ret = newUser;
-        console.log(ret);
         resolve(ret);
       }
     })

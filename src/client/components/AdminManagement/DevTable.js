@@ -118,6 +118,8 @@ class Demo extends React.PureComponent {
                 alertErr();
                 return 'err';
               }
+              const { _id: id, ...restTwo } = res;
+              res = { id, ...restTwo };
               const newAdd = [res];
               console.log(newAdd);
               const startingAddedId =
@@ -193,7 +195,7 @@ class Demo extends React.PureComponent {
         const deletedSet = new Set(deleted);
         const asyncDeleteFunction = async function delFunc(rows) {
           const ret = [];
-          let status = true;
+          // let status = true;
           await Promise.all(
             rows.map(async row => {
               if (deletedSet.has(row.id)) {
@@ -201,22 +203,23 @@ class Demo extends React.PureComponent {
                   .then(res => {
                     if (res === 'err') {
                       alertErr();
-                      status = false;
+                      ret.push(row);
                       return 'err';
                     }
+                    // status = false;
                     toastManager.add('Deleted Successfully', {
                       appearance: 'success',
                       autoDismiss: true,
                     });
                   })
                   .catch(err => {
-                    status = false;
                     console.log('delete data from database err');
+                    ret.push(row);
                     alertErr();
                   });
               } else {
-                console.log(row);
-                if (status) ret.push(row);
+                // console.log(row);
+                ret.push(row);
               }
               // return true;
             })
