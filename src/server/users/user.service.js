@@ -11,6 +11,7 @@ const userSchema = new mongoose.Schema({
   password: String,
   role: String,
   status: Boolean,
+  accessArr: Array,
 });
 const User = mongoose.model('User', userSchema);
 
@@ -91,7 +92,7 @@ async function updateDb(obj) {
   const { id, ...rest } = obj;
   let ret = 0;
   console.log(id, rest);
-  await User.findByIdAndUpdate(id, rest, err => {
+  await User.findByIdAndUpdate(id, { $set: rest }, err => {
     if (err) console.log('Update db error');
     else {
       console.log('update ok');

@@ -10,6 +10,8 @@ import Checkbox from '@material-ui/core/Checkbox';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core/styles';
+import LinearProgress from '@material-ui/core/LinearProgress';
+import { withToastManager } from 'react-toast-notifications';
 import { GetUserInfo, PostApi } from '../../_helpers/Utils';
 
 const styles = theme => ({
@@ -22,6 +24,7 @@ class CoordinateCheckbox extends React.Component {
   render() {
     return (
       <Checkbox
+        checked={this.props.checked}
         onChange={(event, checked) =>
           this.props.onChange(event, checked, this.props.row, this.props.col)
         }
@@ -38,6 +41,7 @@ class AccessManagement extends React.Component {
       tabs: [],
       users: [],
       accessMatrix: [],
+      loadding: true,
     };
     this.promiseState = this.promiseState.bind(this);
     this.GetAllUsers = this.GetAllUsers.bind(this);
@@ -61,10 +65,10 @@ class AccessManagement extends React.Component {
   }
 
   SetupAccessMatrix() {
-    const accessMatrix = Array.from(this.state.users, () =>
-      Array.from(this.state.tabs, () => false)
+    const accessMatrix = this.state.users.map(user =>
+      user.accessArr ? user.accessArr : Array.from(this.state.tabs, () => false)
     );
-    this.setState({ accessMatrix }, () => {
+    this.setState({ accessMatrix, loadding: false }, () => {
       console.log('setup accessmatrix donee!');
       console.log('user');
       console.log(this.state.users);
@@ -134,15 +138,64 @@ class AccessManagement extends React.Component {
   }
 
   HandleSubmit() {
+    const { toastManager } = this.props;
     const result = this.state.users.map((user, index) => ({
       accessArr: this.state.accessMatrix[index].slice(),
       id: user.id,
     }));
-    console.log(result);
+    const alertErr = () => {
+      toastManager.add(`Something went wrong: `, {
+        appearance: 'error',
+        autoDismiss: true,
+      });
+    };
+    const asyncUpdateFunction = async function delFunc(rows) {
+      await Promise.all(
+        rows.map(async row => {
+          await PostApi('/api/users/updateDb', row)
+            .then(res => {
+              // console.log('in then proomse');
+              if (res === 'err') {
+                alertErr();
+              } else {
+                // ret.push(newRow);
+                toastManager.add('Updated Successfully', {
+                  appearance: 'success',
+                  autoDismiss: true,
+                });
+              }
+            })
+            .catch(err => {
+              // ret = 'err';
+              console.log('update data from database err');
+              alertErr();
+            });
+        })
+      );
+    };
+    asyncUpdateFunction(result).then(ret => {
+      if (ret !== 'err')
+        // this.setState({ rows: ret });
+        console.log('ok update ok');
+    });
   }
 
   render() {
-    const { tabs, users } = this.state;
+    const { tabs, users, loadding } = this.state;
+    let { accessMatrix } = this.state;
+
+    if (loadding)
+      return (
+        <div>
+          <LinearProgress />
+          <br />
+          <LinearProgress color="secondary" />
+        </div>
+      );
+    // console.log('in render');
+    // console.log(accessMatrix);
+    accessMatrix = accessMatrix.map(elem => elem.slice());
+    // console.log(accessMatrix);
     return (
       <Paper>
         <Table>
@@ -167,6 +220,7 @@ class AccessManagement extends React.Component {
                     <CoordinateCheckbox
                       row={row.row_id}
                       col={col.col_id}
+                      checked={accessMatrix[row.row_id][col.col_id]}
                       onChange={this.HandleChange}
                     />
                   </TableCell>
@@ -188,4 +242,4 @@ class AccessManagement extends React.Component {
   }
 }
 
-export default withStyles(styles)(AccessManagement);
+export default withToastManager(withStyles(styles)(AccessManagement));
