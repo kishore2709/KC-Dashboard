@@ -20,7 +20,7 @@ import Button from '@material-ui/core/Button';
 import { withToastManager } from 'react-toast-notifications';
 import { logo } from '../icon/Icon';
 // import Table from './Table';
-import Demo from './DevTable';
+// import Demo from "./DevTable";
 
 function HomeIcon(props) {
   return (
@@ -72,8 +72,7 @@ const styles = theme => ({
 });
 
 function PermanentDrawerLeft(props) {
-  const { classes, toastManager } = props;
-
+  const { classes, toastManager, children } = props;
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -92,9 +91,6 @@ function PermanentDrawerLeft(props) {
         }}
         anchor="left"
       >
-        {
-          // <div className={classes.toolbar} />
-        }
         <Avatar alt="PTIT" src={logo} className={classes.bigAvatar} />
         <Divider />
         <List>
@@ -111,29 +107,36 @@ function PermanentDrawerLeft(props) {
         </List>
         <Divider />
         <List>
-          {['All mail'].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
+          {['Phân quyền người dùng'].map((text, index) => (
+            <NavLink to="/manageUser/userTicker" key={text}>
+              <ListItem button key={text}>
+                <ListItemIcon>
+                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                </ListItemIcon>
+                <ListItemText primary={text} />
+              </ListItem>
+            </NavLink>
           ))}
         </List>
       </Drawer>
       <main className={classes.content}>
         <div className={classes.toolbar} />
-        <Button
-          variant="contained"
-          color="secondary"
-          className={classes.button}
-          onClick={() => {
-            toastManager.add('Saved Successfully', { appearance: 'success' });
-          }}
-        >
-          Cập nhật lên cơ sở dữ liệu
-        </Button>
-        <Demo />
+        {/*
+          <Button
+            variant="contained"
+            color="secondary"
+            className={classes.button}
+            onClick={() => {
+              toastManager.add('Saved Successfully', { appearance: 'success' });
+            }}
+          >
+            Cập nhật lên cơ sở dữ liệu
+          </Button>
+
+          <Demo />
+          */
+        }
+        {children}
       </main>
     </div>
   );

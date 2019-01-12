@@ -5,13 +5,12 @@ import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 import '../App.css';
 import PropTypes from 'prop-types';
-import { withToastManager } from 'react-toast-notifications';
-import { ToastProvider } from 'react-toast-notifications';
+import { withToastManager, ToastProvider } from 'react-toast-notifications';
 import ConnectedDrawers from '../SettingManagement/Drawers';
 import { drawerActions } from '../../_actions/drawer.actions';
 import { logo, settingIcon } from '../icon/Icon';
 import { history } from '../../_helpers';
-
+import AdminHeader from '../AdminManagement/AdminHeaderPage';
 // import { map } from 'rsvp';
 
 const ItemLink = ({ to, titleName }) => (
@@ -41,13 +40,15 @@ class Header extends Component {
   }
 
   render() {
-    const { opened } = this.props;
+    const { opened, children } = this.props;
     console.log(this.props);
     if (
       history.location.pathname === '/login' ||
       history.location.pathname === '/register'
     )
-      return <div>{this.props.children}</div>;
+      return <div>{children}</div>;
+    if (history.location.pathname.includes('manageUser'))
+      return <AdminHeader>{children}</AdminHeader>;
     return (
       <div>
         <ToastProvider placement="bottom-right">
@@ -100,7 +101,7 @@ class Header extends Component {
               />
             </div>
           </nav>
-          {this.props.children}
+          {children}
         </ToastProvider>
       </div>
     );
