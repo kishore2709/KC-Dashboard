@@ -48,7 +48,11 @@ class Header extends Component {
     )
       return <div>{children}</div>;
     if (history.location.pathname.includes('manageUser'))
-      return <AdminHeader>{children}</AdminHeader>;
+      return (
+        <ToastProvider placement="bottom-right">
+          <AdminHeader>{children}</AdminHeader>
+        </ToastProvider>
+      );
     return (
       <div>
         <ToastProvider placement="bottom-right">

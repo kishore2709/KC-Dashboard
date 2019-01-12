@@ -13,7 +13,7 @@ module.exports = {
     filename: 'bundle.js',
   },
   resolve: {
-    extensions: ['.js', '.jsx']
+    extensions: ['.js', '.jsx'],
   },
   module: {
     rules: [
@@ -21,16 +21,16 @@ module.exports = {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         use: {
-          loader: 'babel-loader'
+          loader: 'babel-loader',
         },
       },
       {
         test: /\.css$/,
-        use: ['style-loader', 'css-loader']
+        use: ['style-loader', 'css-loader'],
       },
       {
         test: /\.(png|svg|jpg|gif)$/,
-        use: ['file-loader']
+        use: ['file-loader'],
       },
     ],
   },
@@ -38,7 +38,7 @@ module.exports = {
     new CleanWebpackPlugin([outputDirectory]),
     new HtmlWebpackPlugin({
       template: './public/index.html',
-      favicon: './public/favicon.ico'
+      favicon: './public/favicon.ico',
     }),
     new webpack.HotModuleReplacementPlugin(),
   ],

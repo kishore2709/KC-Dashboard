@@ -16,9 +16,9 @@ db.once('open', () => {
   // we're connected!
   console.log('connected to database..');
   const user1 = new User({
-    username: 'Huan',
-    password: md5('123456'),
-    role: 'User',
+    username: 'admin',
+    password: md5('admin'),
+    role: 'Admin',
     status: true,
   });
   user1.save((err, user1) => {
