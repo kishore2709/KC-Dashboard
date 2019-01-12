@@ -78,7 +78,7 @@ const listTab = [
   },
   {
     title: 'Phân quyền người dùng',
-    link: '/manageUser/userTicker',
+    link: '/manageUser/accessManagement',
     Img: ViewModuleIcon,
   },
 ];

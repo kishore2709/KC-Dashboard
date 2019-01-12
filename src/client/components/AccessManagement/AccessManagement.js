@@ -1,3 +1,4 @@
+/* eslint-disable react/no-multi-comp */
 import React from 'react';
 
 import Table from '@material-ui/core/Table';
@@ -8,167 +9,183 @@ import TableRow from '@material-ui/core/TableRow';
 import Checkbox from '@material-ui/core/Checkbox';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
-
 import { withStyles } from '@material-ui/core/styles';
+import { GetUserInfo, PostApi } from '../../_helpers/Utils';
 
 const styles = theme => ({
-    button: {
-        margin: theme.spacing.unit * 4
-    }
+  button: {
+    margin: theme.spacing.unit * 4,
+  },
 });
 
 class CoordinateCheckbox extends React.Component {
-    
-    constructor(props) {
-        super(props);
-    }
-
-    render() {
-        return (
-            <Checkbox   onChange={(event, checked) => this.props.onChange(event, checked, this.props.row, this.props.col)}></Checkbox>
-        );
-    }
-
+  render() {
+    return (
+      <Checkbox
+        onChange={(event, checked) =>
+          this.props.onChange(event, checked, this.props.row, this.props.col)
+        }
+      />
+    );
+  }
 }
 
 class AccessManagement extends React.Component {
+  constructor(props) {
+    super(props);
 
-    constructor(props) {
-        super(props);
+    this.state = {
+      tabs: [],
+      users: [],
+      accessMatrix: [],
+    };
+    this.promiseState = this.promiseState.bind(this);
+    this.GetAllUsers = this.GetAllUsers.bind(this);
+    this.GetAllTabs = this.GetAllTabs.bind(this);
+    this.SetupRows = this.SetupRows.bind(this);
+    this.SetupColumns = this.SetupColumns.bind(this);
+    this.SetupAccessMatrix = this.SetupAccessMatrix.bind(this);
+    this.HandleChange = this.HandleChange.bind(this);
+    this.HandleSubmit = this.HandleSubmit.bind(this);
+  }
 
-        this.state = {
-            tabs: [],
-            users: [],
-            accessMatrix: [],
-        }
+  promiseState = async state =>
+    new Promise(resolve => this.setState(state, resolve));
 
-        this.GetAllUsers = this.GetAllUsers.bind(this);
-        this.GetAllTabs = this.GetAllTabs.bind(this);
-        this.SetupRows = this.SetupRows.bind(this);
-        this.SetupColumns = this.SetupColumns.bind(this);
-        this.SetupAccessMatrix = this.SetupAccessMatrix.bind(this);
-        this.HandleChange = this.HandleChange.bind(this);
-        this.HandleSubmit = this.HandleSubmit.bind(this);
-    }
+  componentDidMount() {
+    Promise.all([this.SetupColumns(), this.SetupRows()]).then(() => {
+      console.log('userrss??');
+      console.log(this.state.users);
+      this.SetupAccessMatrix();
+    });
+  }
 
-    componentDidMount() {
-        Promise.all([this.SetupColumns(), this.SetupRows()]).then(() => this.SetupAccessMatrix());
-    }
+  SetupAccessMatrix() {
+    const accessMatrix = Array.from(this.state.users, () =>
+      Array.from(this.state.tabs, () => false)
+    );
+    this.setState({ accessMatrix }, () => {
+      console.log('setup accessmatrix donee!');
+      console.log('user');
+      console.log(this.state.users);
+      console.log('tabs');
+      console.log(this.state.tabs);
+      console.log(accessMatrix);
+    });
+  }
 
-    SetupAccessMatrix() {
-        const accessMatrix = Array.from(this.state.users, () => Array.from(this.state.tabs, () => false));
-        this.setState({accessMatrix: accessMatrix});
-    }
-
-    GetAllUsers() {
-        return new Promise((resolve, reject) => {
-            const users = [
-                {name: 'User 1', jwt: 'qwe'},
-                {name: 'Moderator 1', jwt: 'asd'},
-                {name: 'Admin 1', jwt: 'zxc'}
-            ];
-            resolve(users);
+  // eslint-disable-next-line class-methods-use-this
+  GetAllUsers() {
+    return PostApi('/api/users/getUsers', {})
+      .then(res => {
+        console.log(res);
+        const result = res.map(x => {
+          const { _id, ...rest } = x;
+          return { id: _id, ...rest };
         });
-    }
+        // console.log(res);
+        return Promise.resolve(result.filter(x => x.role !== 'Admin'));
+      })
+      .catch(err => {
+        console.log('get data from database err');
+      });
+  }
 
-    SetupRows() {
-        this.GetAllUsers().then((users) => {
-            return new Promise((resolve, reject) => {
-                resolve(this.setState({users: users.map((user, index) => Object.assign({}, {row_id: index}, user))}));
-            });
-        });
-    }
+  SetupRows() {
+    return this.GetAllUsers().then(users =>
+      this.promiseState({
+        users: users.map((user, index) =>
+          Object.assign({}, { row_id: index }, user)
+        ),
+      })
+    );
+  }
 
-    GetAllTabs() {
-        return new Promise((resolve, reject) => {         
-            const tabs = [
-                {name: 'Col-1'},
-                {name: 'Col-2'},
-                {name: 'Col-3'},
-                {name: 'Col-4'},
-                {name: 'Col-5'},
-                {name: 'Col-6'}
-            ];
-            resolve(tabs);
-        });
-    }
+  GetAllTabs() {
+    return new Promise((resolve, reject) => {
+      const tabs = [
+        { name: 'Col-1' },
+        { name: 'Col-2' },
+        { name: 'Col-3' },
+        { name: 'Col-4' },
+        { name: 'Col-5' },
+        { name: 'Col-6' },
+      ];
+      resolve(tabs);
+    });
+  }
 
-    SetupColumns() {
-        this.GetAllTabs().then((tabs) => {
-            return new Promise((resolve, reject) => {
-                resolve(this.setState({tabs: tabs.map((tab, index) => Object.assign({}, {col_id: index}, tab))}));
-            });
-        });
-    }
+  SetupColumns() {
+    return this.GetAllTabs().then(tabs =>
+      this.promiseState({
+        tabs: tabs.map((tab, index) =>
+          Object.assign({}, { col_id: index }, tab)
+        ),
+      })
+    );
+  }
 
-    HandleChange(event, checked, row, col) {
-        let accessMatrix = this.state.accessMatrix.map(elem => elem.slice());
-        accessMatrix[row][col] = event.target.checked;
-        this.setState({accessMatrix: accessMatrix});
-    }
+  HandleChange(event, checked, row, col) {
+    const accessMatrix = this.state.accessMatrix.map(elem => elem.slice());
+    console.log(accessMatrix);
+    console.log(row, col);
+    accessMatrix[row][col] = event.target.checked;
+    this.setState({ accessMatrix });
+  }
 
-    HandleSubmit() {
-        const result = this.state.users.map((user, index) => {
-            return {
-                accessArr: this.state.accessMatrix[index].slice(),
-                jwt: user.jwt
-            };
-        });  
-        console.log(result);
-    }
+  HandleSubmit() {
+    const result = this.state.users.map((user, index) => ({
+      accessArr: this.state.accessMatrix[index].slice(),
+      id: user.id,
+    }));
+    console.log(result);
+  }
 
-    render() {
-        const { tabs, users } = this.state;
-        return (
-            <Paper>
-                <Table>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell></TableCell>
-                            {tabs.map(col => {
-                                return (
-                                    <TableCell  key = {col.col_id}
-                                                align = 'center'>
-                                        {col.name}
-                                    </TableCell>
-                                );
-                            })}
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {users.map(row => {
-                            return (
-                                <TableRow   key = {row.row_id}>
-                                    <TableCell  component = 'th'
-                                                scope = 'row'>
-                                        {row.name}
-                                    </TableCell>
-                                    {tabs.map(col => {
-                                        return (
-                                            <TableCell  key = {col.col_id}
-                                                        align = 'center'>
-                                                <CoordinateCheckbox row = {row.row_id}
-                                                                    col = {col.col_id}
-                                                                    onChange = {this.HandleChange}>
-                                                </CoordinateCheckbox>
-                                            </TableCell>
-                                        )
-                                    })}
-                                </TableRow>
-                            )
-                        })}
-                    </TableBody>
-                </Table>
-                <Button variant = 'contained' 
-                        color = 'primary' 
-                        className={this.props.classes.button}
-                        onClick={this.HandleSubmit}>
-                    Submit
-                </Button>
-            </Paper>
-        );
-    }
-
+  render() {
+    const { tabs, users } = this.state;
+    return (
+      <Paper>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell />
+              {tabs.map(col => (
+                <TableCell key={col.col_id} align="center">
+                  {col.name}
+                </TableCell>
+              ))}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {users.map(row => (
+              <TableRow key={row.row_id}>
+                <TableCell component="th" scope="row">
+                  {row.username}
+                </TableCell>
+                {tabs.map(col => (
+                  <TableCell key={col.col_id} align="center">
+                    <CoordinateCheckbox
+                      row={row.row_id}
+                      col={col.col_id}
+                      onChange={this.HandleChange}
+                    />
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+        <Button
+          variant="contained"
+          color="primary"
+          className={this.props.classes.button}
+          onClick={this.HandleSubmit}
+        >
+          Submit
+        </Button>
+      </Paper>
+    );
+  }
 }
 
 export default withStyles(styles)(AccessManagement);
