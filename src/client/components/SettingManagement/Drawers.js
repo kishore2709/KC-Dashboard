@@ -14,6 +14,7 @@ import FaceIcon from '@material-ui/icons/Face';
 import SupervisedUserCircle from '@material-ui/icons/SupervisedUserCircle';
 import { drawerActions, dialogActions } from '../../_actions';
 import UserDialog from './UserDialog';
+import { history } from '../../_helpers/history';
 
 const styles = {
   list: {
@@ -53,6 +54,10 @@ class TemporaryDrawer extends React.Component {
     if (currentUser == null) return <div />;
     console.log('currenttttttttttttttttttt');
     console.log(currentUser);
+    if (!('_doc' in currentUser)) {
+      history.push('/login');
+      location.reload();
+    }
     const fullList = (
       <div className={classes.fullList}>
         <List>
