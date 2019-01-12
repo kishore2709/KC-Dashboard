@@ -18,6 +18,8 @@ import Avatar from '@material-ui/core/Avatar';
 import SvgIcon from '@material-ui/core/SvgIcon';
 import Button from '@material-ui/core/Button';
 import { withToastManager } from 'react-toast-notifications';
+import FaceIcon from '@material-ui/icons/Face';
+import ViewModuleIcon from '@material-ui/icons/ViewModule';
 import { logo } from '../icon/Icon';
 // import Table from './Table';
 // import Demo from "./DevTable";
@@ -71,6 +73,18 @@ const styles = theme => ({
   },
 });
 
+const listTab = [
+  {
+    title: 'Quản lý người dùng',
+    link: '/manageUser',
+    Img: FaceIcon,
+  },
+  {
+    title: 'Phân quyền người dùng',
+    link: '/manageUser/userTicker',
+    Img: ViewModuleIcon,
+  },
+];
 function PermanentDrawerLeft(props) {
   const { classes, toastManager, children } = props;
   return (
@@ -107,13 +121,13 @@ function PermanentDrawerLeft(props) {
         </List>
         <Divider />
         <List>
-          {['Phân quyền người dùng'].map((text, index) => (
-            <NavLink to="/manageUser/userTicker" key={text}>
-              <ListItem button key={text}>
+          {listTab.map((obj, index) => (
+            <NavLink to={obj.link} key={obj.title}>
+              <ListItem button key={obj.title}>
                 <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                  <obj.Img />
                 </ListItemIcon>
-                <ListItemText primary={text} />
+                <ListItemText primary={obj.title} />
               </ListItem>
             </NavLink>
           ))}
@@ -134,8 +148,7 @@ function PermanentDrawerLeft(props) {
           </Button>
 
           <Demo />
-          */
-        }
+          */}
         {children}
       </main>
     </div>
