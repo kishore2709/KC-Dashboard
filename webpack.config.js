@@ -13,6 +13,7 @@ module.exports = {
     filename: 'bundle.js',
   },
   resolve: {
+    modules: [path.resolve(__dirname, 'src/client'), 'node_modules'],
     extensions: ['.js', '.jsx'],
   },
   module: {

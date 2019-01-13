@@ -20,6 +20,8 @@ import { PrivateRoute } from './PrivateRoute';
 import { LoginPage } from './LoginPage';
 import { RegisterPage } from './RegisterPage';
 // import connectedDrawers from './SettingManagement/Drawers';
+import indexRoutes from "routes/index.jsx";
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -41,6 +43,13 @@ class App extends React.Component {
               <div className={`alert ${alert.type}`}>{alert.message}</div>
             )}
             <Router history={history}>
+              <Switch>
+                {indexRoutes.map((prop, key) => {
+                  console.log(prop);
+                  return <Route path={prop.path} component={prop.component} key={key} />;
+                })}
+              </Switch>
+              {/*
               <div>
                 <Header>
                   <Switch>
@@ -70,6 +79,8 @@ class App extends React.Component {
                   </Switch>
                 </Header>
               </div>
+              */
+              }
             </Router>
           </div>
         </div>
