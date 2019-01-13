@@ -6,6 +6,9 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import TableFooter from '@material-ui/core/TableFooter';
+import TablePagination from '@material-ui/core/TablePagination';
+
 import Checkbox from '@material-ui/core/Checkbox';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
@@ -13,10 +16,19 @@ import { withStyles } from '@material-ui/core/styles';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import { withToastManager } from 'react-toast-notifications';
 import { GetUserInfo, PostApi } from '../../_helpers/Utils';
+import { TextField, Input } from '@material-ui/core';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
+import InputLabel from '@material-ui/core/InputLabel';
+import FormControl from '@material-ui/core/FormControl';
 
 const styles = theme => ({
   button: {
     margin: theme.spacing.unit * 4,
+  },
+  formControl: {
+    margin: theme.spacing.unit,
+    minWidth: 250,
   },
 });
 
@@ -42,6 +54,11 @@ class AccessManagement extends React.Component {
       users: [],
       accessMatrix: [],
       loadding: true,
+      page: 0,
+      rowsPerPage: 5,
+      search: '',
+      filter: '',
+      anchorEl: null
     };
     this.promiseState = this.promiseState.bind(this);
     this.GetAllUsers = this.GetAllUsers.bind(this);
@@ -51,6 +68,10 @@ class AccessManagement extends React.Component {
     this.SetupAccessMatrix = this.SetupAccessMatrix.bind(this);
     this.HandleChange = this.HandleChange.bind(this);
     this.HandleSubmit = this.HandleSubmit.bind(this);
+    this.handleChangePage = this.handleChangePage.bind(this);
+    this.handleChangeRowsPerPage = this.handleChangeRowsPerPage.bind(this);
+    this.handleChangeSearch = this.handleChangeSearch.bind(this);
+    this.handleChangeFilter = this.handleChangeFilter.bind(this);
   }
 
   promiseState = async state =>
@@ -180,8 +201,24 @@ class AccessManagement extends React.Component {
     });
   }
 
+  handleChangePage(event, page) {
+    this.setState({ page });
+  };
+
+  handleChangeRowsPerPage(event) {
+    this.setState({ rowsPerPage: event.target.value });
+  };
+
+  handleChangeSearch(event) {
+    this.setState({ search: event.target.value });
+  }
+
+  handleChangeFilter(event) {
+    this.setState({ filter: event.target.value });
+  }
+
   render() {
-    const { tabs, users, loadding } = this.state;
+    const { tabs, users, loadding, page, rowsPerPage, anchorEl } = this.state;
     let { accessMatrix } = this.state;
 
     if (loadding)
@@ -210,7 +247,11 @@ class AccessManagement extends React.Component {
             </TableRow>
           </TableHead>
           <TableBody>
-            {users.map(row => (
+            {users
+              .filter(row => row.role.includes(this.state.filter))
+              .filter(row => row.username.includes(this.state.search))
+              .slice(rowsPerPage * page, rowsPerPage * (page + 1))
+              .map(row => (
               <TableRow key={row.row_id}>
                 <TableCell component="th" scope="row">
                   {row.username}
@@ -228,6 +269,54 @@ class AccessManagement extends React.Component {
               </TableRow>
             ))}
           </TableBody>
+          <TableFooter>
+            <TableRow>
+              <TablePagination
+                rowsPerPageOptions={[5, 10, 20]}
+                count={users
+                        .filter(row => row.role.includes(this.state.filter))
+                        .filter(row => row.username.includes(this.state.search))
+                        .length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                onChangePage={this.handleChangePage}
+                onChangeRowsPerPage={this.handleChangeRowsPerPage}>
+              </TablePagination>
+            </TableRow>
+            <TableRow>
+              <TableCell  align='left'
+                          variant='footer'>
+                <FormControl className={this.props.classes.formControl}>
+                  <InputLabel htmlFor="role-filter">Filter Role</InputLabel>
+                  <Select
+                    value = {this.state.filter}
+                    onChange = {this.handleChangeFilter}
+                    inputProps={{
+                      name: 'role',
+                      id: 'role-filter',
+                    }}
+                  >
+                    <MenuItem value=''>All</MenuItem>
+                    <MenuItem value='User'>User</MenuItem>
+                    <MenuItem value='Moderator'>Moderator</MenuItem>
+                    <MenuItem value='Admin'>Admin</MenuItem>
+                  </Select>
+                </FormControl>
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell  align='left'
+                          variant='footer'>
+                <FormControl className={this.props.classes.formControl}>
+                  <TextField
+                    label="Search"
+                    value={this.state.search}
+                    onChange={this.handleChangeSearch}
+                  />
+                </FormControl>
+              </TableCell>
+            </TableRow>      
+          </TableFooter>
         </Table>
         <Button
           variant="contained"
