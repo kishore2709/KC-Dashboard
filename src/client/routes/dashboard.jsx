@@ -19,49 +19,42 @@ import NotificationsPage from "views/Notifications/Notifications.jsx";
 const dashboardRoutes = [
   {
     path: "/dashboard",
-    sidebarName: "Dashboard",
-    navbarName: "Material Dashboard",
+    sidebarName: "Trang chủ",
+    navbarName: "PTIT Dashboard",
     icon: Dashboard,
     component: DashboardPage
   },
   {
     path: "/user",
-    sidebarName: "User Profile",
-    navbarName: "Profile",
+    sidebarName: "Quản lý người dùng",
+    navbarName: "User Management",
     icon: Person,
     component: UserProfile
   },
   {
     path: "/table",
-    sidebarName: "Table List",
-    navbarName: "Table List",
+    sidebarName: "Quản lý log",
+    navbarName: "Giao diện quản lý log truy cập",
     icon: "content_paste",
     component: TableList
   },
   {
     path: "/typography",
-    sidebarName: "Typography",
-    navbarName: "Typography",
+    sidebarName: "Quản lý dịch vụ",
+    navbarName: "Giao diện quản lý dịch vụ truy cập",
     icon: LibraryBooks,
     component: Typography
   },
   {
     path: "/icons",
-    sidebarName: "Icons",
-    navbarName: "Icons",
+    sidebarName: "Phát hiện tấn công",
+    navbarName: "Attack Detection",
     icon: BubbleChart,
     component: Icons
   },
   {
-    path: "/maps",
-    sidebarName: "Maps",
-    navbarName: "Map",
-    icon: LocationOn,
-    component: Maps
-  },
-  {
     path: "/notifications",
-    sidebarName: "Notifications",
+    sidebarName: "Quảng bá cảnh báo",
     navbarName: "Notifications",
     icon: Notifications,
     component: NotificationsPage
