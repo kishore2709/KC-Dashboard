@@ -1,49 +1,91 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React from 'react';
+import PropTypes from 'prop-types';
 // react plugin for creating charts
-import ChartistGraph from "react-chartist";
+import ChartistGraph from 'react-chartist';
 // @material-ui/core
-import withStyles from "@material-ui/core/styles/withStyles";
-import Icon from "@material-ui/core/Icon";
+import withStyles from '@material-ui/core/styles/withStyles';
+import Icon from '@material-ui/core/Icon';
 // @material-ui/icons
-import Store from "@material-ui/icons/Store";
-import Warning from "@material-ui/icons/Warning";
-import DateRange from "@material-ui/icons/DateRange";
-import LocalOffer from "@material-ui/icons/LocalOffer";
-import Update from "@material-ui/icons/Update";
-import ArrowUpward from "@material-ui/icons/ArrowUpward";
-import AccessTime from "@material-ui/icons/AccessTime";
-import Accessibility from "@material-ui/icons/Accessibility";
-import BugReport from "@material-ui/icons/BugReport";
-import Code from "@material-ui/icons/Code";
-import Cloud from "@material-ui/icons/Cloud";
+import Store from '@material-ui/icons/Store';
+import Warning from '@material-ui/icons/Warning';
+import DateRange from '@material-ui/icons/DateRange';
+import LocalOffer from '@material-ui/icons/LocalOffer';
+import Update from '@material-ui/icons/Update';
+import ArrowUpward from '@material-ui/icons/ArrowUpward';
+import AccessTime from '@material-ui/icons/AccessTime';
+import Accessibility from '@material-ui/icons/Accessibility';
+import BugReport from '@material-ui/icons/BugReport';
+import Code from '@material-ui/icons/Code';
+import Cloud from '@material-ui/icons/Cloud';
 // core components
-import GridItem from "components/Grid/GridItem.jsx";
-import GridContainer from "components/Grid/GridContainer.jsx";
-import Table from "components/Table/Table.jsx";
-import Tasks from "components/Tasks/Tasks.jsx";
-import CustomTabs from "components/CustomTabs/CustomTabs.jsx";
-import Danger from "components/Typography/Danger.jsx";
-import Card from "components/Card/Card.jsx";
-import CardHeader from "components/Card/CardHeader.jsx";
-import CardIcon from "components/Card/CardIcon.jsx";
-import CardBody from "components/Card/CardBody.jsx";
-import CardFooter from "components/Card/CardFooter.jsx";
-
-import { bugs, website, server } from "variables/general.jsx";
+import GridItem from 'components/Grid/GridItem.jsx';
+import GridContainer from 'components/Grid/GridContainer.jsx';
+import Table from 'components/Table/Table.jsx';
+import Tasks from 'components/Tasks/Tasks.jsx';
+import CustomTabs from 'components/CustomTabs/CustomTabs.jsx';
+import Danger from 'components/Typography/Danger.jsx';
+import Card from 'components/Card/Card.jsx';
+import CardHeader from 'components/Card/CardHeader.jsx';
+import CardIcon from 'components/Card/CardIcon.jsx';
+import CardBody from 'components/Card/CardBody.jsx';
+import CardFooter from 'components/Card/CardFooter.jsx';
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
+import ShareIcon from '@material-ui/icons/Share';
+import CardActions from '@material-ui/core/CardActions';
+import IconButton from '@material-ui/core/IconButton';
+import classnames from 'classnames';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import {
+  userLogo,
+  groupLogo,
+  alertLogo,
+  webLogo,
+  dnsLogo,
+  transferLogo,
+  agentLogo,
+  searchLogo,
+  listAlertLogo,
+  smsLogo,
+  emailLogo
+} from 'components/icon/Icon';
+import { bugs, website, server } from 'variables/general.jsx';
+import CardMedia from '@material-ui/core/CardMedia';
+import Grid from '@material-ui/core/Grid';
 
 import {
   dailySalesChart,
   emailsSubscriptionChart,
-  completedTasksChart
-} from "variables/charts.jsx";
+  completedTasksChart,
+} from 'variables/charts.jsx';
 
-import dashboardStyle from "assets/jss/material-dashboard-react/views/dashboardStyle.jsx";
+import dashboardStyle from 'assets/jss/material-dashboard-react/views/dashboardStyle.jsx';
+import { userInfo } from 'os';
+
+const logLists = [
+  { key: 'webLogo', img: webLogo, title: 'Quản lý Web log' },
+  { key: 'dnsLogo', img: dnsLogo, title: 'Quản lý DNS log' },
+  { key: 'transferLogo', img: transferLogo, title: 'Quản lý Transfer log' },
+  { key: 'agentLogo', img: agentLogo, title: 'Quản lý Agent log' },
+];
+
+const serviceAccessLists = [
+  { key: 'searchLogo', img: searchLogo, title: 'Tìm kiếm' },
+  { key: 'webLogo', img: webLogo, title: 'Quản lý dịch vụ Web' },
+  { key: 'dnsLogo', img: dnsLogo, title: 'Quản lý dịch vụ DNS' },
+];
+
+const BroadcastLists = [
+  { key: 'alertListLogo', img: alertLogo, title: 'Danh sách cảnh báo' },
+  { key: 'sendEmailLogo', img: emailLogo, title: 'Gửi Email' },
+  { key: 'sendSmsLogo', img: smsLogo, title: 'Gửi SMS' },
+];
 
 class Dashboard extends React.Component {
   state = {
-    value: 0
+    value: 0,
   };
+
   handleChange = (event, value) => {
     this.setState({ value });
   };
@@ -51,6 +93,7 @@ class Dashboard extends React.Component {
   handleChangeIndex = index => {
     this.setState({ value: index });
   };
+
   render() {
     const { classes } = this.props;
     return (
@@ -144,18 +187,31 @@ class Dashboard extends React.Component {
                 />
               </CardHeader>
               <CardBody>
-                <h4 className={classes.cardTitle}>Daily Sales</h4>
+                <h4 className={classes.cardTitle}>Quản lý log truy cập</h4>
                 <p className={classes.cardCategory}>
                   <span className={classes.successText}>
                     <ArrowUpward className={classes.upArrowCardCategory} /> 55%
-                  </span>{" "}
-                  increase in today sales.
+                  </span>{' '}
+                  increase in today access.
                 </p>
               </CardBody>
               <CardFooter chart>
-                <div className={classes.stats}>
-                  <AccessTime /> updated 4 minutes ago
-                </div>
+                <Grid
+                  container
+                  direction="row"
+                  justify="space-between"
+                  alignItems="center"
+                >
+                  {logLists.map(obj => (
+                    <Grid key={obj.key} item>
+                      <CardMedia
+                        className={classes.media}
+                        image={obj.img}
+                        title={obj.title}
+                      />
+                    </Grid>
+                  ))}
+                </Grid>
               </CardFooter>
             </Card>
           </GridItem>
@@ -172,15 +228,28 @@ class Dashboard extends React.Component {
                 />
               </CardHeader>
               <CardBody>
-                <h4 className={classes.cardTitle}>Email Subscriptions</h4>
+                <h4 className={classes.cardTitle}>Quản lý dịch vụ truy cập</h4>
                 <p className={classes.cardCategory}>
-                  Last Campaign Performance
+                  Dịch vụ truy cập gần nhất
                 </p>
               </CardBody>
               <CardFooter chart>
-                <div className={classes.stats}>
-                  <AccessTime /> campaign sent 2 days ago
-                </div>
+                <Grid
+                  container
+                  direction="row"
+                  justify="space-between"
+                  alignItems="center"
+                >
+                  {serviceAccessLists.map(obj => (
+                    <Grid key={obj.key} item>
+                      <CardMedia
+                        className={classes.media}
+                        image={obj.img}
+                        title={obj.title}
+                      />
+                    </Grid>
+                  ))}
+                </Grid>
               </CardFooter>
             </Card>
           </GridItem>
@@ -196,15 +265,23 @@ class Dashboard extends React.Component {
                 />
               </CardHeader>
               <CardBody>
-                <h4 className={classes.cardTitle}>Completed Tasks</h4>
+                <h4 className={classes.cardTitle}>Quảng bá cảnh báo</h4>
                 <p className={classes.cardCategory}>
-                  Last Campaign Performance
+                  <div className={classes.stats}>
+                    <AccessTime /> campaign sent 2 days ago
+                  </div>
                 </p>
               </CardBody>
-              <CardFooter chart>
-                <div className={classes.stats}>
-                  <AccessTime /> campaign sent 2 days ago
-                </div>
+              <CardFooter chart >
+              {BroadcastLists.map(obj => (
+                    <Grid key={obj.key} item>
+                      <CardMedia
+                        className={classes.media}
+                        image={obj.img}
+                        title={obj.title}
+                      />
+                    </Grid>
+                  ))}
               </CardFooter>
             </Card>
           </GridItem>
@@ -216,7 +293,7 @@ class Dashboard extends React.Component {
               headerColor="primary"
               tabs={[
                 {
-                  tabName: "Bugs",
+                  tabName: 'Bugs',
                   tabIcon: BugReport,
                   tabContent: (
                     <Tasks
@@ -224,10 +301,10 @@ class Dashboard extends React.Component {
                       tasksIndexes={[0, 1, 2, 3]}
                       tasks={bugs}
                     />
-                  )
+                  ),
                 },
                 {
-                  tabName: "Website",
+                  tabName: 'Website',
                   tabIcon: Code,
                   tabContent: (
                     <Tasks
@@ -235,10 +312,10 @@ class Dashboard extends React.Component {
                       tasksIndexes={[0, 1]}
                       tasks={website}
                     />
-                  )
+                  ),
                 },
                 {
-                  tabName: "Server",
+                  tabName: 'Server',
                   tabIcon: Cloud,
                   tabContent: (
                     <Tasks
@@ -246,8 +323,8 @@ class Dashboard extends React.Component {
                       tasksIndexes={[0, 1, 2]}
                       tasks={server}
                     />
-                  )
-                }
+                  ),
+                },
               ]}
             />
           </GridItem>
@@ -262,12 +339,12 @@ class Dashboard extends React.Component {
               <CardBody>
                 <Table
                   tableHeaderColor="warning"
-                  tableHead={["ID", "Name", "Salary", "Country"]}
+                  tableHead={['ID', 'Name', 'Salary', 'Country']}
                   tableData={[
-                    ["1", "Dakota Rice", "$36,738", "Niger"],
-                    ["2", "Minerva Hooper", "$23,789", "Curaçao"],
-                    ["3", "Sage Rodriguez", "$56,142", "Netherlands"],
-                    ["4", "Philip Chaney", "$38,735", "Korea, South"]
+                    ['1', 'Dakota Rice', '$36,738', 'Niger'],
+                    ['2', 'Minerva Hooper', '$23,789', 'Curaçao'],
+                    ['3', 'Sage Rodriguez', '$56,142', 'Netherlands'],
+                    ['4', 'Philip Chaney', '$38,735', 'Korea, South'],
                   ]}
                 />
               </CardBody>
@@ -280,7 +357,7 @@ class Dashboard extends React.Component {
 }
 
 Dashboard.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
 };
 
 export default withStyles(dashboardStyle)(Dashboard);
