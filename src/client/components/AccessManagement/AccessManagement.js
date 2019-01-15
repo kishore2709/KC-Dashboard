@@ -47,7 +47,7 @@ class CoordinateCheckbox extends React.Component {
   }s
 
   componentDidMount() {
-    this.setState({ subAccArr: this.props.subAccArr });
+    this.setState({ subAccArr: this.props.subAccArr ? this.props.subAccArr : [] });
   }
 
   handleClick = event => {
