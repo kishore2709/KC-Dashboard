@@ -21,26 +21,85 @@ import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
+import Menu from '@material-ui/core/Menu';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 
 const styles = theme => ({
   button: {
     margin: theme.spacing.unit * 4,
   },
   formControl: {
-    margin: theme.spacing.unit,
-    minWidth: 250,
+    margin: theme.spacing.unit * 0.5,
+    minWidth: 100,
+    maxWidth: 100
   },
 });
 
 class CoordinateCheckbox extends React.Component {
+  
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      subAccArr: [],
+      anchorEl: null
+    }
+  }s
+
+  componentDidMount() {
+    this.setState({ subAccArr: this.props.subAccArr });
+  }
+
+  handleClick = event => {
+    this.setState({ anchorEl: event.currentTarget });
+  };
+
+  handleClose = () => {
+    this.setState({ anchorEl: null });
+    this.props.updateSubAccArr(this.props.row, this.props.col, this.state.subAccArr);
+  };
+
+  handleChange = (event, checked, index) => {
+    const { subAccArr } = this.state;
+    this.setState({subAccArr: subAccArr.map((elem, _index) => 
+      _index == index ? event.target.checked : elem)});
+  }
+  
   render() {
+    const { anchorEl, subAccArr } = this.state;
+    const { row, col } = this.props;
     return (
-      <Checkbox
-        checked={this.props.checked}
-        onChange={(event, checked) =>
-          this.props.onChange(event, checked, this.props.row, this.props.col)
-        }
-      />
+      <div>
+        <Button
+          aria-owns={anchorEl ? 'simple-menu' : undefined}
+          aria-haspopup="true"
+          onClick={this.handleClick}
+        >
+         {row} - {col}
+        </Button>
+        <Menu
+          id="simple-menu"
+          anchorEl={anchorEl}
+          open={Boolean(anchorEl)}
+          onClose={this.handleClose}
+        >
+          {subAccArr.map((elem, index) => {
+            return (
+              <MenuItem key={index}>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={elem}
+                      onChange={(event, checked) => this.handleChange(event, checked, index)}
+                    />
+                  }
+                  label={index}
+                />
+              </MenuItem>   
+            )
+          })}
+        </Menu>
+      </div>
     );
   }
 }
@@ -57,8 +116,7 @@ class AccessManagement extends React.Component {
       page: 0,
       rowsPerPage: 5,
       search: '',
-      filter: '',
-      anchorEl: null
+      filter: ''
     };
     this.promiseState = this.promiseState.bind(this);
     this.GetAllUsers = this.GetAllUsers.bind(this);
@@ -101,6 +159,26 @@ class AccessManagement extends React.Component {
 
   // eslint-disable-next-line class-methods-use-this
   GetAllUsers() {
+    /*
+    return new Promise((resolve, reject) => {
+      const users = Array.from({length: 26}, () => {
+        const user = {
+          username: Math.random().toString(36).substr(2),
+          password: Math.random().toString(36).substr(2),
+          role: ['Admin', 'Moderator', 'Moderator', 'User', 'User', 'User'][Math.floor(Math.random() * 6)],
+          status: true,
+          accessArr: Array.from({length: 6}, () => {
+            const subAccArr = Array.from({length: Math.floor(Math.random() * 3) + 1}, () => {
+              return Math.random() >= 0.5 ? true : false;
+            });
+            return subAccArr;
+          }),
+        }
+        return user;
+      });
+      resolve(users);
+    });
+    */
     return PostApi('/api/users/getUsers', {})
       .then(res => {
         console.log(res);
@@ -164,6 +242,7 @@ class AccessManagement extends React.Component {
       accessArr: this.state.accessMatrix[index].slice(),
       id: user.id,
     }));
+    //console.log(result);
     const alertErr = () => {
       toastManager.add(`Something went wrong: `, {
         appearance: 'error',
@@ -199,6 +278,7 @@ class AccessManagement extends React.Component {
         // this.setState({ rows: ret });
         console.log('ok update ok');
     });
+   return null;
   }
 
   handleChangePage(event, page) {
@@ -215,6 +295,12 @@ class AccessManagement extends React.Component {
 
   handleChangeFilter(event) {
     this.setState({ filter: event.target.value });
+  }
+
+  updateSubAccArr = (row, col, subAccArr) => {
+    const { accessMatrix } = this.state;
+    accessMatrix[row][col] = subAccArr;
+    this.setState({accessMatrix: accessMatrix});
   }
 
   render() {
@@ -261,8 +347,8 @@ class AccessManagement extends React.Component {
                     <CoordinateCheckbox
                       row={row.row_id}
                       col={col.col_id}
-                      checked={accessMatrix[row.row_id][col.col_id]}
-                      onChange={this.HandleChange}
+                      subAccArr={accessMatrix[row.row_id][col.col_id]}
+                      updateSubAccArr={this.updateSubAccArr}
                     />
                   </TableCell>
                 ))}
