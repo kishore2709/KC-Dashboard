@@ -17,11 +17,11 @@ db.once('open', () => {
   // we're connected!
   console.log('connected to database..');
   const user1 = new User({
-    username: 'dat',
-    password: md5('dat'),
+    username: 'user',
+    password: md5('user'),
     role: 'User',
-    status: false,
-    accessArr: [true, false, true, true, false, false],
+    status: true,
+    accessArr: [[], [true, false, true], [true], [false, false]],
   });
   user1.save((err, user1) => {
     if (err) console.log(err);
