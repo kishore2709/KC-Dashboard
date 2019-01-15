@@ -6,6 +6,7 @@ import './App.css';
 // import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import indexRoutes from 'routes/index.jsx';
 import { connectedHeaderPage as Header } from './Header/Header';
 import Home from './Home/Home';
 import LogManagement from './LogManagement/LogManagement';
@@ -20,7 +21,6 @@ import { PrivateRoute } from './PrivateRoute';
 import { LoginPage } from './LoginPage';
 import { RegisterPage } from './RegisterPage';
 // import connectedDrawers from './SettingManagement/Drawers';
-import indexRoutes from "routes/index.jsx";
 
 class App extends React.Component {
   constructor(props) {
@@ -44,9 +44,17 @@ class App extends React.Component {
             )}
             <Router history={history}>
               <Switch>
+                <Route path="/login" component={LoginPage} />
+                <Route path="/register" component={RegisterPage} />
                 {indexRoutes.map((prop, key) => {
                   console.log(prop);
-                  return <Route path={prop.path} component={prop.component} key={key} />;
+                  return (
+                    <PrivateRoute
+                      path={prop.path}
+                      component={prop.component}
+                      key={key}
+                    />
+                  );
                 })}
               </Switch>
               {/*
@@ -79,8 +87,7 @@ class App extends React.Component {
                   </Switch>
                 </Header>
               </div>
-              */
-              }
+              */}
             </Router>
           </div>
         </div>

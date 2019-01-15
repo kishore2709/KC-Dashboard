@@ -17,7 +17,10 @@ import Icons from 'views/Icons/Icons.jsx';
 import NotificationsPage from 'views/Notifications/Notifications.jsx';
 import UserProfile from 'views/UserProfile/UserProfile.jsx';
 import AccessIcon from '@material-ui/icons/AccessibilityNew';
+import PowerIcon from '@material-ui/icons/PowerOff';
+import { Redirect } from 'react-router-dom';
 import UserPermission from 'views/UserPermission/UserPermission.jsx';
+import React from 'react';
 
 const dashboardRoutes = [
   {
@@ -68,6 +71,12 @@ const dashboardRoutes = [
     navbarName: 'Notifications',
     icon: Notifications,
     component: NotificationsPage,
+  },
+  {
+    path: '/login',
+    sidebarName: 'Đăng xuất',
+    icon: PowerIcon,
+    component: <Redirect to="/login" />,
   },
   {
     path: '/profile',
