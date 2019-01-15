@@ -15,7 +15,6 @@ import {
 } from '@devexpress/dx-react-grid-material-ui';
 import md5 from 'md5';
 import { PostApi } from '../../_helpers/Utils';
-import { generateRows, globalSalesValues } from '../../demo-data/generator';
 
 const getRowId = row => row.id;
 
