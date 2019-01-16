@@ -7,6 +7,7 @@ import './App.css';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import indexRoutes from 'routes/index.jsx';
+import { ToastProvider } from 'react-toast-notifications';
 import { connectedHeaderPage as Header } from './Header/Header';
 import Home from './Home/Home';
 import LogManagement from './LogManagement/LogManagement';
@@ -37,27 +38,28 @@ class App extends React.Component {
 
     return (
       <div>
-        <div>
+        <ToastProvider placement='bottom-right' >
           <div>
-            {alert.message && (
-              <div className={`alert ${alert.type}`}>{alert.message}</div>
-            )}
-            <Router history={history}>
-              <Switch>
-                <Route path="/login" component={LoginPage} />
-                <Route path="/register" component={RegisterPage} />
-                {indexRoutes.map((prop, key) => {
-                  console.log(prop);
-                  return (
-                    <PrivateRoute
-                      path={prop.path}
-                      component={prop.component}
-                      key={key}
-                    />
-                  );
-                })}
-              </Switch>
-              {/*
+            <div>
+              {alert.message && (
+                <div className={`alert ${alert.type}`}>{alert.message}</div>
+              )}
+              <Router history={history}>
+                <Switch>
+                  <Route path="/login" component={LoginPage} />
+                  <Route path="/register" component={RegisterPage} />
+                  {indexRoutes.map((prop, key) => {
+                    console.log(prop);
+                    return (
+                      <PrivateRoute
+                        path={prop.path}
+                        component={prop.component}
+                        key={key}
+                      />
+                    );
+                  })}
+                </Switch>
+                {/*
               <div>
                 <Header>
                   <Switch>
@@ -88,9 +90,10 @@ class App extends React.Component {
                 </Header>
               </div>
               */}
-            </Router>
+              </Router>
+            </div>
           </div>
-        </div>
+        </ToastProvider>
       </div>
     );
   }

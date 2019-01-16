@@ -19,7 +19,6 @@ import dashboardStyle from "assets/jss/material-dashboard-react/layouts/dashboar
 import image from "assets/img/sidebar-3.jpg";
 import logo from "assets/img/ptit-logo.png";
 
-import UserProfile from 'views/UserProfile/UserProfile.jsx';
 
 const switchRoutes = (
   <Switch>
@@ -28,7 +27,6 @@ const switchRoutes = (
         return <Redirect from={prop.path} to={prop.to} key={key} />;
       return <Route path={prop.path} component={prop.component} key={key} />;
     })}
-    <Route path='/profile' component={UserProfile} key={'profile'}/>
   </Switch>
 );
 
