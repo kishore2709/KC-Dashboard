@@ -23,6 +23,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import Menu from '@material-ui/core/Menu';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import SvgIcon from '@material-ui/core/SvgIcon';
 
 const styles = theme => ({
   button: {
@@ -42,7 +43,8 @@ class CoordinateCheckbox extends React.Component {
 
     this.state = {
       subAccArr: [],
-      anchorEl: null
+      anchorEl: null,
+      show: false
     }
   }s
 
@@ -59,46 +61,63 @@ class CoordinateCheckbox extends React.Component {
     this.props.updateSubAccArr(this.props.row, this.props.col, this.state.subAccArr);
   };
 
-  handleChange = (event, checked, index) => {
+  handleChangeCheckbox = event => {
+    this.setState({ show: event.target.checked }).then(() => {
+      this.props.updateSubAccArr(this.props.row, this.props.col, this.state.subAccArr);
+    });
+  }
+
+  handleChangeSubCheckbox = (event, checked, index) => {
     const { subAccArr } = this.state;
     this.setState({subAccArr: subAccArr.map((elem, _index) => 
       _index == index ? event.target.checked : elem)});
   }
   
   render() {
-    const { anchorEl, subAccArr } = this.state;
+    const { anchorEl, subAccArr, show } = this.state;
     const { row, col } = this.props;
     return (
       <div>
-        <Button
-          aria-owns={anchorEl ? 'simple-menu' : undefined}
-          aria-haspopup="true"
-          onClick={this.handleClick}
+        <Checkbox
+          checked={show}
+          onChange={this.handleChangeCheckbox}
         >
-         {row} - {col}
-        </Button>
-        <Menu
-          id="simple-menu"
-          anchorEl={anchorEl}
-          open={Boolean(anchorEl)}
-          onClose={this.handleClose}
-        >
-          {subAccArr.map((elem, index) => {
-            return (
-              <MenuItem key={index}>
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={elem}
-                      onChange={(event, checked) => this.handleChange(event, checked, index)}
-                    />
-                  }
-                  label={index}
-                />
-              </MenuItem>   
-            )
-          })}
-        </Menu>
+        </Checkbox>
+        {show ? (
+        <div>
+          <Button
+            aria-owns={anchorEl ? 'simple-menu' : undefined}
+            aria-haspopup="true"
+            onClick={this.handleClick}
+          >
+            <SvgIcon>
+              <path fill="#000000" d="M7,10L12,15L17,10H7Z" />
+            </SvgIcon>
+          </Button>
+          <Menu
+            id="simple-menu"
+            anchorEl={anchorEl}
+            open={Boolean(anchorEl)}
+            onClose={this.handleClose}
+          >
+            {subAccArr.map((elem, index) => {
+              return (
+                <MenuItem key={index}>
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={elem}
+                        onChange={(event, checked) => this.handleChangeSubCheckbox(event, checked, index)}
+                      />
+                    }
+                    label={index}
+                  />
+                </MenuItem>   
+              )
+            })}
+          </Menu>
+        </div>
+        ) : null}
       </div>
     );
   }
@@ -242,7 +261,7 @@ class AccessManagement extends React.Component {
       accessArr: this.state.accessMatrix[index].slice(),
       id: user.id,
     }));
-    //console.log(result);
+    console.log(result);
     const alertErr = () => {
       toastManager.add(`Something went wrong: `, {
         appearance: 'error',
