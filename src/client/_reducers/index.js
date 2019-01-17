@@ -6,7 +6,7 @@ import { users } from './users.reducer';
 import { alert } from './alert.reducer';
 import { drawer } from './drawer.reducer';
 import { dialog } from './dialog.reducer';
-
+import { serverStatus } from './serverStatus.reducer';
 const rootReducer = combineReducers({
   dialog,
   authentication,
@@ -14,6 +14,7 @@ const rootReducer = combineReducers({
   users,
   alert,
   drawer,
+  serverStatus,
 });
 
 export default rootReducer;

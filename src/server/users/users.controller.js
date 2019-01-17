@@ -10,8 +10,25 @@ router.post('/updateDb', updateDb);
 router.post('/getUsers', getUsers);
 router.post('/deleteDb', deleteDb);
 router.post('/addDb', addDb);
+router.post('/getUserInfo', getUserInfo);
 module.exports = router;
 
+function getUserInfo(req, res, next) {
+  console.log('in getUserInfo');
+  console.log(req.user);
+  userService
+    .getUserInfo(req.body)
+    .then(ret => {
+      // console.log(ret);
+      if (ret === 0) {
+        res.status(400).json({ message: 'find userinfo in db error' });
+      } else {
+        console.log(ret);
+        res.json(ret);
+      }
+    })
+    .catch(err => next(err));
+}
 function addDb(req, res, next) {
   userService
     .addDb(req.body)
@@ -66,7 +83,8 @@ function updateDb(req, res, next) {
 
 function authenticate(req, res, next) {
   // console.log('helsasdl');
-  console.log(req.body);
+  // console.log(req.body);
+  // console.log('endreq.body');
   userService
     .authenticate(req.body)
     .then(user =>

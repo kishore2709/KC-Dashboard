@@ -8,6 +8,8 @@ const md5 = require('md5');
 const errorHandler = require('./_helpers/error-handler');
 const jwt = require('./_helpers/jwt');
 
+const guard = require('express-jwt-permissions')();
+
 const jsonParser = bodyParser.json();
 
 // >>>###################################
@@ -16,15 +18,23 @@ const jsonParser = bodyParser.json();
 const urlencodedParser = bodyParser.urlencoded({ extended: false });
 
 const app = express();
+
 app.use(jsonParser);
 app.use(urlencodedParser);
 app.use(express.static('dist'));
 app.use(cors());
 app.use(jwt());
 app.use('/api/users', require('./users/users.controller'));
-
 app.use(errorHandler);
-
+app.use(
+  guard.check(['admin']).unless({
+    path: [
+      // public routes that don't require authentication
+      '/api/users/authenticate',
+      '/api/users/register',
+    ],
+  })
+);
 app.post('/api/users/register', jsonParser, (req, res) => {
   console.log(req.body);
   const { firstName, lastName, username, password } = req.body;
@@ -33,6 +43,7 @@ app.post('/api/users/register', jsonParser, (req, res) => {
   res.send({ status: 'okkkkkkkkkk' });
   res.end();
 });
+app.listen(8081, () => console.log('Listening on port 8081!'));
 
 // ////////#$################
 
@@ -114,4 +125,3 @@ app.post('/api/users/authenticate', jsonParser, (req, res) => {
 >>>>>>> a11a5487451e704ef4044703f55a036a4a4f49a5
 });
 */
-app.listen(8081, () => console.log('Listening on port 8081!'));

@@ -1,18 +1,12 @@
 ﻿const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 const config = require('../config.json');
-
+const UserSchema = require('../Utils/Schema');
 // #### >>>  Init Mongodb
 mongoose.connect('mongodb://localhost/usermanager');
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
-const userSchema = new mongoose.Schema({
-  username: String,
-  password: String,
-  role: String,
-  status: Boolean,
-  accessArr: Array,
-});
+const userSchema = UserSchema;
 const User = mongoose.model('User', userSchema);
 
 // users hardcoded for simplicity, store in a db for production applications
@@ -40,8 +34,25 @@ module.exports = {
   deleteDb,
   addDb,
   getUsers,
+  getUserInfo,
 };
 
+async function getUserInfo(obj) {
+  const { _id, ...rest } = obj;
+  let ret = 'err';
+  console.log(_id);
+  await User.findById(_id, (err, users) => {
+    if (err) console.log('get db users error');
+    else {
+      console.log('get db users ok');
+      // console.log(users);
+      ret = users;
+    }
+  });
+  // console.log('wtf');
+  // console.log(ret);
+  return ret;
+}
 async function getUsers() {
   let ret = 'err';
   await User.find({}, (err, users) => {
@@ -123,7 +134,7 @@ async function authenticate({ username, password }) {
         if (err) console.log(err);
         else {
           // console.log('wtf');
-          console.log(docs);
+          // console.log(docs);
           // console.log(docs.length);
           if (docs.length === 0) {
             reject(new Error('err'));
@@ -131,10 +142,19 @@ async function authenticate({ username, password }) {
           }
           // console.log(docs.length);
           const user = docs[0];
-          console.log(user);
-          const token = jwt.sign({ sub: user.id }, config.secret);
+          // console.log(user);
+          const token = jwt.sign(
+            {
+              sub: user.id,
+              permissions: ['admin', 'user:read', 'user:write'],
+            },
+            config.secret
+          );
           const { password, ...userWithoutPassword } = user;
-          console.log(user);
+          console.log({
+            ...userWithoutPassword,
+            token,
+          });
           resolve({
             ...userWithoutPassword,
             token,

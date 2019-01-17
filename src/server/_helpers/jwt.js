@@ -17,7 +17,7 @@ function jwt() {
       if (req.query && req.query.token) {
         return req.query.token;
       }
-      console.log(req);
+      // console.log(req);
       console.log('dident find token');
       return null;
     },

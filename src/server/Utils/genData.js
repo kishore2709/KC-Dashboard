@@ -1,16 +1,11 @@
 const mongoose = require('mongoose');
 const md5 = require('md5');
+const UserSchema = require('../Utils/Schema');
 
 mongoose.connect('mongodb://localhost/usermanager');
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
-const userSchema = new mongoose.Schema({
-  username: String,
-  password: String,
-  role: String,
-  status: Boolean,
-  accessArr: Array,
-});
+const userSchema = UserSchema;
 const User = mongoose.model('User', userSchema);
 
 db.once('open', () => {
@@ -21,7 +16,15 @@ db.once('open', () => {
     password: md5('user'),
     role: 'User',
     status: true,
-    accessArr: [[], [true, false, true], [true], [false, false]],
+    permissions: {
+      dashboard: { canAccess: true, subArr: [true, false, false] },
+      user: { canAccess: true, subArr: [true, false] },
+      permission: { canAccess: true, subArr: [true, false] },
+      logManager: { canAccess: true, subArr: [true, false] },
+      serviceManager: { canAccess: true, subArr: [true, false] },
+      attackReport: { canAccess: true, subArr: [true, false] },
+      alert: { canAccess: true, subArr: [true, false] },
+    },
   });
   user1.save((err, user1) => {
     if (err) console.log(err);

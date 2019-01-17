@@ -29,7 +29,12 @@ import CardHeader from 'components/Card/CardHeader.jsx';
 import CardIcon from 'components/Card/CardIcon.jsx';
 import CardBody from 'components/Card/CardBody.jsx';
 import CardFooter from 'components/Card/CardFooter.jsx';
+import Loading from 'components/Loading/Loading.jsx';
+import WarningStatus from 'components/Warning/Warning.jsx';
 
+/// redux
+import { connect } from 'react-redux';
+import { serverStatusConstants } from '_constants';
 // import classnames from 'classnames';
 import {
   userLogo,
@@ -90,7 +95,15 @@ class Dashboard extends React.Component {
   };
 
   render() {
-    const { classes } = this.props;
+    const { classes, serverStatus } = this.props;
+    console.log('serverStatus in props dashboard');
+    console.log(serverStatus);
+    if (serverStatus.type === serverStatusConstants.LOADING){
+      return <Loading/>
+    }
+    if (serverStatus.type === serverStatusConstants.ERROR){
+      return <WarningStatus/>
+    }
     return (
       <div>
         <GridContainer>
@@ -354,5 +367,11 @@ class Dashboard extends React.Component {
 Dashboard.propTypes = {
   classes: PropTypes.object.isRequired,
 };
-
-export default withStyles(dashboardStyle)(Dashboard);
+function mapStateToProps(state) {
+  const { serverStatus } = state;
+  return {
+    serverStatus,
+  };
+}
+const connectedDashboard = connect(mapStateToProps)(Dashboard);
+export default withStyles(dashboardStyle)(connectedDashboard);
