@@ -1,6 +1,7 @@
 /* eslint-disable react/no-multi-comp */
 import React from 'react';
 
+import CircularProgress from '@material-ui/core/CircularProgress';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -8,259 +9,357 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TableFooter from '@material-ui/core/TableFooter';
 import TablePagination from '@material-ui/core/TablePagination';
-
 import Checkbox from '@material-ui/core/Checkbox';
+import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
+import IconButton from '@material-ui/core/IconButton';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
+import Select from '@material-ui/core/Select';
+import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+
 import { withStyles } from '@material-ui/core/styles';
-import LinearProgress from '@material-ui/core/LinearProgress';
+
 import { withToastManager } from 'react-toast-notifications';
 import { GetUserInfo, PostApi } from '../../_helpers/Utils';
-import { TextField, Input } from '@material-ui/core';
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
-import InputLabel from '@material-ui/core/InputLabel';
-import FormControl from '@material-ui/core/FormControl';
-import Menu from '@material-ui/core/Menu';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import SvgIcon from '@material-ui/core/SvgIcon';
 
 const styles = theme => ({
-  button: {
-    margin: theme.spacing.unit * 4,
+  progress: {
   },
-  formControl: {
-    margin: theme.spacing.unit * 0.5,
-    minWidth: 100,
-    maxWidth: 100
+  permissionCheckboxCell: {
+    display: 'flex',
   },
 });
 
-class CoordinateCheckbox extends React.Component {
-  
+class PermissionCheckbox extends React.Component {
+
   constructor(props) {
     super(props);
 
     this.state = {
-      subAccArr: [],
       anchorEl: null,
-      show: false
     }
-  }s
 
-  componentDidMount() {
-    this.setState({ subAccArr: this.props.subAccArr ? this.props.subAccArr : [] });
+  }
+
+  render() {
+
+    const { classes, subPermission, canAccess } = this.props;
+    const { anchorEl } = this.state;
+    const open = Boolean(anchorEl);
+
+    return (
+      <div className={classes.permissionCheckboxCell}>
+        <Checkbox
+          checked={canAccess}
+          onChange={this.handleCanAccessChange}
+        />
+        <IconButton
+          aria-label="Sub-Permission"
+          aria-owns={open ? 'sub-permission' : undefined}
+          aria-haspopup="true"
+          disabled={!canAccess}
+          onClick={this.handleClick}
+        >
+          <MoreVertIcon />
+        </IconButton>
+        <Menu
+          id="sub-permission"
+          anchorEl={anchorEl}
+          open={open}
+          onClose={this.handleClose}>
+          {subPermission.map((permission, index) => (
+            <MenuItem
+              key={index}
+            >
+              <Checkbox
+                checked={permission}
+                onChange={this.handleSubPermissionChange(index)}
+              />
+            </MenuItem>
+          ))}
+        </Menu>
+      </div>
+    );
   }
 
   handleClick = event => {
     this.setState({ anchorEl: event.currentTarget });
-  };
+  }
 
-  handleClose = () => {
+  handleClose = event => {
     this.setState({ anchorEl: null });
-    this.props.updateSubAccArr(this.props.row, this.props.col, this.state.subAccArr);
-  };
-
-  handleChangeCheckbox = event => {
-    this.setState({ show: event.target.checked }).then(() => {
-      this.props.updateSubAccArr(this.props.row, this.props.col, this.state.subAccArr);
-    });
   }
 
-  handleChangeSubCheckbox = (event, checked, index) => {
-    const { subAccArr } = this.state;
-    this.setState({subAccArr: subAccArr.map((elem, _index) => 
-      _index == index ? event.target.checked : elem)});
+  handleCanAccessChange = event => {
+    const result = event.target.checked;
+    this.props.fireUpCanAccessChange(result);
   }
-  
-  render() {
-    const { anchorEl, subAccArr, show } = this.state;
-    const { row, col } = this.props;
-    return (
-      <div>
-        <Checkbox
-          checked={show}
-          onChange={this.handleChangeCheckbox}
-        >
-        </Checkbox>
-        {show ? (
-        <div>
-          <Button
-            aria-owns={anchorEl ? 'simple-menu' : undefined}
-            aria-haspopup="true"
-            onClick={this.handleClick}
-          >
-            <SvgIcon>
-              <path fill="#000000" d="M7,10L12,15L17,10H7Z" />
-            </SvgIcon>
-          </Button>
-          <Menu
-            id="simple-menu"
-            anchorEl={anchorEl}
-            open={Boolean(anchorEl)}
-            onClose={this.handleClose}
-          >
-            {subAccArr.map((elem, index) => {
-              return (
-                <MenuItem key={index}>
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={elem}
-                        onChange={(event, checked) => this.handleChangeSubCheckbox(event, checked, index)}
-                      />
-                    }
-                    label={index}
-                  />
-                </MenuItem>   
-              )
-            })}
-          </Menu>
-        </div>
-        ) : null}
-      </div>
-    );
+
+  handleSubPermissionChange = index => event => {
+    const result = this.props.subPermission.map((permission, _index) => _index === index ? event.target.checked : permission);
+    this.props.fireUpSubPermissionChange(result);
   }
+
 }
 
-class AccessManagement extends React.Component {
+class AccessTable extends React.Component {
+
   constructor(props) {
     super(props);
 
     this.state = {
-      tabs: [],
       users: [],
-      accessMatrix: [],
-      loadding: true,
+      columns: [],
+      roles: [],
       page: 0,
       rowsPerPage: 5,
+      filter: '',
       search: '',
-      filter: ''
     };
-    this.promiseState = this.promiseState.bind(this);
-    this.GetAllUsers = this.GetAllUsers.bind(this);
-    this.GetAllTabs = this.GetAllTabs.bind(this);
-    this.SetupRows = this.SetupRows.bind(this);
-    this.SetupColumns = this.SetupColumns.bind(this);
-    this.SetupAccessMatrix = this.SetupAccessMatrix.bind(this);
-    this.HandleChange = this.HandleChange.bind(this);
-    this.HandleSubmit = this.HandleSubmit.bind(this);
-    this.handleChangePage = this.handleChangePage.bind(this);
-    this.handleChangeRowsPerPage = this.handleChangeRowsPerPage.bind(this);
-    this.handleChangeSearch = this.handleChangeSearch.bind(this);
-    this.handleChangeFilter = this.handleChangeFilter.bind(this);
-  }
 
-  promiseState = async state =>
-    new Promise(resolve => this.setState(state, resolve));
+  }
 
   componentDidMount() {
-    Promise.all([this.SetupColumns(), this.SetupRows()]).then(() => {
-      console.log('userrss??');
-      console.log(this.state.users);
-      this.SetupAccessMatrix();
+    const roles = this.props.users.reduce((accumulator, currentValue) => {
+      if (accumulator.includes(currentValue.role)) {
+        return accumulator;
+      } else {
+        return accumulator.concat(currentValue.role);
+      }
+    }, []);
+    this.setState({
+      users: this.props.users,
+      columns: this.props.columns,
+      roles: roles,
     });
   }
 
-  SetupAccessMatrix() {
-    const accessMatrix = this.state.users.map(user =>
-      user.accessArr ? user.accessArr : Array.from(this.state.tabs, () => false)
+  render() {
+
+    const { columns, page, rowsPerPage, filter, search, roles } = this.state;
+    const users = this.state.users.filter(user => user.username.includes(search)).filter(user => user.role.includes(filter));
+
+    return (
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell>
+              <Typography>Username</Typography>
+            </TableCell>
+            {columns.map((column, index) => (
+              <TableCell 
+                key={index}
+                align='center'
+              >
+                {column}
+              </TableCell>
+            ))}
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          { 
+            users.length > 0 
+            ? (users.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((user, index) => (
+              <TableRow key={index}>
+                <TableCell>
+                  {user.username}
+                </TableCell>
+                {columns.map((column, _index) => (
+                  <TableCell key={_index}>
+                    <PermissionCheckbox 
+                      canAccess={user.permissions[column].canAccess}
+                      fireUpCanAccessChange={this.solveCanAccessChange(index, _index)}
+                      subPermission={user.permissions[column].subArr}
+                      fireUpSubPermissionChange={this.solveSubPermissionChange(index, _index)}
+                      classes = {this.props.classes}
+                    />
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))) 
+            : (<TableRow>
+                <TableCell 
+                  colSpan={columns.length + 1}
+                  align='center'
+                >
+                  No results
+                </TableCell>
+              </TableRow>)
+          }
+        </TableBody>
+        <TableFooter>
+          <TableRow>
+            <TablePagination
+              rowsPerPageOptions={[5, 10, 20]}
+              colSpan={1}
+              count={users.length}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              onChangePage={this.handleChangePage}
+              onChangeRowsPerPage={this.handleChangeRowsPerPage}
+            >
+            </TablePagination>
+          </TableRow>
+          <TableRow>
+            <TableCell
+              colSpan={1}
+            >
+              <Select
+                value={filter}
+                onChange={this.handleChangeFilter}  
+              >
+                <MenuItem value={''}>All</MenuItem>
+                {roles.map((role, index) => (
+                  <MenuItem
+                    key={index}
+                    value={role}
+                  >
+                    {role}
+                  </MenuItem>
+                ))}
+              </Select>
+            </TableCell>
+            <TableCell
+              colSpan={2}
+            >
+            <TextField
+              value={search}
+              onChange={this.handleChangeSearch}
+              label='Search'
+            />
+            </TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell
+              colSpan={1}
+            >
+              <Button 
+                variant="contained" 
+                onClick={this.handleSubmit}
+                color='primary'
+              >
+                Submit
+              </Button>
+            </TableCell>
+          </TableRow>
+        </TableFooter>
+      </Table>
     );
-    this.setState({ accessMatrix, loadding: false }, () => {
-      console.log('setup accessmatrix donee!');
-      console.log('user');
-      console.log(this.state.users);
-      console.log('tabs');
-      console.log(this.state.tabs);
-      console.log(accessMatrix);
-    });
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  GetAllUsers() {
-    /*
+  solveCanAccessChange = (userIndex, columnIndex) => newChecked => {
+    const { users, columns } = this.props;
+    users[userIndex].permissions[columns[columnIndex]].canAccess = newChecked;
+    this.setState({ users: users });
+  }
+
+  solveSubPermissionChange = (userIndex, columnIndex) => newSubPermission => {
+    const { users, columns } = this.props;
+    users[userIndex].permissions[columns[columnIndex]].subArr = newSubPermission;
+    this.setState({ users: users });
+  }
+
+  handleChangePage = (event, page) => {
+    this.setState({ page: page });
+  };
+
+  handleChangeRowsPerPage = event => {
+    this.setState({ rowsPerPage: event.target.value });
+  };
+
+  handleChangeFilter = event => {
+    this.setState({ filter: event.target.value });
+  }
+
+  handleChangeSearch = event => {
+    this.setState({ search: event.target.value });
+  }
+  
+  handleSubmit = event => {
+    this.props.fireUpHandleSubmit(this.state.users);
+  }
+
+}
+
+class AccessManagement extends React.Component {
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      users: [],
+      loading: true,
+      columns: [],
+    };
+
+  }
+
+  componentDidMount() {
+    this.GetAllUsers()
+    .then(users => this.setState({ users: users }))
+    .then(() => this.SetupColumns())
+    .then(columns => this.setState({ columns: columns }))
+    .then(() => this.setState({ loading: false }));
+  }
+
+  render() {
+
+    const { users, loading, columns } = this.state;
+    const { classes } = this.props;
+
+    if (loading) {
+      return (
+        <div>
+          <CircularProgress className={classes.progress} />
+        </div>
+      );
+    } else {
+      return (
+        <Paper>
+          <AccessTable
+            columns = {columns}
+            users = {users}
+            fireUpHandleSubmit = {this.solveHandleSubmit}
+            classes = {this.props.classes} 
+          />
+        </Paper>
+      );
+    }
+  }
+
+  GetAllUserData = () => this.GetAllUsers;
+
+  SetupColumns = () => {
     return new Promise((resolve, reject) => {
-      const users = Array.from({length: 26}, () => {
-        const user = {
-          username: Math.random().toString(36).substr(2),
-          password: Math.random().toString(36).substr(2),
-          role: ['Admin', 'Moderator', 'Moderator', 'User', 'User', 'User'][Math.floor(Math.random() * 6)],
-          status: true,
-          accessArr: Array.from({length: 6}, () => {
-            const subAccArr = Array.from({length: Math.floor(Math.random() * 3) + 1}, () => {
-              return Math.random() >= 0.5 ? true : false;
-            });
-            return subAccArr;
-          }),
+      const { users } = this.state;
+      const result = users.reduce(((accumulator, currentValue) => {
+        if (Boolean(currentValue.permissions)) {
+          return accumulator.concat(Object.keys(currentValue.permissions).filter(_currentValue => !accumulator.includes(_currentValue)));
+        } else {
+          return accumulator;
         }
-        return user;
-      });
-      resolve(users);
-    });
-    */
-    return PostApi('/api/users/getUsers', {})
-      .then(res => {
-        console.log(res);
-        const result = res.map(x => {
-          const { _id, ...rest } = x;
-          return { id: _id, ...rest };
-        });
-        // console.log(res);
-        return Promise.resolve(result.filter(x => x.role !== 'Admin'));
-      })
-      .catch(err => {
-        console.log('get data from database err');
-      });
-  }
-
-  SetupRows() {
-    return this.GetAllUsers().then(users =>
-      this.promiseState({
-        users: users.map((user, index) =>
-          Object.assign({}, { row_id: index }, user)
-        ),
-      })
-    );
-  }
-
-  GetAllTabs() {
-    return new Promise((resolve, reject) => {
-      const tabs = [
-        { name: 'Col-1' },
-        { name: 'Col-2' },
-        { name: 'Col-3' },
-        { name: 'Col-4' },
-        { name: 'Col-5' },
-        { name: 'Col-6' },
-      ];
-      resolve(tabs);
+      }), []);
+      resolve(result);
     });
   }
 
-  SetupColumns() {
-    return this.GetAllTabs().then(tabs =>
-      this.promiseState({
-        tabs: tabs.map((tab, index) =>
-          Object.assign({}, { col_id: index }, tab)
-        ),
-      })
-    );
+  solveHandleSubmit = newUsers => {
+    this.setState({ users: newUsers }, () => {
+      console.log(this.state.users);
+      //this.HandleSubmit;
+    });
   }
 
-  HandleChange(event, checked, row, col) {
-    const accessMatrix = this.state.accessMatrix.map(elem => elem.slice());
-    console.log(accessMatrix);
-    console.log(row, col);
-    accessMatrix[row][col] = event.target.checked;
-    this.setState({ accessMatrix });
-  }
 
-  HandleSubmit() {
+// =================
+
+  HandleSubmit = () => {
     const { toastManager } = this.props;
-    const result = this.state.users.map((user, index) => ({
-      accessArr: this.state.accessMatrix[index].slice(),
-      id: user.id,
-    }));
+    const result = this.state.users;
+
     console.log(result);
     const alertErr = () => {
       toastManager.add(`Something went wrong: `, {
@@ -273,11 +372,9 @@ class AccessManagement extends React.Component {
         rows.map(async row => {
           await PostApi('/api/users/updateDb', row)
             .then(res => {
-              // console.log('in then proomse');
               if (res === 'err') {
                 alertErr();
               } else {
-                // ret.push(newRow);
                 toastManager.add('Updated Successfully', {
                   appearance: 'success',
                   autoDismiss: true,
@@ -285,7 +382,6 @@ class AccessManagement extends React.Component {
               }
             })
             .catch(err => {
-              // ret = 'err';
               console.log('update data from database err');
               alertErr();
             });
@@ -294,146 +390,250 @@ class AccessManagement extends React.Component {
     };
     asyncUpdateFunction(result).then(ret => {
       if (ret !== 'err')
-        // this.setState({ rows: ret });
         console.log('ok update ok');
     });
    return null;
   }
 
-  handleChangePage(event, page) {
-    this.setState({ page });
-  };
-
-  handleChangeRowsPerPage(event) {
-    this.setState({ rowsPerPage: event.target.value });
-  };
-
-  handleChangeSearch(event) {
-    this.setState({ search: event.target.value });
+  GetAllUsers = () => {
+    return PostApi('/api/users/getUsers', {})
+      .then(res => {
+        console.log(res);
+        const result = res.map(x => {
+          const { _id, ...rest } = x;
+          return { id: _id, ...rest };
+        });
+        return Promise.resolve(result.filter(x => x.role !== 'Admin'));
+      })
+      .catch(err => {
+        console.log('get data from database err');
+      });
   }
 
-  handleChangeFilter(event) {
-    this.setState({ filter: event.target.value });
-  }
 
-  updateSubAccArr = (row, col, subAccArr) => {
-    const { accessMatrix } = this.state;
-    accessMatrix[row][col] = subAccArr;
-    this.setState({accessMatrix: accessMatrix});
-  }
+// =================
 
-  render() {
-    const { tabs, users, loadding, page, rowsPerPage, anchorEl } = this.state;
-    let { accessMatrix } = this.state;
-
-    if (loadding)
-      return (
-        <div>
-          <LinearProgress />
-          <br />
-          <LinearProgress color="secondary" />
-        </div>
-      );
-    // console.log('in render');
-    // console.log(accessMatrix);
-    accessMatrix = accessMatrix.map(elem => elem.slice());
-    // console.log(accessMatrix);
-    return (
-      <Paper>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell />
-              {tabs.map(col => (
-                <TableCell key={col.col_id} align="center">
-                  {col.name}
-                </TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {users
-              .filter(row => row.role.includes(this.state.filter))
-              .filter(row => row.username.includes(this.state.search))
-              .slice(rowsPerPage * page, rowsPerPage * (page + 1))
-              .map(row => (
-              <TableRow key={row.row_id}>
-                <TableCell component="th" scope="row">
-                  {row.username}
-                </TableCell>
-                {tabs.map(col => (
-                  <TableCell key={col.col_id} align="center">
-                    <CoordinateCheckbox
-                      row={row.row_id}
-                      col={col.col_id}
-                      subAccArr={accessMatrix[row.row_id][col.col_id]}
-                      updateSubAccArr={this.updateSubAccArr}
-                    />
-                  </TableCell>
-                ))}
-              </TableRow>
-            ))}
-          </TableBody>
-          <TableFooter>
-            <TableRow>
-              <TablePagination
-                rowsPerPageOptions={[5, 10, 20]}
-                count={users
-                        .filter(row => row.role.includes(this.state.filter))
-                        .filter(row => row.username.includes(this.state.search))
-                        .length}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                onChangePage={this.handleChangePage}
-                onChangeRowsPerPage={this.handleChangeRowsPerPage}>
-              </TablePagination>
-            </TableRow>
-            <TableRow>
-              <TableCell  align='left'
-                          variant='footer'>
-                <FormControl className={this.props.classes.formControl}>
-                  <InputLabel htmlFor="role-filter">Filter Role</InputLabel>
-                  <Select
-                    value = {this.state.filter}
-                    onChange = {this.handleChangeFilter}
-                    inputProps={{
-                      name: 'role',
-                      id: 'role-filter',
-                    }}
-                  >
-                    <MenuItem value=''>All</MenuItem>
-                    <MenuItem value='User'>User</MenuItem>
-                    <MenuItem value='Moderator'>Moderator</MenuItem>
-                    <MenuItem value='Admin'>Admin</MenuItem>
-                  </Select>
-                </FormControl>
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell  align='left'
-                          variant='footer'>
-                <FormControl className={this.props.classes.formControl}>
-                  <TextField
-                    label="Search"
-                    value={this.state.search}
-                    onChange={this.handleChangeSearch}
-                  />
-                </FormControl>
-              </TableCell>
-            </TableRow>      
-          </TableFooter>
-        </Table>
-        <Button
-          variant="contained"
-          color="primary"
-          className={this.props.classes.button}
-          onClick={this.HandleSubmit}
-        >
-          Submit
-        </Button>
-      </Paper>
-    );
-  }
 }
 
-export default withToastManager(withStyles(styles)(AccessManagement));
+export default withStyles(styles)(AccessManagement);
+
+/*
+const userData = [
+  {
+    username: 'User 1',
+    password: '1',
+    role: 'User',
+    status: true,
+    permissions: {
+      dashboard: { 
+        canAccess: true, 
+        subArr: [true, false, false] 
+      },
+      user: { 
+        canAccess: true, 
+        subArr: [true, false] 
+      },
+      permission: { 
+        canAccess: false, 
+        subArr: [true, false] 
+      },
+      logManager: { 
+        canAccess: false, 
+        subArr: [false, false] 
+      },
+      serviceManager: { 
+        canAccess: true, 
+        subArr: [true, false] 
+      },
+      attackReport: { 
+        canAccess: false, 
+        subArr: [false, false] 
+      },
+      alert: { 
+        canAccess: true, 
+        subArr: [true, false] 
+      },
+    },
+  },
+  {
+    username: 'User 2',
+    password: '1',
+    role: 'User',
+    status: true,
+    permissions: {
+      dashboard: { 
+        canAccess: true, 
+        subArr: [true, false, false] 
+      },
+      user: { 
+        canAccess: true, 
+        subArr: [true, false] 
+      },
+      permission: { 
+        canAccess: false, 
+        subArr: [true, false] 
+      },
+      logManager: { 
+        canAccess: false, 
+        subArr: [false, false] 
+      },
+      serviceManager: { 
+        canAccess: true, 
+        subArr: [true, false] 
+      },
+      attackReport: { 
+        canAccess: false, 
+        subArr: [false, false] 
+      },
+      alert: { 
+        canAccess: true, 
+        subArr: [true, false] 
+      },
+    },
+  },
+  {
+    username: 'User 3',
+    password: '3',
+    role: 'User',
+    status: true,
+    permissions: {
+      dashboard: { 
+        canAccess: true, 
+        subArr: [true, false, false] 
+      },
+      user: { 
+        canAccess: true, 
+        subArr: [true, false] 
+      },
+      permission: { 
+        canAccess: false, 
+        subArr: [true, false] 
+      },
+      logManager: { 
+        canAccess: false, 
+        subArr: [false, false] 
+      },
+      serviceManager: { 
+        canAccess: true, 
+        subArr: [true, false] 
+      },
+      attackReport: { 
+        canAccess: false, 
+        subArr: [false, false] 
+      },
+      alert: { 
+        canAccess: true, 
+        subArr: [true, false] 
+      },
+    },
+  },
+  {
+    username: 'User 4',
+    password: '1',
+    role: 'User',
+    status: true,
+    permissions: {
+      dashboard: { 
+        canAccess: true, 
+        subArr: [true, true, false] 
+      },
+      user: { 
+        canAccess: true, 
+        subArr: [true, false, false] 
+      },
+      permission: { 
+        canAccess: false, 
+        subArr: [true, false] 
+      },
+      logManager: { 
+        canAccess: false, 
+        subArr: [true, false] 
+      },
+      serviceManager: { 
+        canAccess: true, 
+        subArr: [true, false, false, true] 
+      },
+      attackReport: { 
+        canAccess: false, 
+        subArr: [true, false] 
+      },
+      alert: { 
+        canAccess: true, 
+        subArr: [true, false] 
+      },
+    },
+  },
+  {
+    username: 'Moderator 1',
+    password: '1',
+    role: 'Moderator',
+    status: true,
+    permissions: {
+      dashboard: { 
+        canAccess: true, 
+        subArr: [true, false, false] 
+      },
+      user: { 
+        canAccess: true, 
+        subArr: [true, false] 
+      },
+      permission: { 
+        canAccess: false, 
+        subArr: [true, false] 
+      },
+      logManager: { 
+        canAccess: true, 
+        subArr: [true, false] 
+      },
+      serviceManager: { 
+        canAccess: true, 
+        subArr: [true, false] 
+      },
+      attackReport: { 
+        canAccess: true, 
+        subArr: [true, false] 
+      },
+      alert: { 
+        canAccess: true, 
+        subArr: [true, false] 
+      },
+    },
+  },
+  {
+    username: 'Admin 1',
+    password: '1',
+    role: 'Admin',
+    status: true,
+    permissions: {
+      dashboard: { 
+        canAccess: true, 
+        subArr: [true, false, false] 
+      },
+      user: { 
+        canAccess: true, 
+        subArr: [true, false] 
+      },
+      permission: { 
+        canAccess: true, 
+        subArr: [true, false] 
+      },
+      logManager: { 
+        canAccess: true, 
+        subArr: [true, false] 
+      },
+      serviceManager: { 
+        canAccess: true, 
+        subArr: [true, false] 
+      },
+      attackReport: { 
+        canAccess: true, 
+        subArr: [true, false] 
+      },
+      alert: { 
+        canAccess: true, 
+        subArr: [true, false] 
+      },
+    },
+  }
+];
+*/
