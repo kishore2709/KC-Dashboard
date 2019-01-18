@@ -99,17 +99,24 @@ async function deleteDb(obj) {
   });
   return ret;
 }
-async function updateDb(obj) {
-  const { id, ...rest } = obj;
+async function updateDb(objArr) {
   let ret = 0;
-  console.log(id, rest);
-  await User.findByIdAndUpdate(id, { $set: rest }, err => {
-    if (err) console.log('Update db error');
-    else {
-      console.log('update ok');
-      ret = 1;
-    }
-  });
+  console.log(objArr);
+  for (const obj of objArr) {
+    // console.log(obj);
+    const { id, ...rest } = obj;
+    // console.log('hellll?');
+    // console.log(_id);
+    // console.log(rest);
+    // console.log(_id, rest);
+    await User.findByIdAndUpdate(id, { $set: rest }, err => {
+      if (err) console.log('Update db error');
+      else {
+        console.log('update ok');
+        ret = 1;
+      }
+    });
+  }
   return ret;
 }
 

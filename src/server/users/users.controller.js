@@ -14,8 +14,8 @@ router.post('/getUserInfo', getUserInfo);
 module.exports = router;
 
 function getUserInfo(req, res, next) {
-  console.log('in getUserInfo');
-  console.log(req.user);
+  // console.log('in getUserInfo');
+  // console.log(req.user);
   userService
     .getUserInfo(req.body)
     .then(ret => {
@@ -82,8 +82,8 @@ function updateDb(req, res, next) {
 }
 
 function authenticate(req, res, next) {
-  // console.log('helsasdl');
-  // console.log(req.body);
+  console.log('helsasdl');
+  console.log(req.body);
   // console.log('endreq.body');
   userService
     .authenticate(req.body)

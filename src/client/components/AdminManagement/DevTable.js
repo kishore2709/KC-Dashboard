@@ -154,7 +154,7 @@ class Demo extends React.PureComponent {
                 const { password, ...rest } = newRow;
                 newRow = { password: md5(password), ...rest };
                 console.log(newRow);
-                await PostApi('/api/users/updateDb', newRow)
+                await PostApi('/api/users/updateDb', [newRow])
                   .then(res => {
                     // console.log('in then proomse');
                     if (res === 'err') {

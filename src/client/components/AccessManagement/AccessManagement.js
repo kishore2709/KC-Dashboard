@@ -26,36 +26,29 @@ import { withToastManager } from 'react-toast-notifications';
 import { GetUserInfo, PostApi } from '../../_helpers/Utils';
 
 const styles = theme => ({
-  progress: {
-  },
+  progress: {},
   permissionCheckboxCell: {
     display: 'flex',
   },
 });
 
 class PermissionCheckbox extends React.Component {
-
   constructor(props) {
     super(props);
 
     this.state = {
       anchorEl: null,
-    }
-
+    };
   }
 
   render() {
-
     const { classes, subPermission, canAccess } = this.props;
     const { anchorEl } = this.state;
     const open = Boolean(anchorEl);
 
     return (
       <div className={classes.permissionCheckboxCell}>
-        <Checkbox
-          checked={canAccess}
-          onChange={this.handleCanAccessChange}
-        />
+        <Checkbox checked={canAccess} onChange={this.handleCanAccessChange} />
         <IconButton
           aria-label="Sub-Permission"
           aria-owns={open ? 'sub-permission' : undefined}
@@ -69,11 +62,10 @@ class PermissionCheckbox extends React.Component {
           id="sub-permission"
           anchorEl={anchorEl}
           open={open}
-          onClose={this.handleClose}>
+          onClose={this.handleClose}
+        >
           {subPermission.map((permission, index) => (
-            <MenuItem
-              key={index}
-            >
+            <MenuItem key={index}>
               <Checkbox
                 checked={permission}
                 onChange={this.handleSubPermissionChange(index)}
@@ -87,26 +79,26 @@ class PermissionCheckbox extends React.Component {
 
   handleClick = event => {
     this.setState({ anchorEl: event.currentTarget });
-  }
+  };
 
   handleClose = event => {
     this.setState({ anchorEl: null });
-  }
+  };
 
   handleCanAccessChange = event => {
     const result = event.target.checked;
     this.props.fireUpCanAccessChange(result);
-  }
+  };
 
   handleSubPermissionChange = index => event => {
-    const result = this.props.subPermission.map((permission, _index) => _index === index ? event.target.checked : permission);
+    const result = this.props.subPermission.map((permission, _index) =>
+      _index === index ? event.target.checked : permission
+    );
     this.props.fireUpSubPermissionChange(result);
-  }
-
+  };
 }
 
 class AccessTable extends React.Component {
-
   constructor(props) {
     super(props);
 
@@ -119,28 +111,27 @@ class AccessTable extends React.Component {
       filter: '',
       search: '',
     };
-
   }
 
   componentDidMount() {
     const roles = this.props.users.reduce((accumulator, currentValue) => {
       if (accumulator.includes(currentValue.role)) {
         return accumulator;
-      } else {
-        return accumulator.concat(currentValue.role);
       }
+      return accumulator.concat(currentValue.role);
     }, []);
     this.setState({
       users: this.props.users,
       columns: this.props.columns,
-      roles: roles,
+      roles,
     });
   }
 
   render() {
-
     const { columns, page, rowsPerPage, filter, search, roles } = this.state;
-    const users = this.state.users.filter(user => user.username.includes(search)).filter(user => user.role.includes(filter));
+    const users = this.state.users
+      .filter(user => user.username.includes(search))
+      .filter(user => user.role.includes(filter));
 
     return (
       <Table>
@@ -150,45 +141,45 @@ class AccessTable extends React.Component {
               <Typography>Username</Typography>
             </TableCell>
             {columns.map((column, index) => (
-              <TableCell 
-                key={index}
-                align='center'
-              >
+              <TableCell key={index} align="center">
                 {column}
               </TableCell>
             ))}
           </TableRow>
         </TableHead>
         <TableBody>
-          { 
-            users.length > 0 
-            ? (users.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((user, index) => (
-              <TableRow key={index}>
-                <TableCell>
-                  {user.username}
-                </TableCell>
-                {columns.map((column, _index) => (
-                  <TableCell key={_index}>
-                    <PermissionCheckbox 
-                      canAccess={user.permissions[column].canAccess}
-                      fireUpCanAccessChange={this.solveCanAccessChange(index, _index)}
-                      subPermission={user.permissions[column].subArr}
-                      fireUpSubPermissionChange={this.solveSubPermissionChange(index, _index)}
-                      classes = {this.props.classes}
-                    />
-                  </TableCell>
-                ))}
-              </TableRow>
-            ))) 
-            : (<TableRow>
-                <TableCell 
-                  colSpan={columns.length + 1}
-                  align='center'
-                >
-                  No results
-                </TableCell>
-              </TableRow>)
-          }
+          {users.length > 0 ? (
+            users
+              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .map((user, index) => (
+                <TableRow key={index}>
+                  <TableCell>{user.username}</TableCell>
+                  {columns.map((column, _index) => (
+                    <TableCell key={_index}>
+                      <PermissionCheckbox
+                        canAccess={user.permissions[column].canAccess}
+                        fireUpCanAccessChange={this.solveCanAccessChange(
+                          index,
+                          _index
+                        )}
+                        subPermission={user.permissions[column].subArr}
+                        fireUpSubPermissionChange={this.solveSubPermissionChange(
+                          index,
+                          _index
+                        )}
+                        classes={this.props.classes}
+                      />
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))
+          ) : (
+            <TableRow>
+              <TableCell colSpan={columns.length + 1} align="center">
+                No results
+              </TableCell>
+            </TableRow>
+          )}
         </TableBody>
         <TableFooter>
           <TableRow>
@@ -200,46 +191,33 @@ class AccessTable extends React.Component {
               page={page}
               onChangePage={this.handleChangePage}
               onChangeRowsPerPage={this.handleChangeRowsPerPage}
-            >
-            </TablePagination>
+            />
           </TableRow>
           <TableRow>
-            <TableCell
-              colSpan={1}
-            >
-              <Select
-                value={filter}
-                onChange={this.handleChangeFilter}  
-              >
-                <MenuItem value={''}>All</MenuItem>
+            <TableCell colSpan={1}>
+              <Select value={filter} onChange={this.handleChangeFilter}>
+                <MenuItem value="">All</MenuItem>
                 {roles.map((role, index) => (
-                  <MenuItem
-                    key={index}
-                    value={role}
-                  >
+                  <MenuItem key={index} value={role}>
                     {role}
                   </MenuItem>
                 ))}
               </Select>
             </TableCell>
-            <TableCell
-              colSpan={2}
-            >
-            <TextField
-              value={search}
-              onChange={this.handleChangeSearch}
-              label='Search'
-            />
+            <TableCell colSpan={2}>
+              <TextField
+                value={search}
+                onChange={this.handleChangeSearch}
+                label="Search"
+              />
             </TableCell>
           </TableRow>
           <TableRow>
-            <TableCell
-              colSpan={1}
-            >
-              <Button 
-                variant="contained" 
+            <TableCell colSpan={1}>
+              <Button
+                variant="contained"
                 onClick={this.handleSubmit}
-                color='primary'
+                color="primary"
               >
                 Submit
               </Button>
@@ -253,17 +231,19 @@ class AccessTable extends React.Component {
   solveCanAccessChange = (userIndex, columnIndex) => newChecked => {
     const { users, columns } = this.props;
     users[userIndex].permissions[columns[columnIndex]].canAccess = newChecked;
-    this.setState({ users: users });
-  }
+    this.setState({ users });
+  };
 
   solveSubPermissionChange = (userIndex, columnIndex) => newSubPermission => {
     const { users, columns } = this.props;
-    users[userIndex].permissions[columns[columnIndex]].subArr = newSubPermission;
-    this.setState({ users: users });
-  }
+    users[userIndex].permissions[
+      columns[columnIndex]
+    ].subArr = newSubPermission;
+    this.setState({ users });
+  };
 
   handleChangePage = (event, page) => {
-    this.setState({ page: page });
+    this.setState({ page });
   };
 
   handleChangeRowsPerPage = event => {
@@ -272,20 +252,18 @@ class AccessTable extends React.Component {
 
   handleChangeFilter = event => {
     this.setState({ filter: event.target.value });
-  }
+  };
 
   handleChangeSearch = event => {
     this.setState({ search: event.target.value });
-  }
-  
+  };
+
   handleSubmit = event => {
     this.props.fireUpHandleSubmit(this.state.users);
-  }
-
+  };
 }
 
 class AccessManagement extends React.Component {
-
   constructor(props) {
     super(props);
 
@@ -294,19 +272,17 @@ class AccessManagement extends React.Component {
       loading: true,
       columns: [],
     };
-
   }
 
   componentDidMount() {
     this.GetAllUsers()
-    .then(users => this.setState({ users: users }))
-    .then(() => this.SetupColumns())
-    .then(columns => this.setState({ columns: columns }))
-    .then(() => this.setState({ loading: false }));
+      .then(users => this.setState({ users }))
+      .then(() => this.SetupColumns())
+      .then(columns => this.setState({ columns }))
+      .then(() => this.setState({ loading: false }));
   }
 
   render() {
-
     const { users, loading, columns } = this.state;
     const { classes } = this.props;
 
@@ -316,45 +292,68 @@ class AccessManagement extends React.Component {
           <CircularProgress className={classes.progress} />
         </div>
       );
-    } else {
-      return (
-        <Paper>
-          <AccessTable
-            columns = {columns}
-            users = {users}
-            fireUpHandleSubmit = {this.solveHandleSubmit}
-            classes = {this.props.classes} 
-          />
-        </Paper>
-      );
     }
+    return (
+      <Paper>
+        <AccessTable
+          columns={columns}
+          users={users}
+          fireUpHandleSubmit={this.solveHandleSubmit}
+          classes={this.props.classes}
+        />
+      </Paper>
+    );
   }
 
   GetAllUserData = () => this.GetAllUsers;
 
-  SetupColumns = () => {
-    return new Promise((resolve, reject) => {
+  SetupColumns = () =>
+    new Promise((resolve, reject) => {
       const { users } = this.state;
-      const result = users.reduce(((accumulator, currentValue) => {
-        if (Boolean(currentValue.permissions)) {
-          return accumulator.concat(Object.keys(currentValue.permissions).filter(_currentValue => !accumulator.includes(_currentValue)));
-        } else {
-          return accumulator;
+      const result = users.reduce((accumulator, currentValue) => {
+        if (currentValue.permissions) {
+          return accumulator.concat(
+            Object.keys(currentValue.permissions).filter(
+              _currentValue => !accumulator.includes(_currentValue)
+            )
+          );
         }
-      }), []);
+        return accumulator;
+      }, []);
       resolve(result);
     });
-  }
 
   solveHandleSubmit = newUsers => {
-    this.setState({ users: newUsers }, () => {
-      console.log(this.state.users);
-      //this.HandleSubmit;
-    });
-  }
+    console.log(newUsers);
+    PostApi('/api/users/updateDb', newUsers)
+      .then(res => {
+        if (res === 'err') {
+          this.props.toastManager.add(`Something went wrong: `, {
+            appearance: 'error',
+            autoDismiss: true,
+          });
+          console.log('update data from database err in AcessManagement');
 
+          // ret = 'err';
+        } else {
+          this.props.toastManager.add('Updated Successfully', {
+            appearance: 'success',
+            autoDismiss: true,
+          });
+          this.setState({ users: newUsers });
+        }
+      })
+      .catch(err => {
+        // ret = 'err';
+        this.props.toastManager.add(`Something went wrong: `, {
+          appearance: 'error',
+          autoDismiss: true,
+        });
+        console.log('update data from database err in AcessManagement');
+      });
+  };
 
-// =================
+  // =================
 
   HandleSubmit = () => {
     const { toastManager } = this.props;
@@ -389,14 +388,13 @@ class AccessManagement extends React.Component {
       );
     };
     asyncUpdateFunction(result).then(ret => {
-      if (ret !== 'err')
-        console.log('ok update ok');
+      if (ret !== 'err') console.log('ok update ok');
     });
-   return null;
-  }
+    return null;
+  };
 
-  GetAllUsers = () => {
-    return PostApi('/api/users/getUsers', {})
+  GetAllUsers = () =>
+    PostApi('/api/users/getUsers', {})
       .then(res => {
         console.log(res);
         const result = res.map(x => {
@@ -408,14 +406,11 @@ class AccessManagement extends React.Component {
       .catch(err => {
         console.log('get data from database err');
       });
-  }
 
-
-// =================
-
+  // =================
 }
 
-export default withStyles(styles)(AccessManagement);
+export default withToastManager(withStyles(styles)(AccessManagement));
 
 /*
 const userData = [
@@ -425,33 +420,33 @@ const userData = [
     role: 'User',
     status: true,
     permissions: {
-      dashboard: { 
-        canAccess: true, 
-        subArr: [true, false, false] 
+      dashboard: {
+        canAccess: true,
+        subArr: [true, false, false]
       },
-      user: { 
-        canAccess: true, 
-        subArr: [true, false] 
+      user: {
+        canAccess: true,
+        subArr: [true, false]
       },
-      permission: { 
-        canAccess: false, 
-        subArr: [true, false] 
+      permission: {
+        canAccess: false,
+        subArr: [true, false]
       },
-      logManager: { 
-        canAccess: false, 
-        subArr: [false, false] 
+      logManager: {
+        canAccess: false,
+        subArr: [false, false]
       },
-      serviceManager: { 
-        canAccess: true, 
-        subArr: [true, false] 
+      serviceManager: {
+        canAccess: true,
+        subArr: [true, false]
       },
-      attackReport: { 
-        canAccess: false, 
-        subArr: [false, false] 
+      attackReport: {
+        canAccess: false,
+        subArr: [false, false]
       },
-      alert: { 
-        canAccess: true, 
-        subArr: [true, false] 
+      alert: {
+        canAccess: true,
+        subArr: [true, false]
       },
     },
   },
@@ -461,33 +456,33 @@ const userData = [
     role: 'User',
     status: true,
     permissions: {
-      dashboard: { 
-        canAccess: true, 
-        subArr: [true, false, false] 
+      dashboard: {
+        canAccess: true,
+        subArr: [true, false, false]
       },
-      user: { 
-        canAccess: true, 
-        subArr: [true, false] 
+      user: {
+        canAccess: true,
+        subArr: [true, false]
       },
-      permission: { 
-        canAccess: false, 
-        subArr: [true, false] 
+      permission: {
+        canAccess: false,
+        subArr: [true, false]
       },
-      logManager: { 
-        canAccess: false, 
-        subArr: [false, false] 
+      logManager: {
+        canAccess: false,
+        subArr: [false, false]
       },
-      serviceManager: { 
-        canAccess: true, 
-        subArr: [true, false] 
+      serviceManager: {
+        canAccess: true,
+        subArr: [true, false]
       },
-      attackReport: { 
-        canAccess: false, 
-        subArr: [false, false] 
+      attackReport: {
+        canAccess: false,
+        subArr: [false, false]
       },
-      alert: { 
-        canAccess: true, 
-        subArr: [true, false] 
+      alert: {
+        canAccess: true,
+        subArr: [true, false]
       },
     },
   },
@@ -497,33 +492,33 @@ const userData = [
     role: 'User',
     status: true,
     permissions: {
-      dashboard: { 
-        canAccess: true, 
-        subArr: [true, false, false] 
+      dashboard: {
+        canAccess: true,
+        subArr: [true, false, false]
       },
-      user: { 
-        canAccess: true, 
-        subArr: [true, false] 
+      user: {
+        canAccess: true,
+        subArr: [true, false]
       },
-      permission: { 
-        canAccess: false, 
-        subArr: [true, false] 
+      permission: {
+        canAccess: false,
+        subArr: [true, false]
       },
-      logManager: { 
-        canAccess: false, 
-        subArr: [false, false] 
+      logManager: {
+        canAccess: false,
+        subArr: [false, false]
       },
-      serviceManager: { 
-        canAccess: true, 
-        subArr: [true, false] 
+      serviceManager: {
+        canAccess: true,
+        subArr: [true, false]
       },
-      attackReport: { 
-        canAccess: false, 
-        subArr: [false, false] 
+      attackReport: {
+        canAccess: false,
+        subArr: [false, false]
       },
-      alert: { 
-        canAccess: true, 
-        subArr: [true, false] 
+      alert: {
+        canAccess: true,
+        subArr: [true, false]
       },
     },
   },
@@ -533,33 +528,33 @@ const userData = [
     role: 'User',
     status: true,
     permissions: {
-      dashboard: { 
-        canAccess: true, 
-        subArr: [true, true, false] 
+      dashboard: {
+        canAccess: true,
+        subArr: [true, true, false]
       },
-      user: { 
-        canAccess: true, 
-        subArr: [true, false, false] 
+      user: {
+        canAccess: true,
+        subArr: [true, false, false]
       },
-      permission: { 
-        canAccess: false, 
-        subArr: [true, false] 
+      permission: {
+        canAccess: false,
+        subArr: [true, false]
       },
-      logManager: { 
-        canAccess: false, 
-        subArr: [true, false] 
+      logManager: {
+        canAccess: false,
+        subArr: [true, false]
       },
-      serviceManager: { 
-        canAccess: true, 
-        subArr: [true, false, false, true] 
+      serviceManager: {
+        canAccess: true,
+        subArr: [true, false, false, true]
       },
-      attackReport: { 
-        canAccess: false, 
-        subArr: [true, false] 
+      attackReport: {
+        canAccess: false,
+        subArr: [true, false]
       },
-      alert: { 
-        canAccess: true, 
-        subArr: [true, false] 
+      alert: {
+        canAccess: true,
+        subArr: [true, false]
       },
     },
   },
@@ -569,33 +564,33 @@ const userData = [
     role: 'Moderator',
     status: true,
     permissions: {
-      dashboard: { 
-        canAccess: true, 
-        subArr: [true, false, false] 
+      dashboard: {
+        canAccess: true,
+        subArr: [true, false, false]
       },
-      user: { 
-        canAccess: true, 
-        subArr: [true, false] 
+      user: {
+        canAccess: true,
+        subArr: [true, false]
       },
-      permission: { 
-        canAccess: false, 
-        subArr: [true, false] 
+      permission: {
+        canAccess: false,
+        subArr: [true, false]
       },
-      logManager: { 
-        canAccess: true, 
-        subArr: [true, false] 
+      logManager: {
+        canAccess: true,
+        subArr: [true, false]
       },
-      serviceManager: { 
-        canAccess: true, 
-        subArr: [true, false] 
+      serviceManager: {
+        canAccess: true,
+        subArr: [true, false]
       },
-      attackReport: { 
-        canAccess: true, 
-        subArr: [true, false] 
+      attackReport: {
+        canAccess: true,
+        subArr: [true, false]
       },
-      alert: { 
-        canAccess: true, 
-        subArr: [true, false] 
+      alert: {
+        canAccess: true,
+        subArr: [true, false]
       },
     },
   },
@@ -605,33 +600,33 @@ const userData = [
     role: 'Admin',
     status: true,
     permissions: {
-      dashboard: { 
-        canAccess: true, 
-        subArr: [true, false, false] 
+      dashboard: {
+        canAccess: true,
+        subArr: [true, false, false]
       },
-      user: { 
-        canAccess: true, 
-        subArr: [true, false] 
+      user: {
+        canAccess: true,
+        subArr: [true, false]
       },
-      permission: { 
-        canAccess: true, 
-        subArr: [true, false] 
+      permission: {
+        canAccess: true,
+        subArr: [true, false]
       },
-      logManager: { 
-        canAccess: true, 
-        subArr: [true, false] 
+      logManager: {
+        canAccess: true,
+        subArr: [true, false]
       },
-      serviceManager: { 
-        canAccess: true, 
-        subArr: [true, false] 
+      serviceManager: {
+        canAccess: true,
+        subArr: [true, false]
       },
-      attackReport: { 
-        canAccess: true, 
-        subArr: [true, false] 
+      attackReport: {
+        canAccess: true,
+        subArr: [true, false]
       },
-      alert: { 
-        canAccess: true, 
-        subArr: [true, false] 
+      alert: {
+        canAccess: true,
+        subArr: [true, false]
       },
     },
   }
