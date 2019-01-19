@@ -1,7 +1,6 @@
 /* eslint-disable react/no-multi-comp */
 import React from 'react';
 
-import CircularProgress from '@material-ui/core/CircularProgress';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -203,8 +202,8 @@ class AccessTable extends React.Component {
             <TableCell>
               Username
             </TableCell>
-            {columns.map((column, index) => (
-              <TableCell key={index} align="center">
+            {columns.map(column => (
+              <TableCell key={column} align="center">
                 {column}
               </TableCell>
             ))}
@@ -214,24 +213,26 @@ class AccessTable extends React.Component {
           {users.length > 0 && (
             users
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((user) => user.permissions != null ? (
+              .map(user => user.permissions != null ? (
                 <TableRow key={user.id}>
                   <TableCell>{user.username}</TableCell>
-                  {columns.map((column, _index) => (
-                    <TableCell key={_index}>
-                      <PermissionCheckbox
-                        canAccess={user.permissions[column].canAccess}
-                        fireUpCanAccessChange={this.handleCanAccessChange(
-                          user.id,
-                          column
-                        )}
-                        subPermission={user.permissions[column].subArr}
-                        fireUpSubPermissionChange={this.handleSubPermissionChange(
-                          user.id,
-                          column
-                        )}
-                        classes={this.props.classes}
-                      />
+                  {columns.map(column => (
+                    <TableCell key={column}>
+                      {user.permissions[column] != null ? (
+                        <PermissionCheckbox
+                          canAccess={user.permissions[column].canAccess}
+                          fireUpCanAccessChange={this.handleCanAccessChange(
+                            user.id,
+                            column
+                          )}
+                          subPermission={user.permissions[column].subArr}
+                          fireUpSubPermissionChange={this.handleSubPermissionChange(
+                            user.id,
+                            column
+                          )}
+                          classes={this.props.classes}
+                        />
+                      ) : null}
                     </TableCell>
                   ))}
                 </TableRow>
