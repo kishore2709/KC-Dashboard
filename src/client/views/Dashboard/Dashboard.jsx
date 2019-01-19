@@ -321,7 +321,7 @@ class Dashboard extends React.Component {
         if ('layout3' in val) return (<GridContainer>
           <GridItem xs={12} sm={12} md={6}>
             <CustomTabs
-              title="Tasks:"
+              title="Thông tin lỗi:"
               headerColor="primary"
               tabs={[
                 {
@@ -331,7 +331,7 @@ class Dashboard extends React.Component {
                     <Tasks
                       checkedIndexes={[0, 3]}
                       tasksIndexes={[0, 1, 2, 3]}
-                      tasks={bugs}
+                      tasks={val.layout3.bugs}
                     />
                   ),
                 },
@@ -342,7 +342,7 @@ class Dashboard extends React.Component {
                     <Tasks
                       checkedIndexes={[0]}
                       tasksIndexes={[0, 1]}
-                      tasks={website}
+                      tasks={val.layout3.website}
                     />
                   ),
                 },
@@ -353,7 +353,7 @@ class Dashboard extends React.Component {
                     <Tasks
                       checkedIndexes={[1]}
                       tasksIndexes={[0, 1, 2]}
-                      tasks={server}
+                      tasks={val.layout3.server}
                     />
                   ),
                 },
@@ -363,20 +363,20 @@ class Dashboard extends React.Component {
           <GridItem xs={12} sm={12} md={6}>
             <Card>
               <CardHeader color="warning">
-                <h4 className={classes.cardTitleWhite}>Employees Stats</h4>
+                <h4 className={classes.cardTitleWhite}>Thông tin người dùng</h4>
                 <p className={classes.cardCategoryWhite}>
-                  New employees on 15th September, 2016
+                  Thống kê những người dùng mới nhất
                 </p>
               </CardHeader>
               <CardBody>
                 <Table
                   tableHeaderColor="warning"
-                  tableHead={['ID', 'Name', 'Salary', 'Country']}
+                  tableHead={['ID', 'Tài khoản', 'Vai trò', 'Trạng thái']}
                   tableData={[
-                    ['1', 'Dakota Rice', '$36,738', 'Niger'],
-                    ['2', 'Minerva Hooper', '$23,789', 'Curaçao'],
-                    ['3', 'Sage Rodriguez', '$56,142', 'Netherlands'],
-                    ['4', 'Philip Chaney', '$38,735', 'Korea, South'],
+                    ['1', 'khangkaka', 'User', 'Active'],
+                    ['2', 'trangha', 'User', 'Active'],
+                    ['3', 'ngunoo', 'Moderator', 'Active'],
+                    ['4', 'nonome', 'Admin', 'Active'],
                   ]}
                 />
               </CardBody>

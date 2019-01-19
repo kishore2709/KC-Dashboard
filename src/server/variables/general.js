@@ -2,25 +2,22 @@
 // // // Tasks for TasksCard - see Dashboard view
 // #############################
 
-var bugs = [
-  'Sign contract for "What are conference organizers afraid of?"',
-  "Lines From Great Russian Literature? Or E-mails From My Boss?",
-  "Flooded: One year later, assessing what was lost and what was found when a ravaging rain swept through metro Detroit",
-  "Create 4 Invisible User Experiences you Never Knew About"
+let bugs = [
+  'Thông tin hợp lệ nhưng không lưu được khi điền biểu mẫu',
+  'Pop-up thông tin không chứa văn bản',
+  'Người dùng quay về trang chủ trong khi muốn truy cập trang khác',
+  'Trang không phản hồi khi dùng trên di động hay máy tính bảng'
 ];
-var website = [
-  "Flooded: One year later, assessing what was lost and what was found when a ravaging rain swept through metro Detroit",
-  'Sign contract for "What are conference organizers afraid of?"'
-];
-var server = [
-  "Lines From Great Russian Literature? Or E-mails From My Boss?",
-  "Flooded: One year later, assessing what was lost and what was found when a ravaging rain swept through metro Detroit",
-  'Sign contract for "What are conference organizers afraid of?"'
+let website = ['Website tải quá lâu', 'Website không thân thiện với di động'];
+let server = [
+  '403 Forbidden/Access Denied',
+  '404 File Not Found',
+  '408 Request Timeout',
 ];
 
 module.exports = {
   // these 3 are used to create the tasks lists in TasksCard - Dashboard view
   bugs,
   website,
-  server
+  server,
 };

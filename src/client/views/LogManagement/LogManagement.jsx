@@ -46,22 +46,22 @@ function TableList(props) {
       <GridItem xs={12} sm={12} md={12}>
         <Card>
           <CardHeader color="primary">
-            <h4 className={classes.cardTitleWhite}>Simple Table</h4>
+            <h4 className={classes.cardTitleWhite}>DNS Logs</h4>
             <p className={classes.cardCategoryWhite}>
-              Here is a subtitle for this table
+              Thông tin log về DNS
             </p>
           </CardHeader>
           <CardBody>
             <Table
               tableHeaderColor="primary"
-              tableHead={["Name", "Country", "City", "Salary"]}
+              tableHead={["Thread ID", "TCP/UDP", "Gửi/Nhận", "Địa chỉ IP"]}
               tableData={[
-                ["Dakota Rice", "Niger", "Oud-Turnhout", "$36,738"],
-                ["Minerva Hooper", "Curaçao", "Sinaai-Waas", "$23,789"],
-                ["Sage Rodriguez", "Netherlands", "Baileux", "$56,142"],
-                ["Philip Chaney", "Korea, South", "Overland Park", "$38,735"],
-                ["Doris Greene", "Malawi", "Feldkirchen in Kärnten", "$63,542"],
-                ["Mason Porter", "Chile", "Gloucester", "$78,615"]
+                ["1936", "TCP", "Gửi", "127.0.0.1"],
+                ["32", "UDP", "Gửi", "32.6.22.99"],
+                ["12", "TCP", "Nhận", "16.0.132.12"],
+                ["1233", "TCP", "Gửi", "8.62.36.46"],
+                ["236", "TCP", "Gửi", "127.0.0.1"],
+                ["660", "TCP", "Gửi", "127.0.0.1"],
               ]}
             />
           </CardBody>
@@ -71,35 +71,29 @@ function TableList(props) {
         <Card plain>
           <CardHeader plain color="primary">
             <h4 className={classes.cardTitleWhite}>
-              Table on Plain Background
+              System Logs
             </h4>
             <p className={classes.cardCategoryWhite}>
-              Here is a subtitle for this table
+              Thông tin về log của hệ thống
             </p>
           </CardHeader>
           <CardBody>
             <Table
               tableHeaderColor="primary"
-              tableHead={["ID", "Name", "Country", "City", "Salary"]}
+              tableHead={["Tài nguyên", "Mã Pid", "Lệnh", "Đối tượng chia sẻ", "Ký hiệu"]}
               tableData={[
-                ["1", "Dakota Rice", "$36,738", "Niger", "Oud-Turnhout"],
-                ["2", "Minerva Hooper", "$23,789", "Curaçao", "Sinaai-Waas"],
-                ["3", "Sage Rodriguez", "$56,142", "Netherlands", "Baileux"],
-                [
-                  "4",
-                  "Philip Chaney",
-                  "$38,735",
-                  "Korea, South",
-                  "Overland Park"
-                ],
-                [
-                  "5",
-                  "Doris Greene",
-                  "$63,542",
-                  "Malawi",
-                  "Feldkirchen in Kärnten"
-                ],
-                ["6", "Mason Porter", "$78,615", "Chile", "Gloucester"]
+                ["42.0%", "19326", "apt-config", "libc-2.15.so", "malloc"],
+                ["2.23%", "19326", "grep", "libc-2.15.so", "malloc"],
+                ["3.3%", "19326", "sshd", "libc-2.15.so", "malloc"],
+                ["32.33%", "19326", "sed", "libc-2.15.so", "malloc"],
+                ["1.66%", "19326", "kill", "libc-2.15.so", "malloc"],
+                ["2.78%", "19326", "top", "libc-2.15.so", "malloc"],
+                ["0.75%", "19326", "uname", "libc-2.15.so", "malloc"],
+                ["0.73%", "19326", "groups", "libc-2.15.so", "malloc"],
+                ["0.42%", "19326", "stats", "libc-2.15.so", "malloc"],
+                ["11.32%", "19326", "login", "libc-2.15.so", "malloc"],
+                ["22.32%", "19326", "mesg", "libc-2.15.so", "malloc"],
+                ["0.32%", "19326", "apt-config", "libc-2.15.so", "malloc"],
               ]}
             />
           </CardBody>
