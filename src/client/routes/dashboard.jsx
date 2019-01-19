@@ -11,7 +11,7 @@ import Notifications from '@material-ui/icons/Notifications';
 import DashboardPage from 'views/Dashboard/Dashboard.jsx';
 import UserManagement from 'views/UserManagement/UserManagement.jsx';
 import LogManagement from 'views/LogManagement/LogManagement.jsx';
-import Typography from 'views/Typography/Typography.jsx';
+import ServiceManager from 'views/ServiceManager/ServiceManager.jsx';
 import Icons from 'views/Icons/Icons.jsx';
 // import Maps from 'views/Maps/Maps.jsx';
 import NotificationsPage from 'views/Notifications/Notifications.jsx';
@@ -61,7 +61,7 @@ const dashboardRoutes = [
     sidebarName: 'Quản lý dịch vụ',
     navbarName: 'Giao diện quản lý dịch vụ truy cập',
     icon: LibraryBooks,
-    component: Typography,
+    component: ServiceManager,
   },
   {
     id: 'attackReport',
