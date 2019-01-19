@@ -48,7 +48,6 @@ const sidebarStyle = theme => ({
   },
   logo: {
     position: "relative",
-    padding: "15px 15px",
     zIndex: "4",
     "&:after": {
       content: '""',
@@ -67,7 +66,7 @@ const sidebarStyle = theme => ({
     padding: "5px 0",
     display: "block",
     fontSize: "18px",
-    textAlign: "left",
+    textAlign: "center",
     fontWeight: "400",
     lineHeight: "30px",
     textDecoration: "none",
@@ -77,16 +76,12 @@ const sidebarStyle = theme => ({
     }
   },
   logoImage: {
-    width: "30px",
+    width: "70%",
     display: "inline-block",
-    maxHeight: "30px",
-    marginLeft: "10px",
-    marginRight: "15px"
   },
   img: {
-    width: "35px",
-    top: "22px",
-    position: "absolute",
+    width: "100%",
+    position: "static",
     verticalAlign: "middle",
     border: "0"
   },
@@ -148,17 +143,17 @@ const sidebarStyle = theme => ({
     marginRight: "15px",
     textAlign: "center",
     verticalAlign: "middle",
-    color: "rgba(255, 255, 255, 0.8)"
+    color: "rgba(0, 0, 0, 0.8)"
   },
   itemText: {
     ...defaultFont,
     margin: "0",
     lineHeight: "30px",
     fontSize: "14px",
-    color: "#FFFFFF"
+    color: "#000000"
   },
   whiteFont: {
-    color: "#FFFFFF"
+    color: "#FFFFFF",
   },
   purple: {
     backgroundColor: primaryColor,

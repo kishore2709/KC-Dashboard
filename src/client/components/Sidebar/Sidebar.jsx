@@ -140,7 +140,6 @@ class Sidebar extends Component {
           <div className={classes.logoImage}>
             <img src={logo} alt="logo" className={classes.img} />
           </div>
-          {logoText}
         </a>
       </div>
     );
@@ -164,12 +163,6 @@ class Sidebar extends Component {
               <HeaderLinks />
               {links}
             </div>
-            {image !== undefined ? (
-              <div
-                className={classes.background}
-                style={{ backgroundImage: `url(${image})` }}
-              />
-            ) : null}
           </Drawer>
         </Hidden>
         <Hidden smDown implementation="css">
@@ -183,12 +176,6 @@ class Sidebar extends Component {
           >
             {brand}
             <div className={classes.sidebarWrapper}>{links}</div>
-            {image !== undefined ? (
-              <div
-                className={classes.background}
-                style={{ backgroundImage: `url(${image})` }}
-              />
-            ) : null}
           </Drawer>
         </Hidden>
       </div>

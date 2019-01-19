@@ -206,20 +206,20 @@ class AccessTable extends React.Component {
           {users.length > 0 && (
             users
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((user, index) => (
-                <TableRow key={index}>
+              .map((user) => (
+                <TableRow key={user.id}>
                   <TableCell>{user.username}</TableCell>
                   {columns.map((column, _index) => (
                     <TableCell key={_index}>
                       <PermissionCheckbox
                         canAccess={user.permissions[column].canAccess}
                         fireUpCanAccessChange={this.handleCanAccessChange(
-                          index,
+                          user.id,
                           _index
                         )}
                         subPermission={user.permissions[column].subArr}
                         fireUpSubPermissionChange={this.handleSubPermissionChange(
-                          index,
+                          user.id,
                           _index
                         )}
                         classes={this.props.classes}
@@ -297,14 +297,30 @@ class AccessTable extends React.Component {
     );
   }
 
-  handleCanAccessChange = (userIndex, columnIndex) => newChecked => {
+  handleCanAccessChange = (userId, columnIndex) => newChecked => {
     const { users, columns } = this.props;
+    const userIndex = users.reduce((accumulator, currentValue, index) => {
+      if (currentValue.id === userId) {
+        return index;
+      } else {
+        return accumulator;
+      }
+    }, -1);
+    if (userIndex === -1) return;
     users[userIndex].permissions[columns[columnIndex]].canAccess = newChecked;
     this.setState({ users });
   };
 
-  handleSubPermissionChange = (userIndex, columnIndex) => newSubPermission => {
+  handleSubPermissionChange = (userId, columnIndex) => newSubPermission => {
     const { users, columns } = this.props;
+    const userIndex = users.reduce((accumulator, currentValue, index) => {
+      if (currentValue.id === userId) {
+        return index;
+      } else {
+        return accumulator;
+      }
+    }, -1);
+    if (userIndex === -1) return;
     users[userIndex].permissions[
       columns[columnIndex]
     ].subArr = newSubPermission;
@@ -469,11 +485,11 @@ class AccessManagement extends React.Component {
   GetAllUsers = () =>
     PostApi('/api/users/getUsers', {})
       .then(res => {
-        console.log(res);
         const result = res.map(x => {
           const { _id, ...rest } = x;
           return { id: _id, ...rest };
         });
+        console.log(result);
         return Promise.resolve(result.filter(x => x.role !== 'Admin'));
       })
       .catch(err => {
