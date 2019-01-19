@@ -137,10 +137,6 @@ class Demo extends React.PureComponent {
                 canAccess: false,
                 subArr: [false, false],
               },
-              alert: {
-                canAccess: true,
-                subArr: [true, false],
-              },
             },
           })
             .then(res => {

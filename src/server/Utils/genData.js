@@ -42,10 +42,6 @@ db.once('open', () => {
           canAccess: false,
           subArr: [false, false],
         },
-        alert: {
-          canAccess: true,
-          subArr: [true, false],
-        },
       },
     },
     {
@@ -78,10 +74,7 @@ db.once('open', () => {
           canAccess: false,
           subArr: [false, false],
         },
-        alert: {
-          canAccess: true,
-          subArr: [true, false],
-        },
+
       },
     },
     {
@@ -114,10 +107,7 @@ db.once('open', () => {
           canAccess: false,
           subArr: [false, false],
         },
-        alert: {
-          canAccess: true,
-          subArr: [true, false],
-        },
+
       },
     },
     {
@@ -150,10 +140,7 @@ db.once('open', () => {
           canAccess: false,
           subArr: [true, false],
         },
-        alert: {
-          canAccess: true,
-          subArr: [true, false],
-        },
+
       },
     },
     {
@@ -186,10 +173,7 @@ db.once('open', () => {
           canAccess: true,
           subArr: [true, false],
         },
-        alert: {
-          canAccess: true,
-          subArr: [true, false],
-        },
+
       },
     },
     {
@@ -222,10 +206,7 @@ db.once('open', () => {
           canAccess: true,
           subArr: [true, false],
         },
-        alert: {
-          canAccess: true,
-          subArr: [true, false],
-        },
+
       },
     },
   ];
@@ -237,9 +218,9 @@ db.once('open', () => {
     })
   );
   const user1 = new User({
-    username: 'user',
-    password: md5('user'),
-    role: 'User',
+    username: 'Admin',
+    password: md5('Admin'),
+    role: 'Admin',
     status: true,
     permissions: {
       dashboard: { canAccess: true, subArr: [true, false, false] },
@@ -248,7 +229,6 @@ db.once('open', () => {
       logManager: { canAccess: true, subArr: [true, false] },
       serviceManager: { canAccess: true, subArr: [true, false] },
       attackReport: { canAccess: true, subArr: [true, false] },
-      alert: { canAccess: true, subArr: [true, false] },
     },
   });
   user1.save((err, user1) => {
