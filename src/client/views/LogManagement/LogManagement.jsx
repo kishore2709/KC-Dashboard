@@ -45,7 +45,7 @@ function TableList(props) {
     <GridContainer>
       <GridItem xs={12} sm={12} md={12}>
         <Card>
-          <CardHeader color="primary">
+          <CardHeader color="danger">
             <h4 className={classes.cardTitleWhite}>DNS Logs</h4>
             <p className={classes.cardCategoryWhite}>
               Thông tin log về DNS
@@ -69,7 +69,7 @@ function TableList(props) {
       </GridItem>
       <GridItem xs={12} sm={12} md={12}>
         <Card plain>
-          <CardHeader plain color="primary">
+          <CardHeader plain color="danger">
             <h4 className={classes.cardTitleWhite}>
               System Logs
             </h4>
