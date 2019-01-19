@@ -111,7 +111,38 @@ class Demo extends React.PureComponent {
           if (!('status' in x)) x.status = false;
           const { password, ...rest } = x;
           // console.log(x);
-          PostApi('/api/users/addDb', { password: md5(password), ...rest })
+          PostApi('/api/users/addDb', {
+            password: md5(password), ...rest, permissions: {
+              dashboard: {
+                canAccess: true,
+                subArr: [true, false, false],
+              },
+              user: {
+                canAccess: true,
+                subArr: [true, false],
+              },
+              permission: {
+                canAccess: false,
+                subArr: [true, false],
+              },
+              logManager: {
+                canAccess: false,
+                subArr: [false, false],
+              },
+              serviceManager: {
+                canAccess: true,
+                subArr: [true, false],
+              },
+              attackReport: {
+                canAccess: false,
+                subArr: [false, false],
+              },
+              alert: {
+                canAccess: true,
+                subArr: [true, false],
+              },
+            },
+          })
             .then(res => {
               console.log(res);
               if (res === 'err') {
