@@ -116,31 +116,31 @@ class HeaderLinks extends React.Component {
                         onClick={this.handleClose}
                         className={classes.dropdownItem}
                       >
-                        Mike John responded to your email
+                        Router 01 vừa bị tấn công
                       </MenuItem>
                       <MenuItem
                         onClick={this.handleClose}
                         className={classes.dropdownItem}
                       >
-                        You have 5 new tasks
+                        Máy chủ 02 vừa gửi thông tin về database
                       </MenuItem>
                       <MenuItem
                         onClick={this.handleClose}
                         className={classes.dropdownItem}
                       >
-                        You're now friend with Andrew
+                        Bạn có 5 người dùng đăng ký mới hôm nay
                       </MenuItem>
                       <MenuItem
                         onClick={this.handleClose}
                         className={classes.dropdownItem}
                       >
-                        Another Notification
+                        Đã nhận thêm 50GB dữ liệu trong ngày hôm nay
                       </MenuItem>
                       <MenuItem
                         onClick={this.handleClose}
                         className={classes.dropdownItem}
                       >
-                        Another One
+                        Vừa thêm 5 người dùng
                       </MenuItem>
                     </MenuList>
                   </ClickAwayListener>

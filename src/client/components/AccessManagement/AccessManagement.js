@@ -20,7 +20,7 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Fade from '@material-ui/core/Fade';
 import { FormControl, InputLabel } from '@material-ui/core';
-
+import Loading from 'components/Loading/Loading.jsx';
 import { withStyles } from '@material-ui/core/styles';
 
 import { withToastManager } from 'react-toast-notifications';
@@ -44,7 +44,7 @@ const styles = theme => ({
 });
 
 class SubPermissionMenu extends React.Component {
-  
+
   constructor(props) {
     super(props);
 
@@ -55,7 +55,7 @@ class SubPermissionMenu extends React.Component {
 
   render() {
 
-    const { anchorEl } = this.state; 
+    const { anchorEl } = this.state;
     const { subPermission, canAccess } = this.props;
     const open = Boolean(anchorEl);
 
@@ -111,7 +111,7 @@ SubPermissionMenu.propTypes = {
 };
 
 class PermissionCheckbox extends React.Component {
-  
+
   constructor(props) {
     super(props);
   }
@@ -124,7 +124,7 @@ class PermissionCheckbox extends React.Component {
         <Checkbox checked={canAccess} onChange={this.handleCanAccessChange} />
         <Fade in={canAccess}>
           <div>
-            <SubPermissionMenu 
+            <SubPermissionMenu
               canAccess={canAccess}
               subPermission={subPermission}
               fireUpSubPermissionChange={this.handleSubPermissionChange}
@@ -230,7 +230,7 @@ class AccessTable extends React.Component {
               ))
           )}
           {emptyRows > 0 && (
-            
+
             <TableRow style={{ height: 57 * emptyRows }}>
               <TableCell colSpan={columns.length + 1} align="center">
                 {users.length > 0 ? '' : 'No result'}
@@ -254,8 +254,8 @@ class AccessTable extends React.Component {
             <TableCell colSpan={1}>
               <FormControl className={classes.formControl}>
                 <InputLabel htmlFor="filter">Filter</InputLabel>
-                <Select 
-                  value={filter} 
+                <Select
+                  value={filter}
                   onChange={this.handleChangeFilter}
                   inputProps={{
                     name: 'Filter',
@@ -268,7 +268,7 @@ class AccessTable extends React.Component {
                       {role}
                     </MenuItem>
                   ))}
-                </Select> 
+                </Select>
               </FormControl>
             </TableCell>
             <TableCell colSpan={2}>
@@ -377,9 +377,7 @@ class AccessManagement extends React.Component {
 
     if (loading) {
       return (
-        <div>
-          <CircularProgress />
-        </div>
+        <Loading/>
       );
     }
     return (
