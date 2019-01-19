@@ -60,32 +60,36 @@ class SubPermissionMenu extends React.Component {
     const open = Boolean(anchorEl);
 
     return (
-      <div>
-        <IconButton
-          aria-label="Sub-Permission"
-          aria-owns={open ? 'sub-permission' : undefined}
-          aria-haspopup="true"
-          disabled={!canAccess}
-          onClick={this.handleClick}
-        >
-          <MoreVertIcon />
-        </IconButton>
-        <Menu
-          id="sub-permission"
-          anchorEl={anchorEl}
-          open={open}
-          onClose={this.handleClose}
-        >
-          {subPermission.map((permission, index) => (
-            <MenuItem key={index}>
-              <Checkbox
-                checked={permission}
-                onChange={this.handleSubPermissionChange(index)}
-              />
-            </MenuItem>
-          ))}
-        </Menu>
-      </div>
+      <React.Fragment>
+        { subPermission != null ? (
+          <React.Fragment>
+            <IconButton
+              aria-label="Sub-Permission"
+              aria-owns={open ? 'sub-permission' : undefined}
+              aria-haspopup="true"
+              disabled={!canAccess}
+              onClick={this.handleClick}
+            >
+              <MoreVertIcon />
+            </IconButton>
+            <Menu
+              id="sub-permission"
+              anchorEl={anchorEl}
+              open={open}
+              onClose={this.handleClose}
+            >
+              {subPermission.map((permission, index) => (
+                <MenuItem key={index}>
+                  <Checkbox
+                    checked={permission}
+                    onChange={this.handleSubPermissionChange(index)}
+                  />
+                </MenuItem>
+              ))}
+            </Menu>
+          </React.Fragment>
+        ) : null}
+      </React.Fragment>
     );
   }
 
@@ -121,17 +125,21 @@ class PermissionCheckbox extends React.Component {
 
     return (
       <div className={classes.permissionCheckboxCell}>
-        <Checkbox checked={canAccess} onChange={this.handleCanAccessChange} />
-        <Fade in={canAccess}>
-          <div>
-            <SubPermissionMenu
-              canAccess={canAccess}
-              subPermission={subPermission}
-              fireUpSubPermissionChange={this.handleSubPermissionChange}
-              classes={this.props.classes}
-            />
-          </div>
-        </Fade>
+        {canAccess != null ? (
+          <React.Fragment>
+            <Checkbox checked={canAccess} onChange={this.handleCanAccessChange} />
+            <Fade in={canAccess}>
+              <div>
+                <SubPermissionMenu
+                  canAccess={canAccess}
+                  subPermission={subPermission}
+                  fireUpSubPermissionChange={this.handleSubPermissionChange}
+                  classes={this.props.classes}
+                />
+              </div>
+            </Fade>
+          </React.Fragment>
+        ) : null}
       </div>
     );
   }
@@ -206,7 +214,7 @@ class AccessTable extends React.Component {
           {users.length > 0 && (
             users
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((user) => (
+              .map((user) => user.permissions != null ? (
                 <TableRow key={user.id}>
                   <TableCell>{user.username}</TableCell>
                   {columns.map((column, _index) => (
@@ -215,19 +223,19 @@ class AccessTable extends React.Component {
                         canAccess={user.permissions[column].canAccess}
                         fireUpCanAccessChange={this.handleCanAccessChange(
                           user.id,
-                          _index
+                          column
                         )}
                         subPermission={user.permissions[column].subArr}
                         fireUpSubPermissionChange={this.handleSubPermissionChange(
                           user.id,
-                          _index
+                          column
                         )}
                         classes={this.props.classes}
                       />
                     </TableCell>
                   ))}
                 </TableRow>
-              ))
+              ) : null)
           )}
           {emptyRows > 0 && (
 
@@ -297,8 +305,8 @@ class AccessTable extends React.Component {
     );
   }
 
-  handleCanAccessChange = (userId, columnIndex) => newChecked => {
-    const { users, columns } = this.props;
+  handleCanAccessChange = (userId, column) => newChecked => {
+    const { users } = this.props;
     const userIndex = users.reduce((accumulator, currentValue, index) => {
       if (currentValue.id === userId) {
         return index;
@@ -307,12 +315,12 @@ class AccessTable extends React.Component {
       }
     }, -1);
     if (userIndex === -1) return;
-    users[userIndex].permissions[columns[columnIndex]].canAccess = newChecked;
+    users[userIndex].permissions[column].canAccess = newChecked;
     this.setState({ users });
   };
 
-  handleSubPermissionChange = (userId, columnIndex) => newSubPermission => {
-    const { users, columns } = this.props;
+  handleSubPermissionChange = (userId, column) => newSubPermission => {
+    const { users } = this.props;
     const userIndex = users.reduce((accumulator, currentValue, index) => {
       if (currentValue.id === userId) {
         return index;
@@ -321,9 +329,7 @@ class AccessTable extends React.Component {
       }
     }, -1);
     if (userIndex === -1) return;
-    users[userIndex].permissions[
-      columns[columnIndex]
-    ].subArr = newSubPermission;
+    users[userIndex].permissions[column].subArr = newSubPermission;
     this.setState({ users });
   };
 
@@ -398,7 +404,7 @@ class AccessManagement extends React.Component {
     new Promise((resolve, reject) => {
       const { users } = this.state;
       const result = users.reduce((accumulator, currentValue) => {
-        if (currentValue.permissions) {
+        if (currentValue.permissions != null) {
           return accumulator.concat(
             Object.keys(currentValue.permissions).filter(
               _currentValue => !accumulator.includes(_currentValue)
