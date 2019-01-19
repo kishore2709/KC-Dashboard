@@ -10,7 +10,6 @@ import TableRow from '@material-ui/core/TableRow';
 import TableFooter from '@material-ui/core/TableFooter';
 import TablePagination from '@material-ui/core/TablePagination';
 import Checkbox from '@material-ui/core/Checkbox';
-import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
@@ -19,20 +18,33 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 import Select from '@material-ui/core/Select';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import Fade from '@material-ui/core/Fade';
+import { FormControl, InputLabel } from '@material-ui/core';
 
 import { withStyles } from '@material-ui/core/styles';
 
 import { withToastManager } from 'react-toast-notifications';
 import { GetUserInfo, PostApi } from '../../_helpers/Utils';
 
+import PropTypes from 'prop-types';
+
 const styles = theme => ({
-  progress: {},
+  root: {
+    width: '100%',
+    marginTop: theme.spacing.unit * 3,
+    overflowX: 'auto',
+  },
+  formControl: {
+    width: '100%',
+    minWidth: 120,
+  },
   permissionCheckboxCell: {
     display: 'flex',
   },
 });
 
-class PermissionCheckbox extends React.Component {
+class SubPermissionMenu extends React.Component {
+  
   constructor(props) {
     super(props);
 
@@ -42,13 +54,13 @@ class PermissionCheckbox extends React.Component {
   }
 
   render() {
-    const { classes, subPermission, canAccess } = this.props;
-    const { anchorEl } = this.state;
+
+    const { anchorEl } = this.state; 
+    const { subPermission, canAccess } = this.props;
     const open = Boolean(anchorEl);
 
     return (
-      <div className={classes.permissionCheckboxCell}>
-        <Checkbox checked={canAccess} onChange={this.handleCanAccessChange} />
+      <div>
         <IconButton
           aria-label="Sub-Permission"
           aria-owns={open ? 'sub-permission' : undefined}
@@ -85,18 +97,58 @@ class PermissionCheckbox extends React.Component {
     this.setState({ anchorEl: null });
   };
 
-  handleCanAccessChange = event => {
-    const result = event.target.checked;
-    this.props.fireUpCanAccessChange(result);
-  };
-
   handleSubPermissionChange = index => event => {
     const result = this.props.subPermission.map((permission, _index) =>
       _index === index ? event.target.checked : permission
     );
     this.props.fireUpSubPermissionChange(result);
   };
+
 }
+
+SubPermissionMenu.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
+
+class PermissionCheckbox extends React.Component {
+  
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    const { classes, subPermission, canAccess } = this.props;
+
+    return (
+      <div className={classes.permissionCheckboxCell}>
+        <Checkbox checked={canAccess} onChange={this.handleCanAccessChange} />
+        <Fade in={canAccess}>
+          <div>
+            <SubPermissionMenu 
+              canAccess={canAccess}
+              subPermission={subPermission}
+              fireUpSubPermissionChange={this.handleSubPermissionChange}
+              classes={this.props.classes}
+            />
+          </div>
+        </Fade>
+      </div>
+    );
+  }
+
+  handleCanAccessChange = event => {
+    const result = event.target.checked;
+    this.props.fireUpCanAccessChange(result);
+  };
+
+  handleSubPermissionChange = result => {
+    this.props.fireUpSubPermissionChange(result);
+  };
+}
+
+PermissionCheckbox.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
 
 class AccessTable extends React.Component {
   constructor(props) {
@@ -128,17 +180,20 @@ class AccessTable extends React.Component {
   }
 
   render() {
+
+    const { classes } = this.props;
     const { columns, page, rowsPerPage, filter, search, roles } = this.state;
     const users = this.state.users
       .filter(user => user.username.includes(search))
       .filter(user => user.role.includes(filter));
+    const emptyRows = rowsPerPage - Math.min(rowsPerPage, users.length - page * rowsPerPage);
 
     return (
-      <Table>
+      <Table className={classes.table}>
         <TableHead>
           <TableRow>
             <TableCell>
-              <Typography>Username</Typography>
+              Username
             </TableCell>
             {columns.map((column, index) => (
               <TableCell key={index} align="center">
@@ -148,7 +203,7 @@ class AccessTable extends React.Component {
           </TableRow>
         </TableHead>
         <TableBody>
-          {users.length > 0 ? (
+          {users.length > 0 && (
             users
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((user, index) => (
@@ -158,12 +213,12 @@ class AccessTable extends React.Component {
                     <TableCell key={_index}>
                       <PermissionCheckbox
                         canAccess={user.permissions[column].canAccess}
-                        fireUpCanAccessChange={this.solveCanAccessChange(
+                        fireUpCanAccessChange={this.handleCanAccessChange(
                           index,
                           _index
                         )}
                         subPermission={user.permissions[column].subArr}
-                        fireUpSubPermissionChange={this.solveSubPermissionChange(
+                        fireUpSubPermissionChange={this.handleSubPermissionChange(
                           index,
                           _index
                         )}
@@ -173,10 +228,12 @@ class AccessTable extends React.Component {
                   ))}
                 </TableRow>
               ))
-          ) : (
-            <TableRow>
+          )}
+          {emptyRows > 0 && (
+            
+            <TableRow style={{ height: 57 * emptyRows }}>
               <TableCell colSpan={columns.length + 1} align="center">
-                No results
+                {users.length > 0 ? '' : 'No result'}
               </TableCell>
             </TableRow>
           )}
@@ -195,14 +252,24 @@ class AccessTable extends React.Component {
           </TableRow>
           <TableRow>
             <TableCell colSpan={1}>
-              <Select value={filter} onChange={this.handleChangeFilter}>
-                <MenuItem value="">All</MenuItem>
-                {roles.map((role, index) => (
-                  <MenuItem key={index} value={role}>
-                    {role}
-                  </MenuItem>
-                ))}
-              </Select>
+              <FormControl className={classes.formControl}>
+                <InputLabel htmlFor="filter">Filter</InputLabel>
+                <Select 
+                  value={filter} 
+                  onChange={this.handleChangeFilter}
+                  inputProps={{
+                    name: 'Filter',
+                    id: 'filter',
+                  }}
+                >
+                  <MenuItem value="">All</MenuItem>
+                  {roles.map((role, index) => (
+                    <MenuItem key={index} value={role}>
+                      {role}
+                    </MenuItem>
+                  ))}
+                </Select> 
+              </FormControl>
             </TableCell>
             <TableCell colSpan={2}>
               <TextField
@@ -218,8 +285,10 @@ class AccessTable extends React.Component {
                 variant="contained"
                 onClick={this.handleSubmit}
                 color="primary"
+                fullWidth
+                style={{ marginTop: '20px', marginBottom: '20px' }}
               >
-                Submit
+                Save Changes
               </Button>
             </TableCell>
           </TableRow>
@@ -228,13 +297,13 @@ class AccessTable extends React.Component {
     );
   }
 
-  solveCanAccessChange = (userIndex, columnIndex) => newChecked => {
+  handleCanAccessChange = (userIndex, columnIndex) => newChecked => {
     const { users, columns } = this.props;
     users[userIndex].permissions[columns[columnIndex]].canAccess = newChecked;
     this.setState({ users });
   };
 
-  solveSubPermissionChange = (userIndex, columnIndex) => newSubPermission => {
+  handleSubPermissionChange = (userIndex, columnIndex) => newSubPermission => {
     const { users, columns } = this.props;
     users[userIndex].permissions[
       columns[columnIndex]
@@ -263,6 +332,10 @@ class AccessTable extends React.Component {
   };
 }
 
+AccessTable.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
+
 class AccessManagement extends React.Component {
   constructor(props) {
     super(props);
@@ -289,12 +362,12 @@ class AccessManagement extends React.Component {
     if (loading) {
       return (
         <div>
-          <CircularProgress className={classes.progress} />
+          <CircularProgress />
         </div>
       );
     }
     return (
-      <Paper>
+      <Paper className={classes.root}>
         <AccessTable
           columns={columns}
           users={users}
@@ -410,225 +483,8 @@ class AccessManagement extends React.Component {
   // =================
 }
 
-export default withToastManager(withStyles(styles)(AccessManagement));
+AccessManagement.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
 
-/*
-const userData = [
-  {
-    username: 'User 1',
-    password: '1',
-    role: 'User',
-    status: true,
-    permissions: {
-      dashboard: {
-        canAccess: true,
-        subArr: [true, false, false]
-      },
-      user: {
-        canAccess: true,
-        subArr: [true, false]
-      },
-      permission: {
-        canAccess: false,
-        subArr: [true, false]
-      },
-      logManager: {
-        canAccess: false,
-        subArr: [false, false]
-      },
-      serviceManager: {
-        canAccess: true,
-        subArr: [true, false]
-      },
-      attackReport: {
-        canAccess: false,
-        subArr: [false, false]
-      },
-      alert: {
-        canAccess: true,
-        subArr: [true, false]
-      },
-    },
-  },
-  {
-    username: 'User 2',
-    password: '1',
-    role: 'User',
-    status: true,
-    permissions: {
-      dashboard: {
-        canAccess: true,
-        subArr: [true, false, false]
-      },
-      user: {
-        canAccess: true,
-        subArr: [true, false]
-      },
-      permission: {
-        canAccess: false,
-        subArr: [true, false]
-      },
-      logManager: {
-        canAccess: false,
-        subArr: [false, false]
-      },
-      serviceManager: {
-        canAccess: true,
-        subArr: [true, false]
-      },
-      attackReport: {
-        canAccess: false,
-        subArr: [false, false]
-      },
-      alert: {
-        canAccess: true,
-        subArr: [true, false]
-      },
-    },
-  },
-  {
-    username: 'User 3',
-    password: '3',
-    role: 'User',
-    status: true,
-    permissions: {
-      dashboard: {
-        canAccess: true,
-        subArr: [true, false, false]
-      },
-      user: {
-        canAccess: true,
-        subArr: [true, false]
-      },
-      permission: {
-        canAccess: false,
-        subArr: [true, false]
-      },
-      logManager: {
-        canAccess: false,
-        subArr: [false, false]
-      },
-      serviceManager: {
-        canAccess: true,
-        subArr: [true, false]
-      },
-      attackReport: {
-        canAccess: false,
-        subArr: [false, false]
-      },
-      alert: {
-        canAccess: true,
-        subArr: [true, false]
-      },
-    },
-  },
-  {
-    username: 'User 4',
-    password: '1',
-    role: 'User',
-    status: true,
-    permissions: {
-      dashboard: {
-        canAccess: true,
-        subArr: [true, true, false]
-      },
-      user: {
-        canAccess: true,
-        subArr: [true, false, false]
-      },
-      permission: {
-        canAccess: false,
-        subArr: [true, false]
-      },
-      logManager: {
-        canAccess: false,
-        subArr: [true, false]
-      },
-      serviceManager: {
-        canAccess: true,
-        subArr: [true, false, false, true]
-      },
-      attackReport: {
-        canAccess: false,
-        subArr: [true, false]
-      },
-      alert: {
-        canAccess: true,
-        subArr: [true, false]
-      },
-    },
-  },
-  {
-    username: 'Moderator 1',
-    password: '1',
-    role: 'Moderator',
-    status: true,
-    permissions: {
-      dashboard: {
-        canAccess: true,
-        subArr: [true, false, false]
-      },
-      user: {
-        canAccess: true,
-        subArr: [true, false]
-      },
-      permission: {
-        canAccess: false,
-        subArr: [true, false]
-      },
-      logManager: {
-        canAccess: true,
-        subArr: [true, false]
-      },
-      serviceManager: {
-        canAccess: true,
-        subArr: [true, false]
-      },
-      attackReport: {
-        canAccess: true,
-        subArr: [true, false]
-      },
-      alert: {
-        canAccess: true,
-        subArr: [true, false]
-      },
-    },
-  },
-  {
-    username: 'Admin 1',
-    password: '1',
-    role: 'Admin',
-    status: true,
-    permissions: {
-      dashboard: {
-        canAccess: true,
-        subArr: [true, false, false]
-      },
-      user: {
-        canAccess: true,
-        subArr: [true, false]
-      },
-      permission: {
-        canAccess: true,
-        subArr: [true, false]
-      },
-      logManager: {
-        canAccess: true,
-        subArr: [true, false]
-      },
-      serviceManager: {
-        canAccess: true,
-        subArr: [true, false]
-      },
-      attackReport: {
-        canAccess: true,
-        subArr: [true, false]
-      },
-      alert: {
-        canAccess: true,
-        subArr: [true, false]
-      },
-    },
-  }
-];
-*/
+export default withToastManager(withStyles(styles)(AccessManagement));
