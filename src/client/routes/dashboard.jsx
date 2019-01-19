@@ -12,6 +12,7 @@ import DashboardPage from 'views/Dashboard/Dashboard.jsx';
 import UserManagement from 'views/UserManagement/UserManagement.jsx';
 import LogManagement from 'views/LogManagement/LogManagement.jsx';
 import ServiceManager from 'views/ServiceManager/ServiceManager.jsx';
+import AttackReport from 'views/AttackReport/AttackReport.jsx';
 import Icons from 'views/Icons/Icons.jsx';
 // import Maps from 'views/Maps/Maps.jsx';
 import NotificationsPage from 'views/Notifications/Notifications.jsx';
@@ -69,7 +70,7 @@ const dashboardRoutes = [
     sidebarName: 'Phát hiện tấn công',
     navbarName: 'Attack Detection',
     icon: BubbleChart,
-    component: Icons,
+    component: AttackReport,
   },
   {
     id: 'alert',
