@@ -8,7 +8,7 @@ const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 const userSchema = UserSchema;
 const User = mongoose.model('User', userSchema);
-
+const dashboardService = require('../services/dashboard.js');
 // users hardcoded for simplicity, store in a db for production applications
 const users = [
   {
@@ -35,7 +35,12 @@ module.exports = {
   addDb,
   getUsers,
   getUserInfo,
+  dashboardData,
 };
+
+async function dashboardData() {
+  return dashboardService;
+}
 
 async function getUserInfo(obj) {
   const { _id, ...rest } = obj;

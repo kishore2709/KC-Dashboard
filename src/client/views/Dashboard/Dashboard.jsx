@@ -32,10 +32,11 @@ import CardFooter from 'components/Card/CardFooter.jsx';
 import Loading from 'components/Loading/Loading.jsx';
 import WarningStatus from 'components/Warning/Warning.jsx';
 
-/// redux
+// / redux
 import { connect } from 'react-redux';
 import { serverStatusConstants } from '_constants';
 // import classnames from 'classnames';
+import { PostApi } from '_helpers/Utils';
 import {
   userLogo,
   groupLogo,
@@ -47,7 +48,7 @@ import {
   searchLogo,
   listAlertLogo,
   smsLogo,
-  emailLogo
+  emailLogo,
 } from 'components/icon/Icon';
 import { bugs, website, server } from 'variables/general.jsx';
 import CardMedia from '@material-ui/core/CardMedia';
@@ -82,10 +83,14 @@ const BroadcastLists = [
 ];
 
 class Dashboard extends React.Component {
-  state = {
+  constructor(props){
+    super(props);
+    this.state = {
     value: 0,
+    loading: true,
+    data: [],
   };
-
+  }
   handleChange = (event, value) => {
     this.setState({ value });
   };
@@ -94,101 +99,120 @@ class Dashboard extends React.Component {
     this.setState({ value: index });
   };
 
+  componentWillMount() {
+    PostApi('/api/users/dashboardData', {})
+      .then(res => {
+        if (res === 'err') {
+          console.log('err get user info');
+        } else {
+          console.log(res);
+          this.setState({data:res, loading:false});
+        }
+      })
+      .catch(err => {
+        console.log('get user data from database err');
+      });
+  }
+
   render() {
     const { classes, serverStatus } = this.props;
+    const { data } = this.state;
     console.log('serverStatus in props dashboard');
     console.log(serverStatus);
-    if (serverStatus.type === serverStatusConstants.LOADING){
-      return <Loading/>
+    if (serverStatus.type === serverStatusConstants.LOADING) {
+      return <Loading />;
     }
-    if (serverStatus.type === serverStatusConstants.ERROR){
-      return <WarningStatus/>
+    if (serverStatus.type === serverStatusConstants.ERROR) {
+      return <WarningStatus />;
     }
+    if (this.state.loading) return <Loading />;
     return (
       <div>
-        <GridContainer>
-          <GridItem xs={12} sm={6} md={3}>
-            <Card>
-              <CardHeader color="warning" stats icon>
-                <CardIcon color="warning">
-                  <Icon>content_copy</Icon>
-                </CardIcon>
-                <p className={classes.cardCategory}>Dữ liệu phân tích</p>
-                <h3 className={classes.cardTitle}>
-                  21 <small>GB</small>
-                </h3>
-              </CardHeader>
-              <CardFooter stats>
-                <div className={classes.stats}>
-                  <Danger>
-                    <Warning />
-                  </Danger>
-                  <a href="#pablo" onClick={e => e.preventDefault()}>
-                    Get more data
-                  </a>
-                </div>
-              </CardFooter>
-            </Card>
-          </GridItem>
-          <GridItem xs={12} sm={6} md={3}>
-            <Card>
-              <CardHeader color="success" stats icon>
-                <CardIcon color="success">
-                  <Store />
-                </CardIcon>
-                <p className={classes.cardCategory}>Lợi nhuận</p>
-                <h3 className={classes.cardTitle}>$34,245</h3>
-              </CardHeader>
-              <CardFooter stats>
-                <div className={classes.stats}>
-                  <DateRange />
-                  24 giờ gần nhất
-                </div>
-              </CardFooter>
-            </Card>
-          </GridItem>
-          <GridItem xs={12} sm={6} md={3}>
-            <Card>
-              <CardHeader color="danger" stats icon>
-                <CardIcon color="danger">
-                  <Icon>info_outline</Icon>
-                </CardIcon>
-                <p className={classes.cardCategory}>Số cảnh báo</p>
-                <h3 className={classes.cardTitle}>75</h3>
-              </CardHeader>
-              <CardFooter stats>
-                <div className={classes.stats}>
-                  <LocalOffer />
-                  Truy xuất từ cơ sở dữ liệu
-                </div>
-              </CardFooter>
-            </Card>
-          </GridItem>
-          <GridItem xs={12} sm={6} md={3}>
-            <Card>
-              <CardHeader color="info" stats icon>
-                <CardIcon color="info">
-                  <Accessibility />
-                </CardIcon>
-                <p className={classes.cardCategory}>Số người dùng</p>
-                <h3 className={classes.cardTitle}>+245</h3>
-              </CardHeader>
-              <CardFooter stats>
-                <div className={classes.stats}>
-                  <Update />
-                  Mới cập nhật
-                </div>
-              </CardFooter>
-            </Card>
-          </GridItem>
-        </GridContainer>
-        <GridContainer>
+      {data.map(val=>{
+        console.log(val);
+        if ('layout1' in val) return (<GridContainer>
+        <GridItem xs={12} sm={6} md={3}>
+          <Card>
+            <CardHeader color="warning" stats icon>
+              <CardIcon color="warning">
+                <Icon>content_copy</Icon>
+              </CardIcon>
+              <p className={classes.cardCategory}>Dữ liệu phân tích</p>
+              <h3 className={classes.cardTitle}>
+                {val.layout1[0]} <small>GB</small>
+              </h3>
+            </CardHeader>
+            <CardFooter stats>
+              <div className={classes.stats}>
+                <Danger>
+                  <Warning />
+                </Danger>
+                <a href="#pablo" onClick={e => e.preventDefault()}>
+                  Get more data
+                </a>
+              </div>
+            </CardFooter>
+          </Card>
+        </GridItem>
+        <GridItem xs={12} sm={6} md={3}>
+          <Card>
+            <CardHeader color="success" stats icon>
+              <CardIcon color="success">
+                <Store />
+              </CardIcon>
+              <p className={classes.cardCategory}>Lợi nhuận</p>
+              <h3 className={classes.cardTitle}>${val.layout1[1]}</h3>
+            </CardHeader>
+            <CardFooter stats>
+              <div className={classes.stats}>
+                <DateRange />
+                24 giờ gần nhất
+              </div>
+            </CardFooter>
+          </Card>
+        </GridItem>
+        <GridItem xs={12} sm={6} md={3}>
+          <Card>
+            <CardHeader color="danger" stats icon>
+              <CardIcon color="danger">
+                <Icon>info_outline</Icon>
+              </CardIcon>
+              <p className={classes.cardCategory}>Số cảnh báo</p>
+              <h3 className={classes.cardTitle}>{val.layout1[2]}</h3>
+            </CardHeader>
+            <CardFooter stats>
+              <div className={classes.stats}>
+                <LocalOffer />
+                Truy xuất từ cơ sở dữ liệu
+              </div>
+            </CardFooter>
+          </Card>
+        </GridItem>
+        <GridItem xs={12} sm={6} md={3}>
+          <Card>
+            <CardHeader color="info" stats icon>
+              <CardIcon color="info">
+                <Accessibility />
+              </CardIcon>
+              <p className={classes.cardCategory}>Số người dùng</p>
+              <h3 className={classes.cardTitle}>+{val.layout1[3]}</h3>
+            </CardHeader>
+            <CardFooter stats>
+              <div className={classes.stats}>
+                <Update />
+                Mới cập nhật
+              </div>
+            </CardFooter>
+          </Card>
+        </GridItem>
+      </GridContainer>)
+        if ('layout2' in val) return (<GridContainer>
           <GridItem xs={12} sm={12} md={4}>
             <Card chart>
               <CardHeader color="success">
                 <ChartistGraph
                   className="ct-chart"
-                  data={dailySalesChart.data}
+                  data={val.layout2.dailySalesChart.data}
                   type="Line"
                   options={dailySalesChart.options}
                   listener={dailySalesChart.animation}
@@ -228,7 +252,7 @@ class Dashboard extends React.Component {
               <CardHeader color="warning">
                 <ChartistGraph
                   className="ct-chart"
-                  data={emailsSubscriptionChart.data}
+                  data={val.layout2.emailsSubscriptionChart.data}
                   type="Bar"
                   options={emailsSubscriptionChart.options}
                   responsiveOptions={emailsSubscriptionChart.responsiveOptions}
@@ -266,7 +290,7 @@ class Dashboard extends React.Component {
               <CardHeader color="danger">
                 <ChartistGraph
                   className="ct-chart"
-                  data={completedTasksChart.data}
+                  data={val.layout2.completedTasksChart.data}
                   type="Line"
                   options={completedTasksChart.options}
                   listener={completedTasksChart.animation}
@@ -280,21 +304,21 @@ class Dashboard extends React.Component {
                   </div>
                 </p>
               </CardBody>
-              <CardFooter chart >
-              {BroadcastLists.map(obj => (
-                    <Grid key={obj.key} item>
-                      <CardMedia
-                        className={classes.media}
-                        image={obj.img}
-                        title={obj.title}
-                      />
-                    </Grid>
-                  ))}
+              <CardFooter chart>
+                {BroadcastLists.map(obj => (
+                  <Grid key={obj.key} item>
+                    <CardMedia
+                      className={classes.media}
+                      image={obj.img}
+                      title={obj.title}
+                    />
+                  </Grid>
+                ))}
               </CardFooter>
             </Card>
           </GridItem>
-        </GridContainer>
-        <GridContainer>
+        </GridContainer>);
+        if ('layout3' in val) return (<GridContainer>
           <GridItem xs={12} sm={12} md={6}>
             <CustomTabs
               title="Tasks:"
@@ -358,7 +382,8 @@ class Dashboard extends React.Component {
               </CardBody>
             </Card>
           </GridItem>
-        </GridContainer>
+        </GridContainer>);
+      })}
       </div>
     );
   }

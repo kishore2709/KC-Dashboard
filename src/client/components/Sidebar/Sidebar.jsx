@@ -66,6 +66,7 @@ class Sidebar extends Component {
           || val.id === 'login')});
           this.setState({ routes: [...desRoutes, ...restSidebar] });
           this.props.success('ok');
+          console.log(res.permissions);
           // console.log(desRoutes);
         }
       })

@@ -11,8 +11,44 @@ router.post('/getUsers', getUsers);
 router.post('/deleteDb', deleteDb);
 router.post('/addDb', addDb);
 router.post('/getUserInfo', getUserInfo);
+router.post('/dashboardData', dashboardData);
 module.exports = router;
 
+function dashboardData(req, res, next) {
+  // console.log(req.user);
+  userService
+    .getUserInfo({ _id: req.user.sub })
+    .then(ret => {
+      //console.log('in dashboardadata user info');
+      // console.log(ret.permissions.dashboard);
+      userService
+        .dashboardData()
+        .then(arrData => {
+          // console.log(arrData);
+          if (!arrData) {
+            res.status(400).json({ message: 'find dashboardData error' });
+          } else {
+            console.log('wtf');
+            // console.log(arrData);
+            let jsonRes = Object.keys(arrData).filter((val, index) => {
+              console.log('??')
+              console.log(ret.permissions.dashboard.subArr[index]);
+              return ret.permissions.dashboard.subArr[index];
+            });
+            console.log(jsonRes);
+            let jsonAns = jsonRes.map(val => {
+              // console.log(val);
+              return { [val]: arrData[val] }
+            })
+            res.json(jsonAns);
+          }
+        })
+        .catch(err => next(err));
+    })
+    .catch(err => next(err));
+
+  // console.log('in dashboard data controlller');
+}
 function getUserInfo(req, res, next) {
   // console.log('in getUserInfo');
   // console.log(req.user);
