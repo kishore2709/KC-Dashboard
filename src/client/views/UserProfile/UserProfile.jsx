@@ -42,15 +42,17 @@ function UserProfile(props) {
       <GridContainer>
         <GridItem xs={12} sm={12} md={8}>
           <Card>
-            <CardHeader color="primary">
-              <h4 className={classes.cardTitleWhite}>Edit Profile</h4>
-              <p className={classes.cardCategoryWhite}>Complete your profile</p>
+            <CardHeader color="danger">
+              <h4 className={classes.cardTitleWhite}>Sửa thông tin</h4>
+              <p className={classes.cardCategoryWhite}>
+                Chỉnh sửa thông tin cá nhân của bạn
+              </p>
             </CardHeader>
             <CardBody>
               <GridContainer>
                 <GridItem xs={12} sm={12} md={5}>
                   <CustomInput
-                    labelText="Company (disabled)"
+                    labelText="Công ty"
                     id="company-disabled"
                     formControlProps={{
                       fullWidth: true,
@@ -62,7 +64,7 @@ function UserProfile(props) {
                 </GridItem>
                 <GridItem xs={12} sm={12} md={3}>
                   <CustomInput
-                    labelText="Username"
+                    labelText="Tài khoản"
                     id="username"
                     formControlProps={{
                       fullWidth: true,
@@ -71,7 +73,7 @@ function UserProfile(props) {
                 </GridItem>
                 <GridItem xs={12} sm={12} md={4}>
                   <CustomInput
-                    labelText="Email address"
+                    labelText="Địa chỉ Email"
                     id="email-address"
                     formControlProps={{
                       fullWidth: true,
@@ -82,7 +84,7 @@ function UserProfile(props) {
               <GridContainer>
                 <GridItem xs={12} sm={12} md={6}>
                   <CustomInput
-                    labelText="First Name"
+                    labelText="Họ"
                     id="first-name"
                     formControlProps={{
                       fullWidth: true,
@@ -91,7 +93,7 @@ function UserProfile(props) {
                 </GridItem>
                 <GridItem xs={12} sm={12} md={6}>
                   <CustomInput
-                    labelText="Last Name"
+                    labelText="Tên"
                     id="last-name"
                     formControlProps={{
                       fullWidth: true,
@@ -102,7 +104,7 @@ function UserProfile(props) {
               <GridContainer>
                 <GridItem xs={12} sm={12} md={4}>
                   <CustomInput
-                    labelText="City"
+                    labelText="Thành phố"
                     id="city"
                     formControlProps={{
                       fullWidth: true,
@@ -111,7 +113,7 @@ function UserProfile(props) {
                 </GridItem>
                 <GridItem xs={12} sm={12} md={4}>
                   <CustomInput
-                    labelText="Country"
+                    labelText="Quốc gia"
                     id="country"
                     formControlProps={{
                       fullWidth: true,
@@ -120,7 +122,7 @@ function UserProfile(props) {
                 </GridItem>
                 <GridItem xs={12} sm={12} md={4}>
                   <CustomInput
-                    labelText="Postal Code"
+                    labelText="Mã bưu chính"
                     id="postal-code"
                     formControlProps={{
                       fullWidth: true,
@@ -130,9 +132,9 @@ function UserProfile(props) {
               </GridContainer>
               <GridContainer>
                 <GridItem xs={12} sm={12} md={12}>
-                  <InputLabel style={{ color: '#AAAAAA' }}>About me</InputLabel>
+                  <InputLabel style={{ color: '#AAAAAA' }}>Về tôi</InputLabel>
                   <CustomInput
-                    labelText="Lamborghini Mercy, Your chick she so thirsty, I'm in that two seat Lambo."
+                    labelText="Viết vài dòng về bản thân bạn"
                     id="about-me"
                     formControlProps={{
                       fullWidth: true,
@@ -146,7 +148,7 @@ function UserProfile(props) {
               </GridContainer>
             </CardBody>
             <CardFooter>
-              <Button color="primary">Update Profile</Button>
+              <Button color="primary">Cập nhật thông tin</Button>
             </CardFooter>
           </Card>
         </GridItem>
@@ -166,7 +168,7 @@ function UserProfile(props) {
                 I love Rick Owens’ bed design but the back is...
               </p>
               <Button color="primary" round>
-                Follow
+                Theo dõi
               </Button>
             </CardBody>
           </Card>
