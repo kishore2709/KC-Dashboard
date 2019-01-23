@@ -148,7 +148,7 @@ class Dashboard extends React.Component {
                   <Warning />
                 </Danger>
                 <a href="#pablo" onClick={e => e.preventDefault()}>
-                  Get more data
+                  Mở rộng bộ nhớ
                 </a>
               </div>
             </CardFooter>
@@ -160,8 +160,8 @@ class Dashboard extends React.Component {
               <CardIcon color="success">
                 <Store />
               </CardIcon>
-              <p className={classes.cardCategory}>Lợi nhuận</p>
-              <h3 className={classes.cardTitle}>${val.layout1[1]}</h3>
+              <p className={classes.cardCategory}>Số lượng gói tin</p>
+              <h3 className={classes.cardTitle}>{val.layout1[1]}</h3>
             </CardHeader>
             <CardFooter stats>
               <div className={classes.stats}>
