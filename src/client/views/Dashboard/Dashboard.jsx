@@ -216,8 +216,13 @@ class Dashboard extends React.Component {
               <GridContainer>
                 <GridItem xs={12} sm={12} md={4}>
                   <Card chart>
-                    <CardHeader color="success" >
-                      
+                    <CardHeader color="success">
+                      <Link
+                        variant="body2"
+                        href="/discover"
+                        target="_blank"
+                        rel="noopener"
+                      >
                         <ChartistGraph
                           className="ct-chart"
                           data={val.layout2.dailySalesChart.data}
@@ -225,16 +230,11 @@ class Dashboard extends React.Component {
                           options={dailySalesChart.options}
                           listener={dailySalesChart.animation}
                         />
-                      
+                      </Link>
                     </CardHeader>
                     <CardBody>
                       <h4 className={classes.cardTitle}>
-                      <Link
-                        
-                        variant="body2"
-                        href='/discover'
-                      >
-                        Quản lý log truy cập</Link>
+                        Quản lý log truy cập
                       </h4>
                       <p className={classes.cardCategory}>
                         <span className={classes.successText}>
