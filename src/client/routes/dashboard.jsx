@@ -23,6 +23,7 @@ import React from 'react';
 // import { GetUserInfo, PostApi } from '_helpers/Utils/index.js';
 import UserProfile from 'views/UserProfile/UserProfile.jsx';
 import PowerIcon from '@material-ui/icons/PowerOff';
+import Discover from 'views/Discover/Discover.jsx';
 
 const dashboardRoutes = [
   {
@@ -84,6 +85,12 @@ const dashboardRoutes = [
     id: 'profile',
     path: '/profile',
     component: UserProfile,
+    navbarName: 'Profile',
+  },
+  {
+    id: 'discover',
+    path: '/discover',
+    component: Discover,
     navbarName: 'Profile',
   },
   {
