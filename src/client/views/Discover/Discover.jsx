@@ -3,6 +3,7 @@ import BarChart from 'components/Chart/BarChart/BarChart.js';
 import data from '_helpers/Utils/genChartData.js';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
+
 import Checkboxs from 'components/SelectionControls/Checkboxs.jsx';
 import TableDiscover from 'components/Table/TableDiscover.jsx';
 
