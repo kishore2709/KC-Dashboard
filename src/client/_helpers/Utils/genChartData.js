@@ -1,20 +1,20 @@
-let scalingFactor = (value) => {
-  return Math.abs((value * 0.9) + (Math.random() > 0.5 ? 1.0 : -1.0) * Math.round(Math.random() * 1000));
-};
-let randomDate = (start, end, jump, step) => {
-  return new Date(start.getTime() + step * ((end.getTime() - start.getTime()) / jump));
-}
-let generateData = (count) => {
-  var data = [];
-  var y = 0;
-  for (var i = 0; i < count; i++) {
-      y = Math.round(scalingFactor(y));
-      data.push({
-          x: randomDate(new Date(2017, 0, 1), new Date(), 20000, i),
-          y: y,
-      });
+const randomValue = () => Math.round(Math.random() * 1000 + 1);
+
+const randomDate = start => new Date(start.getTime() + (Math.random() + 1) * 60 * 60 * 1000);
+
+const generateData = count => {
+  let data = [];
+  let curDate = new Date(2018, 0, 1);
+  for (let i = 0; i < count; i++) {
+    curDate = randomDate(curDate);
+    data.push({
+      x: curDate,
+      y: randomValue(),
+    });
   }
   return data;
 };
-// console.log(data)
-export default generateData;
+
+const data = generateData(20000);
+
+export default data;
