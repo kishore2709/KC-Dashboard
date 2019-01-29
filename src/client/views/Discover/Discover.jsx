@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import BarChart from 'components/Chart/BarChart/BarChart.js';
 import data from '_helpers/Utils/genChartData.js';
 import Paper from '@material-ui/core/Paper';
+import Grid from '@material-ui/core/Grid';
+import Checkboxs from 'components/SelectionControls/Checkboxs.jsx';
 
 class Discover extends Component {
   constructor(props) {
@@ -10,9 +12,19 @@ class Discover extends Component {
 
   render() {
     return (
-      <Paper>
-        <BarChart data={data} />
-      </Paper>
+      <Grid
+        container
+        direction="row"
+        justify="space-evenly"
+        alignItems="center"
+      >
+        <Grid item>
+          <Checkboxs />
+        </Grid>
+        <Grid item xs={9}>
+          <BarChart data={data} />
+        </Grid>
+      </Grid>
     );
   }
 }

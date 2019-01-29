@@ -14,7 +14,16 @@ import DateFnsUtils from '@date-io/date-fns';
 import { MuiPickersUtilsProvider, DateTimePicker } from 'material-ui-pickers';
 import Grid from '@material-ui/core/Grid';
 
-const styles = theme => ({});
+const styles = theme => ({
+  root: {
+    background: 'linear-gradient(45deg, #c4b1bb 30%, #FF8E53 90%)',
+    borderRadius: 10,
+    border: 0,
+    color: 'white',
+    padding: '0 3px',
+    boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
+  },
+});
 
 class BarChartCore extends Component {
   chartReference = {};
@@ -122,11 +131,15 @@ class BarChartCore extends Component {
   };
 
   render() {
-    const { data, startDate, endDate } = this.props;
+    const { data, startDate, endDate, classes } = this.props;
     const color = `hsl(${Math.floor(Math.random() * 360)}, 100%, 40%)`;
 
     return (
-      <Card>
+      <Card
+        classes={{
+          root: classes.root, // class name, e.g. `classes-nesting-root-x`
+        }}
+      >
         <CardActions>
           <Grid container spacing={24} alignItems="center">
             <Grid item xs={12} md={6}>
