@@ -8,17 +8,21 @@ function jwt() {
   return expressJwt({
     secret,
     getToken: function fromHeaderOrQuerystring(req) {
+      // console.log('in queryyy jwt header');
+      // console.log(req.headers.authorization);
       if (
         req.headers.authorization &&
         req.headers.authorization.split(' ')[0] === 'Bearer'
       ) {
         return req.headers.authorization.split(' ')[1];
       }
+      // console.log('in queryyy jwt');
+      // console.log(req.query);
       if (req.query && req.query.token) {
         return req.query.token;
       }
       // console.log(req);
-      console.log('dident find token');
+      // console.log('dident find token');
       return null;
     },
   }).unless({

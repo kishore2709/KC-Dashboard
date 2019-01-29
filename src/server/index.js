@@ -4,7 +4,7 @@ const os = require('os');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const md5 = require('md5');
-
+const path = require('path');
 const errorHandler = require('./_helpers/error-handler');
 const jwt = require('./_helpers/jwt');
 
@@ -23,8 +23,18 @@ app.use(jsonParser);
 app.use(urlencodedParser);
 app.use(express.static('dist'));
 app.use(cors());
+/*
+app.get('/*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../../dist/index.html'), err => {
+    if (err) {
+      res.status(500).send(err);
+    }
+  });
+});
+*/
 app.use(jwt());
 app.use('/api/users', require('./users/users.controller'));
+
 app.use(errorHandler);
 app.use(
   guard.check(['admin']).unless({
@@ -43,6 +53,7 @@ app.post('/api/users/register', jsonParser, (req, res) => {
   res.send({ status: 'okkkkkkkkkk' });
   res.end();
 });
+
 app.listen(8081, () => console.log('Listening on port 8081!'));
 
 // ////////#$################

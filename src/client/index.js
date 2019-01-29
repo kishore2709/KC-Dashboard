@@ -9,6 +9,7 @@ import 'assets/css/material-dashboard-react.css?v=1.5.0';
 
 import { store } from './_helpers';
 
+console.log('refresh');
 ReactDOM.render(
   <Provider store={store}>
     <App />
