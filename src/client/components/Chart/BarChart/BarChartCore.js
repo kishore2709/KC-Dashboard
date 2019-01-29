@@ -5,11 +5,19 @@ import { Bar } from 'react-chartjs-2';
 import 'chartjs-plugin-zoom';
 
 const styles = theme => ({
+  root: {
+    background: 'linear-gradient(45deg, #c4b1bb 30%, #FF8E53 90%)',
+    borderRadius: 10,
+    border: 0,
+    color: 'white',
+    padding: '0 3px',
+    boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
+  },
 });
 
 class BarChartCore extends Component {
-
   chartReference = {};
+
   chart = {};
 
   constructor(props) {
@@ -27,29 +35,30 @@ class BarChartCore extends Component {
       const startDate = new Date(curElem.x.getTime() - 1000 * 60 * 60 * 4);
       const endDate = new Date(curElem.x.getTime() + 1000 * 60 * 60 * 4);
       this.props.fireUpDateRangeChange(startDate, endDate);
-    };
-  }
+    }
+  };
 
   handleChangeDateZoom = () => {
     const startDate = new Date(this.chart.scales['x-axis-0'].min);
     const endDate = new Date(this.chart.scales['x-axis-0'].max);
     this.chart.resetZoom();
     this.props.fireUpDateRangeChange(startDate, endDate);
-  }
+  };
 
   render() {
-
-    const { data } = this.props;
+    const { data, classes } = this.props;
     const color = `hsl(${Math.floor(Math.random() * 360)}, 100%, 40%)`;
 
-    return(
+    return (
       <Bar
-        ref={ (reference) => this.chartReference = reference }
+        ref={reference => (this.chartReference = reference)}
         data={{
-          datasets: [{
-            backgroundColor: color,
-            data: data,
-          }],
+          datasets: [
+            {
+              backgroundColor: color,
+              data,
+            },
+          ],
         }}
         onElementsClick={this.handleElementsClick}
         options={{
@@ -59,11 +68,13 @@ class BarChartCore extends Component {
             display: false,
           },
           scales: {
-            xAxes: [{
-              type: 'time',
-              display: true,
-              distribution: 'series',
-            }]
+            xAxes: [
+              {
+                type: 'time',
+                display: true,
+                distribution: 'series',
+              },
+            ],
           },
           zoom: {
             enabled: true,
@@ -72,7 +83,7 @@ class BarChartCore extends Component {
             onZoom: () => {
               this.handleChangeDateZoom();
             },
-          }
+          },
         }}
       />
     );
