@@ -1,18 +1,16 @@
 import React, { Component } from 'react';
 
 function DataVisualizer(Chart) {
-
   const fifteenMinutes = 1000 * 60 * 15;
 
   return class extends Component {
-
     constructor(props) {
       super(props);
       this.state = {
         startDate: null,
         endDate: null,
         data: props.data,
-      }
+      };
     }
 
     componentDidMount() {
@@ -26,16 +24,16 @@ function DataVisualizer(Chart) {
       const newData = data.filter(curData => {
         if ((curData.x.getTime() >= startDate.getTime()) && (curData.x.getTime() <= endDate.getTime())) {
           return true;
-        } else {
+        } 
           return false;
-        }
+        
       });
       this.setState({
-        startDate: startDate,
-        endDate: endDate,
+        startDate,
+        endDate,
         data: newData,
       });
-    }
+    };
 
     render() {
       const { startDate, endDate, data } = this.state; 
@@ -48,11 +46,10 @@ function DataVisualizer(Chart) {
             fireUpDateChange={this.handleDateChange}
           />
         );
-      } else {
-        return (null);
       }
+        return (null);
     }
-  };  
+  };
 }
 
 export default DataVisualizer;
