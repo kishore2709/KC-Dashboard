@@ -25,7 +25,7 @@ const styles = theme => ({
 class Selection extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { age: 1 };
+    this.state = { database: 'Md5 Database', autoref: '1 giờ' };
     this.handleChange = this.handleChange.bind(this);
   }
 
@@ -35,6 +35,7 @@ class Selection extends React.Component {
 
   render() {
     const { classes } = this.props;
+    console.log(this.state.autoref);
     return (
       <form className={classes.root} autoComplete="off">
         <Grid container direction="column" justify="center" alignItems="center">
@@ -49,13 +50,10 @@ class Selection extends React.Component {
                 input={
                   <Input name="database" id="database-label-placeholder" />
                 }
-                displayEmpty
                 name="database"
                 className={classes.selectEmpty}
               >
-                <MenuItem value={10}>Ten</MenuItem>
-                <MenuItem value={20}>Twenty</MenuItem>
-                <MenuItem value={30}>Thirty</MenuItem>
+                <MenuItem value="Md5 Database">Md5 Database</MenuItem>
               </Select>
               <FormHelperText>Chọn CSDL</FormHelperText>
             </FormControl>
@@ -69,13 +67,10 @@ class Selection extends React.Component {
                 value={this.state.autoref}
                 onChange={this.handleChange}
                 input={<Input name="autoref" id="autoref-label-placeholder" />}
-                displayEmpty
                 name="autoref"
                 className={classes.selectEmpty}
               >
-                <MenuItem value={10}>Ten</MenuItem>
-                <MenuItem value={20}>Twenty</MenuItem>
-                <MenuItem value={30}>Thirty</MenuItem>
+                <MenuItem value="1 giờ">1 giờ</MenuItem>
               </Select>
               <FormHelperText>
                 Chọn khoảng thời gian tự động cập nhật

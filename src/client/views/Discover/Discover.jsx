@@ -24,7 +24,7 @@ class Discover extends Component {
           <Selections />
         </Grid>
         <Grid item xs={9}>
-          <BarChart data={data} />
+          <BarChart data={data.chartData} />
         </Grid>
         <Grid item xs={12}>
           <TableDiscover />
