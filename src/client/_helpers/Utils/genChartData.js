@@ -28,7 +28,7 @@ const generateData = count => {
   return { dataTable, chartData };
 };
 
-const { dataTable, chartData } = generateData(20000);
+const { dataTable, chartData } = generateData(2000);
 // console.log(data);
 
 module.exports = { dataTable, chartData };

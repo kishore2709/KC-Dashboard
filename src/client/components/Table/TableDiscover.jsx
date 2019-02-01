@@ -24,11 +24,7 @@ class TableDiscover extends React.Component {
           root: {
             backgroundColor: '#021608',
           },
-          paper: {
-            boxShadow: '1px 2px',
-            backgroundColor: '#DEE3EA',
-            padding: '20px',
-          },
+          
         },
         MUIDataTableBodyCell: {
           root: {

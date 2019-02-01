@@ -32,8 +32,10 @@ import CardFooter from 'components/Card/CardFooter.jsx';
 import Loading from 'components/Loading/Loading.jsx';
 import WarningStatus from 'components/Warning/Warning.jsx';
 import Link from '@material-ui/core/Link';
-
+import { withToastManager } from 'react-toast-notifications';
 // / redux
+import Typography from '@material-ui/core/Typography';
+
 import { connect } from 'react-redux';
 import { serverStatusConstants } from '_constants';
 // import classnames from 'classnames';
@@ -63,6 +65,8 @@ import {
 
 import dashboardStyle from 'assets/jss/material-dashboard-react/views/dashboardStyle.jsx';
 import { userInfo } from 'os';
+
+
 
 const logLists = [
   { key: 'webLogo', img: webLogo, title: 'Quản lý Web log' },
@@ -116,10 +120,24 @@ class Dashboard extends React.Component {
       });
   }
 
+  componentDidMount() {
+    setTimeout(() => {
+      this.props.toastManager.add(
+        'Bấm vào đồ thị "Quản lý log truy cập" để xem chi tiết dữ liệu',
+        {
+          appearance: 'success',
+          placement: 'top-center',
+          autoDismiss: true,
+          autoDismissTimeout: 10000,
+        }
+      );
+    }, 1000);
+  }
+
   render() {
     const { classes, serverStatus } = this.props;
     const { data } = this.state;
-    console.log('serverStatus in props dashboard');
+    console.log('dashboard is rendering');
     console.log(serverStatus);
     if (serverStatus.type === serverStatusConstants.LOADING) {
       return <Loading />;
@@ -129,19 +147,24 @@ class Dashboard extends React.Component {
     }
     if (this.state.loading) return <Loading />;
     return (
-      <div>
+      <React.Fragment>
         {data.map(val => {
           console.log(val);
           if ('layout1' in val)
             return (
-              <GridContainer>
+              <GridContainer key="layout1">
                 <GridItem xs={12} sm={6} md={3}>
                   <Card>
                     <CardHeader color="warning" stats icon>
                       <CardIcon color="warning">
                         <Icon>content_copy</Icon>
                       </CardIcon>
-                      <p className={classes.cardCategory}>Dữ liệu phân tích</p>
+                      <Typography
+                        component={'span'}
+                        className={classes.cardCategory}
+                      >
+                        Dữ liệu phân tích
+                      </Typography>
                       <h3 className={classes.cardTitle}>
                         {val.layout1[0]} <small>GB</small>
                       </h3>
@@ -164,7 +187,12 @@ class Dashboard extends React.Component {
                       <CardIcon color="success">
                         <Store />
                       </CardIcon>
-                      <p className={classes.cardCategory}>Số lượng gói tin</p>
+                      <Typography
+                        component={'span'}
+                        className={classes.cardCategory}
+                      >
+                        Số lượng gói tin
+                      </Typography>
                       <h3 className={classes.cardTitle}>{val.layout1[1]}</h3>
                     </CardHeader>
                     <CardFooter stats>
@@ -181,7 +209,12 @@ class Dashboard extends React.Component {
                       <CardIcon color="danger">
                         <Icon>info_outline</Icon>
                       </CardIcon>
-                      <p className={classes.cardCategory}>Số cảnh báo</p>
+                      <Typography
+                        component={'span'}
+                        className={classes.cardCategory}
+                      >
+                        Số cảnh báo
+                      </Typography>
                       <h3 className={classes.cardTitle}>{val.layout1[2]}</h3>
                     </CardHeader>
                     <CardFooter stats>
@@ -198,7 +231,12 @@ class Dashboard extends React.Component {
                       <CardIcon color="info">
                         <Accessibility />
                       </CardIcon>
-                      <p className={classes.cardCategory}>Số người dùng</p>
+                      <Typography
+                        component={'span'}
+                        className={classes.cardCategory}
+                      >
+                        Số người dùng
+                      </Typography>
                       <h3 className={classes.cardTitle}>+{val.layout1[3]}</h3>
                     </CardHeader>
                     <CardFooter stats>
@@ -213,7 +251,7 @@ class Dashboard extends React.Component {
             );
           if ('layout2' in val)
             return (
-              <GridContainer>
+              <GridContainer key="layout2">
                 <GridItem xs={12} sm={12} md={4}>
                   <Card chart>
                     <CardHeader color="success">
@@ -228,7 +266,7 @@ class Dashboard extends React.Component {
                           data={val.layout2.dailySalesChart.data}
                           type="Line"
                           options={dailySalesChart.options}
-                          listener={dailySalesChart.animation}
+                          
                         />
                       </Link>
                     </CardHeader>
@@ -236,7 +274,10 @@ class Dashboard extends React.Component {
                       <h4 className={classes.cardTitle}>
                         Quản lý log truy cập
                       </h4>
-                      <p className={classes.cardCategory}>
+                      <Typography
+                        component={'span'}
+                        className={classes.cardCategory}
+                      >
                         <span className={classes.successText}>
                           <ArrowUpward
                             className={classes.upArrowCardCategory}
@@ -244,7 +285,7 @@ class Dashboard extends React.Component {
                           55%
                         </span>{' '}
                         increase in today access.
-                      </p>
+                      </Typography>
                     </CardBody>
                     <CardFooter chart>
                       <Grid
@@ -277,16 +318,19 @@ class Dashboard extends React.Component {
                         responsiveOptions={
                           emailsSubscriptionChart.responsiveOptions
                         }
-                        listener={emailsSubscriptionChart.animation}
+                        
                       />
                     </CardHeader>
                     <CardBody>
                       <h4 className={classes.cardTitle}>
                         Quản lý dịch vụ truy cập
                       </h4>
-                      <p className={classes.cardCategory}>
+                      <Typography
+                        component={'span'}
+                        className={classes.cardCategory}
+                      >
                         Dịch vụ truy cập gần nhất
-                      </p>
+                      </Typography>
                     </CardBody>
                     <CardFooter chart>
                       <Grid
@@ -316,16 +360,19 @@ class Dashboard extends React.Component {
                         data={val.layout2.completedTasksChart.data}
                         type="Line"
                         options={completedTasksChart.options}
-                        listener={completedTasksChart.animation}
+                        
                       />
                     </CardHeader>
                     <CardBody>
                       <h4 className={classes.cardTitle}>Quảng bá cảnh báo</h4>
-                      <p className={classes.cardCategory}>
+                      <Typography
+                        component={'span'}
+                        className={classes.cardCategory}
+                      >
                         <div className={classes.stats}>
                           <AccessTime /> campaign sent 2 days ago
                         </div>
-                      </p>
+                      </Typography>
                     </CardBody>
                     <CardFooter chart>
                       {BroadcastLists.map(obj => (
@@ -344,7 +391,7 @@ class Dashboard extends React.Component {
             );
           if ('layout3' in val)
             return (
-              <GridContainer>
+              <GridContainer key="layout3">
                 <GridItem xs={12} sm={12} md={6}>
                   <CustomTabs
                     title="Thông tin lỗi:"
@@ -392,9 +439,12 @@ class Dashboard extends React.Component {
                       <h4 className={classes.cardTitleWhite}>
                         Thông tin người dùng
                       </h4>
-                      <p className={classes.cardCategoryWhite}>
+                      <Typography
+                        component={'span'}
+                        className={classes.cardCategoryWhite}
+                      >
                         Thống kê những người dùng mới nhất
-                      </p>
+                      </Typography>
                     </CardHeader>
                     <CardBody>
                       <Table
@@ -413,7 +463,7 @@ class Dashboard extends React.Component {
               </GridContainer>
             );
         })}
-      </div>
+      </React.Fragment>
     );
   }
 }
@@ -427,5 +477,7 @@ function mapStateToProps(state) {
     serverStatus,
   };
 }
-const connectedDashboard = connect(mapStateToProps)(Dashboard);
+const connectedDashboard = connect(mapStateToProps)(
+  withToastManager(Dashboard)
+);
 export default withStyles(dashboardStyle)(connectedDashboard);

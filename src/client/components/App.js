@@ -8,12 +8,12 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import indexRoutes from 'routes/index.jsx';
 import { ToastProvider } from 'react-toast-notifications';
-import { connectedHeaderPage as Header } from './Header/Header';
-import Home from './Home/Home';
-import LogManagement from './LogManagement/LogManagement';
-import ServiceManagement from './ServiceManagement/ServiceManagement';
-import DevTable from './AdminManagement/DevTable';
-import AccessManagement from './AccessManagement/AccessManagement';
+// import { connectedHeaderPage as Header } from './Header/Header';
+// import Home from './Home/Home';
+// import LogManagement from './LogManagement/LogManagement';
+// import ServiceManagement from './ServiceManagement/ServiceManagement';
+// import DevTable from './AdminManagement/DevTable';
+// import AccessManagement from './AccessManagement/AccessManagement';
 // import PermanentDrawerLeft from './AdminManagement/ManageUser';
 // import Setting from './SettingManagement/Setting';
 import { history } from '../_helpers';
@@ -38,7 +38,7 @@ class App extends React.Component {
 
     return (
       <div>
-        <ToastProvider placement='bottom-right' >
+        <ToastProvider placement="top-center" placementOffset={[500, 500]}>
           <div>
             <div>
               {alert.message && (
