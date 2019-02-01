@@ -23,7 +23,7 @@ function DataVisualizer(Chart) {
       if (data.length <= maxCount) return data;
       const blockSize = data.length / maxCount;
       const reduced = [];
-      for (let i = 0; i < data.length; ) {
+      for (let i = 0; i < data.length;) {
         const chunk = data.slice(i, (i += blockSize) + 1);
         reduced.push(_average(chunk));
       }
@@ -152,7 +152,7 @@ function DataVisualizer(Chart) {
                 <Grid container spacing={24} alignItems="center">
                   <Grid item xs={12} md={4}>
                     <FormControl>
-                      <InputLabel htmlFor="time-select">Time</InputLabel>
+                      <InputLabel htmlFor="time-select">Chọn nhanh</InputLabel>
                       <Select
                         value={this.getTimeRange()}
                         onChange={this.handleChangeTimeRange}
@@ -162,22 +162,22 @@ function DataVisualizer(Chart) {
                         }}
                       >
                         <MenuItem value={-1} disabled>
-                          <em>Custom</em>
+                          <em>Tuỳ chỉnh</em>
                         </MenuItem>
-                        <MenuItem value={15 * 60}>Last 15 minutes</MenuItem>
-                        <MenuItem value={30 * 60}>Last 30 minutes</MenuItem>
-                        <MenuItem value={60 * 60}>Last 1 hour</MenuItem>
-                        <MenuItem value={4 * 60 * 60}>Last 4 hours</MenuItem>
-                        <MenuItem value={12 * 60 * 60}>Last 12 hours</MenuItem>
-                        <MenuItem value={24 * 60 * 60}>Last 1 day</MenuItem>
+                        <MenuItem value={15 * 60}>15 phút trước</MenuItem>
+                        <MenuItem value={30 * 60}>30 phút trước</MenuItem>
+                        <MenuItem value={60 * 60}>1 giờ trước</MenuItem>
+                        <MenuItem value={4 * 60 * 60}>4 giờ trước</MenuItem>
+                        <MenuItem value={12 * 60 * 60}>12 giờ trước</MenuItem>
+                        <MenuItem value={24 * 60 * 60}>1 ngày trước</MenuItem>
                         <MenuItem value={7 * 24 * 60 * 60}>
-                          Last 7 days
+                          7 ngày trước
                         </MenuItem>
                         <MenuItem value={30 * 24 * 60 * 60}>
-                          Last 30 days
+                          30 ngày trước
                         </MenuItem>
                         <MenuItem value={60 * 24 * 60 * 60}>
-                          Last 60 days
+                          60 ngày trước
                         </MenuItem>
                       </Select>
                     </FormControl>
@@ -188,7 +188,7 @@ function DataVisualizer(Chart) {
                         <Grid item xs={6}>
                           <DateTimePicker
                             margin="normal"
-                            label="Start Date"
+                            label="Ngày bắt đầu"
                             value={startDate}
                             format="MMMM, dd, yyyy, HH:mm"
                             onChange={this.handleDateChange('startDate')}
@@ -197,7 +197,7 @@ function DataVisualizer(Chart) {
                         <Grid item xs={6}>
                           <DateTimePicker
                             margin="normal"
-                            label="End Date"
+                            label="Ngày kết thúc"
                             value={endDate}
                             format="MMMM, dd, yyyy, HH:mm"
                             onChange={this.handleDateChange('endDate')}
