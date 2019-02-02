@@ -14,13 +14,17 @@ import Icon from '@material-ui/core/Icon';
 // core components
 // import UserProfile from 'views/UserProfile/UserProfile.jsx';
 // import PowerIcon from '@material-ui/icons/PowerOff';
-import { Redirect } from 'react-router-dom';
+// import { Redirect } from 'react-router-dom';
 import HeaderLinks from 'components/Header/HeaderLinks.jsx';
 import { GetUserInfo, PostApi } from '_helpers/Utils/index.js';
 import Autorenew from '@material-ui/icons/Autorenew';
 import Loading from 'components/Loading/Loading.jsx';
 import sidebarStyle from 'assets/jss/material-dashboard-react/components/sidebarStyle.jsx';
-
+//
+import Collapse from '@material-ui/core/Collapse';
+import InboxIcon from '@material-ui/icons/Inbox';
+import ExpandLess from '@material-ui/icons/ExpandLess';
+import ExpandMore from '@material-ui/icons/ExpandMore';
 // / redux
 import { connect } from 'react-redux';
 import { serverStatusConstants } from '_constants';
@@ -41,7 +45,9 @@ class Sidebar extends Component {
           component: Loading,
         },
       ],
+      openUserManagementSubComponents: false,
     };
+    this.handleClick = this.handleClick.bind(this);
   }
 
   componentWillMount() {
@@ -63,13 +69,12 @@ class Sidebar extends Component {
           const desRoutes = curRoutes.filter(
             val => validKeys.indexOf(val.id) !== -1
           );
-          const restSidebar = curRoutes.filter(val => {
-            return (
+          const restSidebar = curRoutes.filter(
+            val =>
               val.id === 'profile' ||
               val.id === 'redirect' ||
               val.id === 'login'
-            );
-          });
+          );
           this.setState({ routes: [...desRoutes, ...restSidebar] });
           this.props.success('ok');
           console.log(res.permissions);
@@ -87,15 +92,92 @@ class Sidebar extends Component {
 
   // verifies if routeName is the one active (in browser input)
   activeRoute(routeName) {
+    //return true;
     return this.props.location.pathname.indexOf(routeName) > -1;
+  }
+
+  handleClick() {
+    this.setState(state => ({
+      openUserManagementSubComponents: !state.openUserManagementSubComponents,
+    }));
   }
 
   render() {
     const { classes, color, logo, image, logoText } = this.props;
-    const { routes } = this.state;
+    const { routes, openUserManagementSubComponents } = this.state;
     // console.log(routes);
+    const listItemClasses = path =>
+      classNames({
+        [` ${classes[color]}`]: this.activeRoute(path),
+      });
+
+    const whiteFontClasses = path =>
+      classNames({
+        [` ${classes.whiteFont}`]: this.activeRoute(path),
+      });
+
+    const NavUserManagement = (prop, key) => (
+      // console.log('in navusermanagement');
+      // console.log(prop);
+      // console.log(classes.itemText + whiteFontClasses);
+      <React.Fragment>
+        <ListItem
+          button
+          onClick={this.handleClick}
+          className={classes.itemLink + listItemClasses(prop.path)}
+        >
+          <ListItemIcon
+            className={classes.itemIcon + whiteFontClasses(prop.path)}
+          >
+            <prop.icon />
+          </ListItemIcon>
+          <ListItemText
+            primary={prop.sidebarName}
+            className={classes.itemText + whiteFontClasses(prop.path)}
+            disableTypography
+          />
+          {this.state.openUserManagementSubComponents ? (
+            <ExpandLess />
+          ) : (
+            <ExpandMore />
+          )}
+        </ListItem>
+        <Collapse
+          in={openUserManagementSubComponents}
+          timeout="auto"
+          unmountOnExit
+        >
+          <List disablePadding className={classes.nested}>
+            {prop.subNavBar.map(val => (
+              <NavLink
+                to={val.path}
+                className={classes.item}
+                activeClassName="active"
+                key={val.id}
+              >
+                <ListItem
+                  button
+                  className={classes.itemLink + listItemClasses(val.path)}
+                >
+                  <ListItemIcon
+                    className={classes.itemIcon + whiteFontClasses(val.path)}
+                  >
+                    <val.icon />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={val.sidebarName}
+                    className={classes.itemText + whiteFontClasses(val.path)}
+                    disableTypography
+                  />
+                </ListItem>
+              </NavLink>
+            ))}
+          </List>
+        </Collapse>
+      </React.Fragment>
+    );
     const links = (
-      <List className={classes.list}>
+      <List className={`${classes.list} ${classes.root}`}>
         {routes.map((prop, key) => {
           if (prop.redirect) return null;
 
@@ -108,29 +190,36 @@ class Sidebar extends Component {
             [` ${classes.whiteFont}`]: this.activeRoute(prop.path),
           });
           if (prop.path !== '/profile')
-            return (
-              <NavLink
-                to={prop.path}
-                className={classes.item}
-                activeClassName="active"
-                key={key}
-              >
-                <ListItem button className={classes.itemLink + listItemClasses}>
-                  <ListItemIcon className={classes.itemIcon + whiteFontClasses}>
-                    {typeof prop.icon === 'string' ? (
-                      <Icon>{prop.icon}</Icon>
-                    ) : (
-                      <prop.icon />
-                    )}
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={prop.sidebarName}
-                    className={classes.itemText + whiteFontClasses}
-                    disableTypography
-                  />
-                </ListItem>
-              </NavLink>
-            );
+            if (prop.path == '/user') return NavUserManagement(prop, key);
+            else
+              return (
+                <NavLink
+                  to={prop.path}
+                  className={classes.item}
+                  activeClassName="active"
+                  key={key}
+                >
+                  <ListItem
+                    button
+                    className={classes.itemLink + listItemClasses}
+                  >
+                    <ListItemIcon
+                      className={classes.itemIcon + whiteFontClasses}
+                    >
+                      {typeof prop.icon === 'string' ? (
+                        <Icon>{prop.icon}</Icon>
+                      ) : (
+                        <prop.icon />
+                      )}
+                    </ListItemIcon>
+                    <ListItemText
+                      primary={prop.sidebarName}
+                      className={classes.itemText + whiteFontClasses}
+                      disableTypography
+                    />
+                  </ListItem>
+                </NavLink>
+              );
         })}
       </List>
     );

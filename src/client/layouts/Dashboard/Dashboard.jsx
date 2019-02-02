@@ -11,6 +11,7 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import Header from "components/Header/Header.jsx";
 import Footer from "components/Footer/Footer.jsx";
 import Sidebar from "components/Sidebar/Sidebar.jsx";
+import UserPermission from 'views/UserPermission/UserPermission.jsx';
 
 import dashboardRoutes from "routes/dashboard.jsx";
 
@@ -22,11 +23,18 @@ import logo from "assets/img/ptit-logo.png";
 
 const switchRoutes = (
   <Switch>
-    {dashboardRoutes.map((prop, key) => {
-      if (prop.redirect)
-        return <Redirect from={prop.path} to={prop.to} key={key} />;
-      return <Route path={prop.path} component={prop.component} key={key} />;
-    })}
+    {(dashboardRoutes.filter(val=> ('subNavBar' in val))[0].subNavBar.map((prop, key) => {
+      console.log('???');
+      console.log(prop);
+      return <Route path={prop.path} component={prop.component} key={prop.id} />;
+    })).concat(
+      dashboardRoutes.map((prop, key) => {
+        if (prop.redirect)
+          return <Redirect from={prop.path} to={prop.to} key={prop.id} />;
+        return <Route path={prop.path} component={prop.component} key={prop.id} />;
+      })
+    )}
+    
   </Switch>
 );
 
@@ -68,6 +76,8 @@ class App extends React.Component {
   }
   render() {
     const { classes, ...rest } = this.props;
+    console.log('in dashboard')
+    console.log(switchRoutes);
     return (
       <div className={classes.wrapper}>
         <Sidebar

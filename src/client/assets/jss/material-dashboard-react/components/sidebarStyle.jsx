@@ -129,7 +129,6 @@ const sidebarStyle = theme => ({
     margin: '5px 5px 0 0',
     borderRadius: '3px',
     position: 'relative',
-    display: 'block',
     padding: '10px 15px',
     backgroundColor: 'transparent',
     ...defaultFont,
@@ -140,7 +139,7 @@ const sidebarStyle = theme => ({
     fontSize: '24px',
     lineHeight: '30px',
     float: 'left',
-    marginRight: '15px',
+    marginRight: '0px',
     textAlign: 'center',
     verticalAlign: 'middle',
     color: 'rgba(0, 0, 0, 0.8)',
@@ -217,6 +216,14 @@ const sidebarStyle = theme => ({
       width: '100%',
       bottom: '13px',
     },
+  },
+  nested: {
+    paddingLeft: theme.spacing.unit * 4,
+  },
+  root: {
+    width: '100%',
+    maxWidth: 360,
+    background: theme.palette.background.paper,
   },
 });
 
