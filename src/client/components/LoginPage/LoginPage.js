@@ -96,35 +96,27 @@ class LoginPage extends React.Component {
           <Avatar className={classes.avatar}>
             <LockOutlinedIcon />
           </Avatar>
-          <Typography>
-            Login
-          </Typography>
           <form className={classes.form} onSubmit={this.handleSubmit}>
             <FormControl margin="normal" required fullWidth>
-              <InputLabel htmlFor="username">Username</InputLabel>
-              <Input  id="username" 
-                      name="username" 
-                      autoComplete="username" 
-                      autoFocus
-                      value={username} 
-                      onChange={this.handleChange}
+              <InputLabel htmlFor="username">Tên người dùng</InputLabel>
+              <Input id="username"
+                name="username"
+                autoComplete="username"
+                autoFocus
+                value={username}
+                onChange={this.handleChange}
               />
             </FormControl>
             <FormControl margin="normal" required fullWidth>
-              <InputLabel htmlFor="password">Password</InputLabel>
-              <Input  name="password" 
-                      type="password" 
-                      id="password" 
-                      autoComplete="current-password" 
-                      value={password}
-                      onChange={this.handleChange}
+              <InputLabel htmlFor="password">Mật khẩu</InputLabel>
+              <Input name="password"
+                type="password"
+                id="password"
+                autoComplete="current-password"
+                value={password}
+                onChange={this.handleChange}
               />
             </FormControl>
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-              disabled={true}
-            />
             <Button
               type="submit"
               fullWidth
@@ -132,27 +124,17 @@ class LoginPage extends React.Component {
               color="primary"
               className={classes.submit}
             >
-              Login
+              Đăng nhập
             </Button>
-            <Link to="/register">
-              <Button
-                fullWidth
-                variant="contained"
-                color="secondary"
-                className={classes.submit}
-              >
-                Register
-              </Button>
-            </Link>
           </form>
           {authentication.loggingIn && (
-            <CircularProgress style={{ marginTop: '20px' }}/>
+            <CircularProgress style={{ marginTop: '20px' }} />
           )}
-          
+
         </Paper>
       </main>
     );
-    
+
     /*
     return (
       <div

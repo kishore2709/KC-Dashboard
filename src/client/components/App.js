@@ -47,7 +47,6 @@ class App extends React.Component {
               <Router history={history}>
                 <Switch>
                   <Route path="/login" component={LoginPage} />
-                  <Route path="/register" component={RegisterPage} />
                   {indexRoutes.map((prop, key) => {
                     console.log(prop);
                     return (
