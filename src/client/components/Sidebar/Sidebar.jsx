@@ -21,10 +21,11 @@ import Autorenew from '@material-ui/icons/Autorenew';
 import Loading from 'components/Loading/Loading.jsx';
 import sidebarStyle from 'assets/jss/material-dashboard-react/components/sidebarStyle.jsx';
 
-/// redux
+// / redux
 import { connect } from 'react-redux';
 import { serverStatusConstants } from '_constants';
-import { serverStatusActions} from '_actions';
+import { serverStatusActions } from '_actions';
+
 class Sidebar extends Component {
   constructor(props) {
     super(props);
@@ -62,8 +63,13 @@ class Sidebar extends Component {
           const desRoutes = curRoutes.filter(
             val => validKeys.indexOf(val.id) !== -1
           );
-          const restSidebar = curRoutes.filter((val)=>{return (val.id === 'profile' || val.id==='redirect'
-          || val.id === 'login')});
+          const restSidebar = curRoutes.filter(val => {
+            return (
+              val.id === 'profile' ||
+              val.id === 'redirect' ||
+              val.id === 'login'
+            );
+          });
           this.setState({ routes: [...desRoutes, ...restSidebar] });
           this.props.success('ok');
           console.log(res.permissions);
@@ -92,18 +98,12 @@ class Sidebar extends Component {
       <List className={classes.list}>
         {routes.map((prop, key) => {
           if (prop.redirect) return null;
-          let activePro = ' ';
+
           let listItemClasses;
-          if (prop.path === '/upgrade-to-pro') {
-            activePro = `${classes.activePro} `;
-            listItemClasses = classNames({
-              [` ${classes[color]}`]: true,
-            });
-          } else {
-            listItemClasses = classNames({
-              [` ${classes[color]}`]: this.activeRoute(prop.path),
-            });
-          }
+          listItemClasses = classNames({
+            [` ${classes[color]}`]: this.activeRoute(prop.path),
+          });
+
           const whiteFontClasses = classNames({
             [` ${classes.whiteFont}`]: this.activeRoute(prop.path),
           });
@@ -111,7 +111,7 @@ class Sidebar extends Component {
             return (
               <NavLink
                 to={prop.path}
-                className={activePro + classes.item}
+                className={classes.item}
                 activeClassName="active"
                 key={key}
               >
@@ -197,6 +197,9 @@ const mapDispatchToProps = dispatch => ({
     dispatch(serverStatusActions.loading(newStatus));
   },
 });
-const connectedSidebar = connect(null, mapDispatchToProps)(Sidebar);
+const connectedSidebar = connect(
+  null,
+  mapDispatchToProps
+)(Sidebar);
 
 export default withStyles(sidebarStyle)(connectedSidebar);

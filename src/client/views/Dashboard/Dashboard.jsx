@@ -119,20 +119,6 @@ class Dashboard extends React.Component {
       });
   }
 
-  componentDidMount() {
-    setTimeout(() => {
-      this.props.toastManager.add(
-        'Bấm vào đồ thị "Quản lý log truy cập" để xem chi tiết dữ liệu',
-        {
-          appearance: 'success',
-          placement: 'top-center',
-          autoDismiss: true,
-          autoDismissTimeout: 10000,
-        }
-      );
-    }, 1000);
-  }
-
   render() {
     const { classes, serverStatus } = this.props;
     const { data } = this.state;
