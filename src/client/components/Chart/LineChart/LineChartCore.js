@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import withStyles from '@material-ui/core/styles/withStyles';
-import { Bar } from 'react-chartjs-2';
+import { Line } from 'react-chartjs-2';
 import 'chartjs-plugin-zoom';
 
 const styles = theme => ({
@@ -14,7 +14,7 @@ const styles = theme => ({
   },
 });
 
-class BarChartCore extends Component {
+class LineChartCore extends Component {
   chartReference = {};
 
   chart = {};
@@ -25,7 +25,6 @@ class BarChartCore extends Component {
 
   componentDidMount() {
     this.chart = this.chartReference.chartInstance;
-    this.chart.resetZoom();
   }
 
   handleElementsClick = elems => {
@@ -46,15 +45,15 @@ class BarChartCore extends Component {
   };
 
   render() {
-    const { data, startDate, endDate,  classes, color } = this.props;
+    const { data, startDate, endDate, classes, color } = this.props;
 
     return (
-      <Bar
+      <Line
         ref={reference => (this.chartReference = reference)}
         data={{
           datasets: [
             {
-              backgroundColor: color,
+              borderColor: color,
               data,
             },
           ],
@@ -92,14 +91,20 @@ class BarChartCore extends Component {
               this.handleChangeDateZoom();
             },
           },
+          elements: {
+            line: {
+              tension: 0, // disables bezier curves
+              fill: false,
+            }
+          },
         }}
       />
     );
   }
 }
 
-BarChartCore.propTypes = {
+LineChartCore.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(BarChartCore);
+export default withStyles(styles)(LineChartCore);
