@@ -18,6 +18,7 @@ class ErrorBoundary extends React.Component {
   render() {
     if (this.state.errorInfo) {
       // Error path
+      // console.log('in Error boundaries');
       return (
         <div>
           <h2>Something went wrong.</h2>

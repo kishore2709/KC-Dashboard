@@ -24,8 +24,8 @@ import logo from "assets/img/ptit-logo.png";
 const switchRoutes = (
   <Switch>
     {(dashboardRoutes.filter(val=> ('subNavBar' in val))[0].subNavBar.map((prop, key) => {
-      console.log('???');
-      console.log(prop);
+      // console.log('???');
+      // console.log(prop);
       return <Route path={prop.path} component={prop.component} key={prop.id} />;
     })).concat(
       dashboardRoutes.map((prop, key) => {
@@ -76,8 +76,8 @@ class App extends React.Component {
   }
   render() {
     const { classes, ...rest } = this.props;
-    console.log('in dashboard')
-    console.log(switchRoutes);
+    // console.log('in dashboard')
+    // console.log(switchRoutes);
     return (
       <div className={classes.wrapper}>
         <Sidebar

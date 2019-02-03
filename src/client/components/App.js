@@ -35,7 +35,7 @@ class App extends React.Component {
   }
 
   render() {
-    const { alert } = this.props;
+    // const { alert } = this.props;
 
     return (
       <div>
@@ -43,9 +43,6 @@ class App extends React.Component {
           <ToastProvider placement="top-center" placementOffset={[500, 500]}>
             <div>
               <div>
-                {alert.message && (
-                  <div className={`alert ${alert.type}`}>{alert.message}</div>
-                )}
                 <Router history={history}>
                   <Switch>
                     <Route path="/login" component={LoginPage} />
