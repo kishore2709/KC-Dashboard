@@ -218,7 +218,7 @@ const sidebarStyle = theme => ({
     },
   },
   nested: {
-    paddingLeft: theme.spacing.unit * 4,
+    paddingLeft: theme.spacing.unit * 2,
   },
   root: {
     width: '100%',

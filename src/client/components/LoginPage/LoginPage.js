@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import md5 from 'md5';
-import { userActions } from '../../_actions';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -19,6 +18,7 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import { userActions } from '../../_actions';
 
 const styles = theme => ({
   main: {
@@ -37,7 +37,8 @@ const styles = theme => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${theme.spacing.unit * 3}px`,
+    padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${theme
+      .spacing.unit * 3}px`,
   },
   avatar: {
     margin: theme.spacing.unit,
@@ -85,7 +86,7 @@ class LoginPage extends React.Component {
   }
 
   render() {
-    const { authentication } = this.props;
+    const { authentication, alert } = this.props;
     const { username, password, submitted } = this.state;
     const { classes } = this.props;
 
@@ -96,10 +97,16 @@ class LoginPage extends React.Component {
           <Avatar className={classes.avatar}>
             <LockOutlinedIcon />
           </Avatar>
+          {alert.message && (
+            <Typography color="error">
+              Sai tên người dùng hoặc mật khẩu
+            </Typography>
+          )}
           <form className={classes.form} onSubmit={this.handleSubmit}>
             <FormControl margin="normal" required fullWidth>
               <InputLabel htmlFor="username">Tên người dùng</InputLabel>
-              <Input id="username"
+              <Input
+                id="username"
                 name="username"
                 autoComplete="username"
                 autoFocus
@@ -109,7 +116,8 @@ class LoginPage extends React.Component {
             </FormControl>
             <FormControl margin="normal" required fullWidth>
               <InputLabel htmlFor="password">Mật khẩu</InputLabel>
-              <Input name="password"
+              <Input
+                name="password"
                 type="password"
                 id="password"
                 autoComplete="current-password"
@@ -130,7 +138,6 @@ class LoginPage extends React.Component {
           {authentication.loggingIn && (
             <CircularProgress style={{ marginTop: '20px' }} />
           )}
-
         </Paper>
       </main>
     );
@@ -207,11 +214,14 @@ LoginPage.propTypes = {
   authentication: PropTypes.any.isRequired,
 };
 function mapStateToProps(state) {
-  const { authentication } = state;
+  const { authentication, alert } = state;
   return {
     authentication,
+    alert,
   };
 }
 
-const connectedLoginPage = connect(mapStateToProps)(withStyles(styles)(LoginPage));
+const connectedLoginPage = connect(mapStateToProps)(
+  withStyles(styles)(LoginPage)
+);
 export { connectedLoginPage as LoginPage };
