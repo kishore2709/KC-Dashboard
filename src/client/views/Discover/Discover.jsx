@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import BarChart from 'components/Chart/BarChart/BarChart.js';
+import LineChart from 'components/Chart/LineChart/LineChart.js';
+import BarLineChart from 'components/Chart/BarLineChart/BarLineChart.js';
 import data from '_helpers/Utils/genChartData.js';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
@@ -24,7 +26,7 @@ class Discover extends Component {
           <Selections />
         </Grid>
         <Grid item xs={9}>
-          <BarChart data={data.chartData} />
+          <BarLineChart data={data.chartData} color='#c0dfd9' />
         </Grid>
         <Grid item xs={12}>
           <TableDiscover />

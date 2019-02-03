@@ -14,7 +14,7 @@ const styles = theme => ({
   },
 });
 
-class BarChartCore extends Component {
+class BarLineChartCore extends Component {
   chartReference = {};
 
   chart = {};
@@ -54,9 +54,17 @@ class BarChartCore extends Component {
         data={{
           datasets: [
             {
-              backgroundColor: color,
-              data,
+              type: 'bar',
+              backgroundColor: '#ff0000',
+              data: data,
+              yAxisID: 'y-axis-0',
             },
+            {
+              type: 'line',
+              borderColor: '#ff0000',
+              data: data,
+              yAxisID: 'y-axis-1',
+            }
           ],
         }}
         onElementsClick={this.handleElementsClick}
@@ -79,10 +87,23 @@ class BarChartCore extends Component {
               },
             ],
             yAxes: [{
+              id: 'y-axis-0',
               ticks: {
                 beginAtZero: true,
               },
-            }],
+            }, {
+              id: 'y-axis-1',
+              position: 'right',
+              ticks: {
+                beginAtZero: true,
+              },
+            },],
+          },
+          elements: {
+            line: {
+              tension: 0, // disables bezier curves
+              fill: false,
+            },
           },
           zoom: {
             enabled: true,
@@ -98,8 +119,8 @@ class BarChartCore extends Component {
   }
 }
 
-BarChartCore.propTypes = {
+BarLineChartCore.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(BarChartCore);
+export default withStyles(styles)(BarLineChartCore);

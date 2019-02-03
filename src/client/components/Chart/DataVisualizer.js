@@ -9,6 +9,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import DateFnsUtils from '@date-io/date-fns';
 import { MuiPickersUtilsProvider, DateTimePicker } from 'material-ui-pickers';
 import Grid from '@material-ui/core/Grid';
+import LinearProgress from '@material-ui/core/LinearProgress';
 
 import { connect } from 'react-redux';
 import { dateRangeActions } from '_actions';
@@ -51,6 +52,8 @@ function DataVisualizer(Chart) {
           startDate: null,
           endDate: null,
           data: props.data,
+          loading: true,
+          useTR: true,
         };
       }
 
@@ -61,8 +64,10 @@ function DataVisualizer(Chart) {
       }
 
       getTimeRange = () => {
+        if (this.state.useTR === false) return -1;
         let timeRange;
-        switch (this.state.endDate.getTime() - this.state.startDate.getTime()) {
+        const { startDate, endDate } = this.state;
+        switch (endDate.getTime() - startDate.getTime()) {
           case 15 * 60 * 1000:
             timeRange = 15 * 60;
             break;
@@ -97,31 +102,38 @@ function DataVisualizer(Chart) {
       };
 
       handleDateRangeChange = (startDate, endDate) => {
-        const { data, opened } = this.props;
-        // console.log('in HandleDateRangeChange');
-        opened({ startDate, endDate });
-        const newData = data.filter(curData => {
-          if (
-            curData.x.getTime() >= startDate.getTime() &&
-            curData.x.getTime() <= endDate.getTime()
-          ) {
-            return true;
-          }
-          return false;
-        });
         this.setState({
-          startDate,
-          endDate,
-          data: _filterData(newData),
+          loading: true,
+        }, () => {
+          const { data, opened } = this.props;
+          // console.log('in HandleDateRangeChange');
+          opened({ startDate, endDate });
+          const newData = data.filter(curData => {
+            if (
+              curData.x.getTime() >= startDate.getTime() &&
+              curData.x.getTime() <= endDate.getTime()
+            ) {
+              return true;
+            }
+            return false;
+          });
+          this.setState({
+            startDate,
+            endDate,
+            data: _filterData(newData),
+            loading: false,
+          });
         });
       };
 
       handleChangeTimeRange = event => {
         const endDate = new Date();
-        const startDate = new Date(
-          endDate.getTime() - event.target.value * 1000
-        );
-        this.handleDateRangeChange(startDate, endDate);
+        const startDate = new Date(endDate.getTime() - event.target.value * 1000);
+        this.setState({
+          useTR: true,
+        }, () => {
+          this.handleDateRangeChange(startDate, endDate);
+        });
       };
 
       handleDateChange = type => date => {
@@ -131,21 +143,26 @@ function DataVisualizer(Chart) {
         } else {
           endDate = date < startDate ? startDate : date;
         }
-        this.handleDateRangeChange(startDate, endDate);
+        this.setState({
+          useTR: false,
+        }, () => {
+          this.handleDateRangeChange(startDate, endDate);
+        });
       };
 
       render() {
-        const { startDate, endDate, data } = this.state;
+        const { startDate, endDate, data, loading } = this.state;
+        const { color } = this.props;
         if (startDate !== null && endDate !== null) {
           return (
             <Card
               style={{
-                background: 'linear-gradient(45deg, #c4b1bb 30%, #FF8E53 90%)',
                 borderRadius: 10,
                 border: 0,
                 color: 'white',
                 padding: '0 3px',
-                boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
+                margin: '5px',
+                boxShadow: '0 3px 5px 2px #cccccc',
               }}
             >
               <CardActions>
@@ -154,6 +171,7 @@ function DataVisualizer(Chart) {
                     <FormControl>
                       <InputLabel htmlFor="time-select">Chọn nhanh</InputLabel>
                       <Select
+                        disabled={loading}
                         value={this.getTimeRange()}
                         onChange={this.handleChangeTimeRange}
                         inputProps={{
@@ -187,6 +205,7 @@ function DataVisualizer(Chart) {
                       <Grid container spacing={24}>
                         <Grid item xs={6}>
                           <DateTimePicker
+                            disabled={loading}
                             margin="normal"
                             label="Ngày bắt đầu"
                             value={startDate}
@@ -196,6 +215,7 @@ function DataVisualizer(Chart) {
                         </Grid>
                         <Grid item xs={6}>
                           <DateTimePicker
+                            disabled={loading}
                             margin="normal"
                             label="Ngày kết thúc"
                             value={endDate}
@@ -209,15 +229,21 @@ function DataVisualizer(Chart) {
                 </Grid>
               </CardActions>
               <CardContent>
-                <Chart
-                  data={data}
-                  fireUpDateRangeChange={this.handleDateRangeChange}
-                />
+                {loading ? (<LinearProgress />) : (
+                  <Chart
+                    data={data}
+                    startDate={startDate}
+                    endDate={endDate}
+                    fireUpDateRangeChange={this.handleDateRangeChange}
+                    color={color}
+                  />  
+                )}
               </CardContent>
             </Card>
           );
+        } else {
+          return (<LinearProgress />);
         }
-        return null;
       }
     };
     return <SubComponent {...props[0]} />;
