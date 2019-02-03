@@ -16,11 +16,12 @@ import { ToastProvider } from 'react-toast-notifications';
 // import AccessManagement from './AccessManagement/AccessManagement';
 // import PermanentDrawerLeft from './AdminManagement/ManageUser';
 // import Setting from './SettingManagement/Setting';
+import ErrorBoundary from 'components/ErrorBoundaries/ErrorBoundaries.jsx';
 import { history } from '../_helpers';
 import { alertActions } from '../_actions';
 import { PrivateRoute } from './PrivateRoute';
 import { LoginPage } from './LoginPage';
-import { RegisterPage } from './RegisterPage';
+// import { RegisterPage } from './RegisterPage';
 // import connectedDrawers from './SettingManagement/Drawers';
 
 class App extends React.Component {
@@ -38,27 +39,28 @@ class App extends React.Component {
 
     return (
       <div>
-        <ToastProvider placement="top-center" placementOffset={[500, 500]}>
-          <div>
+        <ErrorBoundary>
+          <ToastProvider placement="top-center" placementOffset={[500, 500]}>
             <div>
-              {alert.message && (
-                <div className={`alert ${alert.type}`}>{alert.message}</div>
-              )}
-              <Router history={history}>
-                <Switch>
-                  <Route path="/login" component={LoginPage} />
-                  {indexRoutes.map((prop, key) => {
-                    console.log(prop);
-                    return (
-                      <PrivateRoute
-                        path={prop.path}
-                        component={prop.component}
-                        key={key}
-                      />
-                    );
-                  })}
-                </Switch>
-                {/*
+              <div>
+                {alert.message && (
+                  <div className={`alert ${alert.type}`}>{alert.message}</div>
+                )}
+                <Router history={history}>
+                  <Switch>
+                    <Route path="/login" component={LoginPage} />
+                    {indexRoutes.map((prop, key) => {
+                      console.log(prop);
+                      return (
+                        <PrivateRoute
+                          path={prop.path}
+                          component={prop.component}
+                          key={key}
+                        />
+                      );
+                    })}
+                  </Switch>
+                  {/*
               <div>
                 <Header>
                   <Switch>
@@ -89,10 +91,11 @@ class App extends React.Component {
                 </Header>
               </div>
               */}
-              </Router>
+                </Router>
+              </div>
             </div>
-          </div>
-        </ToastProvider>
+          </ToastProvider>
+        </ErrorBoundary>
       </div>
     );
   }
