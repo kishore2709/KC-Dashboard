@@ -4,8 +4,13 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 import EditIcon from '@material-ui/icons/BorderColor';
 import IconButton from '@material-ui/core/IconButton';
+import UserDialog from 'components/Dialogs/UserDialog.jsx';
 
 class UserTable extends React.Component {
+  state = {
+    openDialog: false,
+  };
+
   render() {
     const columns = [
       {
@@ -53,6 +58,7 @@ class UserTable extends React.Component {
             <IconButton
               onClick={() => {
                 console.log(tableMeta);
+                this.setState({ openDialog: true });
               }}
             >
               <EditIcon />
@@ -74,12 +80,15 @@ class UserTable extends React.Component {
     };
 
     return (
-      <MUIDataTable
-        title="Danh sách người dùng"
-        data={data}
-        columns={columns}
-        options={options}
-      />
+      <React.Fragment>
+        <UserDialog open={this.state.openDialog} />
+        <MUIDataTable
+          title="Danh sách người dùng"
+          data={data}
+          columns={columns}
+          options={options}
+        />
+      </React.Fragment>
     );
   }
 }
