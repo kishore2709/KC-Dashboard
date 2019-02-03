@@ -5,7 +5,7 @@ import withStyles from '@material-ui/core/styles/withStyles';
 import GridItem from 'components/Grid/GridItem.jsx';
 import GridContainer from 'components/Grid/GridContainer.jsx';
 
-import UserTable from 'components/AdminManagement/DevTable';
+import UserTable from 'components/Table/UserTable';
 
 const styles = {
   cardCategoryWhite: {
