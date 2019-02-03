@@ -39,6 +39,7 @@ import Typography from '@material-ui/core/Typography';
 import { connect } from 'react-redux';
 import { serverStatusConstants } from '_constants';
 // import classnames from 'classnames';
+import Discover from 'views/Discover/Discover.jsx';
 import { PostApi } from '_helpers/Utils';
 import {
   userLogo,
@@ -265,7 +266,11 @@ class Dashboard extends React.Component {
                 </GridItem>
               </React.Fragment>
             );
-          if ('layout3' in val) return <React.Fragment />;
+          if ('layout3' in val) return <React.Fragment>
+            <Grid item xs={12}>
+            <Discover/>
+            </Grid>
+          </React.Fragment>;
         })}
       </GridContainer>
     );

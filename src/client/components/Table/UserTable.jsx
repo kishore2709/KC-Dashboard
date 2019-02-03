@@ -2,82 +2,80 @@ import React from 'react';
 import MUIDataTable from 'mui-datatables';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
+import EditIcon from '@material-ui/icons/BorderColor';
+import IconButton from '@material-ui/core/IconButton';
 
 class UserTable extends React.Component {
   render() {
     const columns = [
       {
-        name: 'Name',
-        options: {
-          filter: false,
-        },
-      },
-      {
-        name: 'Title',
+        name: 'Fullname',
         options: {
           filter: true,
         },
       },
       {
-        name: 'Age',
-        options: {
-          filter: false,
-        },
-      },
-      {
-        name: 'Salary',
+        name: 'Username',
         options: {
           filter: true,
-          customBodyRender: (value, tableMeta, updateValue) => {
-            const nf = new Intl.NumberFormat('en-US', {
-              style: 'currency',
-              currency: 'USD',
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-            });
-
-            return nf.format(value);
-          },
         },
       },
       {
-        name: 'Active',
+        name: 'Role',
+        options: {
+          filter: true,
+        },
+      },
+      {
+        name: 'Status',
         options: {
           filter: true,
           customBodyRender: (value, tableMeta, updateValue) => (
-              <FormControlLabel
-                label={value ? "Yes" : "No"}
-                value={value ? "Yes" : "No"}
-                control={
-                  <Switch
-                    color="primary"
-                    checked={value}
-                    value={value ? "Yes" : "No"}
-                  />
-                }
-                onChange={event => {
-                  updateValue(event.target.value === "Yes" ? false : true);
-                }}
-              />
-            ),
+            <FormControlLabel
+              label={value ? 'Yes' : 'No'}
+              value={value ? 'Yes' : 'No'}
+              control={
+                <Switch
+                  color="primary"
+                  checked={value}
+                  value={value ? 'Yes' : 'No'}
+                />
+              }
+            />
+          ),
+        },
+      },
+      {
+        name: 'Options',
+        options: {
+          filter: true,
+          customBodyRender: (value, tableMeta, updateValue) => (
+            <IconButton
+              onClick={() => {
+                console.log(tableMeta);
+              }}
+            >
+              <EditIcon />
+            </IconButton>
+          ),
         },
       },
     ];
 
     const data = [
-      ['Robin Duncan', 'Business Analyst', 20, 77000, false],
-      ['Mel Brooks', 'Business Consultant', 37, 135000, true],
+      ['Robin Duncan', 'TomPython', 'Admin', false, true],
+      ['Mel Brooks', 'Huanthemank55', 'User', true, true],
     ];
 
     const options = {
       filter: true,
       filterType: 'dropdown',
-      responsive: 'scroll'
+      responsive: 'scroll',
     };
 
     return (
       <MUIDataTable
-        title="ACME Employee list"
+        title="Danh sách người dùng"
         data={data}
         columns={columns}
         options={options}

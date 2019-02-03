@@ -22,11 +22,13 @@ class Discover extends Component {
         justify="space-evenly"
         alignItems="center"
       >
+        {/*
         <Grid item>
           <Selections />
         </Grid>
-        <Grid item xs={9}>
-          <BarLineChart data={data.chartData} color='#c0dfd9' />
+        */}
+        <Grid item xs={12}>
+          <BarChart data={data.chartData} color="#c0dfd9" />
         </Grid>
         <Grid item xs={12}>
           <TableDiscover />
