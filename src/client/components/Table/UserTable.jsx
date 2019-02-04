@@ -5,6 +5,7 @@ import Switch from '@material-ui/core/Switch';
 import EditIcon from '@material-ui/icons/BorderColor';
 import IconButton from '@material-ui/core/IconButton';
 import UserDialog from 'components/Dialogs/UserDialog.jsx';
+import CustomFooter from './CustomFooter.jsx';
 
 class UserTable extends React.Component {
   state = {
@@ -75,8 +76,16 @@ class UserTable extends React.Component {
 
     const options = {
       filter: true,
-      filterType: 'dropdown',
-      responsive: 'scroll',
+      selectableRows: true,
+      filterType: "dropdown",
+      responsive: "stacked",
+      customFooter: (
+        count,
+        page,
+        rowsPerPage,
+        changeRowsPerPage,
+        changePage
+      ) => <CustomFooter changePage={changePage} count={count} />,
     };
 
     return (

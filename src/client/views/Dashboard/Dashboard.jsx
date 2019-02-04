@@ -10,28 +10,28 @@ import Store from '@material-ui/icons/Store';
 import Warning from '@material-ui/icons/Warning';
 import DateRange from '@material-ui/icons/DateRange';
 import LocalOffer from '@material-ui/icons/LocalOffer';
-import Update from '@material-ui/icons/Update';
-import ArrowUpward from '@material-ui/icons/ArrowUpward';
-import AccessTime from '@material-ui/icons/AccessTime';
-import Accessibility from '@material-ui/icons/Accessibility';
+// import Update from '@material-ui/icons/Update';
+// import ArrowUpward from '@material-ui/icons/ArrowUpward';
+// import AccessTime from '@material-ui/icons/AccessTime';
+// import Accessibility from '@material-ui/icons/Accessibility';
 import BugReport from '@material-ui/icons/BugReport';
 import Code from '@material-ui/icons/Code';
 import Cloud from '@material-ui/icons/Cloud';
 // core components
 import GridItem from 'components/Grid/GridItem.jsx';
 import GridContainer from 'components/Grid/GridContainer.jsx';
-import Table from 'components/Table/Table.jsx';
+// import Table from 'components/Table/Table.jsx';
 import Tasks from 'components/Tasks/Tasks.jsx';
 import CustomTabs from 'components/CustomTabs/CustomTabs.jsx';
 import Danger from 'components/Typography/Danger.jsx';
 import Card from 'components/Card/Card.jsx';
 import CardHeader from 'components/Card/CardHeader.jsx';
 import CardIcon from 'components/Card/CardIcon.jsx';
-import CardBody from 'components/Card/CardBody.jsx';
+// import CardBody from 'components/Card/CardBody.jsx';
 import CardFooter from 'components/Card/CardFooter.jsx';
 import Loading from 'components/Loading/Loading.jsx';
 import WarningStatus from 'components/Warning/Warning.jsx';
-import Link from '@material-ui/core/Link';
+// import Link from '@material-ui/core/Link';
 import { withToastManager } from 'react-toast-notifications';
 // / redux
 import Typography from '@material-ui/core/Typography';
@@ -42,27 +42,18 @@ import { serverStatusConstants } from '_constants';
 import Discover from 'views/Discover/Discover.jsx';
 import { PostApi } from '_helpers/Utils';
 import {
-  userLogo,
-  groupLogo,
   alertLogo,
   webLogo,
   dnsLogo,
   transferLogo,
   agentLogo,
   searchLogo,
-  listAlertLogo,
   smsLogo,
   emailLogo,
 } from 'components/icon/Icon';
-import { bugs, website, server } from 'variables/general.jsx';
-import CardMedia from '@material-ui/core/CardMedia';
+// import { bugs, website, server } from 'variables/general.jsx';
+// import CardMedia from '@material-ui/core/CardMedia';
 import Grid from '@material-ui/core/Grid';
-
-import {
-  dailySalesChart,
-  emailsSubscriptionChart,
-  completedTasksChart,
-} from 'variables/charts.jsx';
 
 import dashboardStyle from 'assets/jss/material-dashboard-react/views/dashboardStyle.jsx';
 // import { userInfo } from 'os';
@@ -266,11 +257,14 @@ class Dashboard extends React.Component {
                 </GridItem>
               </React.Fragment>
             );
-          if ('layout3' in val) return <React.Fragment>
-            <Grid item xs={12}>
-            <Discover/>
-            </Grid>
-          </React.Fragment>;
+          if ('layout3' in val)
+            return (
+              <React.Fragment>
+                <Grid item xs={12}>
+                  <Discover />
+                </Grid>
+              </React.Fragment>
+            );
         })}
       </GridContainer>
     );
