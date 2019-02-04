@@ -59,8 +59,8 @@ const dashboardRoutes = [
         component: UserPermission,
       },
       {
-        id: 'userSub',
-        path: '/user',
+        id: 'Sub',
+        path: '/Sub',
         sidebarName: 'Danh sách người dùng',
         navbarName: 'Giao diện quản lý danh sách người dùng',
         icon: Person,

@@ -85,7 +85,10 @@ class UserTable extends React.Component {
         rowsPerPage,
         changeRowsPerPage,
         changePage
-      ) => <CustomFooter changePage={changePage} count={count} />,
+      ) => <CustomFooter changePage={changePage} count={count} onClick={() => {
+        // console.log(tableMeta);
+        this.setState({ openDialog: true });
+      }} />,
     };
 
     return (

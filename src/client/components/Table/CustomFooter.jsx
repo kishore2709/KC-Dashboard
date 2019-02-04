@@ -1,8 +1,8 @@
-import React from "react";
-import TableFooter from "@material-ui/core/TableFooter";
-import TableRow from "@material-ui/core/TableRow";
-import TableCell from "@material-ui/core/TableCell";
-import { withStyles } from "@material-ui/core/styles";
+import React from 'react';
+import TableFooter from '@material-ui/core/TableFooter';
+import TableRow from '@material-ui/core/TableRow';
+import TableCell from '@material-ui/core/TableCell';
+import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 
 const defaultFooterStyles = {};
@@ -14,15 +14,17 @@ class CustomFooter extends React.Component {
     return (
       <TableFooter>
         <TableRow>
-          <TableCell><Button variant="contained" color="primary">
-        Thêm người dùng
-      </Button></TableCell>
+          <TableCell>
+            <Button variant="contained" color="primary" onClick={()=>{this.props.onClick()}}>
+              Thêm người dùng
+            </Button>
+          </TableCell>
         </TableRow>
       </TableFooter>
     );
   }
 }
 
-export default withStyles(defaultFooterStyles, { name: "CustomFooter" })(
+export default withStyles(defaultFooterStyles, { name: 'CustomFooter' })(
   CustomFooter
 );
