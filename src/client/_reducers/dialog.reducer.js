@@ -25,6 +25,11 @@ export function dialog(
         type: dialogConstants.DIALOG_USER_UPDATE,
         message: action.message,
       };
+    case dialogConstants.DIALOG_USER_LOAD:
+      return {
+        type: dialogConstants.DIALOG_USER_LOAD,
+        message: action.message,
+      };
     default:
       return state;
   }

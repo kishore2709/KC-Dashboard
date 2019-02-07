@@ -15,9 +15,14 @@ function updateDialog(message) {
 function addDialog(message) {
   return { type: dialogConstants.DIALOG_USER_ADD, message };
 }
+
+function loadDataDialog(message) {
+  return { type: dialogConstants.DIALOG_USER_LOAD, message };
+}
 export const dialogActions = {
   openDialog,
   closeDialog,
   updateDialog,
   addDialog,
+  loadDataDialog,
 };

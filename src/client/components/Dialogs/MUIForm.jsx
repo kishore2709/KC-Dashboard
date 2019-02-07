@@ -10,10 +10,11 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import Grid from '@material-ui/core/Grid';
-import Button from '@material-ui/core/Button';
-import DialogActions from '@material-ui/core/DialogActions';
+import { connect } from 'react-redux';
 import asyncValidate from './asyncValidate';
-
+import { getNormalizedScrollLeft } from 'normalize-scroll-left';
+// import { load as loadAccount } from '../../_reducers/UserData.reducer.js/index.js';
+// import
 const validate = values => {
   const errors = {};
   const requiredFields = [
@@ -105,7 +106,7 @@ const renderSelectField = ({
   </FormControl>
 );
 
-const MaterialUiForm = props => {
+let MaterialUiForm = props => {
   const { handleSubmit, pristine, reset, submitting, classes } = props;
   return (
     <form onSubmit={handleSubmit}>
@@ -132,7 +133,12 @@ const MaterialUiForm = props => {
         </Grid>
 
         <Grid item xs={12}>
-          <Grid container direction="row" justify="space-evenly" alignItems="center">
+          <Grid
+            container
+            direction="row"
+            justify="space-evenly"
+            alignItems="center"
+          >
             <Grid item>
               <Field
                 classes={classes}
@@ -153,15 +159,20 @@ const MaterialUiForm = props => {
                 component={renderSelectField}
                 label="status"
               >
-                <option value="Active">Active</option>
-                <option value="Inactive">Inactive</option>
+                <option value={true}>Active</option>
+                <option value={false}>Inactive</option>
               </Field>
             </Grid>
           </Grid>
         </Grid>
 
         <Grid item xs={12}>
-          <Grid container direction="row" justify="space-evenly" alignItems="center">
+          <Grid
+            container
+            direction="row"
+            justify="space-evenly"
+            alignItems="center"
+          >
             <Grid item>
               <button
                 className="blue button"
@@ -175,10 +186,11 @@ const MaterialUiForm = props => {
               <button
                 className="blue button"
                 type="button"
-                disabled={pristine || submitting}
-                onClick={reset}
+                onClick={() => {
+                  props.onCancel();
+                }}
               >
-                Clear Values
+                Cancel
               </button>
             </Grid>
           </Grid>
@@ -188,8 +200,14 @@ const MaterialUiForm = props => {
   );
 };
 
-export default reduxForm({
+MaterialUiForm = reduxForm({
   form: 'MaterialUiForm', // a unique identifier for this form
   validate,
   asyncValidate,
 })(MaterialUiForm);
+
+MaterialUiForm = connect(state => ({
+  initialValues: state.userDialogData.data, // pull initial values from account reducer
+}))(MaterialUiForm);
+
+export default MaterialUiForm;

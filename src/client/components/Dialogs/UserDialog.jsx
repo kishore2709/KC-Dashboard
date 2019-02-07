@@ -11,7 +11,9 @@ import Card from 'components/Card/Card.jsx';
 import CardHeader from 'components/Card/CardHeader.jsx';
 import CardBody from 'components/Card/CardBody.jsx';
 import { connect } from 'react-redux';
+import { load as loadAccount } from '_reducers/AIO/userData.reducer.js';
 import MUIForm from './MUIForm';
+import { PostApi } from '_helpers/Utils';
 
 const styles = theme => ({
   cardCategoryWhite: {
@@ -41,9 +43,40 @@ const styles = theme => ({
 });
 
 class FormDialog extends React.Component {
-  state = {
-    open: false,
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      open: false,
+    };
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleSubmit(e) {
+    console.log(e);
+    PostApi('/api/users/updateDb', [e])
+      .then(res => {
+        // console.log('in then proomse');
+        if (res === 'err') {
+          // alertErr();
+          console.log(res);
+          // ret.push(row);
+          // ret = 'err';
+        } else {
+          // ret.push(newRow);
+          // toastManager.add('Updated Successfully', {
+          //   appearance: 'success',
+          //   autoDismiss: true,
+          // });
+          console.log('ok');
+        }
+      })
+      .catch(err => {
+        // ret = 'err';
+        // ret.push(row);
+        console.log('update data from database err');
+        // alertErr();
+      });
+  }
 
   componentWillReceiveProps(props) {
     if ('open' in props && props.open) this.setState({ open: true });
@@ -59,7 +92,7 @@ class FormDialog extends React.Component {
   };
 
   render() {
-    const { classes, dialog } = this.props;
+    const { load, dialog, classes } = this.props;
     const {
       fullname,
       email,
@@ -69,6 +102,16 @@ class FormDialog extends React.Component {
       username,
       id,
     } = dialog.message;
+    // load initial data to Dialog
+    load({
+      fullname,
+      email,
+      phonenumber,
+      role,
+      status,
+      username,
+      id,
+    });
     // console.log('??? in UserDialog');
     // console.log({ fullname, email, phonenumber, role, status, username, id });
     return (
@@ -92,9 +135,8 @@ class FormDialog extends React.Component {
                   </CardHeader>
                   <CardBody>
                     <MUIForm
-                      onSubmit={e => {
-                        console.log(e);
-                      }}
+                      onSubmit={this.handleSubmit}
+                      onCancel={this.handleClose}
                     />
                   </CardBody>
                 </Card>
@@ -114,4 +156,15 @@ function mapStateToProps(state) {
   };
 }
 
-export default withStyles(styles)(connect(mapStateToProps)(FormDialog));
+const mapDispatchToProps = dispatch => ({
+  load: newStatus => {
+    dispatch(loadAccount(newStatus));
+  },
+});
+
+export default withStyles(styles)(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(FormDialog)
+);

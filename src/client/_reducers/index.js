@@ -9,6 +9,7 @@ import { drawer } from './drawer.reducer';
 import { dialog } from './dialog.reducer';
 import { dateRange } from './dateRange.reducer';
 import { serverStatus } from './serverStatus.reducer';
+import userDialogData from './AIO/userData.reducer';
 
 const rootReducer = combineReducers({
   dialog,
@@ -20,6 +21,7 @@ const rootReducer = combineReducers({
   drawer,
   serverStatus,
   form: formReducer,
+  userDialogData,
 });
 
 export default rootReducer;
