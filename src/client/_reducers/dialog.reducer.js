@@ -15,6 +15,16 @@ export function dialog(
         type: dialogConstants.DIALOG_USER_OPEN,
         message: action.message,
       };
+    case dialogConstants.DIALOG_USER_ADD:
+      return {
+        type: dialogConstants.DIALOG_USER_ADD,
+        message: action.message,
+      };
+    case dialogConstants.DIALOG_USER_UPDATE:
+      return {
+        type: dialogConstants.DIALOG_USER_UPDATE,
+        message: action.message,
+      };
     default:
       return state;
   }

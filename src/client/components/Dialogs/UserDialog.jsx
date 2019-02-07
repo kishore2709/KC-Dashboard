@@ -19,6 +19,8 @@ import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
+//
+import { connect } from 'react-redux';
 
 const styles = theme => ({
   cardCategoryWhite: {
@@ -50,6 +52,7 @@ const styles = theme => ({
 class FormDialog extends React.Component {
   state = {
     open: false,
+
   };
 
   componentWillReceiveProps(props) {
@@ -66,7 +69,10 @@ class FormDialog extends React.Component {
   };
 
   render() {
-    const { classes } = this.props;
+    const { classes, dialog } = this.props;
+    const { fullname, email, phonenumber, role, status, username, id } = dialog.message;
+    console.log('??? in UserDialog');
+    console.log({ fullname, email, phonenumber, role, status, username, id });
     return (
       <div>
         <Dialog
@@ -82,7 +88,7 @@ class FormDialog extends React.Component {
                   <CardHeader color="danger">
                     <h4 className={classes.cardTitleWhite}>Sửa thông tin</h4>
                     <p className={classes.cardCategoryWhite}>
-                      Chỉnh sửa thông tin cá nhân của bạn
+                      Chỉnh sửa thông tin cá nhân
                     </p>
                   </CardHeader>
                   <CardBody>
@@ -96,6 +102,7 @@ class FormDialog extends React.Component {
                           }}
                           inputProps={{
                             disabled: true,
+                            value: id,
                           }}
                         />
                       </GridItem>
@@ -106,6 +113,12 @@ class FormDialog extends React.Component {
                           formControlProps={{
                             fullWidth: true,
                           }}
+                          inputProps={{
+                            value: username,
+                            onChange: e => {
+                              console.log(e.target.value, e.target.id);
+                            },
+                          }}
                         />
                       </GridItem>
                       <GridItem xs={12} sm={12} md={4}>
@@ -114,6 +127,9 @@ class FormDialog extends React.Component {
                           id="email-address"
                           formControlProps={{
                             fullWidth: true,
+                          }}
+                          inputProps={{
+                            value: email,
                           }}
                         />
                       </GridItem>
@@ -126,6 +142,9 @@ class FormDialog extends React.Component {
                           formControlProps={{
                             fullWidth: true,
                           }}
+                          inputProps={{
+                            value: fullname,
+                          }}
                         />
                       </GridItem>
                       <GridItem xs={12} sm={6} md={6}>
@@ -135,15 +154,20 @@ class FormDialog extends React.Component {
                           formControlProps={{
                             fullWidth: true,
                           }}
+                          inputProps={{
+                            value: phonenumber,
+                          }}
                         />
                       </GridItem>
                     </GridContainer>
                     <GridContainer>
                       <GridItem xs={12} sm={12} md={4}>
                         <FormControl className={classes.formControl}>
-                          <InputLabel shrink htmlFor="role-simple">Role</InputLabel>
+                          <InputLabel shrink htmlFor="role-simple">
+                            Role
+                          </InputLabel>
                           <Select
-                            value={this.state.role}
+                            value={role}
                             onChange={this.handleChange}
                             inputProps={{
                               name: 'role',
@@ -158,16 +182,18 @@ class FormDialog extends React.Component {
                       </GridItem>
                       <GridItem xs={12} sm={12} md={4}>
                         <FormControl className={classes.formControl}>
-                          <InputLabel shrink htmlFor="status-simple">Status</InputLabel>
+                          <InputLabel shrink htmlFor="status-simple">
+                            Status
+                          </InputLabel>
                           <Select
-                            value={this.state.status}
+                            value={status}
                             onChange={this.handleChange}
                             inputProps={{
                               name: 'status',
                               id: 'status-simple',
                             }}
                           >
-                            <MenuItem value={true}>Active</MenuItem>
+                            <MenuItem value>Active</MenuItem>
                             <MenuItem value={false}>Inactive</MenuItem>
                           </Select>
                         </FormControl>
@@ -195,4 +221,11 @@ class FormDialog extends React.Component {
   }
 }
 
-export default withStyles(styles)(FormDialog);
+function mapStateToProps(state) {
+  const { dialog } = state;
+  return {
+    dialog,
+  };
+}
+
+export default withStyles(styles)(connect(mapStateToProps)(FormDialog));
