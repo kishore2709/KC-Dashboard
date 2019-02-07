@@ -1,26 +1,17 @@
 import React from 'react';
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
+// import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import withStyles from '@material-ui/core/styles/withStyles';
 
 // /
 import GridItem from 'components/Grid/GridItem.jsx';
 import GridContainer from 'components/Grid/GridContainer.jsx';
-import CustomInput from 'components/CustomInput/CustomInput.jsx';
 import Card from 'components/Card/Card.jsx';
 import CardHeader from 'components/Card/CardHeader.jsx';
 import CardBody from 'components/Card/CardBody.jsx';
-import Select from '@material-ui/core/Select';
-
-//
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormControl from '@material-ui/core/FormControl';
-//
 import { connect } from 'react-redux';
+import MUIForm from './MUIForm';
 
 const styles = theme => ({
   cardCategoryWhite: {
@@ -52,7 +43,6 @@ const styles = theme => ({
 class FormDialog extends React.Component {
   state = {
     open: false,
-
   };
 
   componentWillReceiveProps(props) {
@@ -70,12 +60,21 @@ class FormDialog extends React.Component {
 
   render() {
     const { classes, dialog } = this.props;
-    const { fullname, email, phonenumber, role, status, username, id } = dialog.message;
-    console.log('??? in UserDialog');
-    console.log({ fullname, email, phonenumber, role, status, username, id });
+    const {
+      fullname,
+      email,
+      phonenumber,
+      role,
+      status,
+      username,
+      id,
+    } = dialog.message;
+    // console.log('??? in UserDialog');
+    // console.log({ fullname, email, phonenumber, role, status, username, id });
     return (
       <div>
         <Dialog
+          fullWidth
           open={this.state.open}
           onClose={this.handleClose}
           aria-labelledby="form-dialog-title"
@@ -92,129 +91,16 @@ class FormDialog extends React.Component {
                     </p>
                   </CardHeader>
                   <CardBody>
-                    <GridContainer>
-                      <GridItem xs={12} sm={12} md={5}>
-                        <CustomInput
-                          labelText="UserID"
-                          id="company-disabled"
-                          formControlProps={{
-                            fullWidth: true,
-                          }}
-                          inputProps={{
-                            disabled: true,
-                            value: id,
-                          }}
-                        />
-                      </GridItem>
-                      <GridItem xs={12} sm={12} md={3}>
-                        <CustomInput
-                          labelText="Username"
-                          id="username"
-                          formControlProps={{
-                            fullWidth: true,
-                          }}
-                          inputProps={{
-                            value: username,
-                            onChange: e => {
-                              console.log(e.target.value, e.target.id);
-                            },
-                          }}
-                        />
-                      </GridItem>
-                      <GridItem xs={12} sm={12} md={4}>
-                        <CustomInput
-                          labelText="Email"
-                          id="email-address"
-                          formControlProps={{
-                            fullWidth: true,
-                          }}
-                          inputProps={{
-                            value: email,
-                          }}
-                        />
-                      </GridItem>
-                    </GridContainer>
-                    <GridContainer>
-                      <GridItem xs={12} sm={6} md={6}>
-                        <CustomInput
-                          labelText="Fullname"
-                          id="full-name"
-                          formControlProps={{
-                            fullWidth: true,
-                          }}
-                          inputProps={{
-                            value: fullname,
-                          }}
-                        />
-                      </GridItem>
-                      <GridItem xs={12} sm={6} md={6}>
-                        <CustomInput
-                          labelText="PhoneNumber"
-                          id="PhoneNumber"
-                          formControlProps={{
-                            fullWidth: true,
-                          }}
-                          inputProps={{
-                            value: phonenumber,
-                          }}
-                        />
-                      </GridItem>
-                    </GridContainer>
-                    <GridContainer>
-                      <GridItem xs={12} sm={12} md={4}>
-                        <FormControl className={classes.formControl}>
-                          <InputLabel shrink htmlFor="role-simple">
-                            Role
-                          </InputLabel>
-                          <Select
-                            value={role}
-                            onChange={this.handleChange}
-                            inputProps={{
-                              name: 'role',
-                              id: 'role-simple',
-                            }}
-                          >
-                            <MenuItem value="Admin">Admin</MenuItem>
-                            <MenuItem value="Moderator">Moderator</MenuItem>
-                            <MenuItem value="User">User</MenuItem>
-                          </Select>
-                        </FormControl>
-                      </GridItem>
-                      <GridItem xs={12} sm={12} md={4}>
-                        <FormControl className={classes.formControl}>
-                          <InputLabel shrink htmlFor="status-simple">
-                            Status
-                          </InputLabel>
-                          <Select
-                            value={status}
-                            onChange={this.handleChange}
-                            inputProps={{
-                              name: 'status',
-                              id: 'status-simple',
-                            }}
-                          >
-                            <MenuItem value>Active</MenuItem>
-                            <MenuItem value={false}>Inactive</MenuItem>
-                          </Select>
-                        </FormControl>
-                      </GridItem>
-                    </GridContainer>
+                    <MUIForm
+                      onSubmit={e => {
+                        console.log(e);
+                      }}
+                    />
                   </CardBody>
                 </Card>
               </GridItem>
             </GridContainer>
           </DialogContent>
-          <DialogActions>
-            <Button onClick={this.handleClose} color="primary">
-              Huỷ
-            </Button>
-            <Button onClick={this.handleClose} color="primary">
-              Reset mật khẩu
-            </Button>
-            <Button onClick={this.handleClose} color="primary">
-              Lưu
-            </Button>
-          </DialogActions>
         </Dialog>
       </div>
     );
