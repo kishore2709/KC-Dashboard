@@ -9,6 +9,11 @@ db.on('error', console.error.bind(console, 'connection error:'));
 const userSchema = UserSchema;
 const User = mongoose.model('User', userSchema);
 const dashboardService = require('../services/dashboard.js');
+// bcrypt
+const bcrypt = require('bcrypt');
+
+const saltRounds = 10;
+
 // users hardcoded for simplicity, store in a db for production applications
 const users = [
   {
@@ -126,35 +131,26 @@ async function updateDb(objArr) {
 }
 
 async function authenticate({ username, password }) {
-  /*
-  const user = users.find(
-    u => u.username === username && u.password === password
-  );
-  if (user) {
-    // console.log('match?/');
-    const token = jwt.sign({ sub: user.id }, config.secret);
-    const { password, ...userWithoutPassword } = user;
-    return {
-      ...userWithoutPassword,
-      token,
-    };
-  }
-  */
-  const tmpFunction = function findDb() {
-    return new Promise((resolve, reject) => {
-      User.find({ username, password }, (err, docs) => {
-        if (err) console.log(err);
-        else {
-          // console.log('wtf');
-          // console.log(docs);
-          // console.log(docs.length);
-          if (docs.length === 0) {
-            reject(new Error('err'));
-            return;
-          }
-          // console.log(docs.length);
-          const user = docs[0];
-          // console.log(user);
+  return new Promise((resolve, reject) => {
+    User.find({ username }, (err, docs) => {
+      if (err) {
+        console.log(err);
+        reject(err);
+      } else {
+        // console.log('wtf');
+        // console.log(docs);
+        // console.log(docs.length);
+        if (docs.length === 0) {
+          reject(new Error('err'));
+          return;
+        }
+
+        // console.log(docs.length);
+        const user = docs[0];
+        // console.log(user);
+        bcrypt.compare(password, user.password, (err, res) => {
+          // res == true
+          if (err) reject(err);
           const token = jwt.sign(
             {
               sub: user.id,
@@ -171,11 +167,10 @@ async function authenticate({ username, password }) {
             ...userWithoutPassword,
             token,
           });
-        }
-      });
+        });
+      }
     });
-  };
-  return tmpFunction();
+  });
 }
 
 async function getAll() {

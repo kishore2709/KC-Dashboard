@@ -1,10 +1,10 @@
 require('rootpath')();
 const express = require('express');
-const os = require('os');
+// const os = require('os');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const md5 = require('md5');
-const path = require('path');
+// const md5 = require('md5');
+// const path = require('path');
 const errorHandler = require('./_helpers/error-handler');
 const jwt = require('./_helpers/jwt');
 

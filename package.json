@@ -31,6 +31,7 @@
     "babel-plugin-css-modules-transform": "^1.6.1",
     "babel-plugin-import": "^1.10.0",
     "babel-plugin-transform-assets": "^1.0.2",
+    "bcrypt": "^3.0.4",
     "chance": "1.0.12",
     "chart.js": "^2.7.2",
     "chartist": "0.10.1",
