@@ -12,8 +12,11 @@ import CardHeader from 'components/Card/CardHeader.jsx';
 import CardBody from 'components/Card/CardBody.jsx';
 import { connect } from 'react-redux';
 import { load as loadAccount } from '_reducers/AIO/userData.reducer.js';
-import MUIForm from './MUIForm';
 import { PostApi } from '_helpers/Utils';
+import { userTableActions, dialogActions } from '_actions';
+import { withToastManager } from 'react-toast-notifications';
+import { dialogConstants } from '_constants';
+import MUIForm from './MUIForm';
 
 const styles = theme => ({
   cardCategoryWhite: {
@@ -45,20 +48,26 @@ const styles = theme => ({
 class FormDialog extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      open: false,
-    };
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   handleSubmit(e) {
+    console.log('in handle submit')
     console.log(e);
+    if (this.props.dialog.new){
+    
+    }
+    else 
     PostApi('/api/users/updateDb', [e])
       .then(res => {
         // console.log('in then proomse');
         if (res === 'err') {
           // alertErr();
-          console.log(res);
+          console.log('errr in user dialog');
+          this.props.toastManager.add(`Something went wrong!`, {
+            appearance: 'error',
+            autoDismiss: true,
+          });
           // ret.push(row);
           // ret = 'err';
         } else {
@@ -67,15 +76,28 @@ class FormDialog extends React.Component {
           //   appearance: 'success',
           //   autoDismiss: true,
           // });
-          console.log('ok');
+          this.props.updateTable(e);
+          this.props.toastManager.add('Saved Successfully', {
+            appearance: 'success',
+            autoDismiss: true,
+          });
+          console.log('ok in dialog');
         }
       })
       .catch(err => {
         // ret = 'err';
         // ret.push(row);
+        this.props.toastManager.add(`Something went wrong!`, {
+          appearance: 'error',
+          autoDismiss: true,
+        });
         console.log('update data from database err');
         // alertErr();
+      })
+      .then(ret=>{
+        this.handleClose()
       });
+    //setTimeout(()=>{this.handleClose()}, 300);
   }
 
   componentWillReceiveProps(props) {
@@ -83,8 +105,9 @@ class FormDialog extends React.Component {
   }
 
   handleClose = () => {
-    this.setState({ open: false });
+    // this.setState({ open: false });
     // this.props.onClose();
+    this.props.closeDialog(false);
   };
 
   handleChange = event => {
@@ -93,32 +116,34 @@ class FormDialog extends React.Component {
 
   render() {
     const { load, dialog, classes } = this.props;
-    const {
-      fullname,
-      email,
-      phonenumber,
-      role,
-      status,
-      username,
-      id,
-    } = dialog.message;
-    // load initial data to Dialog
-    load({
-      fullname,
-      email,
-      phonenumber,
-      role,
-      status,
-      username,
-      id,
-    });
+    if (!dialog.new) {
+      const {
+        fullname,
+        email,
+        phonenumber,
+        role,
+        status,
+        username,
+        id,
+      } = dialog.message;
+      // load initial data to Dialog
+      load({
+        fullname,
+        email,
+        phonenumber,
+        role,
+        status,
+        username,
+        id,
+      });
+    }
     // console.log('??? in UserDialog');
     // console.log({ fullname, email, phonenumber, role, status, username, id });
     return (
       <div>
         <Dialog
           fullWidth
-          open={this.state.open}
+          open={dialog.open}
           onClose={this.handleClose}
           aria-labelledby="form-dialog-title"
           disableBackdropClick
@@ -160,11 +185,20 @@ const mapDispatchToProps = dispatch => ({
   load: newStatus => {
     dispatch(loadAccount(newStatus));
   },
+  updateTable: newStatus => {
+    dispatch(userTableActions.update(newStatus));
+  },
+  addTable: newStatus => {
+    dispatch(userTableActions.add(newStatus));
+  },
+  closeDialog: newStatus => {
+    dispatch(dialogActions.closeDialog(newStatus));
+  },
 });
 
 export default withStyles(styles)(
   connect(
     mapStateToProps,
     mapDispatchToProps
-  )(FormDialog)
+  )(withToastManager(FormDialog))
 );

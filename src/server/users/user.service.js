@@ -174,8 +174,11 @@ async function authenticate({ username, password }) {
 }
 
 async function getAll() {
-  return users.map(u => {
-    const { password, ...userWithoutPassword } = u;
-    return userWithoutPassword;
+  User.find({}, (err, users) => {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log(users);
+    }
   });
 }

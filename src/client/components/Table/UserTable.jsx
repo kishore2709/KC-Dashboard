@@ -6,7 +6,7 @@ import EditIcon from '@material-ui/icons/BorderColor';
 import IconButton from '@material-ui/core/IconButton';
 import UserDialog from 'components/Dialogs/UserDialog.jsx';
 import { PostApi } from '_helpers/Utils';
-import { dialogActions } from '_actions';
+import { dialogActions, userTableActions } from '_actions';
 import { connect } from 'react-redux';
 import CustomFooter from './CustomFooter.jsx';
 
@@ -25,7 +25,8 @@ class UserTable extends React.Component {
           return { id: _id, ...rest };
         });
         // console.log(res);
-        this.setState({ rows: result });
+        // this.setState({ rows: result });
+        this.props.setTable(result);
       })
       .catch(err => {
         console.log('get data from database err');
@@ -33,7 +34,15 @@ class UserTable extends React.Component {
   }
 
   render() {
-    const { add, update } = this.props;
+    // add: thao tac add User - redux
+    // update: Thao tac update User - redux
+    // userTable : data for table;
+    // updateTable: update user in Table
+    // addTable: add User in table
+    // setTable : setTable when fetch done
+    const { add, update, userTable, updateTable, addTable, setTable, dialog } = this.props;
+    console.log('in UserTable');
+    console.log(userTable);
     const columns = [
       {
         name: 'Fullname',
@@ -59,13 +68,13 @@ class UserTable extends React.Component {
           filter: true,
           customBodyRender: (value, tableMeta, updateValue) => (
             <FormControlLabel
-              label={value ? 'Yes' : 'No'}
-              value={value ? 'Yes' : 'No'}
+              label={(value === true || value === 'true') ? 'Yes' : 'No'}
+              value={(value === true || value === 'true') ? 'Yes' : 'No'}
               control={
                 <Switch
                   color="primary"
-                  checked={value}
-                  value={value ? 'Yes' : 'No'}
+                  checked={(value === true || value === 'true')}
+                  value={(value === true || value === 'true') ? 'Yes' : 'No'}
                 />
               }
             />
@@ -79,6 +88,8 @@ class UserTable extends React.Component {
           customBodyRender: (value, tableMeta, updateValue) => (
             <IconButton
               onClick={() => {
+                // console.log(tableMeta.rowIndex);
+                // console.log(this.props.userTable);
                 const {
                   fullname,
                   email,
@@ -87,7 +98,8 @@ class UserTable extends React.Component {
                   status,
                   username,
                   id,
-                } = this.state.rows[tableMeta.rowIndex];
+                } = this.props.userTable[tableMeta.rowIndex];
+                this.props.openDialog(true);
                 update({
                   fullname,
                   email,
@@ -97,7 +109,8 @@ class UserTable extends React.Component {
                   username,
                   id,
                 });
-                this.setState({ openDialog: true });
+                
+                // this.setState({ openDialog: true });
               }}
             >
               <EditIcon />
@@ -107,11 +120,11 @@ class UserTable extends React.Component {
       },
     ];
 
-    const data = this.state.rows.map(val => {
+    const data = userTable.map(val => {
       const { fullname, email, phonenumber, role, status, username, id } = val;
       return [fullname, username, role, status, true];
     });
-
+    console.log(data);
     const options = {
       filter: true,
       selectableRows: true,
@@ -128,8 +141,9 @@ class UserTable extends React.Component {
           changePage={changePage}
           count={count}
           onClick={() => {
-            // console.log(tableMeta);
-            this.setState({ openDialog: true });
+            // truong hop them nguoi dung moi
+            this.props.openDialog(true);
+            this.props.add();
           }}
         />
       ),
@@ -137,7 +151,7 @@ class UserTable extends React.Component {
 
     return (
       <React.Fragment>
-        <UserDialog open={this.state.openDialog} />
+        <UserDialog />
         <MUIDataTable
           title="Danh sách người dùng"
           data={data}
@@ -156,8 +170,25 @@ const mapDispatchToProps = dispatch => ({
   add: newStatus => {
     dispatch(dialogActions.addDialog(newStatus));
   },
+  updateTable: newStatus => {
+    dispatch(userTableActions.update(newStatus));
+  },
+  addTable: newStatus => {
+    dispatch(userTableActions.add(newStatus));
+  },
+  setTable: newStatus => {
+    dispatch(userTableActions.set(newStatus));
+  },
+  openDialog: newStatus => {
+    dispatch(dialogActions.openDialog(newStatus));
+  },
 });
+
+function mapStateToProps(state) {
+  const { userTable, dialog } = state;
+  return { userTable, dialog };
+}
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(UserTable);

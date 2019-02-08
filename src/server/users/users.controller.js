@@ -5,7 +5,7 @@ const userService = require('./user.service');
 
 // routes
 router.post('/authenticate', authenticate);
-router.get('/', getAll);
+router.get('/getAll', getAll);
 router.post('/updateDb', updateDb);
 router.post('/getUsers', getUsers);
 router.post('/deleteDb', deleteDb);
@@ -19,7 +19,7 @@ function dashboardData(req, res, next) {
   userService
     .getUserInfo({ _id: req.user.sub })
     .then(ret => {
-      //console.log('in dashboardadata user info');
+      // console.log('in dashboardadata user info');
       // console.log(ret.permissions.dashboard);
       userService
         .dashboardData()
@@ -30,16 +30,16 @@ function dashboardData(req, res, next) {
           } else {
             console.log('wtf');
             // console.log(arrData);
-            let jsonRes = Object.keys(arrData).filter((val, index) => {
-              console.log('??')
+            const jsonRes = Object.keys(arrData).filter((val, index) => {
+              console.log('??');
               console.log(ret.permissions.dashboard.subArr[index]);
               return ret.permissions.dashboard.subArr[index];
             });
             console.log(jsonRes);
-            let jsonAns = jsonRes.map(val => {
+            const jsonAns = jsonRes.map(val => 
               // console.log(val);
-              return { [val]: arrData[val] }
-            })
+               ({ [val]: arrData[val] })
+            );
             res.json(jsonAns);
           }
         })

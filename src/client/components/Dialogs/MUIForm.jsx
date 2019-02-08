@@ -146,6 +146,7 @@ let MaterialUiForm = props => {
                 component={renderSelectField}
                 label="role"
               >
+              <option value="" />
                 <option value="Admin">Admin</option>
                 <option value="Moderator">Moderator</option>
                 <option value="User">User</option>
@@ -159,6 +160,7 @@ let MaterialUiForm = props => {
                 component={renderSelectField}
                 label="status"
               >
+              <option value="" />
                 <option value={true}>Active</option>
                 <option value={false}>Inactive</option>
               </Field>
@@ -179,7 +181,7 @@ let MaterialUiForm = props => {
                 type="submit"
                 disabled={pristine || submitting}
               >
-                Submit
+                {props.dialog.new ? 'Add' : 'Submit'}
               </button>
             </Grid>
             <Grid item>
@@ -202,12 +204,13 @@ let MaterialUiForm = props => {
 
 MaterialUiForm = reduxForm({
   form: 'MaterialUiForm', // a unique identifier for this form
-  validate,
-  asyncValidate,
+  // validate,
+  // asyncValidate,
 })(MaterialUiForm);
 
 MaterialUiForm = connect(state => ({
   initialValues: state.userDialogData.data, // pull initial values from account reducer
+  dialog: state.dialog, 
 }))(MaterialUiForm);
 
 export default MaterialUiForm;

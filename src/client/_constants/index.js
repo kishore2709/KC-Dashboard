@@ -4,3 +4,4 @@ export * from './drawer.constants';
 export * from './dialog.constants';
 export * from './serverStatus.constants';
 export * from './dateRange.constants';
+export * from './userTable.constants';
