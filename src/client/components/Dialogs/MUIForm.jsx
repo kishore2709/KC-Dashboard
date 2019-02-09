@@ -11,19 +11,13 @@ import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import Grid from '@material-ui/core/Grid';
 import { connect } from 'react-redux';
-import asyncValidate from './asyncValidate';
 import { getNormalizedScrollLeft } from 'normalize-scroll-left';
+import asyncValidate from './asyncValidate';
 // import { load as loadAccount } from '../../_reducers/UserData.reducer.js/index.js';
 // import
 const validate = values => {
   const errors = {};
-  const requiredFields = [
-    'firstName',
-    'lastName',
-    'email',
-    'favoriteColor',
-    'notes',
-  ];
+  const requiredFields = ['fullname', 'username', 'email', 'role', 'status'];
   requiredFields.forEach(field => {
     if (!values[field]) {
       errors[field] = 'Required';
@@ -146,7 +140,7 @@ let MaterialUiForm = props => {
                 component={renderSelectField}
                 label="role"
               >
-              <option value="" />
+                <option value="" />
                 <option value="Admin">Admin</option>
                 <option value="Moderator">Moderator</option>
                 <option value="User">User</option>
@@ -160,8 +154,8 @@ let MaterialUiForm = props => {
                 component={renderSelectField}
                 label="status"
               >
-              <option value="" />
-                <option value={true}>Active</option>
+                <option value="" />
+                <option value>Active</option>
                 <option value={false}>Inactive</option>
               </Field>
             </Grid>
@@ -210,7 +204,7 @@ MaterialUiForm = reduxForm({
 
 MaterialUiForm = connect(state => ({
   initialValues: state.userDialogData.data, // pull initial values from account reducer
-  dialog: state.dialog, 
+  dialog: state.dialog,
 }))(MaterialUiForm);
 
 export default MaterialUiForm;

@@ -100,7 +100,7 @@ class Dashboard extends React.Component {
     PostApi('/api/users/dashboardData', {})
       .then(res => {
         if (res === 'err') {
-          console.log('err get user info');
+          console.log('err get dashboard data info');
         } else {
           console.log(res);
           this.setState({ data: res, loading: false });

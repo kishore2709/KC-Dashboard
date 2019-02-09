@@ -1,4 +1,7 @@
 import React from 'react';
+import { userActions } from '_actions';
+import { connect } from 'react-redux';
+import { history } from '_helpers';
 
 class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -19,6 +22,11 @@ class ErrorBoundary extends React.Component {
     if (this.state.errorInfo) {
       // Error path
       // console.log('in Error boundaries');
+      setTimeout(() => {
+        this.props.dispatch(userActions.logout());
+        history.push('/');
+        window.location.reload();
+      }, 2000);
       return (
         <div>
           <h2>Something went wrong.</h2>
@@ -30,9 +38,13 @@ class ErrorBoundary extends React.Component {
         </div>
       );
     }
+
     // Normally, just render children
     return this.props.children;
   }
 }
 
-export default ErrorBoundary;
+export default connect(
+  null,
+  null
+)(ErrorBoundary);
