@@ -49,6 +49,7 @@ class FormDialog extends React.Component {
   constructor(props) {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleOnResetPassword = this.handleOnResetPassword.bind(this);
   }
 
   
@@ -68,7 +69,7 @@ class FormDialog extends React.Component {
   };
 
   handleSubmit(e) {
-    // console.log('in handle submit')
+    console.log('in handle submit')
     // console.log(e);
     const { toastManager } = this.props;
     if (this.props.dialog.new){
@@ -138,6 +139,32 @@ class FormDialog extends React.Component {
     //setTimeout(()=>{this.handleClose()}, 300);
   }
 
+  handleOnResetPassword(e){
+    const { toastManager } = this.props;
+    console.log(' on ResetPassword');
+    PostApi('/api/users/resetPassword', e)
+      .then(ret=>{
+        // console.log('in response');
+        // console.log(ret);
+        // this.props.addTable(ret);
+        toastManager.add('Reset Password Successfully', {
+          appearance: 'success',
+          autoDismiss: true,
+        });
+      })
+      .catch(err=>{
+        console.log('err');
+        toastManager.add(`Something went wrong!`, {
+          appearance: 'error',
+          autoDismiss: true,
+        });
+      })
+      .then(ret=>{
+        this.handleClose()
+      });
+    // this.handleClose();
+  }
+
   render() {
     const { load, dialog, classes } = this.props;
     if (!dialog.new) {
@@ -186,6 +213,7 @@ class FormDialog extends React.Component {
                     <MUIForm
                       onSubmit={this.handleSubmit}
                       onCancel={this.handleClose}
+                      onResetPassword={this.handleOnResetPassword}
                     />
                   </CardBody>
                 </Card>

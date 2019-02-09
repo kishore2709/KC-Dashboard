@@ -12,7 +12,21 @@ router.post('/deleteDb', deleteDb);
 router.post('/addDb', addDb);
 router.post('/getUserInfo', getUserInfo);
 router.post('/dashboardData', dashboardData);
+router.post('/resetPassword', resetPassword);
 module.exports = router;
+
+function resetPassword(req, res, next) {
+  userService
+    .resetPassword(req.body)
+    .then(ret => {
+      if (ret === 0) {
+        res.status(400).json({ message: 'reset pwd error' });
+      } else {
+        res.json({ message: 'ok' });
+      }
+    })
+    .catch(err => next(err));
+}
 
 function dashboardData(req, res, next) {
   // console.log(req.user);
@@ -28,17 +42,17 @@ function dashboardData(req, res, next) {
           if (!arrData) {
             res.status(400).json({ message: 'find dashboardData error' });
           } else {
-            console.log('wtf');
+            // console.log('wtf');
             // console.log(arrData);
             const jsonRes = Object.keys(arrData).filter((val, index) => {
-              console.log('??');
-              console.log(ret.permissions.dashboard.subArr[index]);
+              // console.log('??');
+              // console.log(ret.permissions.dashboard.subArr[index]);
               return ret.permissions.dashboard.subArr[index];
             });
-            console.log(jsonRes);
-            const jsonAns = jsonRes.map(val => 
+            // console.log(jsonRes);
+            const jsonAns = jsonRes.map(val =>
               // console.log(val);
-               ({ [val]: arrData[val] })
+              ({ [val]: arrData[val] })
             );
             res.json(jsonAns);
           }
@@ -118,13 +132,13 @@ function updateDb(req, res, next) {
 }
 
 function authenticate(req, res, next) {
-  console.log('helsasdl');
-  console.log(req.body);
+  // console.log('helsasdl');
+  // console.log(req.body);
   // console.log('endreq.body');
   userService
     .authenticate(req.body)
     .then(user =>
-      user
+      user !== false
         ? res.json(user)
         : res.status(400).json({ message: 'Username or password is incorrect' })
     )

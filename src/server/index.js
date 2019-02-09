@@ -7,7 +7,7 @@ const cors = require('cors');
 // const path = require('path');
 const errorHandler = require('./_helpers/error-handler');
 const jwt = require('./_helpers/jwt');
-
+const userService = require('./users/user.service');
 const guard = require('express-jwt-permissions')();
 
 const jsonParser = bodyParser.json();
@@ -23,6 +23,7 @@ app.use(jsonParser);
 app.use(urlencodedParser);
 app.use(express.static('dist'));
 app.use(cors());
+// for f5 deploy..
 /*
 app.get('/*', (req, res) => {
   res.sendFile(path.join(__dirname, '../../dist/index.html'), err => {
@@ -33,6 +34,28 @@ app.get('/*', (req, res) => {
 });
 */
 app.use(jwt());
+// for ReCheck PassWd when Change passwd
+app.use((req, res, next) => {
+  if (req.url === '/api/users/authenticate' || req.url === '/authenticate') next();
+  else {
+    //console.log(req.url);
+    userService.checkPwd(req.user)
+      .then(ret => {
+        if (ret === 0) {
+          console.log('in recheck passwd has ret', ret);
+          res.status(404).send();
+        } else {
+          console.log('ok in recheck');
+          next()
+        }
+      })
+      .catch(err => {
+        console.log(err);
+        res.status(404).send();
+        console.log('in recheck passwd err');
+      })
+  }
+})
 app.use('/api/users', require('./users/users.controller'));
 
 app.use(errorHandler);
@@ -41,18 +64,9 @@ app.use(
     path: [
       // public routes that don't require authentication
       '/api/users/authenticate',
-      '/api/users/register',
     ],
   })
 );
-app.post('/api/users/register', jsonParser, (req, res) => {
-  console.log(req.body);
-  const { firstName, lastName, username, password } = req.body;
-  console.log(firstName, lastName, username, password);
-  res.status(200);
-  res.send({ status: 'okkkkkkkkkk' });
-  res.end();
-});
 
 app.listen(8081, () => console.log('Listening on port 8081!'));
 

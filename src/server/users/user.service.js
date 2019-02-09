@@ -11,6 +11,7 @@ const User = mongoose.model('User', userSchema);
 const dashboardService = require('../services/dashboard.js');
 // bcrypt
 const bcrypt = require('bcrypt');
+const defaultPassword = require('../Utils/pwd');
 
 const saltRounds = 10;
 
@@ -41,8 +42,24 @@ module.exports = {
   getUsers,
   getUserInfo,
   dashboardData,
+  resetPassword,
+  checkPwd,
 };
-
+async function checkPwd(obj) {
+  let ret = 0;
+  console.log('in CheckPwd async');
+  console.log(obj);
+  let { sub: id, dat } = obj;
+  await User.findById(id, (err, users) => {
+    if (err) console.log('get db checkpwd users error');
+    else {
+      console.log('get db checkpwd users ok');
+      console.log(users);
+      if (users.password === dat) ret = 1;
+    }
+  });
+  return ret;
+}
 async function dashboardData() {
   return dashboardService;
 }
@@ -150,10 +167,13 @@ async function authenticate({ username, password }) {
         // console.log(user);
         bcrypt.compare(password, user.password, (err, res) => {
           // res == true
+
           if (err) reject(err);
+          if (!res) resolve(false);
           const token = jwt.sign(
             {
               sub: user.id,
+              dat: user.password,
               permissions: ['admin', 'user:read', 'user:write'],
             },
             config.secret
@@ -181,4 +201,24 @@ async function getAll() {
       console.log(users);
     }
   });
+}
+
+async function resetPassword(obj) {
+  let ret = 0;
+  // console.log(obj);
+  let { id, password, ...rest } = obj;
+  password = defaultPassword;
+  console.log(password);
+  // console.log('hellll?');
+  // console.log(_id);
+  // console.log(rest);
+  // console.log(_id, rest);
+  await User.findByIdAndUpdate(id, { $set: { ...rest, password } }, err => {
+    if (err) console.log('Reset pwd error');
+    else {
+      console.log('reset pwd ok');
+      ret = 1;
+    }
+  });
+  return ret;
 }

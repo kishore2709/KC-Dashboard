@@ -161,7 +161,24 @@ let MaterialUiForm = props => {
             </Grid>
           </Grid>
         </Grid>
-
+        <Grid item xs={12}>
+          <Grid
+            container
+            direction="row"
+            justify="space-evenly"
+            alignItems="center"
+          >
+            <Grid item>
+            <button
+                className="red button"
+                type="submit"
+                onClick={handleSubmit(data=>{props.onResetPassword(data)})}
+              >
+                Reset Password
+              </button>
+            </Grid>
+          </Grid>
+        </Grid>
         <Grid item xs={12}>
           <Grid
             container

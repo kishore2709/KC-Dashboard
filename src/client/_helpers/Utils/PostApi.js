@@ -16,6 +16,7 @@ export async function PostApi(url, json) {
       if (response.status === 200) {
         return response.json();
       }
+      if (response.status === 404) throw new Error('Need logout');
       console.log('err');
       return 'err';
       // return Promise.reject(new Error('err status != 200'));
@@ -24,6 +25,8 @@ export async function PostApi(url, json) {
     .then(response => response)
     .catch(error => {
       console.log(`Stm went wronggggg${error}`);
+      // console.log(error.message);
+      // if (error.message == 'Need logout') throw new Error('Goout');
     });
   return result;
 }
