@@ -51,54 +51,7 @@ class FormDialog extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleSubmit(e) {
-    console.log('in handle submit')
-    console.log(e);
-    if (this.props.dialog.new){
-    
-    }
-    else 
-    PostApi('/api/users/updateDb', [e])
-      .then(res => {
-        // console.log('in then proomse');
-        if (res === 'err') {
-          // alertErr();
-          console.log('errr in user dialog');
-          this.props.toastManager.add(`Something went wrong!`, {
-            appearance: 'error',
-            autoDismiss: true,
-          });
-          // ret.push(row);
-          // ret = 'err';
-        } else {
-          // ret.push(newRow);
-          // toastManager.add('Updated Successfully', {
-          //   appearance: 'success',
-          //   autoDismiss: true,
-          // });
-          this.props.updateTable(e);
-          this.props.toastManager.add('Saved Successfully', {
-            appearance: 'success',
-            autoDismiss: true,
-          });
-          console.log('ok in dialog');
-        }
-      })
-      .catch(err => {
-        // ret = 'err';
-        // ret.push(row);
-        this.props.toastManager.add(`Something went wrong!`, {
-          appearance: 'error',
-          autoDismiss: true,
-        });
-        console.log('update data from database err');
-        // alertErr();
-      })
-      .then(ret=>{
-        this.handleClose()
-      });
-    //setTimeout(()=>{this.handleClose()}, 300);
-  }
+  
 
   componentWillReceiveProps(props) {
     if ('open' in props && props.open) this.setState({ open: true });
@@ -113,6 +66,77 @@ class FormDialog extends React.Component {
   handleChange = event => {
     this.setState({ [event.target.name]: event.target.value });
   };
+
+  handleSubmit(e) {
+    // console.log('in handle submit')
+    // console.log(e);
+    const { toastManager } = this.props;
+    if (this.props.dialog.new){
+      PostApi('/api/users/addDb', e)
+      .then(ret=>{
+        // console.log('in response');
+        // console.log(ret);
+        this.props.addTable(ret);
+        toastManager.add('Added Successfully', {
+          appearance: 'success',
+          autoDismiss: true,
+        });
+      })
+      .catch(err=>{
+        console.log('err');
+        toastManager.add(`Something went wrong!`, {
+          appearance: 'error',
+          autoDismiss: true,
+        });
+      })
+      .then(ret=>{
+
+        this.handleClose()
+        
+      });
+    }
+    else 
+    PostApi('/api/users/updateDb', [e])
+      .then(res => {
+        // console.log('in then proomse');
+        if (res === 'err') {
+          // alertErr();
+          console.log('errr in user dialog');
+          toastManager.add(`Something went wrong!`, {
+            appearance: 'error',
+            autoDismiss: true,
+          });
+          // ret.push(row);
+          // ret = 'err';
+        } else {
+          // ret.push(newRow);
+          // toastManager.add('Updated Successfully', {
+          //   appearance: 'success',
+          //   autoDismiss: true,
+          // });
+          this.props.updateTable(e);
+          toastManager.add('Saved Successfully', {
+            appearance: 'success',
+            autoDismiss: true,
+          });
+          console.log('ok in dialog');
+        }
+      })
+      .catch(err => {
+        // ret = 'err';
+        // ret.push(row);
+        toastManager.add(`Something went wrong!`, {
+          appearance: 'error',
+          autoDismiss: true,
+        });
+        console.log('update data from database err');
+        // alertErr();
+      })
+      .then(ret=>{
+        this.handleClose()
+      });
+    //setTimeout(()=>{this.handleClose()}, 300);
+  }
 
   render() {
     const { load, dialog, classes } = this.props;

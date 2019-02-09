@@ -11,10 +11,19 @@ export function userTable(state = [], action) {
           newState[i] = action.message;
           break;
         }
-      console.log(newState);
+      // console.log(newState);
       return newState;
     case userTableConstants.USER_TABLE_SET:
       return action.message;
+    case userTableConstants.USER_TABLE_DELETE:
+      newState = [...state];
+      const arr = [];
+      for (let i = 0; i < newState.length; i++)
+        if (newState[i].id !== action.message.id) {
+          arr.push(newState[i]);
+        }
+      // console.log(newState);
+      return arr;
     case userTableConstants.USER_TABLE_ERROR:
       return state;
     default:

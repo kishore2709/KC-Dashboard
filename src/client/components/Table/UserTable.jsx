@@ -8,6 +8,7 @@ import UserDialog from 'components/Dialogs/UserDialog.jsx';
 import { PostApi } from '_helpers/Utils';
 import { dialogActions, userTableActions } from '_actions';
 import { connect } from 'react-redux';
+import { withToastManager } from 'react-toast-notifications';
 import CustomFooter from './CustomFooter.jsx';
 
 class UserTable extends React.Component {
@@ -40,7 +41,15 @@ class UserTable extends React.Component {
     // updateTable: update user in Table
     // addTable: add User in table
     // setTable : setTable when fetch done
-    const { add, update, userTable, updateTable, addTable, setTable, dialog } = this.props;
+    const {
+      add,
+      update,
+      userTable,
+      updateTable,
+      addTable,
+      setTable,
+      dialog,
+    } = this.props;
     console.log('in UserTable');
     console.log(userTable);
     const columns = [
@@ -68,13 +77,13 @@ class UserTable extends React.Component {
           filter: true,
           customBodyRender: (value, tableMeta, updateValue) => (
             <FormControlLabel
-              label={(value === true || value === 'true') ? 'Yes' : 'No'}
-              value={(value === true || value === 'true') ? 'Yes' : 'No'}
+              label={value === true || value === 'true' ? 'Yes' : 'No'}
+              value={value === true || value === 'true' ? 'Yes' : 'No'}
               control={
                 <Switch
                   color="primary"
-                  checked={(value === true || value === 'true')}
-                  value={(value === true || value === 'true') ? 'Yes' : 'No'}
+                  checked={value === true || value === 'true'}
+                  value={value === true || value === 'true' ? 'Yes' : 'No'}
                 />
               }
             />
@@ -109,7 +118,7 @@ class UserTable extends React.Component {
                   username,
                   id,
                 });
-                
+
                 // this.setState({ openDialog: true });
               }}
             >
@@ -147,6 +156,50 @@ class UserTable extends React.Component {
           }}
         />
       ),
+      onRowsDelete: e => {
+        const { userTable, toastManager } = this.props;
+        const asyncDeleteFunction = async function delFunc(rows) {
+          const needDelArr = rows.map(val => userTable[val.index]);
+          await Promise.all(
+            needDelArr.map(async val => {
+              await PostApi('/api/users/deleteDb', val)
+                .then(res => {
+                  if (res === 'err') {
+                    // alertErr();
+                    // ret.push(row);
+                    // return 'err';
+                    toastManager.add(`Something went wrong!`, {
+                      appearance: 'error',
+                      autoDismiss: true,
+                    });
+                    console.log('err');
+                  } else {
+                    console.log('del ok');
+                    // status = false;
+                    toastManager.add('Deleted Successfully', {
+                      appearance: 'success',
+                      autoDismiss: true,
+                    });
+                  }
+                  // toastManager.add('Deleted Successfully', {
+                  //   appearance: 'success',
+                  //   autoDismiss: true,
+                  // });
+                })
+                .catch(err => {
+                  console.log('delete data from database err');
+                  toastManager.add(`Something went wrong!`, {
+                    appearance: 'error',
+                    autoDismiss: true,
+                  });
+                  // ret.push(row);
+                  // alertErr();
+                });
+            })
+          );
+        };
+        asyncDeleteFunction(e.data);
+      },
     };
 
     return (
@@ -191,4 +244,4 @@ function mapStateToProps(state) {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(UserTable);
+)(withToastManager(UserTable));

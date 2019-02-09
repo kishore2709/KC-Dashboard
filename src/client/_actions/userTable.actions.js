@@ -16,9 +16,14 @@ function error(message) {
   return { type: userTableConstants.USER_TABLE_ERROR, message };
 }
 
+function del(message) {
+  return { type: userTableConstants.USER_TABLE_DELETE, message };
+}
+
 export const userTableActions = {
   update,
   error,
   add,
-  set
+  set,
+  del,
 };
