@@ -1,18 +1,16 @@
 import React from 'react';
 import { Field, reduxForm } from 'redux-form';
 import TextField from '@material-ui/core/TextField';
-import Checkbox from '@material-ui/core/Checkbox';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormHelperText from '@material-ui/core/FormHelperText';
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
 import Grid from '@material-ui/core/Grid';
+import Input from '@material-ui/core/Input';
+
 import { connect } from 'react-redux';
 // import { getNormalizedScrollLeft } from 'normalize-scroll-left';
-import asyncValidate from './asyncValidate';
+// import asyncValidate from './asyncValidate';
 // import { load as loadAccount } from '../../_reducers/UserData.reducer.js/index.js';
 // import
 const validate = values => {
@@ -51,22 +49,28 @@ const renderTextField = ({
   />
 );
 
-const renderCheckbox = ({ input, label }) => (
-  <div>
-    <FormControlLabel
-      control={<Checkbox checked={!!input.value} onChange={input.onChange} />}
-      label={label}
-    />
-  </div>
-);
-
-const radioButton = ({ input, ...rest }) => (
-  <FormControl>
-    <RadioGroup {...input} {...rest}>
-      <FormControlLabel value="female" control={<Radio />} label="Female" />
-      <FormControlLabel value="male" control={<Radio />} label="Male" />
-    </RadioGroup>
-  </FormControl>
+const renderPasswordField = ({
+  label,
+  input,
+  meta: { touched, invalid, error },
+  ...custom
+}) => (
+  
+  <TextField
+    label={label}
+    placeholder={label}
+    error={touched && invalid}
+    helperText={touched && error}
+    variant="outlined"
+    type="password"
+    autoComplete="current-password"
+    InputLabelProps={{
+      shrink: true,
+    }}
+    fullWidth
+    {...input}
+    {...custom}
+  />
 );
 
 const renderFromHelper = ({ touched, error }) => {
@@ -102,86 +106,61 @@ const renderSelectField = ({
   </FormControl>
 );
 
-let MaterialUiForm = props => {
+// eslint-disable-next-line import/no-mutable-exports
+let UserProfileForm = props => {
   const { handleSubmit, pristine, reset, submitting, classes } = props;
   return (
     <form onSubmit={handleSubmit}>
       <Grid container spacing={24}>
-        <Grid item xs={12} sm={6}>
-          <Field name="username" component={renderTextField} label="Username" />
+        <Grid item xs={12} sm={4}>
+          <Field
+            name="username"
+            component={renderTextField}
+            label="Username"
+            disabled
+          />
         </Grid>
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={12} sm={4}>
+          <Field
+            name="role"
+            component={renderTextField}
+            label="role"
+            disabled
+          />
+        </Grid>
+        <Grid item xs={12} sm={4}>
+          <Field
+            name="status"
+            component={renderTextField}
+            label="status"
+            disabled
+          />
+        </Grid>
+        <Grid item xs={12} sm={4}>
           <Field
             name="fullname"
             component={renderTextField}
             label="Full Name"
           />
         </Grid>
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={12} sm={4}>
           <Field
             name="phonenumber"
             component={renderTextField}
             label="Phonenumber"
           />
         </Grid>
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={12} sm={4}>
           <Field name="email" component={renderTextField} label="Email" />
         </Grid>
-
-        <Grid item xs={12}>
-          <Grid
-            container
-            direction="row"
-            justify="space-evenly"
-            alignItems="center"
-          >
-            <Grid item>
-              <Field
-                classes={classes}
-                name="role"
-                component={renderSelectField}
-                label="role"
-              >
-                <option value="" />
-                <option value="Admin">Admin</option>
-                <option value="Moderator">Moderator</option>
-                <option value="User">User</option>
-              </Field>
-            </Grid>
-
-            <Grid item>
-              <Field
-                classes={classes}
-                name="status"
-                component={renderSelectField}
-                label="status"
-              >
-                <option value="" />
-                <option value>Active</option>
-                <option value={false}>Inactive</option>
-              </Field>
-            </Grid>
-          </Grid>
+        <Grid item xs={12} sm={12} md={12}>
+          <Field name="oldPassword" component={renderPasswordField} label="oldPassword"/>
         </Grid>
-        <Grid item xs={12}>
-          <Grid
-            container
-            direction="row"
-            justify="space-evenly"
-            alignItems="center"
-          >
-            <Grid item>
-              <button
-                className="red button"
-                type="submit"
-                onClick={handleSubmit(data => {
-                  props.onResetPassword(data);
-                })}
-              >
-                Reset Password
-              </button>
-            </Grid>
-          </Grid>
+        <Grid item xs={12} sm={12} md={12}>
+          <Field name="newPassword" component={renderPasswordField} label="newPassword"/>
+        </Grid>
+        <Grid item xs={12} sm={12} md={12}>
+          <Field name="confirmNewPassword" component={renderPasswordField} label="confirmNewPassword"/>
         </Grid>
         <Grid item xs={12}>
           <Grid
@@ -217,15 +196,14 @@ let MaterialUiForm = props => {
   );
 };
 
-MaterialUiForm = reduxForm({
-  form: 'MaterialUiForm', // a unique identifier for this form
+UserProfileForm = reduxForm({
+  form: 'UserProfileForm', // a unique identifier for this form
   validate,
-  asyncValidate,
-})(MaterialUiForm);
+})(UserProfileForm);
 
-MaterialUiForm = connect(state => ({
+UserProfileForm = connect(state => ({
   initialValues: state.userDialogData.data, // pull initial values from account reducer
   dialog: state.dialog,
-}))(MaterialUiForm);
+}))(UserProfileForm);
 
-export default MaterialUiForm;
+export default UserProfileForm;

@@ -52,8 +52,6 @@ class FormDialog extends React.Component {
     this.handleOnResetPassword = this.handleOnResetPassword.bind(this);
   }
 
-  
-
   componentWillReceiveProps(props) {
     if ('open' in props && props.open) this.setState({ open: true });
   }

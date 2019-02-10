@@ -13,7 +13,21 @@ router.post('/addDb', addDb);
 router.post('/getUserInfo', getUserInfo);
 router.post('/dashboardData', dashboardData);
 router.post('/resetPassword', resetPassword);
+router.post('/changePassword', changePassword);
 module.exports = router;
+
+function changePassword(req, res, next) {
+  userService
+    .changePassword(req.body)
+    .then(ret => {
+      if (ret === 0) {
+        res.status(400).json({ message: 'changePassword pwd error' });
+      } else {
+        res.json({ message: 'ok' });
+      }
+    })
+    .catch(err => next(err));
+}
 
 function resetPassword(req, res, next) {
   userService
@@ -44,11 +58,11 @@ function dashboardData(req, res, next) {
           } else {
             // console.log('wtf');
             // console.log(arrData);
-            const jsonRes = Object.keys(arrData).filter((val, index) => {
+            const jsonRes = Object.keys(arrData).filter((val, index) => 
               // console.log('??');
               // console.log(ret.permissions.dashboard.subArr[index]);
-              return ret.permissions.dashboard.subArr[index];
-            });
+               ret.permissions.dashboard.subArr[index]
+            );
             // console.log(jsonRes);
             const jsonAns = jsonRes.map(val =>
               // console.log(val);

@@ -11,8 +11,9 @@ import Card from 'components/Card/Card.jsx';
 import CardHeader from 'components/Card/CardHeader.jsx';
 import CardAvatar from 'components/Card/CardAvatar.jsx';
 import CardBody from 'components/Card/CardBody.jsx';
-import CardFooter from 'components/Card/CardFooter.jsx';
 
+// core components
+import UserProfileForm from 'components/Forms/UserProfileForm.jsx';
 import avatar from 'assets/img/faces/me.jpg';
 
 const styles = {
@@ -34,6 +35,58 @@ const styles = {
   },
 };
 
+class UserProfile extends React.Component {
+
+  handleSubmit(e){
+    console.log(e);
+  }
+  render(){
+  const { classes } = this.props;
+  console.log('in userprofile');
+  return (
+    <GridContainer>
+      <GridItem xs={12} sm={12} md={8}>
+        <Card>
+          <CardHeader color="danger">
+            <h4 className={classes.cardTitleWhite}>Sửa thông tin</h4>
+            <p className={classes.cardCategoryWhite}>
+              Chỉnh sửa thông tin cá nhân của bạn
+            </p>
+          </CardHeader>
+          <CardBody>
+            <UserProfileForm onSubmit={this.handleSubmit.bind(this)}/>;
+          </CardBody>
+        </Card>
+      </GridItem>
+      <GridItem xs={12} sm={12} md={4}>
+        <Card profile>
+          <CardAvatar profile>
+            <a href="#pablo" onClick={e => e.preventDefault()}>
+              <img src={avatar} alt="..." />
+            </a>
+          </CardAvatar>
+          <CardBody profile>
+            <h6 className={classes.cardCategory}>CEO / CO-FOUNDER</h6>
+            <h4 className={classes.cardTitle}>Dat Luong Duc Tuan</h4>
+            <p className={classes.description}>
+              Don't be scared of the truth because we need to restart the human
+              foundation in truth And I love you like Kanye loves Kanye I love
+              Rick Owens’ bed design but the back is...
+            </p>
+            <Button color="primary" round>
+              Theo dõi
+            </Button>
+          </CardBody>
+        </Card>
+      </GridItem>
+    </GridContainer>
+  );
+  }
+}
+
+export default withStyles(styles)(UserProfile);
+
+/*
 function UserProfile(props) {
   const { classes } = props;
   console.log('in userprofile');
@@ -132,18 +185,28 @@ function UserProfile(props) {
               </GridContainer>
               <GridContainer>
                 <GridItem xs={12} sm={12} md={12}>
-                  <InputLabel style={{ color: '#AAAAAA' }}>Về tôi</InputLabel>
-                  <CustomInput
-                    labelText="Viết vài dòng về bản thân bạn"
-                    id="about-me"
-                    formControlProps={{
-                      fullWidth: true,
-                    }}
-                    inputProps={{
-                      multiline: true,
-                      rows: 5,
-                    }}
-                  />
+                  <InputLabel style={{ color: '#E40101' }}>Đổi mật khẩu</InputLabel>
+                  <FormControl margin="normal" required fullWidth>
+                    <InputLabel shrink htmlFor="password">Mật khẩu cũ</InputLabel>
+                    <Input
+                      name="password"
+                      type="password"
+                      id="password"
+                      autoComplete="current-password"
+                      value=''
+                    />
+                </FormControl>
+                <FormControl margin="normal" required fullWidth>
+                    <InputLabel shrink htmlFor="password">Mật khẩu mới</InputLabel>
+                    <Input
+                      name="password"
+                      type="password"
+                      id="password"
+                      autoComplete="current-password"
+                      value=''
+            
+                    />
+                </FormControl>
                 </GridItem>
               </GridContainer>
             </CardBody>
@@ -179,3 +242,5 @@ function UserProfile(props) {
 }
 
 export default withStyles(styles)(UserProfile);
+
+*/

@@ -44,12 +44,13 @@ module.exports = {
   dashboardData,
   resetPassword,
   checkPwd,
+  changePassword,
 };
 async function checkPwd(obj) {
   let ret = 0;
   console.log('in CheckPwd async');
   console.log(obj);
-  let { sub: id, dat } = obj;
+  const { sub: id, dat } = obj;
   await User.findById(id, (err, users) => {
     if (err) console.log('get db checkpwd users error');
     else {
@@ -208,7 +209,7 @@ async function resetPassword(obj) {
   // console.log(obj);
   let { id, password, ...rest } = obj;
   password = defaultPassword;
-  console.log(password);
+  // console.log(password);
   // console.log('hellll?');
   // console.log(_id);
   // console.log(rest);
@@ -217,6 +218,25 @@ async function resetPassword(obj) {
     if (err) console.log('Reset pwd error');
     else {
       console.log('reset pwd ok');
+      ret = 1;
+    }
+  });
+  return ret;
+}
+
+async function changePassword(obj) {
+  let ret = 0;
+  // console.log(obj);
+  const { id, password, ...rest } = obj;
+  // console.log(password);
+  // console.log('hellll?');
+  // console.log(_id);
+  // console.log(rest);
+  // console.log(_id, rest);
+  await User.findByIdAndUpdate(id, { $set: { ...rest, password } }, err => {
+    if (err) console.log('Change pwd error');
+    else {
+      console.log('Change pwd ok');
       ret = 1;
     }
   });
