@@ -102,8 +102,8 @@ class Dashboard extends React.Component {
         if (res === 'err') {
           console.log('err get dashboard data info');
         } else {
-          console.log(res);
-          this.setState({ data: res, loading: false });
+          // console.log(res);
+          if (Array.isArray(res)) this.setState({ data: res, loading: false });
         }
       })
       .catch(err => {

@@ -23,7 +23,7 @@ function changePassword(req, res, next) {
       if (ret === 0) {
         res.status(400).json({ message: 'changePassword pwd error' });
       } else {
-        res.json({ message: 'ok' });
+        res.json({ message: ret });
       }
     })
     .catch(err => next(err));
@@ -58,10 +58,11 @@ function dashboardData(req, res, next) {
           } else {
             // console.log('wtf');
             // console.log(arrData);
-            const jsonRes = Object.keys(arrData).filter((val, index) => 
-              // console.log('??');
-              // console.log(ret.permissions.dashboard.subArr[index]);
-               ret.permissions.dashboard.subArr[index]
+            const jsonRes = Object.keys(arrData).filter(
+              (val, index) =>
+                // console.log('??');
+                // console.log(ret.permissions.dashboard.subArr[index]);
+                ret.permissions.dashboard.subArr[index]
             );
             // console.log(jsonRes);
             const jsonAns = jsonRes.map(val =>
@@ -87,7 +88,7 @@ function getUserInfo(req, res, next) {
       if (ret === 0) {
         res.status(400).json({ message: 'find userinfo in db error' });
       } else {
-        console.log(ret);
+        // console.log(ret);
         res.json(ret);
       }
     })
@@ -101,7 +102,7 @@ function addDb(req, res, next) {
       if (ret === 0) {
         res.status(400).json({ message: 'delete db error' });
       } else {
-        console.log(ret);
+        // console.log(ret);
         res.json(ret);
       }
     })
@@ -160,7 +161,7 @@ function authenticate(req, res, next) {
 }
 
 function getAll(req, res, next) {
-  console.log(req.user);
+  // console.log(req.user);
   userService
     .getAll()
     .then(users => res.json(users))

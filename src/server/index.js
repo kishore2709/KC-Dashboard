@@ -36,26 +36,28 @@ app.get('/*', (req, res) => {
 app.use(jwt());
 // for ReCheck PassWd when Change passwd
 app.use((req, res, next) => {
-  if (req.url === '/api/users/authenticate' || req.url === '/authenticate') next();
+  if (req.url === '/api/users/authenticate' || req.url === '/authenticate')
+    next();
   else {
-    //console.log(req.url);
-    userService.checkPwd(req.user)
+    // console.log(req.url);
+    userService
+      .checkPwd(req.user)
       .then(ret => {
         if (ret === 0) {
           console.log('in recheck passwd has ret', ret);
           res.status(404).send();
         } else {
           console.log('ok in recheck');
-          next()
+          next();
         }
       })
       .catch(err => {
         console.log(err);
         res.status(404).send();
         console.log('in recheck passwd err');
-      })
+      });
   }
-})
+});
 app.use('/api/users', require('./users/users.controller'));
 
 app.use(errorHandler);

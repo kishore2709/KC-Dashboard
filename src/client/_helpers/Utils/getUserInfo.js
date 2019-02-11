@@ -7,5 +7,5 @@ export function GetUserInfo() {
     window.location.reload();
     return {};
   }
-  return currentUser._doc;
+  return currentUser;
 }

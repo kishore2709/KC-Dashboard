@@ -29,6 +29,19 @@ const validate = values => {
   ) {
     errors.email = 'Invalid email address';
   }
+  if (
+    values.oldPassword ||
+    values.newPassword ||
+    values.confirmNewPassword
+  ) {
+    if (!values.oldPassword) errors.oldPassword = 'Required';
+    if (!values.newPassword) errors.oldPassword = 'Required';
+    if (!values.confirmNewPassword) errors.oldPassword = 'Required';
+    if (values.newPassword !== values.confirmNewPassword) {
+      errors.newPassword = 'newPassword must match';
+      errors.confirmNewPassword = 'newPassword must match';
+    }
+  }
   return errors;
 };
 
@@ -55,7 +68,6 @@ const renderPasswordField = ({
   meta: { touched, invalid, error },
   ...custom
 }) => (
-  
   <TextField
     label={label}
     placeholder={label}
@@ -154,13 +166,25 @@ let UserProfileForm = props => {
           <Field name="email" component={renderTextField} label="Email" />
         </Grid>
         <Grid item xs={12} sm={12} md={12}>
-          <Field name="oldPassword" component={renderPasswordField} label="oldPassword"/>
+          <Field
+            name="oldPassword"
+            component={renderPasswordField}
+            label="oldPassword"
+          />
         </Grid>
         <Grid item xs={12} sm={12} md={12}>
-          <Field name="newPassword" component={renderPasswordField} label="newPassword"/>
+          <Field
+            name="newPassword"
+            component={renderPasswordField}
+            label="newPassword"
+          />
         </Grid>
         <Grid item xs={12} sm={12} md={12}>
-          <Field name="confirmNewPassword" component={renderPasswordField} label="confirmNewPassword"/>
+          <Field
+            name="confirmNewPassword"
+            component={renderPasswordField}
+            label="confirmNewPassword"
+          />
         </Grid>
         <Grid item xs={12}>
           <Grid

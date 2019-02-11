@@ -15,24 +15,6 @@ const defaultPassword = require('../Utils/pwd');
 
 const saltRounds = 10;
 
-// users hardcoded for simplicity, store in a db for production applications
-const users = [
-  {
-    id: 1,
-    username: 'test',
-    password: 'test',
-    firstName: 'Test',
-    lastName: 'User',
-  },
-  {
-    id: 1,
-    username: 'admin',
-    password: '21232f297a57a5a743894a0e4a801fc3',
-    firstName: 'admin',
-    lastName: 'admin',
-  },
-];
-
 module.exports = {
   authenticate,
   getAll,
@@ -46,16 +28,17 @@ module.exports = {
   checkPwd,
   changePassword,
 };
+
 async function checkPwd(obj) {
   let ret = 0;
   console.log('in CheckPwd async');
-  console.log(obj);
+  // console.log(obj);
   const { sub: id, dat } = obj;
   await User.findById(id, (err, users) => {
     if (err) console.log('get db checkpwd users error');
     else {
       console.log('get db checkpwd users ok');
-      console.log(users);
+      // console.log(users);
       if (users.password === dat) ret = 1;
     }
   });
@@ -68,7 +51,8 @@ async function dashboardData() {
 async function getUserInfo(obj) {
   const { _id, ...rest } = obj;
   let ret = 'err';
-  console.log(_id);
+  // console.log(obj);
+  // console.log(_id);
   await User.findById(_id, (err, users) => {
     if (err) console.log('get db users error');
     else {
@@ -151,6 +135,7 @@ async function updateDb(objArr) {
 async function authenticate({ username, password }) {
   return new Promise((resolve, reject) => {
     User.find({ username }, (err, docs) => {
+      // console.log(err);
       if (err) {
         console.log(err);
         reject(err);
@@ -179,13 +164,39 @@ async function authenticate({ username, password }) {
             },
             config.secret
           );
-          const { password, ...userWithoutPassword } = user;
+          // console.log('before deconstruc.');
+          // console.log(user);
+          const {
+            _id,
+            password,
+            username,
+            role,
+            fullname,
+            email,
+            phonenumber,
+            permissions,
+            status,
+          } = user;
           console.log({
-            ...userWithoutPassword,
+            _id,
+            username,
+            role,
+            fullname,
+            email,
+            phonenumber,
+            status,
             token,
+            permissions,
           });
           resolve({
-            ...userWithoutPassword,
+            _id,
+            permissions,
+            username,
+            role,
+            fullname,
+            email,
+            phonenumber,
+            status,
             token,
           });
         });
@@ -221,24 +232,45 @@ async function resetPassword(obj) {
       ret = 1;
     }
   });
+  console.log('after await');
   return ret;
 }
 
 async function changePassword(obj) {
-  let ret = 0;
-  // console.log(obj);
-  const { id, password, ...rest } = obj;
-  // console.log(password);
-  // console.log('hellll?');
-  // console.log(_id);
-  // console.log(rest);
-  // console.log(_id, rest);
-  await User.findByIdAndUpdate(id, { $set: { ...rest, password } }, err => {
-    if (err) console.log('Change pwd error');
-    else {
-      console.log('Change pwd ok');
-      ret = 1;
-    }
+  return new Promise((resolve, reject) => {
+    const { id, oldPassword: password, newPassword } = obj;
+    User.findById(id, (err, doc) => {
+      if (err) reject(0);
+      // if (!('password' in doc)) reject(0);
+      // console.log(password, doc.password);
+      bcrypt.compare(password, doc.password, (err, res) => {
+        // res == true
+        if (err) reject(0);
+        // console.log(res);
+        if (res == false) reject(0);
+        else {
+          let hashPass = bcrypt.hashSync(newPassword, saltRounds);
+          User.findByIdAndUpdate(
+            id,
+            { $set: { password: hashPass } },
+            err => {
+              if (err) {
+                console.log('Change pwd error');
+                reject(0);
+              } else {
+                console.log('Change pwd ok');
+                resolve(jwt.sign(
+                  {
+                    sub: id,
+                    dat: hashPass,
+                    permissions: ['admin', 'user:read', 'user:write'],
+                  },
+                  config.secret
+                ));
+              }
+            });
+        }
+      });
+    });
   });
-  return ret;
 }
