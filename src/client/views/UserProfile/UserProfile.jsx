@@ -50,7 +50,8 @@ class UserProfile extends React.Component {
   handleSubmit(e) {
     const { user } = this;
     const { toastManager } = this.props;
-
+    // console.log(e);
+    if ('oldPassword' in e && 'newPassword' in e)
     PostApi('/api/users/changePassword', {...e, id : user._id})
       .then(ret=>{
         console.log(ret);
@@ -67,11 +68,32 @@ class UserProfile extends React.Component {
       })
       .catch(err=>{
         console.log(err);
-        toastManager.add(`Something went wrong!`, {
+        toastManager.add(`Change Password Failed!`, {
           appearance: 'error',
           autoDismiss: true,
         });
       })
+    if ('fullname' in e && 'phonenumber' in e && 'email' in e && 'username' in e) {
+      const { fullname, phonenumber, email, username } = e;
+      PostApi('/api/users/updateDb', [{fullname, phonenumber, email, username, id: user._id}])
+      .then(ret=>{
+        console.log(ret);
+        if (ret === 'err') throw new Error('wrong');
+        if ( (!ret) || !('message' in ret)) throw new Error('err');
+        // this.props.addTable(ret);
+        toastManager.add('Update infomation Successfully', {
+          appearance: 'success',
+          autoDismiss: true,
+        });
+      })
+      .catch(err=>{
+        console.log(err);
+        toastManager.add(`Update infomation Failed!`, {
+          appearance: 'error',
+          autoDismiss: true,
+        });
+      })
+    }
   }
 
   render() {

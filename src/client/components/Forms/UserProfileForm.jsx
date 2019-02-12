@@ -30,14 +30,10 @@ const validate = values => {
   ) {
     errors.email = 'Invalid email address';
   }
-    if (
-    values.oldPassword ||
-    values.newPassword ||
-    values.confirmNewPassword
-  ) {
+  if (values.oldPassword || values.newPassword || values.confirmNewPassword) {
     if (!values.oldPassword) errors.oldPassword = 'Required';
-    if (!values.newPassword) errors.oldPassword = 'Required';
-    if (!values.confirmNewPassword) errors.oldPassword = 'Required';
+    if (!values.newPassword) errors.newPassword = 'Required';
+    if (!values.confirmNewPassword) errors.confirmNewPassword = 'Required';
     if (values.newPassword !== values.confirmNewPassword) {
       errors.confirmNewPassword = 'newPassword must match';
     }
@@ -46,11 +42,11 @@ const validate = values => {
 };
 
 const warn = values => {
-  const warnings = {}
-  let score = checkPassStrength(values.newPassword);
+  const warnings = {};
+  const score = checkPassStrength(values.newPassword);
   warnings.newPassword = score;
   return warnings;
-}
+};
 const renderTextField = ({
   label,
   input,

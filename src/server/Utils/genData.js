@@ -18,7 +18,7 @@ db.once('open', () => {
     // Store hash in your password DB.
     const userData = [
       {
-        username: 'User 1',
+        username: 'user',
         password: hash,
         role: 'User',
         status: true,
@@ -54,7 +54,7 @@ db.once('open', () => {
         },
       },
       {
-        username: 'Moderator 1',
+        username: 'mod',
         password: hash,
         role: 'Moderator',
         fullname: 'ABC',
@@ -90,7 +90,7 @@ db.once('open', () => {
         },
       },
       {
-        username: 'Admin',
+        username: 'admin',
         password: hash,
         role: 'Admin',
         fullname: 'ABC',

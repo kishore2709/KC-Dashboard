@@ -147,9 +147,6 @@ function updateDb(req, res, next) {
 }
 
 function authenticate(req, res, next) {
-  // console.log('helsasdl');
-  // console.log(req.body);
-  // console.log('endreq.body');
   userService
     .authenticate(req.body)
     .then(user =>

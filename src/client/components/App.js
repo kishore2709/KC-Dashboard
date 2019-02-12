@@ -40,7 +40,7 @@ class App extends React.Component {
     return (
       <div>
         <ErrorBoundary>
-          <ToastProvider placement="top-center" placementOffset={[500, 500]}>
+          <ToastProvider placement='bottom-right'>
             <div>
               <div>
                 <Router history={history}>
@@ -93,7 +93,7 @@ class App extends React.Component {
             </div>
           </ToastProvider>
         </ErrorBoundary>
-      </div>
+      </div >
     );
   }
 }

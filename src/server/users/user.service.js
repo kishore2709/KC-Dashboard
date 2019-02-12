@@ -31,14 +31,14 @@ module.exports = {
 
 async function checkPwd(obj) {
   let ret = 0;
-  console.log('in CheckPwd async');
+  // console.log('in CheckPwd async');
   // console.log(obj);
   const { sub: id, dat } = obj;
   await User.findById(id, (err, users) => {
     if (err) console.log('get db checkpwd users error');
     else {
-      console.log('get db checkpwd users ok');
-      console.log(dat);
+      // console.log('get db checkpwd users ok');
+      // console.log(dat);
       // console.log(users);
       if (users.password === dat) ret = 1;
     }
@@ -83,6 +83,19 @@ async function getUsers() {
 async function addDb(obj) {
   let ret = 0;
   // console.log(obj);
+  if (!obj || !('username' in obj)) return 0;
+
+  // to lowercase;
+  obj.username = obj.username.toString().toLowerCase();
+
+  // check Username exist?
+  let tmpUsers;
+  await User.find({ username: obj.username }, (err, docs) => {
+    tmpUsers = docs;
+  });
+  if (Array.isArray(tmpUsers) && tmpUsers.length > 0) return 0;
+
+  // add User to db
   const user = new User(obj);
   await new Promise(resolve =>
     user.save((err, newUser) => {
@@ -95,11 +108,12 @@ async function addDb(obj) {
       }
     })
   );
-  console.log('wtf');
-  console.log(ret);
+  // console.log('wtf');
+  // console.log(ret);
   return ret;
 }
 async function deleteDb(obj) {
+  if (!obj || !('id' in obj)) return 0;
   const { id, ...rest } = obj;
   let ret = 0;
   console.log(id, rest);
@@ -114,14 +128,27 @@ async function deleteDb(obj) {
 }
 async function updateDb(objArr) {
   let ret = 0;
-  console.log(objArr);
+  // console.log(objArr);
   for (const obj of objArr) {
-    // console.log(obj);
-    const { id, ...rest } = obj;
-    // console.log('hellll?');
-    // console.log(_id);
-    // console.log(rest);
-    // console.log(_id, rest);
+    // check error
+    if (!obj || !('username' in obj) || !('id' in obj)) return 0;
+    // to lowerCase
+    obj.username = obj.username.toString().toLowerCase();
+    //ensure no update password
+    let { id, username, ...rest } = obj;
+    if ('password' in rest) {
+      let { password, ...restTwo } = rest;
+      rest = restTwo;
+    }
+    if ('oldPassword' in rest) {
+      let { oldPassword, ...restThree } = rest;
+      rest = restThree;
+    }
+    if ('newPassword' in rest) {
+      let { newPassword, ...restFour } = rest;
+      rest = restFour;
+    }
+    console.log(rest);
     await User.findByIdAndUpdate(id, { $set: rest }, err => {
       if (err) console.log('Update db error');
       else {
@@ -133,28 +160,23 @@ async function updateDb(objArr) {
   return ret;
 }
 
-async function authenticate({ username, password }) {
+async function authenticate(obj) {
+  if (!obj || !('username' in obj) || !('password' in obj)) return 0;
+  obj.username = obj.username.toString().toLowerCase();
+  const { username, password } = obj;
+
   return new Promise((resolve, reject) => {
     User.find({ username }, (err, docs) => {
-      // console.log(err);
       if (err) {
         console.log(err);
         reject(err);
       } else {
-        // console.log('wtf');
-        // console.log(docs);
-        // console.log(docs.length);
         if (docs.length === 0) {
           reject(new Error('err'));
           return;
         }
-
-        // console.log(docs.length);
         const user = docs[0];
-        // console.log(user);
         bcrypt.compare(password, user.password, (err, res) => {
-          // res == true
-
           if (err) reject(err);
           if (!res) resolve(false);
           const token = jwt.sign(
@@ -165,8 +187,6 @@ async function authenticate({ username, password }) {
             },
             config.secret
           );
-          // console.log('before deconstruc.');
-          // console.log(user);
           const {
             _id,
             password,
@@ -179,19 +199,6 @@ async function authenticate({ username, password }) {
             status,
             changePwd,
           } = user;
-          console.log({
-            _id,
-            username,
-            role,
-            fullname,
-            email,
-            phonenumber,
-            status,
-            token,
-            permissions,
-            changePwd,
-
-          });
           resolve({
             _id,
             permissions,
@@ -203,7 +210,6 @@ async function authenticate({ username, password }) {
             status,
             token,
             changePwd,
-
           });
         });
       }
@@ -223,39 +229,41 @@ async function getAll() {
 
 async function resetPassword(obj) {
   let ret = 0;
-  // console.log(obj);
   let { id, password, ...rest } = obj;
   password = defaultPassword;
-  // console.log(password);
-  // console.log('hellll?');
-  // console.log(_id);
-  // console.log(rest);
-  // console.log(_id, rest);
-  await User.findByIdAndUpdate(id, { $set: { ...rest, password, changePwd: true } }, err => {
-    if (err) console.log('Reset pwd error');
-    else {
-      console.log('reset pwd ok');
-      ret = 1;
+  await User.findByIdAndUpdate(
+    id,
+    { $set: { ...rest, password, changePwd: true } },
+    err => {
+      if (err) console.log('Reset pwd error');
+      else {
+        console.log('reset pwd ok');
+        ret = 1;
+      }
     }
-  });
-  console.log('after await');
+  );
   return ret;
 }
 
 async function changePassword(obj) {
   return new Promise((resolve, reject) => {
+    if (
+      !obj ||
+      !('oldPassword' in obj) ||
+      !('id' in obj) ||
+      !('newPassword' in obj)
+    )
+      return 0;
     const { id, oldPassword: password, newPassword } = obj;
     User.findById(id, (err, doc) => {
       if (err) reject(0);
-      // if (!('password' in doc)) reject(0);
-      // console.log(password, doc.password);
+      if (!('password' in doc)) reject(0);
       bcrypt.compare(password, doc.password, (err, res) => {
         // res == true
         if (err) reject(0);
-        // console.log(res);
         if (res == false) reject(0);
         else {
-          let hashPass = bcrypt.hashSync(newPassword, saltRounds);
+          const hashPass = bcrypt.hashSync(newPassword, saltRounds);
           User.findByIdAndUpdate(
             id,
             { $set: { password: hashPass, changePwd: false } },
@@ -265,16 +273,19 @@ async function changePassword(obj) {
                 reject(0);
               } else {
                 console.log('Change pwd ok');
-                resolve(jwt.sign(
-                  {
-                    sub: id,
-                    dat: hashPass,
-                    permissions: ['admin', 'user:read', 'user:write'],
-                  },
-                  config.secret
-                ));
+                resolve(
+                  jwt.sign(
+                    {
+                      sub: id,
+                      dat: hashPass,
+                      permissions: ['admin', 'user:read', 'user:write'],
+                    },
+                    config.secret
+                  )
+                );
               }
-            });
+            }
+          );
         }
       });
     });
