@@ -4,6 +4,7 @@ import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 
 import { connect } from 'react-redux';
+import {  checkPassStrength } from '_helpers/Utils';
 // import { getNormalizedScrollLeft } from 'normalize-scroll-left';
 // import asyncValidate from './asyncValidate';
 // import { load as loadAccount } from '../../_reducers/UserData.reducer.js/index.js';
@@ -15,13 +16,18 @@ const validate = values => {
     if (!values.newPassword) errors.oldPassword = 'Required';
     if (!values.confirmNewPassword) errors.oldPassword = 'Required';
     if (values.newPassword !== values.confirmNewPassword) {
-      errors.newPassword = 'newPassword must match';
       errors.confirmNewPassword = 'newPassword must match';
     }
   }
   return errors;
 };
 
+const warn = values => {
+  const warnings = {}
+  let score = checkPassStrength(values.newPassword);
+  warnings.newPassword = score;
+  return warnings;
+}
 const renderPasswordField = ({
   label,
   input,
@@ -109,6 +115,7 @@ let ChangePasswordForm = props => {
 ChangePasswordForm = reduxForm({
   form: 'ChangePasswordForm', // a unique identifier for this form
   validate,
+  warn,
 })(ChangePasswordForm);
 
 ChangePasswordForm = connect(state => ({

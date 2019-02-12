@@ -6,7 +6,8 @@ import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import Grid from '@material-ui/core/Grid';
-import Input from '@material-ui/core/Input';
+// import Input from '@material-ui/core/Input';
+import { checkPassStrength } from '_helpers/Utils';
 
 import { connect } from 'react-redux';
 // import { getNormalizedScrollLeft } from 'normalize-scroll-left';
@@ -29,7 +30,7 @@ const validate = values => {
   ) {
     errors.email = 'Invalid email address';
   }
-  if (
+    if (
     values.oldPassword ||
     values.newPassword ||
     values.confirmNewPassword
@@ -38,13 +39,18 @@ const validate = values => {
     if (!values.newPassword) errors.oldPassword = 'Required';
     if (!values.confirmNewPassword) errors.oldPassword = 'Required';
     if (values.newPassword !== values.confirmNewPassword) {
-      errors.newPassword = 'newPassword must match';
       errors.confirmNewPassword = 'newPassword must match';
     }
   }
   return errors;
 };
 
+const warn = values => {
+  const warnings = {}
+  let score = checkPassStrength(values.newPassword);
+  warnings.newPassword = score;
+  return warnings;
+}
 const renderTextField = ({
   label,
   input,
@@ -65,14 +71,14 @@ const renderTextField = ({
 const renderPasswordField = ({
   label,
   input,
-  meta: { touched, invalid, error },
+  meta: { touched, invalid, error, warning },
   ...custom
 }) => (
   <TextField
     label={label}
     placeholder={label}
     error={touched && invalid}
-    helperText={touched && error}
+    helperText={touched && (error || warning)}
     variant="outlined"
     type="password"
     autoComplete="current-password"
@@ -223,6 +229,7 @@ let UserProfileForm = props => {
 UserProfileForm = reduxForm({
   form: 'UserProfileForm', // a unique identifier for this form
   validate,
+  warn,
 })(UserProfileForm);
 
 UserProfileForm = connect(state => ({

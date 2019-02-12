@@ -15,7 +15,7 @@ import { connect } from 'react-redux';
 import { PostApi } from '_helpers/Utils';
 import { dialogActions } from '_actions';
 import { withToastManager } from 'react-toast-notifications';
-import { dialogConstants } from '_constants';
+// import { dialogConstants } from '_constants';
 import ChangePasswordForm from 'components/Forms/ChangePasswordForm.jsx';
 import { GetUserInfo } from "_helpers/Utils/";
 
