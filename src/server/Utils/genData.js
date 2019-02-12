@@ -3,8 +3,8 @@ const bcrypt = require('bcrypt');
 
 const saltRounds = 10;
 const myPlaintextPassword = '1';
-const UserSchema = require('../Utils/Schema');
-
+const Schemas = require('../Utils/Schema');
+const UserSchema = Schemas.UserSchema;
 mongoose.connect('mongodb://localhost/usermanager');
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));

@@ -1,13 +1,16 @@
 ﻿const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 const config = require('../config.json');
-const UserSchema = require('../Utils/Schema');
+const Schemas = require('../Utils/Schema');
+const UserSchema = Schemas.UserSchema;
+const LogSchema = Schemas.LogSchema;
 // #### >>>  Init Mongodb
 mongoose.connect('mongodb://localhost/usermanager');
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 const userSchema = UserSchema;
 const User = mongoose.model('User', userSchema);
+const Log = mongoose.model('Log', LogSchema);
 const dashboardService = require('../services/dashboard.js');
 // bcrypt
 const bcrypt = require('bcrypt');
@@ -27,8 +30,42 @@ module.exports = {
   resetPassword,
   checkPwd,
   changePassword,
+  saveLog,
+  getLog,
 };
 
+async function saveLog(obj) {
+  if (!obj || !('username' in obj) || !('timestamp' in obj) || !('status' in obj) || !('isLogin' in obj))
+    return 0;
+  let { username, timestamp, status, isLogin } = obj;
+  username = username.toString().toLowerCase();
+  const log = new Log({ username, timestamp, status, isLogin });
+  let ret = 0;
+  await new Promise(resolve =>
+    log.save((err, newLog) => {
+      if (err) {
+        console.log('add db log err');
+      } else {
+        console.log('add log ok');
+        ret = 1;
+        resolve(ret);
+      }
+    })
+  );
+  return ret;
+}
+
+async function getLog(obj) {
+  let ret = 0;
+  await Log.find({}, (err, logs) => {
+    if (err) console.log('get db logs error');
+    else {
+      console.log('get db logs ok');
+      ret = [...logs];
+    }
+  });
+  return ret;
+}
 async function checkPwd(obj) {
   let ret = 0;
   // console.log('in CheckPwd async');

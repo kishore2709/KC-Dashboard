@@ -14,7 +14,35 @@ router.post('/getUserInfo', getUserInfo);
 router.post('/dashboardData', dashboardData);
 router.post('/resetPassword', resetPassword);
 router.post('/changePassword', changePassword);
+router.post('/getLog', getLog);
+router.post('/saveLog', saveLog);
 module.exports = router;
+
+function saveLog(req, res, next) {
+  userService
+    .saveLog(req.body)
+    .then(ret => {
+      if (ret === 0) {
+        res.status(400).json({ message: 'saveLog error' });
+      } else {
+        res.json({ message: ret });
+      }
+    })
+    .catch(err => next(err));
+}
+
+function getLog(req, res, next) {
+  userService
+    .getLog(req.body)
+    .then(ret => {
+      if (ret === 0) {
+        res.status(400).json({ message: 'getLog error' });
+      } else {
+        res.json({ message: ret });
+      }
+    })
+    .catch(err => next(err));
+}
 
 function changePassword(req, res, next) {
   userService

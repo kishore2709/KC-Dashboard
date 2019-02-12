@@ -2,15 +2,41 @@ import { userConstants } from '../_constants';
 import { userService } from '../_services';
 import { alertActions } from '.';
 import { history } from '../_helpers';
+import { PostApi, GetUserInfo } from '_helpers/Utils';
 
 function login(username, password) {
   function request(user) {
     return { type: userConstants.LOGIN_REQUEST, user };
   }
   function success(user) {
+    PostApi('/api/users/saveLog',
+      { status: true, isLogin: true, username: user, timestamp: new Date().toLocaleString() })
+      .then(ret => {
+        if ((!ret) || !('message' in ret)) console.log('Error in send log to sv');
+        else {
+          console.log(ret);
+          console.log('send log to sv ok!');
+        }
+      })
+      .catch(err => {
+        console.log(err, 'send log err');
+      })
     return { type: userConstants.LOGIN_SUCCESS, user };
   }
-  function failure(error) {
+  function failure(error, user) {
+    PostApi('/api/users/saveLog',
+      { status: false, isLogin: true, username: user, timestamp: new Date().toLocaleString() })
+      .then(ret => {
+        console.log(ret);
+        if ((!ret) || !('message' in ret)) console.log('Error in send log to sv');
+        else {
+          console.log(ret);
+          console.log('send log to sv ok!');
+        }
+      })
+      .catch(err => {
+        console.log(err, 'send log err');
+      })
     return { type: userConstants.LOGIN_FAILURE, error };
   }
   return dispatch => {
@@ -18,11 +44,11 @@ function login(username, password) {
 
     userService.login(username, password).then(
       user => {
-        dispatch(success(user));
+        dispatch(success(username));
         history.push('/');
       },
       error => {
-        dispatch(failure(error.toString()));
+        dispatch(failure(error.toString(), username));
         dispatch(alertActions.error(error.toString()));
       }
     );
@@ -30,6 +56,22 @@ function login(username, password) {
 }
 
 function logout() {
+  let user = JSON.parse(localStorage.getItem('user'));
+  // console.log('in logout action');
+  // console.log(user);
+  if (!(!user || !('username' in user)))
+    PostApi('/api/users/saveLog',
+      { status: true, isLogin: false, username: user.username, timestamp: new Date().toLocaleString() })
+      .then(ret => {
+        if ((!ret) || !('message' in ret)) console.log('Error in send log to sv');
+        else {
+          // console.log(ret);
+          // console.log('send log to sv ok!');
+        }
+      })
+      .catch(err => {
+        console.log(err, 'send log err');
+      })
   userService.logout();
   return { type: userConstants.LOGOUT };
 }

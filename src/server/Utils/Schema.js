@@ -45,4 +45,11 @@ const UserSchema = new mongoose.Schema({
     },
   },
 });
-module.exports = UserSchema;
+
+const LogSchema = new mongoose.Schema({
+  timestamp: Date,
+  isLogin: Boolean,
+  username: String,
+  status: Boolean,
+});
+module.exports = { UserSchema, LogSchema };

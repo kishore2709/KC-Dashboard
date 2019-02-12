@@ -36,7 +36,8 @@ app.get('/*', (req, res) => {
 app.use(jwt());
 // for ReCheck PassWd when Change passwd
 app.use((req, res, next) => {
-  if (req.url === '/api/users/authenticate' || req.url === '/authenticate')
+  if (req.url === '/api/users/authenticate' || req.url === '/authenticate'
+    || req.url === '/api/users/saveLog' || req.url === '/api/users/getLog')
     next();
   else {
     // console.log(req.url);
@@ -62,14 +63,15 @@ app.use((req, res, next) => {
 app.use('/api/users', require('./users/users.controller'));
 
 app.use(errorHandler);
-app.use(
-  guard.check(['admin']).unless({
-    path: [
-      // public routes that don't require authentication
-      '/api/users/authenticate',
-    ],
-  })
-);
+// app.use(
+//   guard.check(['admin']).unless({
+//     path: [
+//       // public routes that don't require authentication
+//       '/api/users/authenticate',
+//       '/api/users/saveLog',
+//     ],
+//   })
+// );
 
 app.listen(8081, () => console.log('Listening on port 8081!'));
 
