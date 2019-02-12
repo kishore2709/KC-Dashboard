@@ -11,6 +11,10 @@ const UserSchema = new mongoose.Schema({
   email: String,
   phonenumber: String,
   status: Boolean,
+  changePwd: {
+    type: Boolean,
+    default: true
+  },
   permissions: {
     type: Object,
     default: {

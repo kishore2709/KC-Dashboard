@@ -25,6 +25,7 @@ db.once('open', () => {
         fullname: 'ABC',
         email: 'ABC@gmail.com',
         phonenumber: '01632653333',
+        changePwd: false,
         permissions: {
           dashboard: {
             canAccess: true,
@@ -60,6 +61,7 @@ db.once('open', () => {
         email: 'ABC@gmail.com',
         phonenumber: '01632653333',
         status: true,
+        changePwd: false,
         permissions: {
           dashboard: {
             canAccess: true,
@@ -95,6 +97,7 @@ db.once('open', () => {
         email: 'ABC@gmail.com',
         phonenumber: '01632653333',
         status: true,
+        changePwd: false,
         permissions: {
           dashboard: {
             canAccess: true,

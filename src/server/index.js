@@ -43,10 +43,11 @@ app.use((req, res, next) => {
     userService
       .checkPwd(req.user)
       .then(ret => {
-        if (ret === 0) {
+        if (ret === 0 || !ret) {
           console.log('in recheck passwd has ret', ret);
           res.status(404).send();
         } else {
+          console.log(ret);
           console.log('ok in recheck');
           next();
         }

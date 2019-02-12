@@ -54,13 +54,15 @@ class UserProfile extends React.Component {
     PostApi('/api/users/changePassword', {...e, id : user._id})
       .then(ret=>{
         console.log(ret);
+        if ( (!ret) || !('message' in ret)) throw new Error('err');
         // this.props.addTable(ret);
         toastManager.add('Change password Successfully', {
           appearance: 'success',
           autoDismiss: true,
         });
-        if ( (!ret) || !('message' in ret)) throw new Error('err');
+        
         this.user.token = ret.message;
+        this.user.changePwd = false;
         localStorage.setItem('user', JSON.stringify(this.user));
       })
       .catch(err=>{

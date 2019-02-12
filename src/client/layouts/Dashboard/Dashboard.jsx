@@ -23,7 +23,7 @@ import dashboardStyle from "assets/jss/material-dashboard-react/layouts/dashboar
 import image from "assets/img/sidebar-3.jpg";
 import logo from "assets/img/ptit-logo.png";
 import ChangePasswordDialog from "components/Dialogs/ChangePasswordDialog.jsx";
-
+import { GetUserInfo } from "_helpers/Utils/";
 const switchRoutes = (
   <Switch>
     {(dashboardRoutes.filter(val=> ('subNavBar' in val))[0].subNavBar.map((prop, key) => {
@@ -79,9 +79,11 @@ class App extends React.Component {
   }
   render() {
     const { classes, openDialogPwdForm, ...rest } = this.props;
+    const user = GetUserInfo();
     // console.log('in dashboard')
     // console.log(switchRoutes);
-    openDialogPwdForm(true);
+    if (!user || (!('changePwd' in user))) throw new Error('cannot get User Info');
+    openDialogPwdForm(user.changePwd);
     return (
       <div className={classes.wrapper}>
         <Sidebar

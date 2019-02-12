@@ -38,6 +38,7 @@ async function checkPwd(obj) {
     if (err) console.log('get db checkpwd users error');
     else {
       console.log('get db checkpwd users ok');
+      console.log(dat);
       // console.log(users);
       if (users.password === dat) ret = 1;
     }
@@ -176,6 +177,7 @@ async function authenticate({ username, password }) {
             phonenumber,
             permissions,
             status,
+            changePwd,
           } = user;
           console.log({
             _id,
@@ -187,6 +189,8 @@ async function authenticate({ username, password }) {
             status,
             token,
             permissions,
+            changePwd,
+
           });
           resolve({
             _id,
@@ -198,6 +202,8 @@ async function authenticate({ username, password }) {
             phonenumber,
             status,
             token,
+            changePwd,
+
           });
         });
       }
@@ -225,7 +231,7 @@ async function resetPassword(obj) {
   // console.log(_id);
   // console.log(rest);
   // console.log(_id, rest);
-  await User.findByIdAndUpdate(id, { $set: { ...rest, password } }, err => {
+  await User.findByIdAndUpdate(id, { $set: { ...rest, password, changePwd: true } }, err => {
     if (err) console.log('Reset pwd error');
     else {
       console.log('reset pwd ok');
@@ -252,7 +258,7 @@ async function changePassword(obj) {
           let hashPass = bcrypt.hashSync(newPassword, saltRounds);
           User.findByIdAndUpdate(
             id,
-            { $set: { password: hashPass } },
+            { $set: { password: hashPass, changePwd: false } },
             err => {
               if (err) {
                 console.log('Change pwd error');

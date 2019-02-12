@@ -17,6 +17,7 @@ import { dialogActions } from '_actions';
 import { withToastManager } from 'react-toast-notifications';
 import { dialogConstants } from '_constants';
 import ChangePasswordForm from 'components/Forms/ChangePasswordForm.jsx';
+import { GetUserInfo } from "_helpers/Utils/";
 
 const styles = theme => ({
   cardCategoryWhite: {
@@ -49,6 +50,7 @@ class ChangePasswordDialog extends React.Component {
   constructor(props) {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.user = GetUserInfo();
   }
 
   handleClose = () => {
@@ -60,7 +62,36 @@ class ChangePasswordDialog extends React.Component {
   };
 
   handleSubmit(e) {
-    console.log('in handle submit change pwd form');
+    // console.log('in handle submit change pwd form');
+    // console.log(e);
+    const user = this.user;
+    const { toastManager, closeDialogPwdForm } = this.props;
+
+    PostApi('/api/users/changePassword', {...e, id : user._id})
+      .then(ret=>{
+        console.log('??????????');
+        console.log(ret);
+        if ( (!ret) || !('message' in ret)) throw new Error('err');
+        
+        // this.props.addTable(ret);
+        toastManager.add('Change password Successfully', {
+          appearance: 'success',
+          autoDismiss: true,
+        });
+        this.user.token = ret.message;
+        this.user.changePwd = false;
+        localStorage.setItem('user', JSON.stringify(this.user));
+      })
+      .catch(err=>{
+        console.log(err);
+        toastManager.add(`Something went wrong!`, {
+          appearance: 'error',
+          autoDismiss: true,
+        });
+      })
+      .then(rett=>{
+          closeDialogPwdForm(false);
+      })
   }
 
   render() {
@@ -86,7 +117,7 @@ class ChangePasswordDialog extends React.Component {
                     </p>
                   </CardHeader>
                   <CardBody>
-                    <ChangePasswordForm />
+                    <ChangePasswordForm onSubmit={this.handleSubmit}/>
                   </CardBody>
                 </Card>
               </GridItem>
