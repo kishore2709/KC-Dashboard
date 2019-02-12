@@ -4,6 +4,13 @@ function openDialog(message) {
   return { type: dialogConstants.DIALOG_USER_OPEN, message };
 }
 
+function openDialogPwdForm(message) {
+  return { type: dialogConstants.DIALOG_USER_OPEN_PWD_FORM, message };
+}
+
+function closeDialogPwdForm(message) {
+  return { type: dialogConstants.DIALOG_USER_CLOSE_PWD_FORM, message };
+}
 function closeDialog(message) {
   return { type: dialogConstants.DIALOG_USER_CLOSE, message };
 }
@@ -24,5 +31,7 @@ export const dialogActions = {
   closeDialog,
   updateDialog,
   addDialog,
+  openDialogPwdForm,
+  closeDialogPwdForm,
   loadDataDialog,
 };

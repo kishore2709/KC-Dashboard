@@ -11,7 +11,10 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import Header from "components/Header/Header.jsx";
 import Footer from "components/Footer/Footer.jsx";
 import Sidebar from "components/Sidebar/Sidebar.jsx";
-import UserPermission from 'views/UserPermission/UserPermission.jsx';
+// import UserPermission from 'views/UserPermission/UserPermission.jsx';
+import { connect } from 'react-redux';
+import { dialogActions } from '_actions';
+import { withToastManager } from 'react-toast-notifications';
 
 import dashboardRoutes from "routes/dashboard.jsx";
 
@@ -19,7 +22,7 @@ import dashboardStyle from "assets/jss/material-dashboard-react/layouts/dashboar
 
 import image from "assets/img/sidebar-3.jpg";
 import logo from "assets/img/ptit-logo.png";
-
+import ChangePasswordDialog from "components/Dialogs/ChangePasswordDialog.jsx";
 
 const switchRoutes = (
   <Switch>
@@ -75,9 +78,10 @@ class App extends React.Component {
     window.removeEventListener("resize", this.resizeFunction);
   }
   render() {
-    const { classes, ...rest } = this.props;
+    const { classes, openDialogPwdForm, ...rest } = this.props;
     // console.log('in dashboard')
     // console.log(switchRoutes);
+    openDialogPwdForm(true);
     return (
       <div className={classes.wrapper}>
         <Sidebar
@@ -91,6 +95,7 @@ class App extends React.Component {
           {...rest}
         />
         <div className={classes.mainPanel} ref="mainPanel">
+          <ChangePasswordDialog/>
           <Header
             routes={dashboardRoutes}
             handleDrawerToggle={this.handleDrawerToggle}
@@ -115,4 +120,15 @@ App.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(dashboardStyle)(App);
+const mapDispatchToProps = dispatch => ({
+  openDialogPwdForm: newStatus => {
+    dispatch(dialogActions.openDialogPwdForm(newStatus));
+  },
+});
+
+export default withStyles(dashboardStyle)(
+  connect(
+    null,
+    mapDispatchToProps
+  )(withToastManager(App))
+);
