@@ -54,11 +54,7 @@ const AttackReport = Loadable({
   loader: () => import(/* webpackPrefetch: true */ 'views/AttackReport/AttackReport.jsx'),
   loading: TableLoader,
 });
-// import UserPermission from 'views/UserPermission/UserPermission.jsx';
-const UserPermission = Loadable({
-  loader: () => import(/* webpackPrefetch: true */ 'views/UserPermission/UserPermission.jsx'),
-  loading: TableLoader,
-});
+
 // import UserProfile from 'views/UserProfile/UserProfile.jsx';
 const UserProfile = Loadable({
   loader: () => import(/* webpackPrefetch: true */ 'views/UserProfile/UserProfile.jsx'),
