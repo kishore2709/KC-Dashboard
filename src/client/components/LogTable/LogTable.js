@@ -65,6 +65,7 @@ class LogTable extends Component {
       rowsPerPage: 5,
       rowsPerPageOptions: [5, 10, 20],
       page: 0,
+      selectableRows: false,
     };
 
     return (
