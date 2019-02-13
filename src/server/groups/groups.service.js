@@ -63,11 +63,11 @@ async function getGroups() {
 }
 
 async function updateDb(objArr) {
-  console.log(objArr);
+  // console.log(objArr);
   let ret = 1;
-  console.log('???');
+  // console.log('???');
   for (const obj of objArr) {
-    console.log(obj);
+    // console.log(obj);
     if (!obj || !('id' in obj)) { ret = 0; continue };
     const { id, ...rest } = obj;
     await Group.findByIdAndUpdate(id, { $set: rest }, err => {

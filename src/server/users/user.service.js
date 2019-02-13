@@ -79,6 +79,7 @@ async function checkPwd(obj) {
       // console.log('get db checkpwd users ok');
       // console.log(dat);
       // console.log(users);
+      if (!users || !('password' in users)) { ret = 0; return 0 };
       if (users.password === dat) ret = 1;
     }
   });
