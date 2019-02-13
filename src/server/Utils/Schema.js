@@ -51,5 +51,39 @@ const LogSchema = new mongoose.Schema({
   isLogin: Boolean,
   username: String,
   status: Boolean,
+  ip: String,
 });
-module.exports = { UserSchema, LogSchema };
+
+const GroupSchema = new mongoose.Schema({
+  groupname: String,
+  permissions: {
+    type: Object,
+    default: {
+      dashboard: {
+        canAccess: true,
+        subArr: [true, false, false],
+      },
+      user: {
+        canAccess: true,
+        subArr: [true, false],
+      },
+      permission: {
+        canAccess: false,
+        subArr: [true, false],
+      },
+      logManager: {
+        canAccess: true,
+        subArr: [true, false],
+      },
+      serviceManager: {
+        canAccess: true,
+        subArr: [true, false],
+      },
+      attackReport: {
+        canAccess: true,
+        subArr: [true, false],
+      },
+    },
+  },
+});
+module.exports = { UserSchema, LogSchema, GroupSchema };

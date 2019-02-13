@@ -20,7 +20,7 @@ module.exports = router;
 
 function saveLog(req, res, next) {
   userService
-    .saveLog(req.body)
+    .saveLog({ ...req.body, ip: req.ipAddr })
     .then(ret => {
       if (ret === 0) {
         res.status(400).json({ message: 'saveLog error' });

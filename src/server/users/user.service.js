@@ -35,11 +35,13 @@ module.exports = {
 };
 
 async function saveLog(obj) {
-  if (!obj || !('username' in obj) || !('timestamp' in obj) || !('status' in obj) || !('isLogin' in obj))
+  if (!obj || !('username' in obj) || !('timestamp' in obj)
+    || !('status' in obj) || !('isLogin' in obj)
+    || !('ip' in obj))
     return 0;
-  let { username, timestamp, status, isLogin } = obj;
+  let { username, timestamp, status, isLogin, ip } = obj;
   username = username.toString().toLowerCase();
-  const log = new Log({ username, timestamp, status, isLogin });
+  const log = new Log({ username, timestamp, status, isLogin, ip });
   let ret = 0;
   await new Promise(resolve =>
     log.save((err, newLog) => {
@@ -149,6 +151,7 @@ async function addDb(obj) {
   // console.log(ret);
   return ret;
 }
+
 async function deleteDb(obj) {
   if (!obj || !('id' in obj)) return 0;
   const { id, ...rest } = obj;
@@ -201,7 +204,7 @@ async function authenticate(obj) {
   if (!obj || !('username' in obj) || !('password' in obj)) return 0;
   obj.username = obj.username.toString().toLowerCase();
   const { username, password } = obj;
-
+  // console.log(username, password);
   return new Promise((resolve, reject) => {
     User.find({ username }, (err, docs) => {
       if (err) {
@@ -213,6 +216,7 @@ async function authenticate(obj) {
           return;
         }
         const user = docs[0];
+        // console.log(user);
         bcrypt.compare(password, user.password, (err, res) => {
           if (err) reject(err);
           if (!res) resolve(false);

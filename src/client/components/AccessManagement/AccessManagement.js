@@ -35,7 +35,7 @@ class AccessManagement extends React.Component {
 
     if (loading) {
       return (
-        <Loading/>
+        <Loading />
       );
     }
     return (

@@ -35,9 +35,10 @@ class GroupAccessManagement extends React.Component {
 
     if (loading) {
       return (
-        <Loading/>
+        <Loading />
       );
     }
+    // console.log(users);
     return (
       <DataTable
         users={users}
@@ -66,61 +67,64 @@ class GroupAccessManagement extends React.Component {
     });
 
   solveHandleSubmit = newUsers => {
-    console.log(newUsers);
+    // console.log(newUsers);
+    let dataUpdate = newUsers.map(({ id, username: groupname, permissions, role }) => ({
+      id, groupname, permissions
+    }))
+    PostApi('/api/groups/updateDb', dataUpdate)
+      .then(res => {
+        if (res === 'err') {
+          this.props.toastManager.add(`Something went wrong: `, {
+            appearance: 'error',
+            autoDismiss: true,
+          });
+          // console.log('update data from database err in AcessManagement');
+
+          // ret = 'err';
+        } else {
+          this.props.toastManager.add('Updated group Successfully', {
+            appearance: 'success',
+            autoDismiss: true,
+          });
+          this.setState({ users: newUsers });
+        }
+      })
+      .catch(err => {
+        // ret = 'err';
+        this.props.toastManager.add(`Something went wrong: `, {
+          appearance: 'error',
+          autoDismiss: true,
+        });
+        // console.log('update data from database err in AcessManagement');
+      });
   };
 
   // =================
 
   HandleSubmit = () => {
-    const { toastManager } = this.props;
-    const result = this.state.users;
 
-    console.log(result);
-    const alertErr = () => {
-      toastManager.add(`Something went wrong: `, {
-        appearance: 'error',
-        autoDismiss: true,
-      });
-    };
-    const asyncUpdateFunction = async function delFunc(rows) {
-      await Promise.all(
-        rows.map(async row => {
-          await PostApi('/api/users/updateDb', row)
-            .then(res => {
-              if (res === 'err') {
-                alertErr();
-              } else {
-                toastManager.add('Updated Successfully', {
-                  appearance: 'success',
-                  autoDismiss: true,
-                });
-              }
-            })
-            .catch(err => {
-              console.log('update data from database err');
-              alertErr();
-            });
-        })
-      );
-    };
-    asyncUpdateFunction(result).then(ret => {
-      if (ret !== 'err') console.log('ok update ok');
-    });
-    return null;
   };
 
   GetAllUsers = () =>
-    PostApi('/api/users/getUsers', {})
+    PostApi('/api/groups/getGroups', {})
       .then(res => {
-        const result = res.map(x => {
+        let result = res.map(x => {
           const { _id, ...rest } = x;
           return { id: _id, ...rest };
         });
+        result = result.map(({ id, groupname, permissions }) => {
+          return {
+            id,
+            username: groupname,
+            permissions,
+            role: 'user',
+          }
+        })
         console.log(result);
-        return Promise.resolve(result.filter(x => x.role !== 'Admin'));
+        return Promise.resolve(result);
       })
       .catch(err => {
-        console.log('get data from database err');
+        console.log('get data gr from database err');
       });
 
   // =================

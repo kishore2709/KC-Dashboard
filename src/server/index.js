@@ -8,7 +8,9 @@ const cors = require('cors');
 const errorHandler = require('./_helpers/error-handler');
 const jwt = require('./_helpers/jwt');
 const userService = require('./users/user.service');
-const guard = require('express-jwt-permissions')();
+// const groupService = require('./groups/groups.service');
+// const guard = require('express-jwt-permissions')();
+// const expressip = require('express-ip');
 
 const jsonParser = bodyParser.json();
 
@@ -18,11 +20,12 @@ const jsonParser = bodyParser.json();
 const urlencodedParser = bodyParser.urlencoded({ extended: false });
 
 const app = express();
-
+// app.use(expressip().getIpInfoMiddleware);
 app.use(jsonParser);
 app.use(urlencodedParser);
 app.use(express.static('dist'));
 app.use(cors());
+
 // for f5 deploy..
 /*
 app.get('/*', (req, res) => {
@@ -60,7 +63,17 @@ app.use((req, res, next) => {
       });
   }
 });
+// get ip addr
+app.use((req, res, next) => {
+  let xForwardedFor = (req.headers['x-forwarded-for'] || '').replace(/:\d+$/, '');
+  let ip = xForwardedFor || req.connection.remoteAddress;
+  req.ipAddr = ip;
+  next();
+})
+
+
 app.use('/api/users', require('./users/users.controller'));
+app.use('/api/groups', require('./groups/groups.controller'));
 
 app.use(errorHandler);
 // app.use(
