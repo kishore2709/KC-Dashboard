@@ -30,7 +30,6 @@ function jwt() {
       // public routes that don't require authentication
       '/api/users/authenticate',
       '/api/users/saveLog',
-      '/api/users/getLog',
     ],
   });
 }

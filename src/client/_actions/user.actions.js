@@ -2,7 +2,7 @@ import { userConstants } from '../_constants';
 import { userService } from '../_services';
 import { alertActions } from '.';
 import { history } from '../_helpers';
-import { PostApi, GetUserInfo } from '_helpers/Utils';
+import { PostApi } from '_helpers/Utils';
 
 function login(username, password) {
   function request(user) {

@@ -1,3 +1,5 @@
+// import React from 'react';
+import React from 'react';
 // @material-ui/icons
 import Dashboard from '@material-ui/icons/Dashboard';
 import Person from '@material-ui/icons/Person';
@@ -5,25 +7,59 @@ import Person from '@material-ui/icons/Person';
 import LibraryBooks from '@material-ui/icons/LibraryBooks';
 import BubbleChart from '@material-ui/icons/BubbleChart';
 // import LocationOn from '@material-ui/icons/LocationOn';
-import Notifications from '@material-ui/icons/Notifications';
-// import Unarchive from '@material-ui/icons/Unarchive';
-// core components/views
-import DashboardPage from 'views/Dashboard/Dashboard.jsx';
-import UserManagement from 'views/UserManagement/UserManagement.jsx';
-import LogManagement from 'views/LogManagement/LogManagement.jsx';
-import ServiceManager from 'views/ServiceManager/ServiceManager.jsx';
-import AttackReport from 'views/AttackReport/AttackReport.jsx';
-import Icons from 'views/Icons/Icons.jsx';
-// import Maps from 'views/Maps/Maps.jsx';
-import NotificationsPage from 'views/Notifications/Notifications.jsx';
+// import Notifications from '@material-ui/icons/Notifications';
 import AccessIcon from '@material-ui/icons/AccessibilityNew';
+// import Unarchive from '@material-ui/icons/Unarchive';
+// Loadable
+import Loadable from 'react-loadable';
+import TableLoader from 'components/ContentLoader/TableLoader.jsx';
+// core components/views
+// import DashboardPage from 'views/Dashboard/Dashboard.jsx';
+const DashboardPage = Loadable({
+  loader: () => import(/* webpackPrefetch: true */ 'views/Dashboard/Dashboard.jsx'),
+  loading: TableLoader,
+});
+// import UserManagement from 'views/UserManagement/UserManagement.jsx';
+const UserManagement = Loadable({
+  loader: () => import(/* webpackPrefetch: true */ 'views/UserManagement/UserManagement.jsx'),
+  loading: TableLoader,
+});
+// import LogManagement from 'views/LogManagement/LogManagement.jsx';
+const LogManagement = Loadable({
+  loader: () => import(/* webpackPrefetch: true */ 'views/LogManagement/LogManagement.jsx'),
+  loading: TableLoader,
+});
+// import ServiceManager from 'views/ServiceManager/ServiceManager.jsx';
+const ServiceManager = Loadable({
+  loader: () => import(/* webpackPrefetch: true */ 'views/ServiceManager/ServiceManager.jsx'),
+  loading: TableLoader,
+});
+// import AttackReport from 'views/AttackReport/AttackReport.jsx';
+const AttackReport = Loadable({
+  loader: () => import(/* webpackPrefetch: true */ 'views/AttackReport/AttackReport.jsx'),
+  loading: TableLoader,
+});
+// import UserPermission from 'views/UserPermission/UserPermission.jsx';
+const UserPermission = Loadable({
+  loader: () => import(/* webpackPrefetch: true */ 'views/UserPermission/UserPermission.jsx'),
+  loading: TableLoader,
+});
+// import UserProfile from 'views/UserProfile/UserProfile.jsx';
+const UserProfile = Loadable({
+  loader: () => import(/* webpackPrefetch: true */ 'views/UserProfile/UserProfile.jsx'),
+  loading: TableLoader,
+});
+// import Discover from 'views/Discover/Discover.jsx';
+const Discover = Loadable({
+  loader: () => import(/* webpackPrefetch: true */ 'views/Discover/Discover.jsx'),
+  loading: TableLoader,
+});
+// import Icons from 'views/Icons/Icons.jsx';
+// import NotificationsPage from 'views/Notifications/Notifications.jsx';
 import { Redirect } from 'react-router-dom';
-import UserPermission from 'views/UserPermission/UserPermission.jsx';
-import React from 'react';
 // import { GetUserInfo, PostApi } from '_helpers/Utils/index.js';
-import UserProfile from 'views/UserProfile/UserProfile.jsx';
 import PowerIcon from '@material-ui/icons/PowerOff';
-import Discover from 'views/Discover/Discover.jsx';
+
 
 const dashboardRoutes = [
   {
@@ -119,13 +155,5 @@ const dashboardRoutes = [
     navbarName: 'Redirect',
   },
 ];
-
-// const user = GetUserInfo();
-// let ret;
-// console.log(user);
-// if (user == {}) ret = dashboardRoutes;
-// else ret = dashboardRoutes.filter((val, index) => user.accessArr[index]);
-// console.log(ret);
-// console.log(user);
 
 export default dashboardRoutes;

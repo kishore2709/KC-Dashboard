@@ -1,11 +1,20 @@
 import React from 'react';
 // @material-ui/core components
 import withStyles from '@material-ui/core/styles/withStyles';
+// loader
+import Loadable from 'react-loadable';
+import TableLoader from 'components/ContentLoader/TableLoader.jsx';
+//
+
 // core components
-import GridItem from 'components/Grid/GridItem.jsx';
+// import GridItem from 'components/Grid/GridItem.jsx';
 import GridContainer from 'components/Grid/GridContainer.jsx';
 
-import UserTable from 'components/Table/UserTable';
+// import UserTable from 'components/Table/UserTable';
+const UserTable = Loadable({
+  loader: () => import(/* webpackPreload: true */ 'components/Table/UserTable'),
+  loading: TableLoader,
+});
 
 const styles = {
   cardCategoryWhite: {

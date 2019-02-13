@@ -10,11 +10,14 @@ import { dialogActions, userTableActions } from '_actions';
 import { connect } from 'react-redux';
 import { withToastManager } from 'react-toast-notifications';
 import CustomFooter from './CustomFooter.jsx';
+// import TableLoader from 'components/ContentLoader/TableLoader.jsx';
+// import { List } from 'react-content-loader'
 
 class UserTable extends React.Component {
   state = {
     openDialog: false,
     rows: [],
+    loading : true,
   };
 
   componentWillMount() {
@@ -28,6 +31,7 @@ class UserTable extends React.Component {
         // console.log(res);
         // this.setState({ rows: result });
         this.props.setTable(result);
+        this.setState({loading : false});
       })
       .catch(err => {
         console.log('get data from database err');
@@ -35,6 +39,10 @@ class UserTable extends React.Component {
   }
 
   render() {
+    // khi chua Load xong data from Sv
+    // const { loading } = this.state;
+  
+
     // add: thao tac add User - redux
     // update: Thao tac update User - redux
     // userTable : data for table;
@@ -50,8 +58,8 @@ class UserTable extends React.Component {
       setTable,
       dialog,
     } = this.props;
-    console.log('in UserTable');
-    console.log(userTable);
+    // console.log('in UserTable');
+    // console.log(userTable);
     const columns = [
       {
         name: 'Fullname',
@@ -133,7 +141,7 @@ class UserTable extends React.Component {
       const { fullname, email, phonenumber, role, status, username, id } = val;
       return [fullname, username, role, status, true];
     });
-    console.log(data);
+    // console.log(data);
     const options = {
       filter: true,
       selectableRows: true,
@@ -201,7 +209,7 @@ class UserTable extends React.Component {
         asyncDeleteFunction(e.data);
       },
     };
-
+    
     return (
       <React.Fragment>
         <UserDialog />

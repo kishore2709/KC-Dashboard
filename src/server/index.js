@@ -37,7 +37,7 @@ app.use(jwt());
 // for ReCheck PassWd when Change passwd
 app.use((req, res, next) => {
   if (req.url === '/api/users/authenticate' || req.url === '/authenticate'
-    || req.url === '/api/users/saveLog' || req.url === '/api/users/getLog')
+    || req.url === '/api/users/saveLog')
     next();
   else {
     // console.log(req.url);

@@ -1,82 +1,49 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-// react plugin for creating charts
-import ChartistGraph from 'react-chartist';
 // @material-ui/core
 import withStyles from '@material-ui/core/styles/withStyles';
 import Icon from '@material-ui/core/Icon';
-// @material-ui/icons
 import Store from '@material-ui/icons/Store';
 import Warning from '@material-ui/icons/Warning';
 import DateRange from '@material-ui/icons/DateRange';
 import LocalOffer from '@material-ui/icons/LocalOffer';
-// import Update from '@material-ui/icons/Update';
-// import ArrowUpward from '@material-ui/icons/ArrowUpward';
-// import AccessTime from '@material-ui/icons/AccessTime';
-// import Accessibility from '@material-ui/icons/Accessibility';
 import BugReport from '@material-ui/icons/BugReport';
 import Code from '@material-ui/icons/Code';
 import Cloud from '@material-ui/icons/Cloud';
+// loader 
+import Loadable from 'react-loadable';
+import TableLoader from 'components/ContentLoader/TableLoader.jsx';
 // core components
 import GridItem from 'components/Grid/GridItem.jsx';
 import GridContainer from 'components/Grid/GridContainer.jsx';
-// import Table from 'components/Table/Table.jsx';
 import Tasks from 'components/Tasks/Tasks.jsx';
 import CustomTabs from 'components/CustomTabs/CustomTabs.jsx';
 import Danger from 'components/Typography/Danger.jsx';
 import Card from 'components/Card/Card.jsx';
 import CardHeader from 'components/Card/CardHeader.jsx';
 import CardIcon from 'components/Card/CardIcon.jsx';
-// import CardBody from 'components/Card/CardBody.jsx';
 import CardFooter from 'components/Card/CardFooter.jsx';
 import Loading from 'components/Loading/Loading.jsx';
 import WarningStatus from 'components/Warning/Warning.jsx';
-// import Link from '@material-ui/core/Link';
 import { withToastManager } from 'react-toast-notifications';
-// / redux
 import Typography from '@material-ui/core/Typography';
-
 import { connect } from 'react-redux';
 import { serverStatusConstants } from '_constants';
-// import classnames from 'classnames';
-import Discover from 'views/Discover/Discover.jsx';
+// 
+// import Discover from 'views/Discover/Discover.jsx';
+const Discover = Loadable({
+  loader: () => import(/* webpackPreload: true */'views/Discover/Discover.jsx'),
+  loading: TableLoader,
+});
+
 import { PostApi } from '_helpers/Utils';
-import {
-  alertLogo,
-  webLogo,
-  dnsLogo,
-  transferLogo,
-  agentLogo,
-  searchLogo,
-  smsLogo,
-  emailLogo,
-} from 'components/icon/Icon';
-// import { bugs, website, server } from 'variables/general.jsx';
-// import CardMedia from '@material-ui/core/CardMedia';
 import Grid from '@material-ui/core/Grid';
-
 import dashboardStyle from 'assets/jss/material-dashboard-react/views/dashboardStyle.jsx';
-// import { userInfo } from 'os';
-import VnMap from 'components/Maps/Maps.jsx';
-
-const logLists = [
-  { key: 'webLogo', img: webLogo, title: 'Quản lý Web log' },
-  { key: 'dnsLogo', img: dnsLogo, title: 'Quản lý DNS log' },
-  { key: 'transferLogo', img: transferLogo, title: 'Quản lý Transfer log' },
-  { key: 'agentLogo', img: agentLogo, title: 'Quản lý Agent log' },
-];
-
-const serviceAccessLists = [
-  { key: 'searchLogo', img: searchLogo, title: 'Tìm kiếm' },
-  { key: 'webLogo', img: webLogo, title: 'Quản lý dịch vụ Web' },
-  { key: 'dnsLogo', img: dnsLogo, title: 'Quản lý dịch vụ DNS' },
-];
-
-const BroadcastLists = [
-  { key: 'alertListLogo', img: alertLogo, title: 'Danh sách cảnh báo' },
-  { key: 'sendEmailLogo', img: emailLogo, title: 'Gửi Email' },
-  { key: 'sendSmsLogo', img: smsLogo, title: 'Gửi SMS' },
-];
+// import VnMap from 'components/Maps/Maps.jsx';
+const VnMap = Loadable({
+  loader: () => import(/* webpackPreload: true */'components/Maps/Maps.jsx'),
+  loading: TableLoader,
+});
 
 class Dashboard extends React.Component {
   constructor(props) {
@@ -122,7 +89,7 @@ class Dashboard extends React.Component {
     if (serverStatus.type === serverStatusConstants.ERROR) {
       return <WarningStatus />;
     }
-    if (this.state.loading) return <Loading />;
+    if (this.state.loading) return <Loading/>;
     return (
       <GridContainer>
         {data.map(val => {

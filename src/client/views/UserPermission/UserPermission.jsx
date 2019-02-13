@@ -2,11 +2,18 @@ import React from 'react';
 // @material-ui/core components
 import withStyles from '@material-ui/core/styles/withStyles';
 // core components
-import GridItem from 'components/Grid/GridItem.jsx';
+// import GridItem from 'components/Grid/GridItem.jsx';
 import GridContainer from 'components/Grid/GridContainer.jsx';
+// loader
+import Loadable from 'react-loadable';
+import TableLoader from 'components/ContentLoader/TableLoader.jsx';
+//
 
-import AccessManagement from 'components/AccessManagement/AccessManagement';
-
+// import AccessManagement from 'components/AccessManagement/AccessManagement';
+const AccessManagement = Loadable({
+  loader: () => import(/* webpackPreload: true */ 'components/AccessManagement/AccessManagement'),
+  loading: TableLoader,
+});
 const styles = {
   cardCategoryWhite: {
     color: 'rgba(255,255,255,.62)',
