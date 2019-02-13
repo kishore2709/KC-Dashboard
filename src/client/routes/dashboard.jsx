@@ -19,6 +19,7 @@ import NotificationsPage from 'views/Notifications/Notifications.jsx';
 import AccessIcon from '@material-ui/icons/AccessibilityNew';
 import { Redirect } from 'react-router-dom';
 import UserPermission from 'views/UserPermission/UserPermission.jsx';
+import GroupPermission from 'views/GroupPermission/GroupPermission.jsx';
 import React from 'react';
 // import { GetUserInfo, PostApi } from '_helpers/Utils/index.js';
 import UserProfile from 'views/UserProfile/UserProfile.jsx';
@@ -48,7 +49,7 @@ const dashboardRoutes = [
         sidebarName: 'Nhóm người dùng',
         navbarName: 'Giao diện quản lý nhóm người dùng',
         icon: Person,
-        component: <div />,
+        component: GroupPermission,
       },
       {
         id: 'permission',

@@ -10,7 +10,7 @@ import Loading from 'components/Loading/Loading.jsx';
 const styles = theme => ({
 });
 
-class AccessManagement extends React.Component {
+class GroupAccessManagement extends React.Component {
   constructor(props) {
     super(props);
 
@@ -67,32 +67,6 @@ class AccessManagement extends React.Component {
 
   solveHandleSubmit = newUsers => {
     console.log(newUsers);
-    PostApi('/api/users/updateDb', newUsers)
-      .then(res => {
-        if (res === 'err') {
-          this.props.toastManager.add(`Something went wrong: `, {
-            appearance: 'error',
-            autoDismiss: true,
-          });
-          console.log('update data from database err in AcessManagement');
-
-          // ret = 'err';
-        } else {
-          this.props.toastManager.add('Updated Successfully', {
-            appearance: 'success',
-            autoDismiss: true,
-          });
-          this.setState({ users: newUsers });
-        }
-      })
-      .catch(err => {
-        // ret = 'err';
-        this.props.toastManager.add(`Something went wrong: `, {
-          appearance: 'error',
-          autoDismiss: true,
-        });
-        console.log('update data from database err in AcessManagement');
-      });
   };
 
   // =================
@@ -152,8 +126,8 @@ class AccessManagement extends React.Component {
   // =================
 }
 
-AccessManagement.propTypes = {
+GroupAccessManagement.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withToastManager(withStyles(styles)(AccessManagement));
+export default withToastManager(withStyles(styles)(GroupAccessManagement));
