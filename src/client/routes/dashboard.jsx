@@ -9,11 +9,26 @@ import BubbleChart from '@material-ui/icons/BubbleChart';
 // import LocationOn from '@material-ui/icons/LocationOn';
 // import Notifications from '@material-ui/icons/Notifications';
 import AccessIcon from '@material-ui/icons/AccessibilityNew';
+import PowerIcon from '@material-ui/icons/PowerOff';
 // import Unarchive from '@material-ui/icons/Unarchive';
 // Loadable
 import Loadable from 'react-loadable';
 import TableLoader from 'components/ContentLoader/TableLoader.jsx';
+// import Icons from 'views/Icons/Icons.jsx';
+// import NotificationsPage from 'views/Notifications/Notifications.jsx';
+import { Redirect } from 'react-router-dom';
+
 // core components/views
+// import UserPermission from 'views/UserPermission/UserPermission.jsx';
+const UserPermission = Loadable({
+  loader: () => import(/* webpackPrefetch: true */ 'views/UserPermission/UserPermission.jsx'),
+  loading: TableLoader,
+});
+// import GroupPermission from 'views/GroupPermission/GroupPermission.jsx';
+const GroupPermission = Loadable({
+  loader: () => import(/* webpackPrefetch: true */ 'views/GroupPermission/GroupPermission.jsx'),
+  loading: TableLoader,
+});
 // import DashboardPage from 'views/Dashboard/Dashboard.jsx';
 const DashboardPage = Loadable({
   loader: () => import(/* webpackPrefetch: true */ 'views/Dashboard/Dashboard.jsx'),
@@ -54,12 +69,6 @@ const Discover = Loadable({
   loader: () => import(/* webpackPrefetch: true */ 'views/Discover/Discover.jsx'),
   loading: TableLoader,
 });
-// import Icons from 'views/Icons/Icons.jsx';
-// import NotificationsPage from 'views/Notifications/Notifications.jsx';
-import { Redirect } from 'react-router-dom';
-// import { GetUserInfo, PostApi } from '_helpers/Utils/index.js';
-import PowerIcon from '@material-ui/icons/PowerOff';
-
 
 const dashboardRoutes = [
   {
@@ -84,7 +93,7 @@ const dashboardRoutes = [
         sidebarName: 'Nhóm người dùng',
         navbarName: 'Giao diện quản lý nhóm người dùng',
         icon: Person,
-        component: <div />,
+        component: GroupPermission,
       },
       {
         id: 'permission',
