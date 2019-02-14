@@ -22,7 +22,7 @@ db.once('open', () => {
       {
         username: 'user',
         password: hash,
-        role: 'User',
+        role: 'user',
         status: true,
         fullname: 'ABC',
         email: 'ABC@gmail.com',
@@ -58,7 +58,7 @@ db.once('open', () => {
       {
         username: 'mod',
         password: hash,
-        role: 'Moderator',
+        role: 'moderator',
         fullname: 'ABC',
         email: 'ABC@gmail.com',
         phonenumber: '01632653333',
@@ -94,7 +94,7 @@ db.once('open', () => {
       {
         username: 'admin',
         password: hash,
-        role: 'Admin',
+        role: 'admin',
         fullname: 'ABC',
         email: 'ABC@gmail.com',
         phonenumber: '01632653333',

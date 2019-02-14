@@ -37,8 +37,8 @@ class GroupAccessManagement extends React.Component {
     if (loading) {
       return <Loading />;
     }
-    console.log(' in render');
-    console.log(users);
+    // console.log(' in render');
+    // console.log(users);
     return (
       <DataTable
         users={users}

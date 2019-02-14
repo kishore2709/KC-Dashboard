@@ -11,6 +11,7 @@ import { dateRange } from './dateRange.reducer';
 import { serverStatus } from './serverStatus.reducer';
 import userDialogData from './AIO/userData.reducer';
 import { userTable } from './userTable.reducer';
+import { groupTable } from './groupTable.reducer';
 const rootReducer = combineReducers({
   dialog,
   dateRange,
@@ -23,6 +24,7 @@ const rootReducer = combineReducers({
   form: formReducer,
   userDialogData,
   userTable,
+  groupTable,
 });
 
 export default rootReducer;

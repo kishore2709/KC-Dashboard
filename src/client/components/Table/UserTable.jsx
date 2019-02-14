@@ -7,7 +7,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import UserDialog from 'components/Dialogs/UserDialog.jsx';
 import { PostApi } from '_helpers/Utils';
-import { dialogActions, userTableActions } from '_actions';
+import { dialogActions, userTableActions, groupTableActions } from '_actions';
 import { connect } from 'react-redux';
 import { withToastManager } from 'react-toast-notifications';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
@@ -21,12 +21,14 @@ class UserTable extends React.Component {
     openDialog: false,
     rows: [],
     loading: true,
+    groups: [],
   };
 
   componentWillMount() {
     PostApi('/api/users/getUsers', {})
       .then(res => {
         // console.log(res);
+        if (!res || !Array.isArray(res) || 'message' in res || res === 'err') return 0;
         const result = res.map(x => {
           const { _id, ...rest } = x;
           return { id: _id, ...rest };
@@ -38,6 +40,16 @@ class UserTable extends React.Component {
       })
       .catch(err => {
         console.log('get data from database err');
+      });
+    PostApi('/api/groups/getGroups', {})
+      .then(res => {
+        if (!res || !Array.isArray(res) || 'message' in res || res === 'err') return 0;
+        // console.log('get Groups..');
+        // console.log(res);
+        this.props.setGroup(res);
+      })
+      .catch(err => {
+        console.log('get usergroups from database err');
       });
   }
 
@@ -206,7 +218,7 @@ class UserTable extends React.Component {
 
     return (
       <React.Fragment>
-        <UserDialog />
+        <UserDialog groups={this.state.groups}/>
         <MUIDataTable
           title="Danh sách người dùng"
           data={data}
@@ -236,6 +248,9 @@ const mapDispatchToProps = dispatch => ({
   },
   setTable: newStatus => {
     dispatch(userTableActions.set(newStatus));
+  },
+  setGroup: newStatus => {
+    dispatch(groupTableActions.set(newStatus));
   },
   openDialog: newStatus => {
     dispatch(dialogActions.openDialog(newStatus));
