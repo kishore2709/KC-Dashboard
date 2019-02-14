@@ -77,7 +77,7 @@ class LogTable extends Component {
 
     return (
       <Grid container spacing={24}>
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={12}>
           <MUIDataTable
             title={'LogIn Logs'}
             data={logData.in}
@@ -85,7 +85,7 @@ class LogTable extends Component {
             options={options}
           />
         </Grid>
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={12}>
           <MUIDataTable
             title={'LogOut Logs'}
             data={logData.out}
