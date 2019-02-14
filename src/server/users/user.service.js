@@ -2,12 +2,11 @@
 const mongoose = require('mongoose');
 const config = require('../config.json');
 const Schemas = require('../Utils/Schema');
+
 const UserSchema = Schemas.UserSchema;
 const LogSchema = Schemas.LogSchema;
 // #### >>>  Init Mongodb
-mongoose.connect('mongodb://localhost/usermanager');
-const db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
+
 const userSchema = UserSchema;
 const User = mongoose.model('User', userSchema);
 const Log = mongoose.model('Log', LogSchema);
@@ -35,9 +34,14 @@ module.exports = {
 };
 
 async function saveLog(obj) {
-  if (!obj || !('username' in obj) || !('timestamp' in obj)
-    || !('status' in obj) || !('isLogin' in obj)
-    || !('ip' in obj))
+  if (
+    !obj ||
+    !('username' in obj) ||
+    !('timestamp' in obj) ||
+    !('status' in obj) ||
+    !('isLogin' in obj) ||
+    !('ip' in obj)
+  )
     return 0;
   let { username, timestamp, status, isLogin, ip } = obj;
   username = username.toString().toLowerCase();
@@ -79,7 +83,10 @@ async function checkPwd(obj) {
       // console.log('get db checkpwd users ok');
       // console.log(dat);
       // console.log(users);
-      if (!users || !('password' in users)) { ret = 0; return 0 };
+      if (!users || !('password' in users)) {
+        ret = 0;
+        return 0;
+      }
       if (users.password === dat) ret = 1;
     }
   });
@@ -175,18 +182,18 @@ async function updateDb(objArr) {
     if (!obj || !('username' in obj) || !('id' in obj)) return 0;
     // to lowerCase
     obj.username = obj.username.toString().toLowerCase();
-    //ensure no update password
+    // ensure no update password
     let { id, username, ...rest } = obj;
     if ('password' in rest) {
-      let { password, ...restTwo } = rest;
+      const { password, ...restTwo } = rest;
       rest = restTwo;
     }
     if ('oldPassword' in rest) {
-      let { oldPassword, ...restThree } = rest;
+      const { oldPassword, ...restThree } = rest;
       rest = restThree;
     }
     if ('newPassword' in rest) {
-      let { newPassword, ...restFour } = rest;
+      const { newPassword, ...restFour } = rest;
       rest = restFour;
     }
     console.log(rest);
