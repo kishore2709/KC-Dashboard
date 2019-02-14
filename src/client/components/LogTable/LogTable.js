@@ -30,6 +30,7 @@ class LogTable extends Component {
       });
   }
   render() {
+    console.log(this.state.data);
     const logData = _DataParser(this.state.data);
     const columns = [
       {
@@ -40,6 +41,12 @@ class LogTable extends Component {
       },
       {
         name: 'Username',
+      },
+      {
+        name: 'IP Address',
+        options: {
+          filter: false,
+        }
       },
       {
         name: 'Status',
@@ -102,10 +109,10 @@ function _DataParser(data) {
   const logData = {
     in: data.message
       .filter(curLog => curLog.isLogin)
-      .map(curLog => [curLog.timestamp, curLog.username, curLog.status]),
+      .map(curLog => [curLog.timestamp, curLog.username, curLog.ip, curLog.status]),
     out: data.message
       .filter(curLog => !curLog.isLogin)
-      .map(curLog => [curLog.timestamp, curLog.username, curLog.status]),
+      .map(curLog => [curLog.timestamp, curLog.username, curLog.ip, curLog.status]),
   };
   return logData;
 }
