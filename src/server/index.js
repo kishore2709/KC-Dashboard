@@ -3,6 +3,8 @@ const express = require('express');
 // const os = require('os');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const mongoose = require('mongoose');
+
 // const md5 = require('md5');
 // const path = require('path');
 const errorHandler = require('./_helpers/error-handler');
@@ -39,8 +41,11 @@ app.get('/*', (req, res) => {
 app.use(jwt());
 // for ReCheck PassWd when Change passwd
 app.use((req, res, next) => {
-  if (req.url === '/api/users/authenticate' || req.url === '/authenticate'
-    || req.url === '/api/users/saveLog')
+  if (
+    req.url === '/api/users/authenticate' ||
+    req.url === '/authenticate' ||
+    req.url === '/api/users/saveLog'
+  )
     next();
   else {
     // console.log(req.url);
@@ -65,12 +70,14 @@ app.use((req, res, next) => {
 });
 // get ip addr
 app.use((req, res, next) => {
-  let xForwardedFor = (req.headers['x-forwarded-for'] || '').replace(/:\d+$/, '');
-  let ip = xForwardedFor || req.connection.remoteAddress;
+  const xForwardedFor = (req.headers['x-forwarded-for'] || '').replace(
+    /:\d+$/,
+    ''
+  );
+  const ip = xForwardedFor || req.connection.remoteAddress;
   req.ipAddr = ip;
   next();
-})
-
+});
 
 app.use('/api/users', require('./users/users.controller'));
 app.use('/api/groups', require('./groups/groups.controller'));
@@ -85,8 +92,12 @@ app.use(errorHandler);
 //     ],
 //   })
 // );
-
-app.listen(8081, () => console.log('Listening on port 8081!'));
+mongoose.connect('mongodb://localhost/usermanager');
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', () => {
+  app.listen(8081, () => console.log('Listening on port 8081!'));
+});
 
 // ////////#$################
 

@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 // const bcrypt = require('bcrypt');
 const defaultPassword = require('./pwd');
 
-mongoose.connect('mongodb://localhost/usermanager');
+// mongoose.connect('mongodb://localhost/usermanager');
 const UserSchema = new mongoose.Schema({
   username: String,
   password: { type: String, default: defaultPassword },
@@ -13,7 +13,7 @@ const UserSchema = new mongoose.Schema({
   status: Boolean,
   changePwd: {
     type: Boolean,
-    default: true
+    default: true,
   },
   permissions: {
     type: Object,
