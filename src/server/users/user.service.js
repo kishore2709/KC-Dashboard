@@ -215,6 +215,7 @@ async function authenticate(obj) {
   // console.log(username, password);
   return new Promise((resolve, reject) => {
     User.find({ username }, (err, docs) => {
+      console.log(err, docs);
       if (err) {
         console.log(err);
         reject(err);
