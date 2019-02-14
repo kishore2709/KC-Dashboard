@@ -9,6 +9,7 @@ import TableLoader from 'components/ContentLoader/TableLoader.jsx';
 // core components
 // import GridItem from 'components/Grid/GridItem.jsx';
 import GridContainer from 'components/Grid/GridContainer.jsx';
+import { Grid } from '@material-ui/core';
 
 // import UserTable from 'components/Table/UserTable';
 const UserTable = Loadable({
@@ -38,11 +39,17 @@ const styles = {
 function UserProfile(props) {
   const { classes } = props;
   return (
-    <div>
-      <GridContainer>
-        <UserTable />
-      </GridContainer>
-    </div>
+      <Grid
+        container
+        spacing={24}  
+      >
+        <Grid
+          item
+          xs={12}
+        >
+          <UserTable />
+        </Grid>
+      </Grid>
   );
 }
 

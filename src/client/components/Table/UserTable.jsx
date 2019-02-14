@@ -4,12 +4,15 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 import EditIcon from '@material-ui/icons/BorderColor';
 import IconButton from '@material-ui/core/IconButton';
+import Tooltip from '@material-ui/core/Tooltip';
 import UserDialog from 'components/Dialogs/UserDialog.jsx';
 import { PostApi } from '_helpers/Utils';
 import { dialogActions, userTableActions } from '_actions';
 import { connect } from 'react-redux';
 import { withToastManager } from 'react-toast-notifications';
 import CustomFooter from './CustomFooter.jsx';
+import PersonAddIcon from '@material-ui/icons/PersonAdd';
+import { Typography } from '@material-ui/core';
 // import TableLoader from 'components/ContentLoader/TableLoader.jsx';
 // import { List } from 'react-content-loader'
 
@@ -84,17 +87,7 @@ class UserTable extends React.Component {
         options: {
           filter: true,
           customBodyRender: (value, tableMeta, updateValue) => (
-            <FormControlLabel
-              label={value === true || value === 'true' ? 'Yes' : 'No'}
-              value={value === true || value === 'true' ? 'Yes' : 'No'}
-              control={
-                <Switch
-                  color="primary"
-                  checked={value === true || value === 'true'}
-                  value={value === true || value === 'true' ? 'Yes' : 'No'}
-                />
-              }
-            />
+            value ? <Typography color='primary'>Active</Typography> : <Typography color='error'>Inactive</Typography>
           ),
         },
       },
@@ -147,23 +140,22 @@ class UserTable extends React.Component {
       selectableRows: true,
       filterType: 'dropdown',
       responsive: 'stacked',
-      customFooter: (
-        count,
-        page,
-        rowsPerPage,
-        changeRowsPerPage,
-        changePage
-      ) => (
-        <CustomFooter
-          changePage={changePage}
-          count={count}
-          onClick={() => {
-            // truong hop them nguoi dung moi
-            this.props.openDialog(true);
-            this.props.add();
-          }}
-        />
-      ),
+      customToolbar: () => {
+        return (
+          <Tooltip title='Thêm người dùng'>
+            <IconButton 
+              aria-label='Add User'
+              onClick={() => {
+                // truong hop them nguoi dung moi
+                this.props.openDialog(true);
+                this.props.add();
+              }}
+            >
+              <PersonAddIcon />
+            </IconButton>
+          </Tooltip>
+        );
+      },
       onRowsDelete: e => {
         const { userTable, toastManager } = this.props;
         const asyncDeleteFunction = async function delFunc(rows) {

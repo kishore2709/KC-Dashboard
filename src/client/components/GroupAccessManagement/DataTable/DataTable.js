@@ -152,7 +152,7 @@ class DataTable extends Component {
             </IconButton>
           </Tooltip>
         );
-      }
+      },
     };
 
     return (
