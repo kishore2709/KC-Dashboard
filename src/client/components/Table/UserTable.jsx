@@ -10,9 +10,9 @@ import { PostApi } from '_helpers/Utils';
 import { dialogActions, userTableActions } from '_actions';
 import { connect } from 'react-redux';
 import { withToastManager } from 'react-toast-notifications';
-import CustomFooter from './CustomFooter.jsx';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import { Typography } from '@material-ui/core';
+import CustomFooter from './CustomFooter.jsx';
 // import TableLoader from 'components/ContentLoader/TableLoader.jsx';
 // import { List } from 'react-content-loader'
 
@@ -20,7 +20,7 @@ class UserTable extends React.Component {
   state = {
     openDialog: false,
     rows: [],
-    loading : true,
+    loading: true,
   };
 
   componentWillMount() {
@@ -34,7 +34,7 @@ class UserTable extends React.Component {
         // console.log(res);
         // this.setState({ rows: result });
         this.props.setTable(result);
-        this.setState({loading : false});
+        this.setState({ loading: false });
       })
       .catch(err => {
         console.log('get data from database err');
@@ -44,7 +44,6 @@ class UserTable extends React.Component {
   render() {
     // khi chua Load xong data from Sv
     // const { loading } = this.state;
-  
 
     // add: thao tac add User - redux
     // update: Thao tac update User - redux
@@ -54,6 +53,7 @@ class UserTable extends React.Component {
     // setTable : setTable when fetch done
     const {
       add,
+      delTable,
       update,
       userTable,
       updateTable,
@@ -86,9 +86,12 @@ class UserTable extends React.Component {
         name: 'Status',
         options: {
           filter: true,
-          customBodyRender: (value, tableMeta, updateValue) => (
-            value ? <Typography color='primary'>Active</Typography> : <Typography color='error'>Inactive</Typography>
-          ),
+          customBodyRender: (value, tableMeta, updateValue) =>
+            value ? (
+              <Typography color="primary">Active</Typography>
+            ) : (
+              <Typography color="error">Inactive</Typography>
+            ),
         },
       },
       {
@@ -140,28 +143,27 @@ class UserTable extends React.Component {
       selectableRows: true,
       filterType: 'dropdown',
       responsive: 'stacked',
-      customToolbar: () => {
-        return (
-          <Tooltip title='Thêm người dùng'>
-            <IconButton 
-              aria-label='Add User'
-              onClick={() => {
-                // truong hop them nguoi dung moi
-                this.props.openDialog(true);
-                this.props.add();
-              }}
-            >
-              <PersonAddIcon />
-            </IconButton>
-          </Tooltip>
-        );
-      },
+      customToolbar: () => (
+        <Tooltip title="Thêm người dùng">
+          <IconButton
+            aria-label="Add User"
+            onClick={() => {
+              // truong hop them nguoi dung moi
+              this.props.openDialog(true);
+              this.props.add();
+            }}
+          >
+            <PersonAddIcon />
+          </IconButton>
+        </Tooltip>
+      ),
       onRowsDelete: e => {
         const { userTable, toastManager } = this.props;
         const asyncDeleteFunction = async function delFunc(rows) {
           const needDelArr = rows.map(val => userTable[val.index]);
           await Promise.all(
             needDelArr.map(async val => {
+              delTable(val);
               await PostApi('/api/users/deleteDb', val)
                 .then(res => {
                   if (res === 'err') {
@@ -201,7 +203,7 @@ class UserTable extends React.Component {
         asyncDeleteFunction(e.data);
       },
     };
-    
+
     return (
       <React.Fragment>
         <UserDialog />
@@ -225,6 +227,9 @@ const mapDispatchToProps = dispatch => ({
   },
   updateTable: newStatus => {
     dispatch(userTableActions.update(newStatus));
+  },
+  delTable: newStatus => {
+    dispatch(userTableActions.del(newStatus));
   },
   addTable: newStatus => {
     dispatch(userTableActions.add(newStatus));
