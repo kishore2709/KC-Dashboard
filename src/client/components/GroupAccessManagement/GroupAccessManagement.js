@@ -2,13 +2,14 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import { withToastManager } from 'react-toast-notifications';
-import { GetUserInfo, PostApi } from '../../_helpers/Utils';
 import PropTypes from 'prop-types';
-import DataTable from './DataTable/DataTable';
 import Loading from 'components/Loading/Loading.jsx';
+import { dialogActions } from '_actions';
+import { GetUserInfo, PostApi } from '../../_helpers/Utils';
+import DataTable from './DataTable/DataTable';
+import { connect } from 'react-redux';
 
-const styles = theme => ({
-});
+const styles = theme => ({});
 
 class GroupAccessManagement extends React.Component {
   constructor(props) {
@@ -34,16 +35,16 @@ class GroupAccessManagement extends React.Component {
     const { classes } = this.props;
 
     if (loading) {
-      return (
-        <Loading />
-      );
+      return <Loading />;
     }
-    // console.log(users);
+    console.log(' in render');
+    console.log(users);
     return (
       <DataTable
         users={users}
         fireUpSubmit={this.solveHandleSubmit}
         classes={this.props.classes}
+        onAddGroup={this.solveAddGroup}
       />
     );
   }
@@ -68,9 +69,13 @@ class GroupAccessManagement extends React.Component {
 
   solveHandleSubmit = newUsers => {
     // console.log(newUsers);
-    let dataUpdate = newUsers.map(({ id, username: groupname, permissions, role }) => ({
-      id, groupname, permissions
-    }))
+    const dataUpdate = newUsers.map(
+      ({ id, username: groupname, permissions, role }) => ({
+        id,
+        groupname,
+        permissions,
+      })
+    );
     PostApi('/api/groups/updateDb', dataUpdate)
       .then(res => {
         if (res === 'err') {
@@ -99,11 +104,59 @@ class GroupAccessManagement extends React.Component {
       });
   };
 
+  solveAddGroup = newGroup => {
+    // console.log(newGroup, '///');
+    PostApi('/api/groups/addDb', { groupname: newGroup })
+      .then(res => {
+        if (res === 'err' || !res || 'message' in res) {
+          this.props.toastManager.add(`Something went wrong: `, {
+            appearance: 'error',
+            autoDismiss: true,
+          });
+          // console.log('update data from database err in AcessManagement');
+
+          // ret = 'err';
+        } else {
+          this.props.toastManager.add('Add group Successfully', {
+            appearance: 'success',
+            autoDismiss: true,
+          });
+          console.log(res);
+          const { _id: id, permissions, groupname: username } = res;
+
+          // console.log('ok add');
+          this.setState(
+            ({ users }) => ({
+              users: [
+                ...users,
+                {
+                  id,
+                  username,
+                  permissions,
+                  role: 'user',
+                },
+              ],
+            }),
+            () => {
+              console.log(this.state);
+            }
+          );
+        }
+      })
+      .catch(err => {
+        // ret = 'err';
+        this.props.toastManager.add(`Something went wrong: `, {
+          appearance: 'error',
+          autoDismiss: true,
+        });
+        // console.log('update data from database err in AcessManagement');
+      }).then(rettt => {
+        this.props.closeDialogGroup(false);
+      });
+  };
   // =================
 
-  HandleSubmit = () => {
-
-  };
+  HandleSubmit = () => { };
 
   GetAllUsers = () =>
     PostApi('/api/groups/getGroups', {})
@@ -112,14 +165,12 @@ class GroupAccessManagement extends React.Component {
           const { _id, ...rest } = x;
           return { id: _id, ...rest };
         });
-        result = result.map(({ id, groupname, permissions }) => {
-          return {
-            id,
-            username: groupname,
-            permissions,
-            role: 'user',
-          }
-        })
+        result = result.map(({ id, groupname, permissions }) => ({
+          id,
+          username: groupname,
+          permissions,
+          role: 'user',
+        }));
         console.log(result);
         return Promise.resolve(result);
       })
@@ -134,4 +185,17 @@ GroupAccessManagement.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withToastManager(withStyles(styles)(GroupAccessManagement));
+const mapDispatchToProps = dispatch => ({
+  closeDialogGroup: newStatus => {
+    dispatch(dialogActions.closeDialogGroup(newStatus));
+  },
+});
+
+export default withToastManager(
+  withStyles(styles)(
+    connect(
+      null,
+      mapDispatchToProps
+    )(GroupAccessManagement)
+  )
+);
