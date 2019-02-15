@@ -90,7 +90,7 @@ class LogTable extends Component {
       <Grid container spacing={24}>
         <Grid item xs={12}>
           <MUIDataTable
-            title={'LogIn Logs'}
+            title={'Thông tin logs đăng nhập'}
             data={logData.in}
             columns={columns}
             options={options}
@@ -98,7 +98,7 @@ class LogTable extends Component {
         </Grid>
         <Grid item xs={12}>
           <MUIDataTable
-            title={'LogOut Logs'}
+            title={'Thông tin Logs đăng xuất'}
             data={logData.out}
             columns={columns}
             options={options}

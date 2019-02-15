@@ -6,7 +6,7 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 
 // const md5 = require('md5');
-// const path = require('path');
+const path = require('path');
 const errorHandler = require('./_helpers/error-handler');
 const jwt = require('./_helpers/jwt');
 const userService = require('./users/user.service');
@@ -29,15 +29,15 @@ app.use(express.static('dist'));
 app.use(cors());
 
 // for f5 deploy..
-/*
-app.get('/*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../../dist/index.html'), err => {
-    if (err) {
-      res.status(500).send(err);
-    }
-  });
-});
-*/
+
+// app.get('/*', (req, res) => {
+//   res.sendFile(path.join(__dirname, '../../dist/index.html'), err => {
+//     if (err) {
+//       res.status(500).send(err);
+//     }
+//   });
+// });
+
 app.use(jwt());
 // for ReCheck PassWd when Change passwd
 app.use((req, res, next) => {

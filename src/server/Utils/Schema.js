@@ -86,4 +86,7 @@ const GroupSchema = new mongoose.Schema({
     },
   },
 });
-module.exports = { UserSchema, LogSchema, GroupSchema };
+const User = mongoose.model('User', UserSchema);
+const Log = mongoose.model('Log', LogSchema);
+const Group = mongoose.model('Group', GroupSchema);
+module.exports = { User, Log, Group };

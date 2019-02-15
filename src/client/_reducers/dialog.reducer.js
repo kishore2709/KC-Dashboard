@@ -6,13 +6,27 @@ export function dialog(
     message: false,
     open: false,
     openPwdForm: false,
+    openGroupDialog: false,
     new: false,
   },
   action
 ) {
   switch (action.type) {
+    case dialogConstants.DIALOG_GROUP_OPEN:
+      return {
+        ...state,
+        type: dialogConstants.DIALOG_GROUP_OPEN,
+        openGroupDialog: true,
+      };
+    case dialogConstants.DIALOG_GROUP_CLOSE:
+      return {
+        ...state,
+        type: dialogConstants.DIALOG_GROUP_CLOSE,
+        openGroupDialog: false,
+      };
     case dialogConstants.DIALOG_USER_CLOSE:
       return {
+        ...state,
         type: dialogConstants.DIALOG_USER_CLOSE,
         open: action.message,
         message: {},
@@ -21,6 +35,7 @@ export function dialog(
       };
     case dialogConstants.DIALOG_USER_OPEN:
       return {
+        ...state,
         type: dialogConstants.DIALOG_USER_OPEN,
         message: {},
         open: action.message,
@@ -29,6 +44,7 @@ export function dialog(
       };
     case dialogConstants.DIALOG_USER_OPEN_PWD_FORM:
       return {
+        ...state,
         type: dialogConstants.DIALOG_USER_OPEN_PWD_FORM,
         message: {},
         openPwdForm: action.message,
@@ -37,6 +53,7 @@ export function dialog(
       };
     case dialogConstants.DIALOG_USER_CLOSE_PWD_FORM:
       return {
+        ...state,
         type: dialogConstants.DIALOG_USER_CLOSE_PWD_FORM,
         message: {},
         openPwdForm: action.message,
@@ -45,6 +62,7 @@ export function dialog(
       };
     case dialogConstants.DIALOG_USER_ADD:
       return {
+        ...state,
         type: dialogConstants.DIALOG_USER_ADD,
         message: action.message,
         open: state.open,
@@ -53,6 +71,7 @@ export function dialog(
       };
     case dialogConstants.DIALOG_USER_UPDATE:
       return {
+        ...state,
         type: dialogConstants.DIALOG_USER_UPDATE,
         message: action.message,
         open: state.open,
@@ -61,6 +80,7 @@ export function dialog(
       };
     case dialogConstants.DIALOG_USER_LOAD:
       return {
+        ...state,
         type: dialogConstants.DIALOG_USER_LOAD,
         message: action.message,
         open: state.open,

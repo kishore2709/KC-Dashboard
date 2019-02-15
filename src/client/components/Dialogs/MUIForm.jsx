@@ -103,7 +103,8 @@ const renderSelectField = ({
 );
 
 let MaterialUiForm = props => {
-  const { handleSubmit, pristine, reset, submitting, classes } = props;
+  const { handleSubmit, pristine, reset, submitting, classes, groupTable } = props;
+  // console.log(groupTable);
   return (
     <form onSubmit={handleSubmit}>
       <Grid container spacing={24}>
@@ -143,9 +144,9 @@ let MaterialUiForm = props => {
                 label="role"
               >
                 <option value="" />
-                <option value="Admin">Admin</option>
-                <option value="Moderator">Moderator</option>
-                <option value="User">User</option>
+                {groupTable.map(val => {
+                  return (<option value={val.groupname}>{val.groupname}</option>);
+                })}
               </Field>
             </Grid>
 
@@ -226,6 +227,7 @@ MaterialUiForm = reduxForm({
 MaterialUiForm = connect(state => ({
   initialValues: state.userDialogData.data, // pull initial values from account reducer
   dialog: state.dialog,
+  groupTable: state.groupTable,
 }))(MaterialUiForm);
 
 export default MaterialUiForm;

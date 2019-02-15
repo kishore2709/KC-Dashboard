@@ -130,7 +130,7 @@ let UserProfileForm = props => {
           <Field
             name="username"
             component={renderTextField}
-            label="Username"
+            label="Tài khoản"
             disabled
           />
         </Grid>
@@ -138,7 +138,7 @@ let UserProfileForm = props => {
           <Field
             name="role"
             component={renderTextField}
-            label="role"
+            label="Nhóm"
             disabled
           />
         </Grid>
@@ -146,7 +146,7 @@ let UserProfileForm = props => {
           <Field
             name="status"
             component={renderTextField}
-            label="status"
+            label="Trạng thái"
             disabled
           />
         </Grid>
@@ -154,14 +154,14 @@ let UserProfileForm = props => {
           <Field
             name="fullname"
             component={renderTextField}
-            label="Full Name"
+            label="Tên"
           />
         </Grid>
         <Grid item xs={12} sm={4}>
           <Field
             name="phonenumber"
             component={renderTextField}
-            label="Phonenumber"
+            label="Số điện thoại"
           />
         </Grid>
         <Grid item xs={12} sm={4}>
@@ -171,21 +171,21 @@ let UserProfileForm = props => {
           <Field
             name="oldPassword"
             component={renderPasswordField}
-            label="oldPassword"
+            label="Mật khẩu cũ"
           />
         </Grid>
         <Grid item xs={12} sm={12} md={12}>
           <Field
             name="newPassword"
             component={renderPasswordField}
-            label="newPassword"
+            label="Mật khẩu mới"
           />
         </Grid>
         <Grid item xs={12} sm={12} md={12}>
           <Field
             name="confirmNewPassword"
             component={renderPasswordField}
-            label="confirmNewPassword"
+            label="Nhập lại mật khẩu mới"
           />
         </Grid>
         <Grid item xs={12}>

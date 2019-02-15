@@ -26,7 +26,17 @@ function addDialog(message) {
 function loadDataDialog(message) {
   return { type: dialogConstants.DIALOG_USER_LOAD, message };
 }
+
+function openDialogGroup(message) {
+  return { type: dialogConstants.DIALOG_GROUP_OPEN, message };
+}
+
+function closeDialogGroup(message) {
+  return { type: dialogConstants.DIALOG_GROUP_CLOSE, message };
+}
 export const dialogActions = {
+  openDialogGroup,
+  closeDialogGroup,
   openDialog,
   closeDialog,
   updateDialog,

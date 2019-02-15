@@ -14,7 +14,7 @@ import CardBody from 'components/Card/CardBody.jsx';
 
 // core components
 import UserProfileForm from 'components/Forms/UserProfileForm.jsx';
-import avatar from 'assets/img/faces/me.jpg';
+import avatar from 'assets/img/faces/avartabus.png';
 // redux
 import { connect } from 'react-redux';
 import { load as loadAccount } from '_reducers/AIO/userData.reducer.js';
@@ -125,8 +125,8 @@ class UserProfile extends React.Component {
               </a>
             </CardAvatar>
             <CardBody profile>
-              <h6 className={classes.cardCategory}>CEO / CO-FOUNDER</h6>
-              <h4 className={classes.cardTitle}>Dat Luong Duc Tuan</h4>
+              <h6 className={classes.cardCategory}>{fullname}</h6>
+              <h4 className={classes.cardTitle}>{username}</h4>
               <p className={classes.description}>
                 Don't be scared of the truth because we need to restart the
                 human foundation in truth And I love you like Kanye loves Kanye

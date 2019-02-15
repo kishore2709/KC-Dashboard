@@ -41,8 +41,12 @@ const styles = theme => ({
 });
 
 const markers = [
-  { markerOffset: 65, name: 'Hà Nội', coordinates: [105.6525, 20.9755] },
-  { markerOffset: 65, name: 'Hồ Chí Minh', coordinates: [106.69509, 10.76472] },
+  { markerOffset: -35, name: 'Hà Nội', coordinates: [105.6525, 20.9755] },
+  {
+    markerOffset: -35,
+    name: 'Hồ Chí Minh',
+    coordinates: [106.69509, 10.76472],
+  },
 ];
 
 class SimpleMarkers extends Component {
@@ -51,12 +55,12 @@ class SimpleMarkers extends Component {
     return (
       <div style={wrapperStyles} className={classes.box}>
         <ComposableMap
-          projectionConfig={{ scale: 6000 }}
-          width={980}
-          height={851}
+          projectionConfig={{ scale: 3000 }}
+          width={580}
+          height={800}
           style={{
             width: '100%',
-            height: '400px',
+            height: '100%',
           }}
         >
           <ZoomableGroup center={[105, 15]} disablePanning>
@@ -108,7 +112,7 @@ class SimpleMarkers extends Component {
                   <circle
                     cx={0}
                     cy={0}
-                    r={30}
+                    r={20}
                     style={{
                       stroke: '#FF5722',
                       strokeWidth: 3,

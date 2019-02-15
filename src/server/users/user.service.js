@@ -1,15 +1,10 @@
 ﻿const jwt = require('jsonwebtoken');
-const mongoose = require('mongoose');
 const config = require('../config.json');
-const Schemas = require('../Utils/Schema');
-
-const UserSchema = Schemas.UserSchema;
-const LogSchema = Schemas.LogSchema;
+const Models = require('../Utils/Schema');
 // #### >>>  Init Mongodb
-
-const userSchema = UserSchema;
-const User = mongoose.model('User', userSchema);
-const Log = mongoose.model('Log', LogSchema);
+const User = Models.User;
+const Log = Models.Log;
+const Group = Models.Group;
 const dashboardService = require('../services/dashboard.js');
 // bcrypt
 const bcrypt = require('bcrypt');
@@ -130,11 +125,11 @@ async function getUsers() {
 async function addDb(obj) {
   let ret = 0;
   // console.log(obj);
-  if (!obj || !('username' in obj)) return 0;
+  if (!obj || !('username' in obj) || !('role' in obj)) return 0;
 
   // to lowercase;
   obj.username = obj.username.toString().toLowerCase();
-
+  obj.role = obj.role.toString().toLowerCase();
   // check Username exist?
   let tmpUsers;
   await User.find({ username: obj.username }, (err, docs) => {
@@ -142,8 +137,16 @@ async function addDb(obj) {
   });
   if (Array.isArray(tmpUsers) && tmpUsers.length > 0) return 0;
 
+  // check role - groupname exist ? -> set Permission Group for user
+  let groupUserPermission;
+  await Group.find({ groupname: obj.role }, (err, docs) => {
+    if (err) return 0;
+    if (docs.length === 0) return;
+    groupUserPermission = docs[0].permissions;
+  });
+
   // add User to db
-  const user = new User(obj);
+  const user = new User({ ...obj, permissions: groupUserPermission });
   await new Promise(resolve =>
     user.save((err, newUser) => {
       if (err) {
