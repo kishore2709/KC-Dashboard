@@ -26,18 +26,8 @@ class TableDiscover extends React.Component {
           },
           
         },
-        MUIDataTableBodyCell: {
-          root: {
-            backgroundColor: '#B3F2C6',
-          },
-        },
-        MUIDataTableHeadCell: {
-          root: {
-            '&:nth-child(1)': {
-              width: 200,
-            },
-          },
-        },
+        
+       
       },
     });
 
@@ -78,11 +68,11 @@ class TableDiscover extends React.Component {
       selectableRows: false,
       filter: true,
     };
-    console.log('handle data');
+    // console.log('handle data');
     // console.log(this.handleData(startDate, endDate));
     const curData = this.handleData(startDate, endDate);
-    console.log(curData);
-    console.log(this.state.data);
+    // console.log(curData);
+    // console.log(this.state.data);
     return (
       <MuiThemeProvider theme={this.getMuiTheme()}>
         <MUIDataTable

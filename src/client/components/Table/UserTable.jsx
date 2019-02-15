@@ -1,7 +1,10 @@
 import React from 'react';
+import { withStyles } from '@material-ui/core/styles';
+
 import MUIDataTable from 'mui-datatables';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Switch from '@material-ui/core/Switch';
+// import FormControlLabel from '@material-ui/core/FormControlLabel';
+//import Switch from '@material-ui/core/Switch';
+import Button from '@material-ui/core/Button';
 import EditIcon from '@material-ui/icons/BorderColor';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
@@ -13,8 +16,19 @@ import { withToastManager } from 'react-toast-notifications';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import { Typography } from '@material-ui/core';
 import CustomFooter from './CustomFooter.jsx';
+import ButtonBase from '@material-ui/core/ButtonBase';
+
 // import TableLoader from 'components/ContentLoader/TableLoader.jsx';
 // import { List } from 'react-content-loader'
+
+const styles = theme => ({
+  button: {
+    margin: theme.spacing.unit,
+  },
+  input: {
+    display: 'none',
+  },
+});
 
 class UserTable extends React.Component {
   state = {
@@ -111,35 +125,36 @@ class UserTable extends React.Component {
         options: {
           filter: true,
           customBodyRender: (value, tableMeta, updateValue) => (
-            <IconButton
+           <ButtonBase>
+            <EditIcon
+              fontSize='small'
+              color='action'
+              titleAccess='Chỉnh sửa thông tin người dùng'
               onClick={() => {
-                // console.log(tableMeta.rowIndex);
-                // console.log(this.props.userTable);
-                const {
-                  fullname,
-                  email,
-                  phonenumber,
-                  role,
-                  status,
-                  username,
-                  id,
-                } = this.props.userTable[tableMeta.rowIndex];
-                this.props.openDialog(true);
-                update({
-                  fullname,
-                  email,
-                  phonenumber,
-                  role,
-                  status,
-                  username,
-                  id,
-                });
+              const {
+                fullname,
+                email,
+                phonenumber,
+                role,
+                status,
+                username,
+                id,
+              } = this.props.userTable[tableMeta.rowIndex];
+              this.props.openDialog(true);
+              update({
+                fullname,
+                email,
+                phonenumber,
+                role,
+                status,
+                username,
+                id,
+                    });
+                  }}
+                />
+            </ButtonBase>
 
-                // this.setState({ openDialog: true });
-              }}
-            >
-              <EditIcon />
-            </IconButton>
+            
           ),
         },
       },
@@ -264,4 +279,4 @@ function mapStateToProps(state) {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(withToastManager(UserTable));
+)(withToastManager(withStyles(styles)(UserTable)));
