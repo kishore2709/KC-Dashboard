@@ -5,7 +5,12 @@ import MUIDataTable from 'mui-datatables';
 import { Typography, Grid } from '@material-ui/core';
 import { PostApi } from '_helpers/Utils';
 
-const styles = theme => ({});
+const styles = theme => ({
+  canOverflow: {
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+  }
+});
 
 class LogTable extends Component {
   constructor(props) {
@@ -32,20 +37,26 @@ class LogTable extends Component {
   render() {
     console.log(this.state.data);
     const logData = _DataParser(this.state.data);
+    const { classes } = this.props;
     const columns = [
       {
         name: 'Time',
         options: {
           filter: false,
+          customBodyRender: data => <Typography className={classes.canOverflow}>{data}</Typography>,
         },
       },
       {
         name: 'Username',
+        options: {
+          customBodyRender: data => <Typography className={classes.canOverflow}>{data}</Typography>,
+        },
       },
       {
         name: 'IP Address',
         options: {
           filter: false,
+          customBodyRender: data => <Typography className={classes.canOverflow}>{data}</Typography>,
         }
       },
       {

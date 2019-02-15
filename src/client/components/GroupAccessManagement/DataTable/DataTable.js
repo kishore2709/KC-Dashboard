@@ -155,6 +155,8 @@ class DataTable extends Component {
       },
     };
 
+    const { classes } = this.props;
+
     return (
       <Grid
         container

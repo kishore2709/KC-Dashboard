@@ -2,6 +2,7 @@ import React from 'react';
 import MUIDataTable from 'mui-datatables';
 import withStyles from '@material-ui/core/styles/withStyles';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
 import momentRandom from 'moment-random';
 import { connect } from 'react-redux';
 import { dateRangeActions } from '_actions';
@@ -58,12 +59,14 @@ class TableDiscover extends React.Component {
         name: 'Timestamp',
         options: {
           filter: true,
+          customBodyRender: data => <Typography style={{overflow: 'hidden', textOverflow: 'ellipsis',}}>{data}</Typography>,
         },
       },
       {
         name: 'Data',
         options: {
           filter: true,
+          customBodyRender: data => <Typography style={{overflow: 'hidden', textOverflow: 'ellipsis',}}>{data}</Typography>,
         },
       },
     ];
