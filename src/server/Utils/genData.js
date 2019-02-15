@@ -3,16 +3,13 @@ const bcrypt = require('bcrypt');
 
 const saltRounds = 10;
 const myPlaintextPassword = '1';
-const Schemas = require('../Utils/Schema');
-const UserSchema = Schemas.UserSchema;
-const GroupSchema = Schemas.GroupSchema;
+const Models = require('../Utils/Schema');
 
 mongoose.connect('mongodb://localhost/usermanager');
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
-const userSchema = UserSchema;
-const User = mongoose.model('User', userSchema);
-const Group = mongoose.model('Group', GroupSchema);
+const User = Models.User;
+const Group = Models.Group;
 db.once('open', () => {
   // we're connected!
   console.log('connected to database..');
@@ -128,16 +125,17 @@ db.once('open', () => {
         },
       },
     ];
-    const groupData = [{
-      groupname: 'admin',
-    },
-    {
-      groupname: 'moderator',
-    },
-    {
-      groupname: 'user',
-    },
-    ]
+    const groupData = [
+      {
+        groupname: 'admin',
+      },
+      {
+        groupname: 'moderator',
+      },
+      {
+        groupname: 'user',
+      },
+    ];
     const users = userData.map(user => new User(user));
     users.map(user =>
       user.save((err, user1) => {
@@ -146,10 +144,12 @@ db.once('open', () => {
       })
     );
     const groups = groupData.map(group => new Group(group));
-    groups.map(group => group.save((err, groupNew) => {
-      if (err) console.log(err);
-      console.log('save group ok');
-    }));
+    groups.map(group =>
+      group.save((err, groupNew) => {
+        if (err) console.log(err);
+        console.log('save group ok');
+      })
+    );
   });
 });
 // console.log('end');
