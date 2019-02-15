@@ -61,21 +61,21 @@ let ChangePasswordForm = props => {
           <Field
             name="oldPassword"
             component={renderPasswordField}
-            label="oldPassword"
+            label="Mật khẩu cũ"
           />
         </Grid>
         <Grid item xs={12} sm={12} md={12}>
           <Field
             name="newPassword"
             component={renderPasswordField}
-            label="newPassword"
+            label="Mật khẩu mới"
           />
         </Grid>
         <Grid item xs={12} sm={12} md={12}>
           <Field
             name="confirmNewPassword"
             component={renderPasswordField}
-            label="confirmNewPassword"
+            label="Nhập lại mật khẩu mới"
           />
         </Grid>
         <Grid item xs={12}>
