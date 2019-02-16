@@ -215,14 +215,13 @@ async function updateDb(objArr) {
 async function authenticate(obj) {
   // console.log(obj);
   // console.log('in auth');
-
   if (!obj || !('username' in obj) || !('password' in obj)) return 0;
   obj.username = obj.username.toString().toLowerCase();
   const { username, password } = obj;
   // console.log(username, password);
   return new Promise((resolve, reject) => {
     User.find({ username }, (err, docs) => {
-      console.log(err, docs);
+      // console.log(err, docs);
       if (err) {
         console.log(err);
         reject(err);

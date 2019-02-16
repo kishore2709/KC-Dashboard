@@ -61,6 +61,7 @@ app.use((req, res, next) => {
     ''
   );
   const ip = xForwardedFor || req.connection.remoteAddress;
+  console.log(ip);
   req.ipAddr = ip;
   next();
 });
