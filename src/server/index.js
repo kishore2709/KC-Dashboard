@@ -7,7 +7,7 @@ const path = require('path');
 const errorHandler = require('./_helpers/error-handler');
 const jwt = require('./_helpers/jwt');
 const userService = require('./users/user.service');
-const Model = require('./Utils/Schema');
+// const Model = require('./Utils/Schema');
 
 const jsonParser = bodyParser.json();
 // Nodejs

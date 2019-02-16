@@ -47,7 +47,7 @@ const UserSchema = new mongoose.Schema({
 });
 
 const LogSchema = new mongoose.Schema({
-  timestamp: Date,
+  timestamp: String,
   isLogin: Boolean,
   username: String,
   status: Boolean,

@@ -33,6 +33,8 @@ import { serverStatusActions } from '_actions';
 class Sidebar extends Component {
   constructor(props) {
     super(props);
+    // console.log('in constructor sidebar');
+    // console.log(['/userGroup','/permission','/manageUser'].includes(window.location.pathname), window.location.pathname);
     this.activeRoute = this.activeRoute.bind(this);
     this.state = {
       routes: [
@@ -45,12 +47,13 @@ class Sidebar extends Component {
           component: Loading,
         },
       ],
-      openUserManagementSubComponents: false,
+      openUserManagementSubComponents: ['/userGroup','/permission','/manageUser'].includes(window.location.pathname),
     };
     this.handleClick = this.handleClick.bind(this);
   }
 
   componentWillMount() {
+    console.log('will mount ?');
     PostApi('/api/users/getUserInfo', GetUserInfo())
       .then(res => {
         // console.log('in then proomse');
