@@ -43,56 +43,64 @@ const styles = {
 };
 
 class UserProfile extends React.Component {
-  constructor(props){
+  constructor(props) {
     super(props);
     this.user = GetUserInfo();
   }
+
   handleSubmit(e) {
     const { user } = this;
     const { toastManager } = this.props;
     // console.log(e);
     if ('oldPassword' in e && 'newPassword' in e)
-    PostApi('/api/users/changePassword', {...e, id : user._id})
-      .then(ret=>{
-        console.log(ret);
-        if ( (!ret) || !('message' in ret)) throw new Error('err');
-        // this.props.addTable(ret);
-        toastManager.add('Change password Successfully', {
-          appearance: 'success',
-          autoDismiss: true,
+      PostApi('/api/users/changePassword', { ...e, id: user._id })
+        .then(ret => {
+          console.log(ret);
+          if (!ret || !('message' in ret)) throw new Error('err');
+          // this.props.addTable(ret);
+          toastManager.add('Change password Successfully', {
+            appearance: 'success',
+            autoDismiss: true,
+          });
+
+          this.user.token = ret.message;
+          this.user.changePwd = false;
+          localStorage.setItem('user', JSON.stringify(this.user));
+        })
+        .catch(err => {
+          console.log(err);
+          toastManager.add(`Change Password Failed!`, {
+            appearance: 'error',
+            autoDismiss: true,
+          });
         });
-        
-        this.user.token = ret.message;
-        this.user.changePwd = false;
-        localStorage.setItem('user', JSON.stringify(this.user));
-      })
-      .catch(err=>{
-        console.log(err);
-        toastManager.add(`Change Password Failed!`, {
-          appearance: 'error',
-          autoDismiss: true,
-        });
-      })
-    if ('fullname' in e && 'phonenumber' in e && 'email' in e && 'username' in e) {
+    if (
+      'fullname' in e &&
+      'phonenumber' in e &&
+      'email' in e &&
+      'username' in e
+    ) {
       const { fullname, phonenumber, email, username } = e;
-      PostApi('/api/users/updateDb', [{fullname, phonenumber, email, username, id: user._id}])
-      .then(ret=>{
-        console.log(ret);
-        if (ret === 'err') throw new Error('wrong');
-        if ( (!ret) || !('message' in ret)) throw new Error('err');
-        // this.props.addTable(ret);
-        toastManager.add('Update infomation Successfully', {
-          appearance: 'success',
-          autoDismiss: true,
+      PostApi('/api/users/updateDb', [
+        { fullname, phonenumber, email, username, id: user._id },
+      ])
+        .then(ret => {
+          console.log(ret);
+          if (ret === 'err') throw new Error('wrong');
+          if (!ret || !('message' in ret)) throw new Error('err');
+          // this.props.addTable(ret);
+          toastManager.add('Update infomation Successfully', {
+            appearance: 'success',
+            autoDismiss: true,
+          });
+        })
+        .catch(err => {
+          console.log(err);
+          toastManager.add(`Update infomation Failed!`, {
+            appearance: 'error',
+            autoDismiss: true,
+          });
         });
-      })
-      .catch(err=>{
-        console.log(err);
-        toastManager.add(`Update infomation Failed!`, {
-          appearance: 'error',
-          autoDismiss: true,
-        });
-      })
     }
   }
 

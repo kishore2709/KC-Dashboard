@@ -1,35 +1,23 @@
 require('rootpath')();
 const express = require('express');
-// const os = require('os');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const mongoose = require('mongoose');
-
-// const md5 = require('md5');
 const path = require('path');
 const errorHandler = require('./_helpers/error-handler');
 const jwt = require('./_helpers/jwt');
 const userService = require('./users/user.service');
 // const groupService = require('./groups/groups.service');
 // const guard = require('express-jwt-permissions')();
-// const expressip = require('express-ip');
-
 const jsonParser = bodyParser.json();
-
-// >>>###################################
-
 // Nodejs
 const urlencodedParser = bodyParser.urlencoded({ extended: false });
-
 const app = express();
-// app.use(expressip().getIpInfoMiddleware);
 app.use(jsonParser);
 app.use(urlencodedParser);
 app.use(express.static('dist'));
 app.use(cors());
-
 // for f5 deploy..
-
 // app.get('/*', (req, res) => {
 //   res.sendFile(path.join(__dirname, '../../dist/index.html'), err => {
 //     if (err) {
@@ -37,7 +25,6 @@ app.use(cors());
 //     }
 //   });
 // });
-
 app.use(jwt());
 // for ReCheck PassWd when Change passwd
 app.use((req, res, next) => {
@@ -78,7 +65,6 @@ app.use((req, res, next) => {
   req.ipAddr = ip;
   next();
 });
-
 app.use('/api/users', require('./users/users.controller'));
 app.use('/api/groups', require('./groups/groups.controller'));
 
@@ -92,13 +78,39 @@ app.use(errorHandler);
 //     ],
 //   })
 // );
-mongoose.connect('mongodb://localhost/usermanager');
-const db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
+const mongodbURI = 'mongodb://localhost/usermanager';
+let db = mongoose.connection;
+
+db.on('connecting', () => {
+  console.log('connecting to MongoDB...');
+});
+
+db.on('error', (error) => {
+  console.error('Error in MongoDb connection: ' + error);
+  mongoose.disconnect();
+});
+db.on('connected', () => {
+  console.log('MongoDB connected!');
+});
+
 db.once('open', () => {
+  console.log('MongoDB connection opened!');
   app.listen(8081, () => console.log('Listening on port 8081!'));
 });
 
+db.on('reconnected', () => {
+  console.log('MongoDB reconnected!');
+});
+
+db.on('disconnected', () => {
+  console.log('MongoDB disconnected!');
+  mongoose.connect(mongodbURI, { server: { auto_reconnect: true } });
+});
+
+mongoose.connect(
+  mongodbURI,
+  { server: { auto_reconnect: true } }
+);
 // ////////#$################
 
 // <<<<<<< HEAD
