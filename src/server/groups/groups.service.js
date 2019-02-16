@@ -1,17 +1,8 @@
-const jwt = require('jsonwebtoken');
-const mongoose = require('mongoose');
-const config = require('../config.json');
 const Schemas = require('../Utils/Schema');
 
-const GroupSchema = Schemas.GroupSchema;
+const Group = Schemas.Group;
 // const GroupSchema = Schemas.GroupSchema;
-
 // #### >>>  Init Mongodb
-mongoose.connect('mongodb://localhost/Groupmanager');
-const db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
-const Group = mongoose.model('Group', GroupSchema);
-// const Group = mongoose.model('Group', GroupSchema);
 module.exports = {
   getGroups,
   updateDb,

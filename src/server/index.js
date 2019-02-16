@@ -7,8 +7,8 @@ const path = require('path');
 const errorHandler = require('./_helpers/error-handler');
 const jwt = require('./_helpers/jwt');
 const userService = require('./users/user.service');
-// const groupService = require('./groups/groups.service');
-// const guard = require('express-jwt-permissions')();
+const Model = require('./Utils/Schema');
+
 const jsonParser = bodyParser.json();
 // Nodejs
 const urlencodedParser = bodyParser.urlencoded({ extended: false });
@@ -35,7 +35,6 @@ app.use((req, res, next) => {
   )
     next();
   else {
-    // console.log(req.url);
     userService
       .checkPwd(req.user)
       .then(ret => {
@@ -54,10 +53,6 @@ app.use((req, res, next) => {
         console.log('in recheck passwd err');
       });
   }
-});
-app.use((req, res, next) => {
-  console.log(req.url);
-  next();
 });
 // get ip addr
 app.use((req, res, next) => {

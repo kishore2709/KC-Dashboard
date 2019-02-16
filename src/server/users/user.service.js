@@ -44,6 +44,7 @@ async function saveLog(obj) {
   let ret = 0;
   await new Promise(resolve =>
     log.save((err, newLog) => {
+      // console.log(err, newLog);
       if (err) {
         console.log('add db log err');
       } else {
@@ -212,6 +213,9 @@ async function updateDb(objArr) {
 }
 
 async function authenticate(obj) {
+  // console.log(obj);
+  // console.log('in auth');
+
   if (!obj || !('username' in obj) || !('password' in obj)) return 0;
   obj.username = obj.username.toString().toLowerCase();
   const { username, password } = obj;
