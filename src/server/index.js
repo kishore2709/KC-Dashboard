@@ -55,6 +55,10 @@ app.use((req, res, next) => {
       });
   }
 });
+app.use((req, res, next) => {
+  console.log(req.url);
+  next();
+});
 // get ip addr
 app.use((req, res, next) => {
   const xForwardedFor = (req.headers['x-forwarded-for'] || '').replace(
@@ -69,24 +73,15 @@ app.use('/api/users', require('./users/users.controller'));
 app.use('/api/groups', require('./groups/groups.controller'));
 
 app.use(errorHandler);
-// app.use(
-//   guard.check(['admin']).unless({
-//     path: [
-//       // public routes that don't require authentication
-//       '/api/users/authenticate',
-//       '/api/users/saveLog',
-//     ],
-//   })
-// );
 const mongodbURI = 'mongodb://localhost/usermanager';
-let db = mongoose.connection;
+const db = mongoose.connection;
 
 db.on('connecting', () => {
   console.log('connecting to MongoDB...');
 });
 
-db.on('error', (error) => {
-  console.error('Error in MongoDb connection: ' + error);
+db.on('error', error => {
+  console.error(`Error in MongoDb connection: ${error}`);
   mongoose.disconnect();
 });
 db.on('connected', () => {
@@ -104,7 +99,10 @@ db.on('reconnected', () => {
 
 db.on('disconnected', () => {
   console.log('MongoDB disconnected!');
-  mongoose.connect(mongodbURI, { server: { auto_reconnect: true } });
+  mongoose.connect(
+    mongodbURI,
+    { server: { auto_reconnect: true } }
+  );
 });
 
 mongoose.connect(

@@ -92,7 +92,7 @@ class Sidebar extends Component {
 
   // verifies if routeName is the one active (in browser input)
   activeRoute(routeName) {
-    //return true;
+    // return true;
     return this.props.location.pathname.indexOf(routeName) > -1;
   }
 
@@ -155,7 +155,8 @@ class Sidebar extends Component {
                 activeClassName="active"
                 key={val.id}
               >
-                <ListItem
+                <ListItem 
+                key={val.id}
                   button
                   className={classes.itemLink + listItemClasses(val.path)}
                 >
@@ -234,7 +235,7 @@ class Sidebar extends Component {
     );
     return (
       <div>
-        <Hidden mdUp implementation="css">
+        <Hidden mdUp implementation="css" key="hidden1">
           <Drawer
             variant="temporary"
             anchor="right"
@@ -254,7 +255,7 @@ class Sidebar extends Component {
             </div>
           </Drawer>
         </Hidden>
-        <Hidden smDown implementation="css">
+        <Hidden smDown implementation="css" key="hidden2">
           <Drawer
             anchor="left"
             variant="permanent"

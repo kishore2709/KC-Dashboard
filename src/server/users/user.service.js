@@ -236,7 +236,6 @@ async function authenticate(obj) {
             {
               sub: user.id,
               dat: user.password,
-              permissions: ['admin', 'user:read', 'user:write'],
             },
             config.secret
           );
