@@ -4,6 +4,14 @@ function openDialog(message) {
   return { type: dialogConstants.DIALOG_USER_OPEN, message };
 }
 
+function dialogAIML(message) {
+  return { type: dialogConstants.DIALOG_AIML, message };
+}
+
+function dialogAIMLSecond(message) {
+  return { type: dialogConstants.DIALOG_AIML_SECOND, message };
+}
+
 function openDialogPwdForm(message) {
   return { type: dialogConstants.DIALOG_USER_OPEN_PWD_FORM, message };
 }
@@ -36,10 +44,12 @@ function closeDialogGroup(message) {
 }
 export const dialogActions = {
   openDialogGroup,
+  dialogAIMLSecond,
   closeDialogGroup,
   openDialog,
   closeDialog,
   updateDialog,
+  dialogAIML,
   addDialog,
   openDialogPwdForm,
   closeDialogPwdForm,

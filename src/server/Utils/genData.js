@@ -25,32 +25,6 @@ db.once('open', () => {
         email: 'ABC@gmail.com',
         phonenumber: '01632653333',
         changePwd: false,
-        permissions: {
-          dashboard: {
-            canAccess: true,
-            subArr: [true, false, false],
-          },
-          user: {
-            canAccess: true,
-            subArr: [true, false],
-          },
-          permission: {
-            canAccess: false,
-            subArr: [true, false],
-          },
-          logManager: {
-            canAccess: false,
-            subArr: [false, false],
-          },
-          serviceManager: {
-            canAccess: true,
-            subArr: [true, false],
-          },
-          attackReport: {
-            canAccess: false,
-            subArr: [false, false],
-          },
-        },
       },
       {
         username: 'mod',
@@ -61,32 +35,6 @@ db.once('open', () => {
         phonenumber: '01632653333',
         status: true,
         changePwd: false,
-        permissions: {
-          dashboard: {
-            canAccess: true,
-            subArr: [true, false, false],
-          },
-          user: {
-            canAccess: true,
-            subArr: [true, false],
-          },
-          permission: {
-            canAccess: false,
-            subArr: [true, false],
-          },
-          logManager: {
-            canAccess: true,
-            subArr: [true, false],
-          },
-          serviceManager: {
-            canAccess: true,
-            subArr: [true, false],
-          },
-          attackReport: {
-            canAccess: true,
-            subArr: [true, false],
-          },
-        },
       },
       {
         username: 'admin',
@@ -99,6 +47,10 @@ db.once('open', () => {
         changePwd: false,
         permissions: {
           dashboard: {
+            canAccess: true,
+            subArr: [true, true, true],
+          },
+          aiml: {
             canAccess: true,
             subArr: [true, true, true],
           },

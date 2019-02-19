@@ -8,10 +8,28 @@ export function dialog(
     openPwdForm: false,
     openGroupDialog: false,
     new: false,
+    dialogAIML: {
+      open: false,
+      message: '',
+    },
+    dialogAIMLSecond: {
+      open: false,
+      message: '',
+    },
   },
   action
 ) {
   switch (action.type) {
+    case dialogConstants.DIALOG_AIML_SECOND:
+      return {
+        ...state,
+        dialogAIMLSecond: action.message,
+      };
+    case dialogConstants.DIALOG_AIML:
+      return {
+        ...state,
+        dialogAIML: action.message,
+      };
     case dialogConstants.DIALOG_GROUP_OPEN:
       return {
         ...state,

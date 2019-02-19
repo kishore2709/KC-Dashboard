@@ -22,6 +22,10 @@ const UserSchema = new mongoose.Schema({
         canAccess: true,
         subArr: [true, false, false],
       },
+      aiml: {
+        canAccess: true,
+        subArr: [true, true, true],
+      },
       user: {
         canAccess: true,
         subArr: [true, false],
