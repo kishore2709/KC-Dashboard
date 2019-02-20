@@ -53,7 +53,7 @@ class Sidebar extends Component {
   }
 
   componentWillMount() {
-    console.log('will mount ?');
+    // console.log('will mount ?');
     PostApi('/api/users/getUserInfo', GetUserInfo())
       .then(res => {
         // console.log('in then proomse');
@@ -68,7 +68,7 @@ class Sidebar extends Component {
           );
           // / console.log(validKeys);
           const curRoutes = this.props.routes;
-          console.log(curRoutes);
+          // console.log(curRoutes);
           const desRoutes = curRoutes.filter(
             val => validKeys.indexOf(val.id) !== -1
           );
@@ -80,7 +80,7 @@ class Sidebar extends Component {
           );
           this.setState({ routes: [...desRoutes, ...restSidebar] });
           this.props.success('ok');
-          console.log(res.permissions);
+          // console.log(res.permissions);
           // console.log(desRoutes);
         }
       })

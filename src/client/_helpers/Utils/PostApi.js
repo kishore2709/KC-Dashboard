@@ -58,7 +58,7 @@ export async function PostApiForm(url, json) {
         return response.json();
       }
       console.log('err');
-      return 'err';
+      return false;
       // return Promise.reject(new Error('err status != 200'));
       // console.log('Something went wrong on api server!');
     })
