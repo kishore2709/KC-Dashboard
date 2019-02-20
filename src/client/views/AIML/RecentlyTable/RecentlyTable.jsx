@@ -2,26 +2,56 @@ import React from 'react';
 import { PostApiForm, ip } from '_helpers/Utils';
 import { aimlActions } from '_actions';
 import { connect } from 'react-redux';
-// import Text2AIML from './Text2AIML';
-// core
-// custom Component Card
-//
-
+import { Typography } from '@material-ui/core';
 import MUIDataTable from 'mui-datatables';
+import withStyles from '@material-ui/core/styles/withStyles';
 
-const columns = ['Pattern', 'Template'];
-
-const options = {
-  filterType: 'checkbox',
-  selectableRows: false,
-};
+const styles = theme => ({
+  canOverflow: {
+    maxWidth: '300px',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+  },
+});
 
 class RecentlyTable extends React.Component {
   render() {
-    const { aiml } = this.props;
-    const data = aiml.data.map(val => {
-      return [val.aiml_question, val.aiml_answer];
-    });
+    const { aiml, classes } = this.props;
+    const columns = [
+      {
+        name: 'Pattern',
+        options: {
+          filter: false,
+          customBodyRender: (value, tableMeta, updateValue) => (
+            <Typography color="primary" className={classes.canOverflow}>
+              {value}
+            </Typography>
+          ),
+        },
+      },
+      {
+        name: 'Template',
+        options: {
+          filter: false,
+          customBodyRender: (value, tableMeta, updateValue) => (
+            <Typography color="secondary" className={classes.canOverflow}>
+              {value}
+            </Typography>
+          ),
+        },
+      },
+    ];
+
+    const options = {
+      filter: true,
+      filterType: 'dropdown',
+      responsive: 'stacked',
+      rowsPerPage: 5,
+      rowsPerPageOptions: [5, 10, 20],
+      page: 0,
+      selectableRows: false,
+    };
+    const data = aiml.data.map(val => [val.aiml_question, val.aiml_answer]);
     console.log(data);
     return (
       <MUIDataTable
@@ -37,4 +67,4 @@ class RecentlyTable extends React.Component {
 export default connect(
   state => ({ aiml: state.aiml }),
   null
-)(RecentlyTable);
+)(withStyles(styles)(RecentlyTable));

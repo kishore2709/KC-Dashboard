@@ -40,11 +40,7 @@ class App extends React.Component {
     return (
       <div>
         <ErrorBoundary>
-          <ToastProvider styles={{
-            container: (provided) => ({ ...provided, zIndex: '200 !important', top: 50 }),
-            toastContent: (provided, state) => ({ ...provided, padding: state.appearance === 'success' ? 15 : 10 }),
-            toastIcon: () => ({ display: 'none' }),
-          }}>
+          <ToastProvider>
             <div>
               <div>
                 <Router history={history}>

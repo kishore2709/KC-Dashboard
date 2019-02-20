@@ -9,6 +9,13 @@ import { dateRangeActions } from '_actions';
 import moment from 'moment';
 import data from '_helpers/Utils/genChartData.js';
 
+const styles = theme => ({
+  canOverflow: {
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+  },
+});
+
 class TableDiscover extends React.Component {
   constructor(props) {
     super(props);
@@ -25,10 +32,7 @@ class TableDiscover extends React.Component {
           root: {
             backgroundColor: '#021608',
           },
-          
         },
-        
-       
       },
     });
 
@@ -43,20 +47,25 @@ class TableDiscover extends React.Component {
   }
 
   render() {
+    const { classes } = this.props;
     // console.log(this.props.dateRange);
     const columns = [
       {
         name: 'Timestamp',
         options: {
           filter: true,
-          customBodyRender: data => <Typography style={{overflow: 'hidden', textOverflow: 'ellipsis',}}>{data}</Typography>,
+          customBodyRender: data => (
+            <Typography className={classes.canOverflow}>{data}</Typography>
+          ),
         },
       },
       {
         name: 'Data',
         options: {
           filter: true,
-          customBodyRender: data => <Typography style={{overflow: 'hidden', textOverflow: 'ellipsis',}}>{data}</Typography>,
+          customBodyRender: data => (
+            <Typography className={classes.canOverflow}>{data}</Typography>
+          ),
         },
       },
     ];
@@ -96,4 +105,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(TableDiscover);
+export default connect(mapStateToProps)(withStyles(styles)(TableDiscover));
