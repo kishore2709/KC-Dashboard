@@ -5,7 +5,7 @@ import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 // redux-form
-import { Field, reduxForm, FieldArray } from 'redux-form';
+import { Field, reduxForm, FieldArray, change } from 'redux-form';
 import { connect } from 'react-redux';
 // import { load as loadAccount } from '_reducers/AIO/userData.reducer.js';
 // noti
@@ -25,6 +25,7 @@ import { dialogActions } from '_actions';
 import Card from 'components/Card/Card.jsx';
 import CardHeader from 'components/Card/CardHeader.jsx';
 import CardBody from 'components/Card/CardBody.jsx';
+import { load as loadAccount } from '_reducers/AIO/aiml.reducer.js';
 import DialogSecond from './Dialog2/DialogSecond.jsx';
 import Dialog from './Dialog1/Dialog.jsx';
 
@@ -82,103 +83,100 @@ const renderTextField = ({
   />
 );
 
-const renderMembers = ({ fields, meta: { error, submitFailed } }) => (
-  <Grid container spacing={24}>
-    {fields.map((member, index) => (
-      <Grid item xs={12} key={index}>
-        <Grid container direction="row" alignItems="center">
-          <Grid
-            item
-            xs={1}
-            style={{
-              display: 'flex',
-              alignContent: 'center',
-              justify: 'center',
-            }}
-          >
-            <IconButton
-              aria-label="Delete"
-              onClick={() => fields.remove(index)}
-              style={{ margin: 'auto' }}
+const renderMembers = params => {
+  // console.log(params);
+  const {
+    fields,
+    dialogAIMLFunc,
+    meta: { error, submitFailed },
+  } = params;
+  return (
+    <Grid container spacing={24}>
+      {fields.map((member, index) => (
+        <Grid item xs={12} key={index}>
+          <Grid container direction="row" alignItems="center">
+            <Grid
+              item
+              xs={1}
+              style={{
+                display: 'flex',
+                alignContent: 'center',
+                justify: 'center',
+              }}
             >
-              <DeleteIcon fontSize="small" />
-            </IconButton>
-          </Grid>
-          <Grid
-            item
-            xs={5}
-            style={{
-              display: 'flex',
-              alignContent: 'center',
-              justify: 'center',
-            }}
-          >
-            <Field
-              style={{ margin: 'auto' }}
-              name={`${member}.Q`}
-              component={renderTextField}
-              onKeyPress={ev => {
-                console.log(`Pressed keyCode ${ev.key}`);
-                if (ev.key === 'Enter') {
-                  // Do code here
-                  // console.log(ev.target.name, ' ', ev.target.value);
-                  dialogAIMLFunc({
-                    open: true,
-                    message: ev.target.value,
-                  });
-                  ev.preventDefault();
-                }
+              <IconButton
+                aria-label="Delete"
+                onClick={() => fields.remove(index)}
+                style={{ margin: 'auto' }}
+              >
+                <DeleteIcon fontSize="small" />
+              </IconButton>
+            </Grid>
+            <Grid
+              item
+              xs={5}
+              style={{
+                display: 'flex',
+                alignContent: 'center',
+                justify: 'center',
               }}
-            />
-          </Grid>
+            >
+              <Field
+                style={{ margin: 'auto' }}
+                name={`${member}.Q`}
+                component={renderTextField}
+                onKeyPress={ev => {
+                  console.log(`Pressed keyCode ${ev.key}`);
+                  if (ev.key === 'Enter') {
+                    // Do code here
+                    // console.log(ev.target.name, ' ', ev.target.value, ' ',index);
+                    dialogAIMLFunc({
+                      open: true,
+                      message: ev.target.value,
+                      id: index,
+                    });
+                    ev.preventDefault();
+                  }
+                }}
+              />
+            </Grid>
 
-          <Grid
-            item
-            xs={6}
-            style={{
-              display: 'flex',
-              alignContent: 'center',
-              justify: 'center',
-            }}
-          >
-            <Field
-              style={{ margin: 'auto' }}
-              name={`${member}.A`}
-              component={renderTextField}
-              onKeyPress={ev => {
-                console.log(`Pressed keyCode ${ev.key}`);
-                if (ev.key === 'Enter') {
-                  // Do code here
-                  // console.log(ev.target.name, ' ', ev.target.value);
-                  dialogAIMLFunc({
-                    open: true,
-                    message: ev.target.value,
-                  });
-                  ev.preventDefault();
-                }
+            <Grid
+              item
+              xs={6}
+              style={{
+                display: 'flex',
+                alignContent: 'center',
+                justify: 'center',
               }}
-            />
+            >
+              <Field
+                style={{ margin: 'auto' }}
+                name={`${member}.A`}
+                component={renderTextField}
+              />
+            </Grid>
           </Grid>
         </Grid>
-      </Grid>
-    ))}
-    <Grid item xs={12}>
-      <Grid container direction="row" justify="center" alignItems="center">
-        <Grid item>
-          <Fab
-            size="small"
-            color="secondary"
-            aria-label="Add"
-            onClick={() => fields.push({})}
-          >
-            <AddIcon />
-          </Fab>
-          {submitFailed && error && <span>{error}</span>}
+      ))}
+      <Grid item xs={12}>
+        <Grid container direction="row" justify="center" alignItems="center">
+          <Grid item>
+            <Fab
+              size="small"
+              color="secondary"
+              aria-label="Add"
+              onClick={() => fields.push({})}
+            >
+              <AddIcon />
+            </Fab>
+            {submitFailed && error && <span>{error}</span>}
+          </Grid>
         </Grid>
       </Grid>
     </Grid>
-  </Grid>
-);
+  );
+};
 
 class Text2AIML extends React.Component {
   render() {
@@ -189,25 +187,22 @@ class Text2AIML extends React.Component {
       submitting,
       classes,
       dialogAIMLFunc,
+      load,
     } = this.props;
     return (
       <React.Fragment>
         <Dialog
-          onSubmit={e => {
-            console.log(e);
+          onSubmit={({e, id}) => {
+            // console.log(e);
             console.log('?????');
-          }}
-          onCancel={() => {
-            dialogAIMLFunc({ open: false, message: '' });
+            console.log(id, e);
+            this.props.dispatch(change('Text2AIML', 'members['+id+'].A', e));
           }}
         />
         <DialogSecond
           onSubmit={e => {
             console.log(e);
             console.log('?????');
-          }}
-          onCancel={() => {
-            dialogAIMLFunc({ open: false, message: '' });
           }}
         />
         <form onSubmit={handleSubmit}>
@@ -242,7 +237,11 @@ class Text2AIML extends React.Component {
                 </Typography>
               </Grid>
               <Grid item xs={12}>
-                <FieldArray name="members" component={renderMembers} />
+                <FieldArray
+                  name="members"
+                  component={renderMembers}
+                  props={{ dialogAIMLFunc }}
+                />
               </Grid>
               <Grid item xs={12} className={classes.container} />
               <Grid item xs={12}>
@@ -280,44 +279,45 @@ const mapDispatchToProps = dispatch => ({
   dialogAIMLFunc: newStatus => {
     dispatch(dialogActions.dialogAIML(newStatus));
   },
+  load: newStatus => {
+    dispatch(loadAccount(newStatus));
+  },
 });
 
 const validate = values => {
-  const errors = {}
+  const errors = {};
   if (!values.members || !values.members.length) {
-    errors.members = { _error: 'At least one member must be entered' }
+    errors.members = { _error: 'At least one member must be entered' };
   } else {
-    const membersArrayErrors = []
+    const membersArrayErrors = [];
     values.members.forEach((member, memberIndex) => {
-      const memberErrors = {}
+      const memberErrors = {};
       console.log(member);
       if (!member || !member.Q) {
-        memberErrors.Q = 'Required'
-        membersArrayErrors[memberIndex] = memberErrors
+        memberErrors.Q = 'Required';
+        membersArrayErrors[memberIndex] = memberErrors;
       }
       if (!member || !member.A) {
-        memberErrors.A = 'Required'
-        membersArrayErrors[memberIndex] = memberErrors
+        memberErrors.A = 'Required';
+        membersArrayErrors[memberIndex] = memberErrors;
       }
-    })
+    });
     if (membersArrayErrors.length) {
-      errors.members = membersArrayErrors
+      errors.members = membersArrayErrors;
     }
   }
-  return errors
-}
+  return errors;
+};
 
 let mText2AIML = reduxForm({
   form: 'Text2AIML', // a unique identifier for this form
   validate,
   // warn,
-})(Text2AIML);
+}
+)(Text2AIML);
 
 mText2AIML = connect(
-  state => ({
-    initialValues: state.userDialogData.data, // pull initial values from account reducer
-    // dialog: state.dialog,
-  }),
+  null,
   mapDispatchToProps
 )(mText2AIML);
 

@@ -10,10 +10,15 @@ import { dialog } from './dialog.reducer';
 import { dateRange } from './dateRange.reducer';
 import { serverStatus } from './serverStatus.reducer';
 import userDialogData from './AIO/userData.reducer';
+import aimlLoader from './AIO/aiml.reducer';
 import { userTable } from './userTable.reducer';
 import { groupTable } from './groupTable.reducer';
+import { aiml } from './aiml.reducer';
+
 const rootReducer = combineReducers({
   dialog,
+  aimlLoader,
+  aiml,
   dateRange,
   authentication,
   registration,

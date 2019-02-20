@@ -10,10 +10,12 @@ export function dialog(
     new: false,
     dialogAIML: {
       open: false,
+      id: 0,
       message: '',
     },
     dialogAIMLSecond: {
       open: false,
+      id: 0,
       message: '',
     },
   },

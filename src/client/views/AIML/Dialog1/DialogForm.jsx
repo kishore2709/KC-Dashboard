@@ -86,7 +86,7 @@ class RadioButtonsGroup extends React.Component {
                 color="secondary"
                 className={classes.button}
                 onClick={() => {
-                  this.props.onSave(this.state.value);
+                  this.props.onSave(this.state.arr[this.state.value].Q);
                 }}
               >
                 Save

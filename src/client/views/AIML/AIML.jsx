@@ -8,13 +8,25 @@ import TableLoader from 'components/ContentLoader/TableLoader.jsx';
 
 // import Text2AIML from './Text2AIML';
 // core
-import TextField from '@material-ui/core/TextField';
+
 import Grid from '@material-ui/core/Grid';
 
 //
 
 const Text2AIML = Loadable({
   loader: () => import(/* webpackPreload: true */ './Text2AIML.jsx'),
+  loading: TableLoader,
+});
+
+const SelectForm = Loadable({
+  loader: () =>
+    import(/* webpackPreload: true */ './SelectForm/SelectForm.jsx'),
+  loading: TableLoader,
+});
+
+const RecentlyTable = Loadable({
+  loader: () =>
+    import(/* webpackPreload: true */ './RecentlyTable/RecentlyTable.jsx'),
   loading: TableLoader,
 });
 
@@ -25,6 +37,13 @@ class AIML extends React.Component {
     const { classes } = this.props;
     return (
       <Grid container spacing={24}>
+        <Grid item xs={12}>
+          <SelectForm
+            onDoneStep={e => {
+              console.log(e);
+            }}
+          />
+        </Grid>
         <Grid item xs={12} className={classes.Text2AIML}>
           <Text2AIML
             onSubmit={e => {
@@ -32,7 +51,7 @@ class AIML extends React.Component {
             }}
           />
         </Grid>
-        <Grid item xs={12} />
+        <Grid item xs={12}><RecentlyTable/></Grid>
       </Grid>
     );
   }
