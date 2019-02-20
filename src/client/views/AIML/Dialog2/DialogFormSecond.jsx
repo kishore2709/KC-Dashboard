@@ -10,6 +10,7 @@ import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import { connect } from 'react-redux';
 
 const styles = theme => ({
   root: {
@@ -35,8 +36,10 @@ class RadioButtonsGroup extends React.Component {
   };
 
   render() {
-    const { classes } = this.props;
-    const { arr } = this.state;
+    const { classes, dialog } = this.props;
+    const { message } = dialog.dialogAIMLSecond;
+    // console.log('in dialog second form..',message);
+    // const { arr } = this.state;
     return (
       <Grid container className={classes.root}>
         <Grid item xs={12}>
@@ -48,7 +51,7 @@ class RadioButtonsGroup extends React.Component {
               value={this.state.value}
               onChange={this.handleChange}
             >
-              {arr.map((val, index) => (
+              {message.map((val, index) => (
                 <FormControlLabel
                   value={index.toString()}
                   control={<Radio />}
@@ -56,7 +59,7 @@ class RadioButtonsGroup extends React.Component {
                     <React.Fragment>
                       <TextField
                         id="outlined-bare"
-                        value={val.Q}
+                        value={val.aiml_question}
                         margin="normal"
                         variant="outlined"
                       />
@@ -80,7 +83,8 @@ class RadioButtonsGroup extends React.Component {
                 color="secondary"
                 className={classes.button}
                 onClick={() => {
-                  this.props.onSave(this.state.value);
+                  if (!message[this.state.value]) return;
+                  this.props.onSave(message[this.state.value].aiml_question);
                 }}
               >
                 Save
@@ -109,4 +113,4 @@ RadioButtonsGroup.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(RadioButtonsGroup);
+export default connect(state=>({dialog: state.dialog,}))(withStyles(styles)(RadioButtonsGroup));

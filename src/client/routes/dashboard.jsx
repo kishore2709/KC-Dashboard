@@ -22,61 +22,62 @@ import { Redirect } from 'react-router-dom';
 // import UserPermission from 'views/UserPermission/UserPermission.jsx';
 const UserPermission = Loadable({
   loader: () =>
-    import(/* webpackPrefetch: true */ 'views/UserPermission/UserPermission.jsx'),
+    import(/* webpackChunkName: "UserPermission", webpackPrefetch: true */ 'views/UserPermission/UserPermission.jsx'),
   loading: TableLoader,
 });
 // import GroupPermission from 'views/GroupPermission/GroupPermission.jsx';
 const GroupPermission = Loadable({
   loader: () =>
-    import(/* webpackPrefetch: true */ 'views/GroupPermission/GroupPermission.jsx'),
+    import(/* webpackChunkName: "GroupPermission", webpackPrefetch: true */ 'views/GroupPermission/GroupPermission.jsx'),
   loading: TableLoader,
 });
 // import DashboardPage from 'views/Dashboard/Dashboard.jsx';
 const DashboardPage = Loadable({
   loader: () =>
-    import(/* webpackPrefetch: true */ 'views/Dashboard/Dashboard.jsx'),
+    import(/* webpackChunkName: "DashboardPage", webpackPrefetch: true */ 'views/Dashboard/Dashboard.jsx'),
   loading: TableLoader,
 });
 // import UserManagement from 'views/UserManagement/UserManagement.jsx';
 const UserManagement = Loadable({
   loader: () =>
-    import(/* webpackPrefetch: true */ 'views/UserManagement/UserManagement.jsx'),
+    import(/* webpackChunkName: "UserManagement", webpackPrefetch: true */ 'views/UserManagement/UserManagement.jsx'),
   loading: TableLoader,
 });
 // import LogManagement from 'views/LogManagement/LogManagement.jsx';
 const LogManagement = Loadable({
   loader: () =>
-    import(/* webpackPrefetch: true */ 'views/LogManagement/LogManagement.jsx'),
+    import(/* webpackChunkName: "LogManagement", webpackPrefetch: true */ 'views/LogManagement/LogManagement.jsx'),
   loading: TableLoader,
 });
 // import ServiceManager from 'views/ServiceManager/ServiceManager.jsx';
 const ServiceManager = Loadable({
   loader: () =>
-    import(/* webpackPrefetch: true */ 'views/ServiceManager/ServiceManager.jsx'),
+    import(/* webpackChunkName: "ServiceManager", webpackPrefetch: true */ 'views/ServiceManager/ServiceManager.jsx'),
   loading: TableLoader,
 });
 // import AttackReport from 'views/AttackReport/AttackReport.jsx';
 const AttackReport = Loadable({
   loader: () =>
-    import(/* webpackPrefetch: true */ 'views/AttackReport/AttackReport.jsx'),
+    import(/* webpackChunkName: "AttackReport", webpackPrefetch: true */ 'views/AttackReport/AttackReport.jsx'),
   loading: TableLoader,
 });
 
 // import UserProfile from 'views/UserProfile/UserProfile.jsx';
 const UserProfile = Loadable({
   loader: () =>
-    import(/* webpackPrefetch: true */ 'views/UserProfile/UserProfile.jsx'),
+    import(/* webpackChunkName: "UserProfile", webpackPrefetch: true */ 'views/UserProfile/UserProfile.jsx'),
   loading: TableLoader,
 });
 // import Discover from 'views/Discover/Discover.jsx';
 const Discover = Loadable({
   loader: () =>
-    import(/* webpackPrefetch: true */ 'views/Discover/Discover.jsx'),
+    import(/* webpackChunkName: "Discover",  webpackPrefetch: true */ 'views/Discover/Discover.jsx'),
   loading: TableLoader,
 });
 
 const AIML = Loadable({
-  loader: () => import(/* webpackPrefetch: true */ 'views/AIML/AIML.jsx'),
+  loader: () =>
+    import(/* webpackChunkName: "AIML", webpackPrefetch: true */ 'views/AIML/AIML.jsx'),
   loading: TableLoader,
 });
 

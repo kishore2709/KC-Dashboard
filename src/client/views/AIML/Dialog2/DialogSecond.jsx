@@ -23,12 +23,12 @@ const styles = theme => ({
 });
 class DialogFormComponent extends React.Component {
   handleClose() {
-    this.props.dialogAIMLFunc({ open: false, message: '' });
+    this.props.dialogAIMLFunc({ open: false, message: [], id: 0 });
   }
 
   render() {
     const { dialog, classes } = this.props;
-    const { open, message } = dialog.dialogAIMLSecond;
+    const { open, id } = dialog.dialogAIMLSecond;
     // console.log(open, message);
     // console.log(classes.dialog);
     return (
@@ -41,9 +41,9 @@ class DialogFormComponent extends React.Component {
         <DialogContent>
           <DialogFormAIML
             onSave={e => {
-              console.log(e);
+              // console.log(e);
+              this.props.onSubmit({e, id});
               this.handleClose();
-              this.props.onSubmit(e);
             }}
             onCancel={() => {
               this.handleClose();

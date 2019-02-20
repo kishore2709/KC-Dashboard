@@ -26,7 +26,7 @@ const styles = theme => ({
 
 class RadioButtonsGroup extends React.Component {
   state = {
-    value: 0,
+    value: '',
     arr: [{ Q: 'haha', A: 'xyz' }, { Q: 'abc', A: 'xyz' }],
   };
 
@@ -38,8 +38,8 @@ class RadioButtonsGroup extends React.Component {
   render() {
     const { classes, dialog } = this.props;
     const { message } = dialog.dialogAIML;
-    console.log(message);
-    const { arr } = this.state;
+    // console.log(message);
+    // const { arr } = this.state;
     return (
       <Grid container className={classes.root}>
         <Grid item xs={12}>

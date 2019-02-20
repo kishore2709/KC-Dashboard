@@ -13,6 +13,7 @@ module.exports = {
   output: {
     path: path.join(__dirname, outputDirectory),
     filename: 'bundle.js',
+    chunkFilename: '[name].[chunkhash].js',
   },
   resolve: {
     modules: [path.resolve(__dirname, 'src/client'), 'node_modules'],
@@ -44,7 +45,7 @@ module.exports = {
       favicon: './public/favicon.ico',
     }),
     new webpack.HotModuleReplacementPlugin(),
-    // new BundleAnalyzerPlugin(),
+    new BundleAnalyzerPlugin(),
   ],
   devServer: {
     historyApiFallback: true,

@@ -13,6 +13,8 @@ import { dialogActions } from '_actions';
 import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
 import DialogFormAIML from './DialogForm.jsx';
+import { PostApiForm, ip } from '_helpers/Utils';
+
 // styles
 const styles = theme => ({
   border: {
@@ -26,8 +28,9 @@ class DialogFormComponent extends React.Component {
   }
 
   render() {
-    const { dialog, classes } = this.props;
+    const { dialog, classes, aiml, dialogAIMLFuncSecond } = this.props;
     const { open, id } = dialog.dialogAIML;
+    const { curAIML, topic:topicname} = aiml;
     // console.log(open, message);
     // console.log(classes.dialog);
     return (
@@ -46,7 +49,17 @@ class DialogFormComponent extends React.Component {
             }}
             onCancel={() => {
               this.handleClose();
-              this.props.dialogAIMLFuncSecond({ open: true, message: '' });
+              // Neu ko chon o Dialog 1 -> Sang goi y Dialog 2
+              PostApiForm(
+                `${ip.server  }/aimlquestions/getsimilarpatternindb`,
+                { aimlpatternfromtext: curAIML, topicname  }
+              ).then(res => {
+                console.log(' in doalog step 2..', res);
+                if (!res || !(Array.isArray(res))) throw new Error('err');
+                else
+                dialogAIMLFuncSecond({ open: true, message: res, id });
+              }).catch(err=>{console.log(err)});
+              
             }}
           />
         </DialogContent>
@@ -67,6 +80,7 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
   state => ({
     dialog: state.dialog,
+    aiml: state.aiml,
   }),
   mapDispatchToProps
 )(withStyles(styles)(DialogFormComponent));

@@ -20,15 +20,28 @@ import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 // import IconButton from '@material-ui/core/IconButton';
 import AddIcon from '@material-ui/icons/Add';
-import { dialogActions } from '_actions';
+import { dialogActions, aimlActions } from '_actions';
 // custom Component Card
 import Card from 'components/Card/Card.jsx';
 import CardHeader from 'components/Card/CardHeader.jsx';
 import CardBody from 'components/Card/CardBody.jsx';
 import { load as loadAccount } from '_reducers/AIO/aiml.reducer.js';
 import { PostApiForm, ip } from '_helpers/Utils';
-import DialogSecond from './Dialog2/DialogSecond.jsx';
-import Dialog from './Dialog1/Dialog.jsx';
+//
+// loader
+import Loadable from 'react-loadable';
+import TableLoader from 'components/ContentLoader/TableLoader.jsx';
+
+// import DialogSecond from './Dialog2/DialogSecond.jsx';
+const DialogSecond = Loadable({
+  loader: () => import(/* webpackPreload: true */ './Dialog2/DialogSecond.jsx'),
+  loading: TableLoader,
+});
+// import Dialog from './Dialog1/Dialog.jsx';
+const Dialog = Loadable({
+  loader: () => import(/* webpackPreload: true */ './Dialog1/Dialog.jsx'),
+  loading: TableLoader,
+});
 //
 const styles = theme => ({
   cardCategoryWhite: {
@@ -90,6 +103,7 @@ const renderMembers = params => {
     fields,
     dialogAIMLFunc,
     topicname,
+    saveCurrentQuestionAIML,
     meta: { error, submitFailed },
   } = params;
   return (
@@ -138,8 +152,9 @@ const renderMembers = params => {
                       .then(res => {
                         if (!res || !('aiml_pattern' in res))
                           throw new Error('err');
-                        // console.log('in PostApiForm',res, topicname);
-                        
+                        // Save current AIML Question
+                        saveCurrentQuestionAIML(res.aiml_pattern);
+                        // Show cau hoi tuong tu trong Dialog1
                         PostApiForm(
                           `${ip.server  }/aimlquestions/getsimilarpatternindb`,
                           { aimlpatternfromtext: res.aiml_pattern, topicname }
@@ -212,6 +227,7 @@ class Text2AIML extends React.Component {
       dialogAIMLFunc,
       load,
       aiml,
+      saveCurrentQuestionAIML,
     } = this.props;
     return (
       <React.Fragment>
@@ -224,9 +240,11 @@ class Text2AIML extends React.Component {
           }}
         />
         <DialogSecond
-          onSubmit={e => {
-            console.log(e);
-            console.log('?????');
+          onSubmit={({ e, id }) => {
+            // console.log(e);
+            // console.log('?????');
+            // console.log(id, e);
+            this.props.dispatch(change('Text2AIML', `members[${id}].A`, e));
           }}
         />
         <form onSubmit={handleSubmit}>
@@ -264,7 +282,7 @@ class Text2AIML extends React.Component {
                 <FieldArray
                   name="members"
                   component={renderMembers}
-                  props={{ dialogAIMLFunc, topicname: aiml.topic }}
+                  props={{ dialogAIMLFunc, topicname: aiml.topic, saveCurrentQuestionAIML }}
                 />
               </Grid>
               <Grid item xs={12} className={classes.container} />
@@ -305,6 +323,9 @@ const mapDispatchToProps = dispatch => ({
   },
   load: newStatus => {
     dispatch(loadAccount(newStatus));
+  },
+  saveCurrentQuestionAIML: newStatus => {
+    dispatch(aimlActions.saveCurrentQuestionAIML(newStatus));
   },
 });
 

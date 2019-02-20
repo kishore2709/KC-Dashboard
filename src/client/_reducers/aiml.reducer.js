@@ -1,7 +1,15 @@
 import { aimlConstants } from '../_constants';
 
-export function aiml(state = { data: [], chatbot: '', topic: '' }, action) {
+export function aiml(
+  state = { data: [], chatbot: '', topic: '', curAIML: '' },
+  action
+) {
   switch (action.type) {
+    case aimlConstants.AIML_CURRENT_QUESTION:
+      return {
+        ...state,
+        curAIML: action.message,
+      }
     case aimlConstants.AIML_RECENTLY_DATA:
       return {
         ...state,
@@ -12,7 +20,7 @@ export function aiml(state = { data: [], chatbot: '', topic: '' }, action) {
         ...state,
         chatbot: action.message.chatbot,
         topic: action.message.topic,
-      }
+      };
     default:
       return state;
   }
