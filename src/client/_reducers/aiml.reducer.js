@@ -1,6 +1,6 @@
 import { aimlConstants } from '../_constants';
 
-export function aiml(state = {data:[]}, action) {
+export function aiml(state = { data: [] }, action) {
   switch (action.type) {
     case aimlConstants.AIML_RECENTLY_DATA:
       return {

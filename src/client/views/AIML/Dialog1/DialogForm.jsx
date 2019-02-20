@@ -10,6 +10,7 @@ import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import { connect } from 'react-redux';
 
 const styles = theme => ({
   root: {
@@ -35,7 +36,9 @@ class RadioButtonsGroup extends React.Component {
   };
 
   render() {
-    const { classes } = this.props;
+    const { classes, dialog } = this.props;
+    const { message } = dialog.dialogAIML;
+    console.log(message);
     const { arr } = this.state;
     return (
       <Grid container className={classes.root}>
@@ -48,7 +51,7 @@ class RadioButtonsGroup extends React.Component {
               value={this.state.value}
               onChange={this.handleChange}
             >
-              {arr.map((val, index) => (
+              {message.map((val, index) => (
                 <FormControlLabel
                   value={index.toString()}
                   control={<Radio />}
@@ -86,6 +89,7 @@ class RadioButtonsGroup extends React.Component {
                 color="secondary"
                 className={classes.button}
                 onClick={() => {
+                  if (!this.state.arr[this.state.value]) return;
                   this.props.onSave(this.state.arr[this.state.value].Q);
                 }}
               >
@@ -115,4 +119,4 @@ RadioButtonsGroup.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(RadioButtonsGroup);
+export default connect(state=>({dialog: state.dialog,}))(withStyles(styles)(RadioButtonsGroup));

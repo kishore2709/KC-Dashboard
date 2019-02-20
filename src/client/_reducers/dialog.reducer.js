@@ -11,7 +11,7 @@ export function dialog(
     dialogAIML: {
       open: false,
       id: 0,
-      message: '',
+      message: [],
     },
     dialogAIMLSecond: {
       open: false,

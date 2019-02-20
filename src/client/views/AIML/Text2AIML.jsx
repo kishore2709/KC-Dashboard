@@ -26,9 +26,10 @@ import Card from 'components/Card/Card.jsx';
 import CardHeader from 'components/Card/CardHeader.jsx';
 import CardBody from 'components/Card/CardBody.jsx';
 import { load as loadAccount } from '_reducers/AIO/aiml.reducer.js';
+import { PostApiForm, ip } from '_helpers/Utils';
 import DialogSecond from './Dialog2/DialogSecond.jsx';
 import Dialog from './Dialog1/Dialog.jsx';
-
+//
 const styles = theme => ({
   cardCategoryWhite: {
     color: 'rgba(255,255,255,.62)',
@@ -126,15 +127,33 @@ const renderMembers = params => {
                 name={`${member}.Q`}
                 component={renderTextField}
                 onKeyPress={ev => {
-                  console.log(`Pressed keyCode ${ev.key}`);
+                  // console.log(`Pressed keyCode ${ev.key}`);
                   if (ev.key === 'Enter') {
-                    // Do code here
-                    // console.log(ev.target.name, ' ', ev.target.value, ' ',index);
-                    dialogAIMLFunc({
-                      open: true,
-                      message: ev.target.value,
-                      id: index,
-                    });
+                    // Convert Text 2 AIML
+                    // console.log('in Enter',ev.target.value);
+                    PostApiForm(ip.server + '/aimlquestions/getaimlfromtext', {
+                      textquestion: ev.target.value,
+                    })
+                      .then(res => {
+                        if (!res) throw new Error('err');
+                        // console.log('in PostApiForm',res);
+                        PostApiForm(
+                          ip.server + '/aimlquestions/getsimilarpatternindb',
+                          { aimlpatternfromtext: res }
+                        ).then(res => {
+                          if (!res) throw new Error('err');
+                          console.log('in []',res);
+                          dialogAIMLFunc({
+                            open: true,
+                            message: res,
+                            id: index,
+                          });
+                        });
+                      })
+                      .catch(err => {
+                        console.log(err);
+                      });
+
                     ev.preventDefault();
                   }
                 }}
@@ -192,11 +211,11 @@ class Text2AIML extends React.Component {
     return (
       <React.Fragment>
         <Dialog
-          onSubmit={({e, id}) => {
+          onSubmit={({ e, id }) => {
             // console.log(e);
             console.log('?????');
             console.log(id, e);
-            this.props.dispatch(change('Text2AIML', 'members['+id+'].A', e));
+            this.props.dispatch(change('Text2AIML', `members[${id}].A`, e));
           }}
         />
         <DialogSecond
@@ -313,8 +332,7 @@ let mText2AIML = reduxForm({
   form: 'Text2AIML', // a unique identifier for this form
   validate,
   // warn,
-}
-)(Text2AIML);
+})(Text2AIML);
 
 mText2AIML = connect(
   null,

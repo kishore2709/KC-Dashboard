@@ -1,4 +1,6 @@
 import React from 'react';
+import { PostApiForm, ip } from '_helpers/Utils';
+import { aimlActions } from '_actions';
 import { connect } from 'react-redux';
 // import Text2AIML from './Text2AIML';
 // core
@@ -15,6 +17,14 @@ const options = {
 };
 
 class RecentlyTable extends React.Component {
+  componentWillMount(){
+    PostApiForm(ip.server + '/aimlquestions/listtop10', {})
+    .then(res=>{
+      if (!res) throw new Error('err');
+      aimlActions.setDataRecentlyTable(res);
+    })
+    .catch(err=>{console.log(err)});
+  }
   render() {
     const { aiml } = this.props;
     return (

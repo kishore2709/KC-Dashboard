@@ -1,5 +1,4 @@
 import React from 'react';
-import { hot } from 'react-hot-loader/root';
 import withStyles from '@material-ui/core/styles/withStyles';
 
 // loader
@@ -51,10 +50,12 @@ class AIML extends React.Component {
             }}
           />
         </Grid>
-        <Grid item xs={12}><RecentlyTable/></Grid>
+        <Grid item xs={12}>
+          <RecentlyTable />
+        </Grid>
       </Grid>
     );
   }
 }
 
-export default hot(withStyles(styles)(AIML));
+export default withStyles(styles)(AIML);

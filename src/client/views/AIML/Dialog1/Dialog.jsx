@@ -22,16 +22,12 @@ const styles = theme => ({
 });
 class DialogFormComponent extends React.Component {
   handleClose() {
-    this.props.dialogAIMLFunc({ open: false, message: '' });
-  }
-
-  componentWillReceiveProps(props) {
-    console.log('inDialogForm..', props);
+    this.props.dialogAIMLFunc({ open: false, message: [], id: 0 });
   }
 
   render() {
     const { dialog, classes } = this.props;
-    const { open, message, id } = dialog.dialogAIML;
+    const { open, id } = dialog.dialogAIML;
     // console.log(open, message);
     // console.log(classes.dialog);
     return (
