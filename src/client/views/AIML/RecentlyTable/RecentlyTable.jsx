@@ -17,20 +17,16 @@ const options = {
 };
 
 class RecentlyTable extends React.Component {
-  componentWillMount(){
-    PostApiForm(ip.server + '/aimlquestions/listtop10', {})
-    .then(res=>{
-      if (!res) throw new Error('err');
-      aimlActions.setDataRecentlyTable(res);
-    })
-    .catch(err=>{console.log(err)});
-  }
   render() {
     const { aiml } = this.props;
+    const data = aiml.data.map(val => {
+      return [val.aiml_question, val.aiml_answer];
+    });
+    console.log(data);
     return (
       <MUIDataTable
-        title={'GẦN ĐÂY'}
-        data={aiml.data}
+        title="GẦN ĐÂY"
+        data={data}
         columns={columns}
         options={options}
       />

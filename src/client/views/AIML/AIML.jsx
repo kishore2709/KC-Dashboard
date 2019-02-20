@@ -37,11 +37,7 @@ class AIML extends React.Component {
     return (
       <Grid container spacing={24}>
         <Grid item xs={12}>
-          <SelectForm
-            onDoneStep={e => {
-              console.log(e);
-            }}
-          />
+          <SelectForm/>
         </Grid>
         <Grid item xs={12} className={classes.Text2AIML}>
           <Text2AIML

@@ -89,6 +89,7 @@ const renderMembers = params => {
   const {
     fields,
     dialogAIMLFunc,
+    topicname,
     meta: { error, submitFailed },
   } = params;
   return (
@@ -131,18 +132,21 @@ const renderMembers = params => {
                   if (ev.key === 'Enter') {
                     // Convert Text 2 AIML
                     // console.log('in Enter',ev.target.value);
-                    PostApiForm(ip.server + '/aimlquestions/getaimlfromtext', {
+                    PostApiForm(`${ip.server  }/aimlquestions/getaimlfromtext`, {
                       textquestion: ev.target.value,
                     })
                       .then(res => {
-                        if (!res) throw new Error('err');
-                        // console.log('in PostApiForm',res);
+                        if (!res || !('aiml_pattern' in res))
+                          throw new Error('err');
+                        // console.log('in PostApiForm',res, topicname);
+                        
                         PostApiForm(
-                          ip.server + '/aimlquestions/getsimilarpatternindb',
-                          { aimlpatternfromtext: res }
+                          `${ip.server  }/aimlquestions/getsimilarpatternindb`,
+                          { aimlpatternfromtext: res.aiml_pattern, topicname }
                         ).then(res => {
-                          if (!res) throw new Error('err');
-                          console.log('in []',res);
+                          if (!res || !(Array.isArray(res))) throw new Error('err');
+                          // console.log('in []', res);
+                          // console.log(res);
                           dialogAIMLFunc({
                             open: true,
                             message: res,
@@ -207,6 +211,7 @@ class Text2AIML extends React.Component {
       classes,
       dialogAIMLFunc,
       load,
+      aiml,
     } = this.props;
     return (
       <React.Fragment>
@@ -259,7 +264,7 @@ class Text2AIML extends React.Component {
                 <FieldArray
                   name="members"
                   component={renderMembers}
-                  props={{ dialogAIMLFunc }}
+                  props={{ dialogAIMLFunc, topicname: aiml.topic }}
                 />
               </Grid>
               <Grid item xs={12} className={classes.container} />
@@ -335,7 +340,9 @@ let mText2AIML = reduxForm({
 })(Text2AIML);
 
 mText2AIML = connect(
-  null,
+  state => ({
+    aiml: state.aiml,
+  }),
   mapDispatchToProps
 )(mText2AIML);
 

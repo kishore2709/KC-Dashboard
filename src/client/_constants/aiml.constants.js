@@ -1,3 +1,4 @@
 export const aimlConstants = {
   AIML_RECENTLY_DATA: 'AIML_RECENTLY_DATA',
+  AIML_SERVER_INFO: 'AIML_SERVER_INFO',
 };

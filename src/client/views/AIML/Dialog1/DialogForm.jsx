@@ -26,7 +26,7 @@ const styles = theme => ({
 
 class RadioButtonsGroup extends React.Component {
   state = {
-    value: '',
+    value: 0,
     arr: [{ Q: 'haha', A: 'xyz' }, { Q: 'abc', A: 'xyz' }],
   };
 
@@ -59,13 +59,13 @@ class RadioButtonsGroup extends React.Component {
                     <React.Fragment>
                       <TextField
                         id="outlined-bare"
-                        value={val.Q}
+                        value={val.aiml_question}
                         margin="normal"
                         variant="outlined"
                       />
                       <TextField
                         id="outlined-bare"
-                        value={val.A}
+                        value={val.aiml_answer}
                         margin="normal"
                         variant="outlined"
                       />
@@ -89,8 +89,8 @@ class RadioButtonsGroup extends React.Component {
                 color="secondary"
                 className={classes.button}
                 onClick={() => {
-                  if (!this.state.arr[this.state.value]) return;
-                  this.props.onSave(this.state.arr[this.state.value].Q);
+                  if (!message[this.state.value]) return;
+                  this.props.onSave(message[this.state.value].aiml_question);
                 }}
               >
                 Save
