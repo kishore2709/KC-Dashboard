@@ -14,6 +14,8 @@ import NotificationSystem from 'react-notification-system';
 import { aimlActions } from '_actions';
 //
 import Grid from '@material-ui/core/Grid';
+// hot
+import { hot } from 'react-hot-loader/root';
 
 //
 
@@ -132,5 +134,5 @@ class AIML extends React.Component {
 }
 
 export default connect(state => ({ aiml: state.aiml }))(
-  withStyles(styles)(AIML)
+  withStyles(styles)(hot(AIML))
 );

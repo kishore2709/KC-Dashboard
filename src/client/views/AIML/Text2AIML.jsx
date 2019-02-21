@@ -77,11 +77,15 @@ const styles = theme => ({
   },
   textFeild: {
     height: '4px',
-  }
+  },
+  member: {
+    padding: 0,
+    margin: '0 0 0 0',
+  },
 });
 
-const renderTextField = (params) => {
-  let {
+const renderTextField = params => {
+  const {
     label,
     input,
     classes,
@@ -91,20 +95,21 @@ const renderTextField = (params) => {
   console.log(' in render text fiell..sd');
   console.log(params);
   return (
-  // input.value=''
-  <TextField
-    error={touched && invalid}
-    helperText={touched && error}
-    variant="outlined"
-    fullWidth
-    InputProps={{ classes: { input: classes.textFeild } }}
-    InputLabelProps={{
-      shrink: true,
-    }}
-    {...input}
-    {...custom}
-  />
-)};
+    // input.value=''
+    <TextField
+      error={touched && invalid}
+      helperText={touched && error}
+      variant="outlined"
+      fullWidth
+      InputProps={{ classes: { input: classes.textFeild } }}
+      InputLabelProps={{
+        shrink: true,
+      }}
+      {...input}
+      {...custom}
+    />
+  );
+};
 
 const renderMembers = params => {
   // console.log(params);
@@ -118,10 +123,15 @@ const renderMembers = params => {
   } = params;
   // console.log(' in render Member..', classes);
   return (
-    <Grid container spacing={24}>
+    <Grid container spacing={8}>
       {fields.map((member, index) => (
-        <Grid item xs={12} key={index}>
-          <Grid container direction="row" alignItems="center">
+        <Grid item xs={12} key={index} className={classes.member}>
+          <Grid
+            container
+            direction="row"
+            alignItems="center"
+            className={classes.member}
+          >
             <Grid
               item
               xs={1}
@@ -151,7 +161,7 @@ const renderMembers = params => {
               <Field
                 style={{ margin: 'auto' }}
                 name={`${member}.Q`}
-                props={{classes}}
+                props={{ classes }}
                 component={renderTextField}
                 onKeyPress={ev => {
                   // console.log(`Pressed keyCode ${ev.key}`);
@@ -190,10 +200,8 @@ const renderMembers = params => {
                     ev.preventDefault();
                   }
                 }}
-                
               />
             </Grid>
-
             <Grid
               item
               xs={6}
@@ -206,7 +214,7 @@ const renderMembers = params => {
               <Field
                 style={{ margin: 'auto' }}
                 name={`${member}.A`}
-                props={{classes}}
+                props={{ classes }}
                 component={renderTextField}
               />
             </Grid>
@@ -318,7 +326,7 @@ class Text2AIML extends React.Component {
                       name="answer"
                       component={renderTextField}
                       fullWidth
-                      props={{classes}}
+                      props={{ classes }}
                     />
                   </CardBody>
                 </Card>
