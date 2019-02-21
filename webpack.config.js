@@ -3,7 +3,6 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const webpack = require('webpack');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
-  .BundleAnalyzerPlugin;
 
 const outputDirectory = 'dist';
 
@@ -45,7 +44,7 @@ module.exports = {
       favicon: './public/favicon.ico',
     }),
     new webpack.HotModuleReplacementPlugin(),
-    new BundleAnalyzerPlugin(),
+    // new BundleAnalyzerPlugin(),
   ],
   devServer: {
     historyApiFallback: true,
