@@ -82,14 +82,14 @@ const AIML = Loadable({
 });
 
 const dashboardRoutes = [
-  // {
-  //   id: 'dashboard',
-  //   path: '/dashboard',
-  //   sidebarName: 'Trang chủ',
-  //   navbarName: 'Giao diện Dashboard',
-  //   icon: Dashboard,
-  //   component: DashboardPage,
-  // },
+  {
+    id: 'dashboard',
+    path: '/dashboard',
+    sidebarName: 'Trang chủ',
+    navbarName: 'Giao diện Dashboard',
+    icon: Dashboard,
+    component: DashboardPage,
+  },
   {
     id: 'aiml',
     path: '/aiml',
