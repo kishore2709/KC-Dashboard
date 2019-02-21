@@ -150,6 +150,7 @@ const renderMembers = params => {
                       textquestion: ev.target.value,
                     })
                       .then(res => {
+                        console.log(res);
                         if (!res || !('aiml_pattern' in res))
                           throw new Error('err');
                         // Save current AIML Question
