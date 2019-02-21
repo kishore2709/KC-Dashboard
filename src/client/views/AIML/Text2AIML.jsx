@@ -75,37 +75,48 @@ const styles = theme => ({
   item: {
     margin: 'auto',
   },
+  textFeild: {
+    height: '4px',
+  }
 });
 
-const renderTextField = ({
-  label,
-  input,
-  meta: { touched, invalid, error },
-  ...custom
-}) => (
+const renderTextField = (params) => {
+  let {
+    label,
+    input,
+    classes,
+    meta: { touched, invalid, error },
+    ...custom
+  } = params;
+  console.log(' in render text fiell..sd');
+  console.log(params);
+  return (
   // input.value=''
   <TextField
     error={touched && invalid}
     helperText={touched && error}
     variant="outlined"
     fullWidth
+    InputProps={{ classes: { input: classes.textFeild } }}
     InputLabelProps={{
       shrink: true,
     }}
     {...input}
     {...custom}
   />
-);
+)};
 
 const renderMembers = params => {
   // console.log(params);
   const {
     fields,
+    classes,
     dialogAIMLFunc,
     topicname,
     saveCurrentQuestionAIML,
     meta: { error, submitFailed },
   } = params;
+  // console.log(' in render Member..', classes);
   return (
     <Grid container spacing={24}>
       {fields.map((member, index) => (
@@ -140,13 +151,14 @@ const renderMembers = params => {
               <Field
                 style={{ margin: 'auto' }}
                 name={`${member}.Q`}
+                props={{classes}}
                 component={renderTextField}
                 onKeyPress={ev => {
                   // console.log(`Pressed keyCode ${ev.key}`);
                   if (ev.key === 'Enter') {
                     // Convert Text 2 AIML
                     // console.log('in Enter',ev.target.value);
-                    PostApiForm(`${ip.server  }/aimlquestions/getaimlfromtext`, {
+                    PostApiForm(`${ip.server}/aimlquestions/getaimlfromtext`, {
                       textquestion: ev.target.value,
                     })
                       .then(res => {
@@ -157,10 +169,11 @@ const renderMembers = params => {
                         saveCurrentQuestionAIML(res.aiml_pattern);
                         // Show cau hoi tuong tu trong Dialog1
                         PostApiForm(
-                          `${ip.server  }/aimlquestions/getsimilarpatternindb`,
+                          `${ip.server}/aimlquestions/getsimilarpatternindb`,
                           { aimlpatternfromtext: res.aiml_pattern, topicname }
                         ).then(res => {
-                          if (!res || !(Array.isArray(res))) throw new Error('err');
+                          if (!res || !Array.isArray(res))
+                            throw new Error('err');
                           // console.log('in []', res);
                           // console.log(res);
                           dialogAIMLFunc({
@@ -177,6 +190,7 @@ const renderMembers = params => {
                     ev.preventDefault();
                   }
                 }}
+                
               />
             </Grid>
 
@@ -192,6 +206,7 @@ const renderMembers = params => {
               <Field
                 style={{ margin: 'auto' }}
                 name={`${member}.A`}
+                props={{classes}}
                 component={renderTextField}
               />
             </Grid>
@@ -230,6 +245,7 @@ class Text2AIML extends React.Component {
       aiml,
       saveCurrentQuestionAIML,
     } = this.props;
+    // console.log(classes.textFeild);
     return (
       <React.Fragment>
         <Dialog
@@ -283,7 +299,12 @@ class Text2AIML extends React.Component {
                 <FieldArray
                   name="members"
                   component={renderMembers}
-                  props={{ dialogAIMLFunc, topicname: aiml.topic, saveCurrentQuestionAIML }}
+                  props={{
+                    dialogAIMLFunc,
+                    topicname: aiml.topic,
+                    saveCurrentQuestionAIML,
+                    classes,
+                  }}
                 />
               </Grid>
               <Grid item xs={12} className={classes.container} />
@@ -297,6 +318,7 @@ class Text2AIML extends React.Component {
                       name="answer"
                       component={renderTextField}
                       fullWidth
+                      props={{classes}}
                     />
                   </CardBody>
                 </Card>
@@ -332,7 +354,7 @@ const mapDispatchToProps = dispatch => ({
 
 const validate = values => {
   const errors = {};
-  if (!values['answer']) errors['answer'] = 'Required';
+  if (!values.answer) errors.answer = 'Required';
   if (!values.members || !values.members.length) {
     errors.members = { _error: 'At least one member must be entered' };
   } else {
