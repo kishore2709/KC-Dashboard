@@ -108,6 +108,7 @@ class Sidebar extends Component {
   render() {
     const { classes, color, logo, image, logoText } = this.props;
     const { routes, openUserManagementSubComponents } = this.state;
+    // console.log('routes in sidabar')
     // console.log(routes);
     const listItemClasses = path =>
       classNames({
