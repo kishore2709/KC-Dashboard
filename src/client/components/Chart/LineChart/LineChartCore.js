@@ -51,19 +51,19 @@ class LineChartCore extends Component {
       <Line
         ref={reference => (this.chartReference = reference)}
         data={{
-          datasets: [
-            {
-              borderColor: color,
-              data,
-            },
-          ],
+          datasets: data.map((dataRow, key) => ({
+            label: dataRow.label,
+            data: dataRow.data,
+            borderColor: color[key],
+            backgroundColor: 'rgba(0, 0, 0, 0.0)',
+          })),
         }}
         onElementsClick={this.handleElementsClick}
         options={{
           maintainAspectRatio: false,
           responsive: true,
           legend: {
-            display: false,
+            display: true,
           },
           scales: {
             xAxes: [
@@ -93,10 +93,9 @@ class LineChartCore extends Component {
           },
           elements: {
             line: {
-              tension: 0, // disables bezier curves
-              fill: false,
+                tension: 0, // disables bezier curves
             }
-          },
+          }
         }}
       />
     );
