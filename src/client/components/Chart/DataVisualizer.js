@@ -4,12 +4,17 @@ import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+import Input from '@material-ui/core/Input';
+import Checkbox from '@material-ui/core/Checkbox';
+import ListItemText from '@material-ui/core/ListItemText';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import DateFnsUtils from '@date-io/date-fns';
 import { MuiPickersUtilsProvider, DateTimePicker } from 'material-ui-pickers';
 import Grid from '@material-ui/core/Grid';
 import LinearProgress from '@material-ui/core/LinearProgress';
+
+import randomColor from 'randomcolor';
 
 import { connect } from 'react-redux';
 import { dateRangeActions } from '_actions';
@@ -42,6 +47,7 @@ function DataVisualizer(Chart) {
         y: Math.round(y / chunk.length),
       };
     };
+    const _color = Array.from({length: 10}, () => randomColor({luminosity: 'random', hue: 'random'}));
     const SubComponent = class extends Component {
       constructor(props) {
         super(props);
@@ -51,16 +57,23 @@ function DataVisualizer(Chart) {
         this.state = {
           startDate: null,
           endDate: null,
-          data: props.data,
+          data: [],
           loading: true,
           useTR: true,
+          dataShow: [],
+          allDataLabel: []
         };
+
       }
 
       componentDidMount() {
-        const endDate = new Date();
-        const startDate = new Date(endDate.getTime() - _fourHours);
-        this.handleDateRangeChange(startDate, endDate);
+        if (!Array.isArray(this.props.data)) return;
+        const allDataLabel = this.props.data.filter(dataRow => dataRow.label && Array.isArray(dataRow.data)).map(dataRow => dataRow.label);
+        this.setState({allDataLabel: allDataLabel}, () => {
+          const endDate = new Date();
+          const startDate = new Date(endDate.getTime() - _fourHours);
+          this.handleDateRangeChange(startDate, endDate);
+        });
       }
 
       getTimeRange = () => {
@@ -105,22 +118,27 @@ function DataVisualizer(Chart) {
         this.setState({
           loading: true,
         }, () => {
+          if (!Array.isArray(this.props.data)) return;
           const { data, opened } = this.props;
-          // console.log('in HandleDateRangeChange');
           opened({ startDate, endDate });
-          const newData = data.filter(curData => {
-            if (
-              curData.x.getTime() >= startDate.getTime() &&
-              curData.x.getTime() <= endDate.getTime()
-            ) {
-              return true;
-            }
-            return false;
-          });
+          const newData = data.filter(dataRow => dataRow.label && Array.isArray(dataRow.data))
+                              .filter(dataRow => this.state.dataShow.includes(dataRow.label))
+                              .map(dataRow => ({
+            label: dataRow.label,
+            data: _filterData(dataRow.data.filter(curData => {
+              if (
+                curData.x.getTime() >= startDate.getTime() &&
+                curData.x.getTime() <= endDate.getTime()
+              ) {
+                return true;
+              }
+              return false;
+            })),
+          }));
           this.setState({
             startDate,
             endDate,
-            data: _filterData(newData),
+            data: newData,
             loading: false,
           });
         });
@@ -150,8 +168,16 @@ function DataVisualizer(Chart) {
         });
       };
 
+      handleDataShowChange = event => {
+        this.setState({
+          dataShow: event.target.value,
+        }, () => {
+          this.handleDateRangeChange(this.state.startDate, this.state.endDate);
+        });
+      }
+
       render() {
-        const { startDate, endDate, data, loading } = this.state;
+        const { startDate, endDate, data, loading, allDataLabel } = this.state;
         const { color } = this.props;
         if (startDate !== null && endDate !== null) {
           return (
@@ -167,7 +193,7 @@ function DataVisualizer(Chart) {
             >
               <CardActions>
                 <Grid container spacing={24} alignItems="center">
-                  <Grid item xs={12} md={4}>
+                  <Grid item xs={12} md={3}>
                     <FormControl>
                       <InputLabel htmlFor="time-select">Chọn nhanh</InputLabel>
                       <Select
@@ -200,7 +226,31 @@ function DataVisualizer(Chart) {
                       </Select>
                     </FormControl>
                   </Grid>
-                  <Grid item xs={12} md={8}>
+                  <Grid item xs={12} md={3}>
+                  <FormControl>
+                      <InputLabel htmlFor='select-mutiple-checkbox'>Dữ liệu</InputLabel>
+                      <Select
+                        style={{
+                          width: '180px',
+                          overflow: 'auto',
+                          textOverflow: 'ellipse',
+                        }}
+                        multiple
+                        value={this.state.dataShow}
+                        onChange={this.handleDataShowChange}
+                        input={<Input id="select-multiple-checkbox" />}
+                        renderValue={selected => selected.join(', ')}
+                      >
+                        {allDataLabel.map(label => (
+                          <MenuItem key={label} value={label}>
+                            <Checkbox checked={this.state.dataShow.includes(label)} />
+                            <ListItemText primary={label} />
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  </Grid>
+                  <Grid item xs={12} md={6}>
                     <MuiPickersUtilsProvider utils={DateFnsUtils}>
                       <Grid container spacing={24}>
                         <Grid item xs={6}>
@@ -228,14 +278,17 @@ function DataVisualizer(Chart) {
                   </Grid>
                 </Grid>
               </CardActions>
-              <CardContent>
+              <CardContent
+                style={{
+                  height: '200px',
+                }}>
                 {loading ? (<LinearProgress />) : (
                   <Chart
                     data={data}
                     startDate={startDate}
                     endDate={endDate}
                     fireUpDateRangeChange={this.handleDateRangeChange}
-                    color={color}
+                    color={_color}
                   />  
                 )}
               </CardContent>

@@ -52,19 +52,18 @@ class BarChartCore extends Component {
       <Bar
         ref={reference => (this.chartReference = reference)}
         data={{
-          datasets: [
-            {
-              backgroundColor: color,
-              data,
-            },
-          ],
+          datasets: data.map((dataRow, key) => ({
+            label: dataRow.label,
+            data: dataRow.data,
+            backgroundColor: color[key],
+          })),
         }}
         onElementsClick={this.handleElementsClick}
         options={{
           maintainAspectRatio: false,
           responsive: true,
           legend: {
-            display: false,
+            display: true,
           },
           scales: {
             xAxes: [

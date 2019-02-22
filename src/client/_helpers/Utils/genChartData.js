@@ -31,4 +31,4 @@ const generateData = count => {
 const { dataTable, chartData } = generateData(2000);
 // console.log(data);
 
-module.exports = { dataTable, chartData };
+module.exports = { dataTable, chartData, generateData };
