@@ -74,8 +74,9 @@ class TableDiscover extends React.Component {
     // console.log('handle data');
     // console.log(this.handleData(startDate, endDate));
     const curData = this.handleData(startDate, endDate);
-    // console.log(curData);
+    console.log(curData);
     // console.log(this.state.data);
+
     return (
       <MuiThemeProvider theme={this.getMuiTheme()}>
         <MUIDataTable
