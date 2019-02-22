@@ -26,7 +26,7 @@ const cardHeaderStyle = {
       "&:not($cardHeaderIcon)": {
         borderRadius: "3px",
         marginTop: "-20px",
-        padding: "15px"
+        padding: "5px 15px 5px 15px"
       }
     },
     "&$cardHeaderStats svg": {
