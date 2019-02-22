@@ -43,13 +43,15 @@ const markers = [
     markerOffset: -35,
     name: 'Hà Nội',
     coordinates: [105.6525, 20.9755],
+    ip: '16.30.3.2',
     status: true,
   },
   {
     id: 2,
     markerOffset: -35,
     name: 'Đà Nẵng',
-    coordinates: [108.2119, 16.0680],
+    coordinates: [108.2119, 16.068],
+    ip: '16.32.3.2',
     status: false,
   },
   {
@@ -57,8 +59,9 @@ const markers = [
     markerOffset: -35,
     name: 'Hồ Chí Minh',
     coordinates: [106.69509, 10.76472],
+    ip: '16.30.32.2',
     status: true,
-  }
+  },
 ];
 
 class SimpleMarkers extends Component {
@@ -67,7 +70,7 @@ class SimpleMarkers extends Component {
     this.state = {
       index: 0,
     };
-    this.colors = ['#90E53A', '#E21336'];
+    this.colors = ['#E21336', '#556B2F'];
   }
 
   componentDidMount() {
@@ -86,24 +89,23 @@ class SimpleMarkers extends Component {
       <Paper style={wrapperStyles} className={classes.box}>
         <Grid container>
           <Grid item md={4} xs={12}>
-            <Status cities={markers}/>
+            <Status cities={markers} />
           </Grid>
-          <ReactTooltip place="right" type="info" effect="float" id="1">
-            <Typography style={{ color: '#FFF' }} gutterBottom>
-              Địa chỉ IP: 10.23.33.2
-            </Typography>
-            <Typography style={{ color: '#FFF' }} gutterBottom>
-              Trạng thái: An toàn
-            </Typography>
-          </ReactTooltip>
-          <ReactTooltip place="right" type="info" effect="float" id="2">
-            <Typography style={{ color: '#FFF' }} gutterBottom>
-              Địa chỉ IP: 12.23.33.2
-            </Typography>
-            <Typography style={{ color: '#FFF' }} gutterBottom>
-              Trạng thái: An toàn
-            </Typography>
-          </ReactTooltip>
+          {markers.map(val => (
+            <ReactTooltip
+              place="right"
+              type="info"
+              effect="float"
+              id={val.id.toString()}
+            >
+              <Typography style={{ color: '#FFF' }} gutterBottom>
+                Địa chỉ IP: {val.ip}
+              </Typography>
+              <Typography style={{ color: '#FFF' }} gutterBottom>
+                Trạng thái: {val.status ? 'An toàn' : 'Nguy hiểm'}
+              </Typography>
+            </ReactTooltip>
+          ))}
           <Grid item xs={12}>
             <ComposableMap
               projectionConfig={{ scale: 2250 }}
@@ -155,7 +157,8 @@ class SimpleMarkers extends Component {
                       key={i}
                       marker={marker}
                       style={{
-                        default: { fill: this.colors[this.state.index] },
+                        default: { fill: (marker.status ? this.colors[marker.status] 
+                          : this.colors[this.state.index]) },
                         // hover: { fill: '#FFFFFF' },
                         // pressed: { fill: '#FF5722' },
                       }}
@@ -169,8 +172,8 @@ class SimpleMarkers extends Component {
                         cy={0}
                         r={15}
                         style={{
-                          stroke: '#FF5722',
-                          strokeWidth: 3,
+                          stroke: '#2D7FDE',
+                          strokeWidth: 1,
                           opacity: 0.9,
                         }}
                       />
