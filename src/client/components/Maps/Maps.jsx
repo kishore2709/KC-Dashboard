@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import withStyles from '@material-ui/core/styles/withStyles';
-
+import ReactTooltip from 'react-tooltip';
+import { connect } from 'react-redux';
 import {
   ComposableMap,
   ZoomableGroup,
@@ -10,6 +11,8 @@ import {
   Marker,
 } from 'react-simple-maps';
 import jsonFile from 'assets/topojson/world-50m.json';
+import Typography from '@material-ui/core/Typography';
+import { hot } from 'react-hot-loader/root';
 
 const wrapperStyles = {
   width: '100%',
@@ -17,32 +20,24 @@ const wrapperStyles = {
   margin: '0 auto',
 };
 
-const include = [
-  'ARG',
-  'BOL',
-  'BRA',
-  'CHL',
-  'COL',
-  'ECU',
-  'GUY',
-  'PRY',
-  'PER',
-  'SUR',
-  'URY',
-  'VEN',
-  'VNM',
-];
+const include = ['VNM'];
 
 const styles = theme => ({
   box: {
-    border: '5px solid #BE6060',
+    border: '2px solid #BD13E2',
     borderRadius: '10px',
   },
 });
 
 const markers = [
-  { markerOffset: -35, name: 'Hà Nội', coordinates: [105.6525, 20.9755] },
   {
+    id: 1,
+    markerOffset: -35,
+    name: 'Hà Nội',
+    coordinates: [105.6525, 20.9755],
+  },
+  {
+    id: 2,
     markerOffset: -35,
     name: 'Hồ Chí Minh',
     coordinates: [106.69509, 10.76472],
@@ -50,10 +45,44 @@ const markers = [
 ];
 
 class SimpleMarkers extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      index: 0,
+    };
+    this.colors = ['#90E53A', '#E21336'];
+  }
+
+  componentDidMount() {
+    setInterval(() => {
+      this.setState(state => ({
+        index: 1 - state.index,
+      }));
+    }, 1000);
+  }
+
   render() {
     const { classes } = this.props;
+    console.log('in render..');
+    // console.log(dispatch);
     return (
       <div style={wrapperStyles} className={classes.box}>
+        <ReactTooltip place="right" type="info" effect="float" id="1">
+          <Typography style={{ color: '#FFF' }} gutterBottom>
+            Địa chỉ IP: 10.23.33.2
+          </Typography>
+          <Typography style={{ color: '#FFF' }} gutterBottom>
+            Trạng thái: An toàn
+          </Typography>
+        </ReactTooltip>
+        <ReactTooltip place="right" type="info" effect="float" id="2">
+          <Typography style={{ color: '#FFF' }} gutterBottom>
+            Địa chỉ IP: 12.23.33.2
+          </Typography>
+          <Typography style={{ color: '#FFF' }} gutterBottom>
+            Trạng thái: An toàn
+          </Typography>
+        </ReactTooltip>
         <ComposableMap
           projectionConfig={{ scale: 3000 }}
           width={580}
@@ -63,7 +92,7 @@ class SimpleMarkers extends Component {
             height: '100%',
           }}
         >
-          <ZoomableGroup center={[105, 15]} disablePanning>
+          <ZoomableGroup center={[108, 16]} disablePanning>
             <Geographies geography={jsonFile}>
               {(geographies, projection) =>
                 geographies.map(
@@ -87,7 +116,7 @@ class SimpleMarkers extends Component {
                             outline: 'none',
                           },
                           pressed: {
-                            fill: '#FF5722',
+                            fill: '#CFD8DC',
                             stroke: '#607D8B',
                             strokeWidth: 0.75,
                             outline: 'none',
@@ -104,15 +133,19 @@ class SimpleMarkers extends Component {
                   key={i}
                   marker={marker}
                   style={{
-                    default: { fill: '#FF5722' },
-                    hover: { fill: '#FFFFFF' },
-                    pressed: { fill: '#FF5722' },
+                    default: { fill: this.colors[this.state.index] },
+                    // hover: { fill: '#FFFFFF' },
+                    // pressed: { fill: '#FF5722' },
                   }}
+                  // onMouseMove={this.handleMove.bind(this)}
+                  // onMouseLeave={this.handleLeave.bind(this)}
                 >
                   <circle
+                    data-tip
+                    data-for={marker.id}
                     cx={0}
                     cy={0}
-                    r={20}
+                    r={15}
                     style={{
                       stroke: '#FF5722',
                       strokeWidth: 3,
@@ -125,7 +158,7 @@ class SimpleMarkers extends Component {
                     style={{
                       fontFamily: 'Roboto, sans-serif',
                       fill: '#607D8B',
-                      fontSize: 45,
+                      fontSize: 30,
                     }}
                   >
                     {marker.name}
@@ -140,4 +173,6 @@ class SimpleMarkers extends Component {
   }
 }
 
-export default withStyles(styles)(SimpleMarkers);
+export default hot(
+  connect(state => ({ app: state }))(withStyles(styles)(SimpleMarkers))
+);

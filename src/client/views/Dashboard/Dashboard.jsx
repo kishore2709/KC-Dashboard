@@ -97,7 +97,7 @@ class Dashboard extends React.Component {
         {data.map(val => {
           if ('layout1' in val)
             return (
-              <GridItem xs={12} sm={3} md={3} style={{ height: '100%' }}>
+              <GridItem xs={12} sm={5} md={5} style={{ height: '100%' }}>
                 <Grid
                   container
                   direction="row"
@@ -111,7 +111,7 @@ class Dashboard extends React.Component {
               </GridItem>
             );
         })}
-        <GridItem xs={12} sm={9} md={9}>
+        <GridItem xs={12} sm={7} md={7}>
           <GridContainer>
             {data.map(val => {
               if ('layout2' in val)
