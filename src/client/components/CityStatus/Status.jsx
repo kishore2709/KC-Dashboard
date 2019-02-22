@@ -5,29 +5,33 @@ import withStyles from '@material-ui/core/styles/withStyles';
 // import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import { Icon } from '@material-ui/core';
+import ButtonBase from '@material-ui/core/ButtonBase';
 
 const styles = theme => ({
   typo: {
     minWidth: '100px',
     fontWeight: 'bold',
+    zIndex: 2000,
   },
   OKFab: {
     padding: 10,
-    margin: 0,
+    margin: 2,
     display: 'inline-block',
     backgroundColor: '#0F0',
     borderRadius: '50%',
-    width: 10,
-    height: 10,
+    width: 6,
+    height: 6,
+    zIndex: 2000,
   },
   RedFab: {
     padding: 10,
-    margin: 0,
+    margin: 2,
     display: 'inline-block',
     backgroundColor: '#008000',
     borderRadius: '50%',
-    width: 10,
-    height: 10,
+    width: 6,
+    height: 6,
+    zIndex: 2000,
   },
 });
 
@@ -37,14 +41,14 @@ class Status extends React.Component {
   render() {
     const { classes, cities } = this.props;
     const OKButton = (
-      <IconButton>
-      <div className={classes.OKFab}/>
-      </IconButton>
+      <ButtonBase>
+        <div className={classes.OKFab} />
+      </ButtonBase>
     );
     const WarnButton = (
-      <IconButton>
-      <div className={classes.RedFab}/>
-      </IconButton>
+      <ButtonBase>
+        <div className={classes.RedFab} />
+      </ButtonBase>
     );
     return (
       <div style={{ position: 'absolute', top: 10, right: 0, width: 200 }}>
