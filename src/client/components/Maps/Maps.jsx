@@ -15,6 +15,9 @@ import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Status from 'components/CityStatus/Status.jsx';
+import { colors } from 'assets/colors/colors.jsx';
+
+const { active : activeColor, warn : warnColor } = colors;
 
 const wrapperStyles = {
   width: '100%',
@@ -70,7 +73,7 @@ class SimpleMarkers extends Component {
     this.state = {
       index: 0,
     };
-    this.colors = ['#E21336', '#556B2F'];
+    this.colors = [warnColor, activeColor];
   }
 
   componentDidMount() {
@@ -83,7 +86,7 @@ class SimpleMarkers extends Component {
 
   render() {
     const { classes } = this.props;
-    console.log('in render..');
+    // console.log('in render..');
     // console.log(dispatch);
     return (
       <Paper style={wrapperStyles} className={classes.box}>
@@ -157,8 +160,7 @@ class SimpleMarkers extends Component {
                       key={i}
                       marker={marker}
                       style={{
-                        default: { fill: (marker.status ? this.colors[marker.status] 
-                          : this.colors[this.state.index]) },
+                        default: { fill: (marker.status ? activeColor : warnColor ) },
                         // hover: { fill: '#FFFFFF' },
                         // pressed: { fill: '#FF5722' },
                       }}
@@ -182,7 +184,7 @@ class SimpleMarkers extends Component {
                         y={marker.markerOffset}
                         style={{
                           fontFamily: 'Roboto, sans-serif',
-                          fill: '#FF0422',
+                          fill: '#201B55',
                           fontSize: 20,
                           fontWeight: 'bold',
                         }}
