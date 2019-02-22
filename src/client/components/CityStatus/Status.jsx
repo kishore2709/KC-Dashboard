@@ -23,6 +23,7 @@ const styles = theme => ({
     borderRadius: '50%',
     width: 6,
     height: 6,
+    zIndex: 2,
   },
   RedFab: {
     padding: 10,
@@ -32,6 +33,7 @@ const styles = theme => ({
     borderRadius: '50%',
     width: 6,
     height: 6,
+    zIndex: 2,
   },
 });
 
