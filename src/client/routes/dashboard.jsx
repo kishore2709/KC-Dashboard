@@ -21,48 +21,57 @@ import { Redirect } from 'react-router-dom';
 // core components/views
 // import UserPermission from 'views/UserPermission/UserPermission.jsx';
 const UserPermission = Loadable({
-  loader: () => import(/* webpackPrefetch: true */ 'views/UserPermission/UserPermission.jsx'),
+  loader: () =>
+    import(/* webpackPrefetch: true */ 'views/UserPermission/UserPermission.jsx'),
   loading: TableLoader,
 });
 // import GroupPermission from 'views/GroupPermission/GroupPermission.jsx';
 const GroupPermission = Loadable({
-  loader: () => import(/* webpackPrefetch: true */ 'views/GroupPermission/GroupPermission.jsx'),
+  loader: () =>
+    import(/* webpackPrefetch: true */ 'views/GroupPermission/GroupPermission.jsx'),
   loading: TableLoader,
 });
 // import DashboardPage from 'views/Dashboard/Dashboard.jsx';
 const DashboardPage = Loadable({
-  loader: () => import(/* webpackPrefetch: true */ 'views/Dashboard/Dashboard.jsx'),
+  loader: () =>
+    import(/* webpackPrefetch: true */ 'views/Dashboard/Dashboard.jsx'),
   loading: TableLoader,
 });
 // import UserManagement from 'views/UserManagement/UserManagement.jsx';
 const UserManagement = Loadable({
-  loader: () => import(/* webpackPrefetch: true */ 'views/UserManagement/UserManagement.jsx'),
+  loader: () =>
+    import(/* webpackPrefetch: true */ 'views/UserManagement/UserManagement.jsx'),
   loading: TableLoader,
 });
 // import LogManagement from 'views/LogManagement/LogManagement.jsx';
 const LogManagement = Loadable({
-  loader: () => import(/* webpackPrefetch: true */ 'views/LogManagement/LogManagement.jsx'),
+  loader: () =>
+    import(/* webpackPrefetch: true */ 'views/LogManagement/LogManagement.jsx'),
   loading: TableLoader,
 });
 // import ServiceManager from 'views/ServiceManager/ServiceManager.jsx';
 const ServiceManager = Loadable({
-  loader: () => import(/* webpackPrefetch: true */ 'views/ServiceManager/ServiceManager.jsx'),
+  loader: () =>
+    import(/* webpackPrefetch: true */ 'views/ServiceManager/ServiceManager.jsx'),
   loading: TableLoader,
 });
 // import AttackReport from 'views/AttackReport/AttackReport.jsx';
 const AttackReport = Loadable({
-  loader: () => import(/* webpackPrefetch: true */ 'views/AttackReport/AttackReport.jsx'),
+  loader: () =>
+    import(/* webpackPrefetch: true */ 'views/AttackReport/AttackReport.jsx'),
   loading: TableLoader,
 });
 
 // import UserProfile from 'views/UserProfile/UserProfile.jsx';
 const UserProfile = Loadable({
-  loader: () => import(/* webpackPrefetch: true */ 'views/UserProfile/UserProfile.jsx'),
+  loader: () =>
+    import(/* webpackPrefetch: true */ 'views/UserProfile/UserProfile.jsx'),
   loading: TableLoader,
 });
 // import Discover from 'views/Discover/Discover.jsx';
 const Discover = Loadable({
-  loader: () => import(/* webpackPrefetch: true */ 'views/Discover/Discover.jsx'),
+  loader: () =>
+    import(/* webpackPrefetch: true */ 'views/Discover/Discover.jsx'),
   loading: TableLoader,
 });
 

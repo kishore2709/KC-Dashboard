@@ -1,155 +1,81 @@
 const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
-
-const saltRounds = 10;
-const myPlaintextPassword = '1';
 const Models = require('../Utils/Schema');
 
-mongoose.connect('mongodb://localhost/usermanager');
+const { User, Group, City, DnsLog, WebLog, Report } = Models;
+// connect db
+mongoose.connect('mongodb://localhost/KCdb');
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
-const User = Models.User;
-const Group = Models.Group;
+// get Data
+const citiesData = require('./data/cities');
+const usersData = require('./data/users');
+const groupsData = require('./data/groups');
+const reportsData = require('./data/reports');
+const chartData = require('../../client/_helpers/Utils/genChartData.js');
+
 db.once('open', () => {
   // we're connected!
   console.log('connected to database..');
-  bcrypt.hash(myPlaintextPassword, saltRounds, (err, hash) => {
-    // Store hash in your password DB.
-    const userData = [
-      {
-        username: 'user',
-        password: hash,
-        role: 'user',
-        status: true,
-        fullname: 'ABC',
-        email: 'ABC@gmail.com',
-        phonenumber: '01632653333',
-        changePwd: false,
-        permissions: {
-          dashboard: {
-            canAccess: true,
-            subArr: [true, false, false],
-          },
-          user: {
-            canAccess: true,
-            subArr: [true, false],
-          },
-          permission: {
-            canAccess: false,
-            subArr: [true, false],
-          },
-          logManager: {
-            canAccess: false,
-            subArr: [false, false],
-          },
-          serviceManager: {
-            canAccess: true,
-            subArr: [true, false],
-          },
-          attackReport: {
-            canAccess: false,
-            subArr: [false, false],
-          },
-        },
-      },
-      {
-        username: 'mod',
-        password: hash,
-        role: 'moderator',
-        fullname: 'ABC',
-        email: 'ABC@gmail.com',
-        phonenumber: '01632653333',
-        status: true,
-        changePwd: false,
-        permissions: {
-          dashboard: {
-            canAccess: true,
-            subArr: [true, false, false],
-          },
-          user: {
-            canAccess: true,
-            subArr: [true, false],
-          },
-          permission: {
-            canAccess: false,
-            subArr: [true, false],
-          },
-          logManager: {
-            canAccess: true,
-            subArr: [true, false],
-          },
-          serviceManager: {
-            canAccess: true,
-            subArr: [true, false],
-          },
-          attackReport: {
-            canAccess: true,
-            subArr: [true, false],
-          },
-        },
-      },
-      {
-        username: 'admin',
-        password: hash,
-        role: 'admin',
-        fullname: 'ABC',
-        email: 'ABC@gmail.com',
-        phonenumber: '01632653333',
-        status: true,
-        changePwd: false,
-        permissions: {
-          dashboard: {
-            canAccess: true,
-            subArr: [true, true, true],
-          },
-          user: {
-            canAccess: true,
-            subArr: [true, true],
-          },
-          permission: {
-            canAccess: true,
-            subArr: [true, true],
-          },
-          logManager: {
-            canAccess: true,
-            subArr: [true, true],
-          },
-          serviceManager: {
-            canAccess: true,
-            subArr: [true, true],
-          },
-          attackReport: {
-            canAccess: true,
-            subArr: [true, true],
-          },
-        },
-      },
-    ];
-    const groupData = [
-      {
-        groupname: 'admin',
-      },
-      {
-        groupname: 'moderator',
-      },
-      {
-        groupname: 'user',
-      },
-    ];
-    const users = userData.map(user => new User(user));
-    users.map(user =>
-      user.save((err, user1) => {
-        if (err) console.log(err);
-        console.log('save ok');
-      })
-    );
-    const groups = groupData.map(group => new Group(group));
-    groups.map(group =>
-      group.save((err, groupNew) => {
-        if (err) console.log(err);
-        console.log('save group ok');
-      })
-    );
-  });
+  // console.log(citiesData);
+  // user
+  const users = usersData.map(val => new User(val));
+  users.map(user =>
+    user.save((err, user1) => {
+      if (err) console.log(err);
+      console.log('save user ok');
+    })
+  );
+  // group
+  const groups = groupsData.map(val => new Group(val));
+  groups.map(group =>
+    group.save((err, groupNew) => {
+      if (err) console.log(err);
+      console.log('save group ok');
+    })
+  );
+  const cities = citiesData.map(city => new City(city));
+  cities.map(city =>
+    city.save((err, city1) => {
+      if (err) console.log(err);
+      console.log('save city ok');
+
+      // report
+      const reports = reportsData.map(val => {
+        const report = { city: city1._id, ...val };
+        return new Report(report);
+      });
+      reports.map(report =>
+        report.save((err, reportNew) => {
+          if (err) console.log(err);
+          console.log('save report ok');
+        })
+      );
+      // dnslog
+      const dnsLogsData = chartData.generateData(2000).chartData;
+      // console.log(dnsLogsData);
+      const dnsLogs = dnsLogsData.map(({ x: timestamp, y: count }) => {
+        const dnsLog = { city: city1._id, timestamp, count };
+        return new DnsLog(dnsLog);
+      });
+      dnsLogs.map(dnsLog => {
+        dnsLog.save((err, dnsLog1) => {
+          if (err) console.log(err);
+          // console.log('save dnsLog ok');
+        });
+      });
+      // weblog
+      const webLogsData = chartData.generateData(2000).chartData;
+      const webLogs = webLogsData.map(({ x: timestamp, y: count }) => {
+        const webLog = { city: city1._id, timestamp, count };
+        return new WebLog(webLog);
+      });
+      webLogs.map(webLog => {
+        webLog.save((err, webLog1) => {
+          if (err) console.log(err);
+          // console.log('save webLog ok');
+        });
+      });
+    })
+  );
 });
 // console.log('end');

@@ -14,8 +14,8 @@ router.post('/getUserInfo', getUserInfo);
 router.post('/dashboardData', dashboardData);
 router.post('/resetPassword', resetPassword);
 router.post('/changePassword', changePassword);
-router.post('/getLog', getLog);
-router.post('/saveLog', saveLog);
+// router.post('/getLog', getLog);
+// router.post('/saveLog', saveLog);
 module.exports = router;
 
 function saveLog(req, res, next) {
