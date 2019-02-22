@@ -14,7 +14,7 @@ const cardHeaderStyle = {
     background: "transparent",
     zIndex: "3 !important",
     "&$cardHeaderPlain,&$cardHeaderIcon,&$cardHeaderStats,&$warningCardHeader,&$successCardHeader,&$dangerCardHeader,&$infoCardHeader,&$primaryCardHeader,&$roseCardHeader": {
-      margin: "0 15px",
+      margin: "0 10px",
       padding: "0",
       position: "relative",
       color: "#FFFFFF"
@@ -30,18 +30,19 @@ const cardHeaderStyle = {
       }
     },
     "&$cardHeaderStats svg": {
-      fontSize: "36px",
+      fontSize: "14px",
       lineHeight: "56px",
       textAlign: "center",
-      width: "36px",
+      width: "46px",
       height: "36px",
-      margin: "10px 10px 4px"
+      margin: "10px 5px 4px"
     },
     "&$cardHeaderStats i,&$cardHeaderStats .material-icons": {
       fontSize: "36px",
       lineHeight: "56px",
       width: "56px",
       height: "56px",
+      marginRight: '1px',
       textAlign: "center",
       overflow: "unset",
       marginBottom: "1px"

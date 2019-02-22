@@ -31,7 +31,6 @@ const dashboardStyle = {
   },
   cardCategory: {
     color: '#999999',
-    margin: '0',
     fontSize: '14px',
     marginTop: '0',
     paddingTop: '10px',
@@ -48,9 +47,9 @@ const dashboardStyle = {
     color: '#3C4858',
     marginTop: '0px',
     minHeight: 'auto',
-    fontWeight: '300',
+    fontWeight: '100',
     fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif",
-    marginBottom: '3px',
+    marginBottom: '1px',
     textDecoration: 'none',
     '& small': {
       color: '#777',

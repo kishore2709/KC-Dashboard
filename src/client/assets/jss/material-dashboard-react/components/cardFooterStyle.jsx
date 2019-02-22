@@ -1,7 +1,7 @@
 const cardFooterStyle = {
   cardFooter: {
     padding: "0",
-    paddingTop: "10px",
+    paddingTop: "0px",
     margin: "0 15px 10px",
     borderRadius: "0",
     justifyContent: "space-between",
@@ -20,7 +20,7 @@ const cardFooterStyle = {
   },
   cardFooterStats: {
     borderTop: "1px solid #eee",
-    marginTop: "20px",
+    marginTop: "5px",
     "& svg": {
       position: "relative",
       top: "4px",

@@ -12,7 +12,7 @@ import {
 } from 'react-simple-maps';
 import jsonFile from 'assets/topojson/world-50m.json';
 import Typography from '@material-ui/core/Typography';
-import { hot } from 'react-hot-loader/root';
+
 import Paper from '@material-ui/core/Paper';
 
 const wrapperStyles = {
@@ -85,9 +85,9 @@ class SimpleMarkers extends Component {
           </Typography>
         </ReactTooltip>
         <ComposableMap
-          projectionConfig={{ scale: 3000 }}
-          width={580}
-          height={800}
+          projectionConfig={{ scale: 2800 }}
+          width={600}
+          height={600}
           style={{
             width: '100%',
             height: '100%',
@@ -175,6 +175,4 @@ class SimpleMarkers extends Component {
   }
 }
 
-export default hot(
-  connect(state => ({ app: state }))(withStyles(styles)(SimpleMarkers))
-);
+export default connect(state => ({ app: state }))(withStyles(styles)(SimpleMarkers));
