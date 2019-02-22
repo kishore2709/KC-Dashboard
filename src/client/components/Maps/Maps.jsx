@@ -13,6 +13,7 @@ import {
 import jsonFile from 'assets/topojson/world-50m.json';
 import Typography from '@material-ui/core/Typography';
 import { hot } from 'react-hot-loader/root';
+import Paper from '@material-ui/core/Paper';
 
 const wrapperStyles = {
   width: '100%',
@@ -66,7 +67,7 @@ class SimpleMarkers extends Component {
     console.log('in render..');
     // console.log(dispatch);
     return (
-      <div style={wrapperStyles} className={classes.box}>
+      <Paper style={wrapperStyles} className={classes.box}>
         <ReactTooltip place="right" type="info" effect="float" id="1">
           <Typography style={{ color: '#FFF' }} gutterBottom>
             Địa chỉ IP: 10.23.33.2
@@ -104,13 +105,13 @@ class SimpleMarkers extends Component {
                         projection={projection}
                         style={{
                           default: {
-                            fill: '#ECEFF1',
+                            fill: '#E8B14E',
                             stroke: '#CA0C27',
                             strokeWidth: 2,
                             outline: 'none',
                           },
                           hover: {
-                            fill: '#CFD8DC',
+                            fill: '#E8B14E',
                             stroke: '#607D8B',
                             strokeWidth: 0.75,
                             outline: 'none',
@@ -157,8 +158,9 @@ class SimpleMarkers extends Component {
                     y={marker.markerOffset}
                     style={{
                       fontFamily: 'Roboto, sans-serif',
-                      fill: '#607D8B',
-                      fontSize: 30,
+                      fill: '#FF0422',
+                      fontSize: 20,
+                      fontWeight: 'bold',
                     }}
                   >
                     {marker.name}
@@ -168,7 +170,7 @@ class SimpleMarkers extends Component {
             </Markers>
           </ZoomableGroup>
         </ComposableMap>
-      </div>
+      </Paper>
     );
   }
 }
