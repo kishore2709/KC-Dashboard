@@ -6,6 +6,8 @@ import withStyles from '@material-ui/core/styles/withStyles';
 import IconButton from '@material-ui/core/IconButton';
 import { Icon } from '@material-ui/core';
 import ButtonBase from '@material-ui/core/ButtonBase';
+import { colors } from 'assets/colors/colors.jsx';
+const { active : activeColor, warn : warnColor } = colors;
 
 const styles = theme => ({
   typo: {
@@ -17,21 +19,19 @@ const styles = theme => ({
     padding: 10,
     margin: 2,
     display: 'inline-block',
-    backgroundColor: '#0F0',
+    backgroundColor: activeColor,
     borderRadius: '50%',
     width: 6,
     height: 6,
-    zIndex: 2000,
   },
   RedFab: {
     padding: 10,
     margin: 2,
     display: 'inline-block',
-    backgroundColor: '#008000',
+    backgroundColor: warnColor,
     borderRadius: '50%',
     width: 6,
     height: 6,
-    zIndex: 2000,
   },
 });
 
@@ -51,7 +51,7 @@ class Status extends React.Component {
       </ButtonBase>
     );
     return (
-      <div style={{ position: 'absolute', top: 10, right: 0, width: 200 }}>
+      <div style={{ position: 'absolute', top: 20, right: 0, width: 200 }}>
         <Grid container>
           <Grid container direction="row" justify="center" alignItems="center">
             <Grid item>
