@@ -65,6 +65,11 @@ const Discover = Loadable({
   loader: () => import(/* webpackPrefetch: true */ 'views/Discover/Discover.jsx'),
   loading: TableLoader,
 });
+// import MailBox from 'views/MailBox/MailBox.jsx';
+const MailBox = Loadable({
+  loader: () => import(/* webpackPrefetch: true */ '../views/MailBox/MailBox.jsx'),
+  loading: TableLoader,
+});
 
 const dashboardRoutes = [
   {
@@ -110,6 +115,14 @@ const dashboardRoutes = [
     ],
   },
   {
+    id: 'mailBox',
+    path: '/mailBox',
+    sidebarName: 'Hộp thư đến',
+    navbarName: 'Giao diện hộp thư đến',
+    icon: Person,
+    component: MailBox,
+  },
+  {
     id: 'logManager',
     path: '/logManager',
     sidebarName: 'Quản lý log',
@@ -140,6 +153,7 @@ const dashboardRoutes = [
     icon: PowerIcon,
     component: <Redirect to="/login" />,
   },
+
   {
     id: 'profile',
     path: '/profile',
