@@ -3,10 +3,10 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
 // import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
-import { Icon } from '@material-ui/core';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import { colors } from 'assets/colors/colors.jsx';
+import { connect } from 'react-redux';
+import { dashboardActions } from '_actions';
 const { active : activeColor, warn : warnColor } = colors;
 
 const styles = theme => ({
@@ -41,7 +41,9 @@ class Status extends React.Component {
   // const { classes } = props;
   // console.log('in status', classes);
   render() {
-    const { classes, cities } = this.props;
+    const { classes, dashboard } = this.props;
+    // console.log(dashboard);
+    const { data : cities } = dashboard;
     const OKButton = (
       <ButtonBase>
         <div className={classes.OKFab} />
@@ -67,7 +69,7 @@ class Status extends React.Component {
               </Typography>
             </Grid>
           </Grid>
-          {cities.map(city => (
+          {cities.map((city, index) => (
             <Grid
               container
               direction="row"
@@ -80,7 +82,9 @@ class Status extends React.Component {
                 </Typography>
               </Grid>
               <Grid item>
-                <Typography className={classes.typo} align="center">
+                <Typography className={classes.typo} align="center" onClick={()=>{
+                  this.props.changeCity(index)
+                }}>
                   {city.status ? OKButton : WarnButton}
                 </Typography>
               </Grid>
@@ -92,4 +96,10 @@ class Status extends React.Component {
   }
 }
 
-export default withStyles(styles)(Status);
+export default connect(state => ({
+  dashboard : state.dashboard,
+}), dispatch => ({
+  changeCity: newStatus=>{
+      dispatch(dashboardActions.changeCity(newStatus))
+  }
+}))(withStyles(styles)(Status));

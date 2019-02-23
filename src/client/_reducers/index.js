@@ -11,8 +11,10 @@ import { serverStatus } from './serverStatus.reducer';
 import userDialogData from './AIO/userData.reducer';
 import { userTable } from './userTable.reducer';
 import { groupTable } from './groupTable.reducer';
+import { dashboard } from './dashboard.reducer';
 
 const rootReducer = combineReducers({
+  dashboard,
   dialog,
   dateRange,
   authentication,

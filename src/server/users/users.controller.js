@@ -14,29 +14,18 @@ router.post('/getUserInfo', getUserInfo);
 router.post('/dashboardData', dashboardData);
 router.post('/resetPassword', resetPassword);
 router.post('/changePassword', changePassword);
+router.post('/getCitiesInfo', getCitiesInfo);
+
 // router.post('/getLog', getLog);
 // router.post('/saveLog', saveLog);
 module.exports = router;
 
-function saveLog(req, res, next) {
+function getCitiesInfo(req, res, next) {
   userService
-    .saveLog({ ...req.body, ip: req.ipAddr })
+    .getCitiesInfo()
     .then(ret => {
-      if (ret === 0) {
-        res.status(400).json({ message: 'saveLog error' });
-      } else {
-        res.json({ message: ret });
-      }
-    })
-    .catch(err => next(err));
-}
-
-function getLog(req, res, next) {
-  userService
-    .getLog(req.body)
-    .then(ret => {
-      if (ret === 0) {
-        res.status(400).json({ message: 'getLog error' });
+      if (!ret) {
+        res.status(400).json({ message: 'getCity error' });
       } else {
         res.json({ message: ret });
       }

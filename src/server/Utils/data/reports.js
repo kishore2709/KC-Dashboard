@@ -1,8 +1,8 @@
 const reports = [
   {
-    attack: 2,
-    pcap: 326,
-    log: 1623,
+    attacks: 2,
+    pcaps: 326,
+    logs: 1623,
     bugs: ['Server Error', '404 Not Found'],
     website: ['Server Error', '404 Not Found'],
     server: ['Server Error', '404 Not Found'],
@@ -16,9 +16,9 @@ const reports = [
     server: ['Server Error', '404 Not Found'],
   },
   {
-    attack: 32,
-    pcap: 32326,
-    log: 1613,
+    attacks: 32,
+    pcaps: 32326,
+    logs: 1613,
     bugs: ['Server Error', '404 Not Found'],
     website: ['Server Error', '404 Not Found'],
     server: ['Server Error', '404 Not Found'],

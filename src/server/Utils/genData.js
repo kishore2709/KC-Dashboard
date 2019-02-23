@@ -34,7 +34,7 @@ db.once('open', () => {
     })
   );
   const cities = citiesData.map(city => new City(city));
-  cities.map(city =>
+  cities.map((city, index) =>
     city.save((err, city1) => {
       if (err) console.log(err);
       console.log('save city ok');
@@ -44,12 +44,10 @@ db.once('open', () => {
         const report = { city: city1._id, ...val };
         return new Report(report);
       });
-      reports.map(report =>
-        report.save((err, reportNew) => {
-          if (err) console.log(err);
-          console.log('save report ok');
-        })
-      );
+      reports[index].save((err, reportNew) => {
+        if (err) console.log(err);
+        console.log('save report ok');
+      })
       // dnslog
       const dnsLogsData = chartData.generateData(2000).chartData;
       // console.log(dnsLogsData);

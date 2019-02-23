@@ -2,7 +2,7 @@
 const config = require('../config.json');
 const Models = require('../Utils/Schema');
 // #### >>>  Init Mongodb
-const { User, Log, Group } = Models;
+const { User, Log, Group, City, DnsLog, WebLog, Report } = Models;
 const dashboardService = require('../services/dashboard.js');
 // bcrypt
 const bcrypt = require('bcrypt');
@@ -24,7 +24,44 @@ module.exports = {
   changePassword,
   saveLog,
   getLog,
+  getCitiesInfo,
 };
+
+async function getCitiesInfo() {
+  let cities;
+  await City.find({}, (err, ret) => {
+    if (!err) cities = ret;
+  });
+  if (!cities || !Array.isArray(cities)) return false;
+  const result = [];
+  for (let i = 0; i < cities.length; i++) {
+    let dnslogs;
+    let weblogs;
+    let reports;
+    const { _id: id, markerOffset, name, coordinates, ip, status } = cities[i];
+    await DnsLog.find({ city: id }, (err, ret) => {
+      if (!err) dnslogs = ret;
+    });
+    await WebLog.find({ city: id }, (err, ret) => {
+      if (!err) weblogs = ret;
+    });
+    await Report.find({ city: id }, (err, ret) => {
+      if (!err) reports = ret;
+    });
+    result.push({
+      dnslogs,
+      weblogs,
+      reports,
+      id,
+      markerOffset,
+      name,
+      coordinates,
+      ip,
+      status,
+    });
+  }
+  return result;
+}
 
 async function saveLog(obj) {
   if (
