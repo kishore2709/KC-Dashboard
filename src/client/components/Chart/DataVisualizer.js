@@ -47,7 +47,7 @@ function DataVisualizer(Chart) {
         y: Math.round(y / chunk.length),
       };
     };
-    const _color = Array.from({length: 10}, () => randomColor({luminosity: 'random', hue: 'random'}));
+    const _color = Array.from({ length: 10 }, () => randomColor({ luminosity: 'random', hue: 'random' }));
     const SubComponent = class extends Component {
       constructor(props) {
         super(props);
@@ -69,10 +69,11 @@ function DataVisualizer(Chart) {
       componentDidMount() {
         if (!Array.isArray(this.props.data)) return;
         const allDataLabel = this.props.data.filter(dataRow => dataRow.label && Array.isArray(dataRow.data)).map(dataRow => dataRow.label);
-        this.setState({allDataLabel: allDataLabel}, () => {
+        this.setState({ allDataLabel: allDataLabel }, () => {
           const endDate = new Date();
           const startDate = new Date(endDate.getTime() - _fourHours);
           this.handleDateRangeChange(startDate, endDate);
+          // console.log(allDataLabel);
         });
       }
 
@@ -122,19 +123,19 @@ function DataVisualizer(Chart) {
           const { data, opened } = this.props;
           opened({ startDate, endDate });
           const newData = data.filter(dataRow => dataRow.label && Array.isArray(dataRow.data))
-                              .filter(dataRow => this.state.dataShow.includes(dataRow.label))
-                              .map(dataRow => ({
-            label: dataRow.label,
-            data: _filterData(dataRow.data.filter(curData => {
-              if (
-                curData.x.getTime() >= startDate.getTime() &&
-                curData.x.getTime() <= endDate.getTime()
-              ) {
-                return true;
-              }
-              return false;
-            })),
-          }));
+            .filter(dataRow => this.state.dataShow.includes(dataRow.label))
+            .map(dataRow => ({
+              label: dataRow.label,
+              data: _filterData(dataRow.data.filter(curData => {
+                if (
+                  curData.x.getTime() >= startDate.getTime() &&
+                  curData.x.getTime() <= endDate.getTime()
+                ) {
+                  return true;
+                }
+                return false;
+              })),
+            }));
           this.setState({
             startDate,
             endDate,
@@ -227,7 +228,7 @@ function DataVisualizer(Chart) {
                     </FormControl>
                   </Grid>
                   <Grid item xs={12} md={3}>
-                  <FormControl>
+                    <FormControl>
                       <InputLabel htmlFor='select-mutiple-checkbox'>Dữ liệu</InputLabel>
                       <Select
                         style={{
@@ -289,7 +290,7 @@ function DataVisualizer(Chart) {
                     endDate={endDate}
                     fireUpDateRangeChange={this.handleDateRangeChange}
                     color={_color}
-                  />  
+                  />
                 )}
               </CardContent>
             </Card>

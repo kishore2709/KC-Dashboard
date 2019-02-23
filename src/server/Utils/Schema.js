@@ -2,7 +2,37 @@ const mongoose = require('mongoose');
 // const bcrypt = require('bcrypt');
 const defaultPassword = require('./pwd');
 
+const ObjectId = mongoose.Schema.Types.ObjectId;
+
 // mongoose.connect('mongodb://localhost/usermanager');
+const CitySchema = new mongoose.Schema({
+  markerOffset: Number,
+  name: String,
+  coordinates: Array,
+  ip: String,
+  status: Boolean,
+});
+const ReportSchema = new mongoose.Schema({
+  city: ObjectId,
+  attacks: Number,
+  pcaps: Number,
+  logs: Number,
+  bugs: Array,
+  website: Array,
+  server: Array,
+});
+
+const dnsLogSchema = new mongoose.Schema({
+  city: ObjectId,
+  timestamp: Date,
+  count: Number,
+});
+const webLogSchema = new mongoose.Schema({
+  city: ObjectId,
+  timestamp: Date,
+  count: Number,
+});
+
 const UserSchema = new mongoose.Schema({
   username: String,
   password: { type: String, default: defaultPassword },
@@ -18,9 +48,13 @@ const UserSchema = new mongoose.Schema({
   permissions: {
     type: Object,
     default: {
+      mailBox: {
+        canAccess: true,
+        subArr: [true, true, true],
+      },
       dashboard: {
         canAccess: true,
-        subArr: [true, false, false],
+        subArr: [true, true, true],
       },
       user: {
         canAccess: true,
@@ -46,22 +80,18 @@ const UserSchema = new mongoose.Schema({
   },
 });
 
-const LogSchema = new mongoose.Schema({
-  timestamp: String,
-  isLogin: Boolean,
-  username: String,
-  status: Boolean,
-  ip: String,
-});
-
 const GroupSchema = new mongoose.Schema({
   groupname: String,
   permissions: {
     type: Object,
     default: {
+      mailBox: {
+        canAccess: true,
+        subArr: [true, true, true],
+      },
       dashboard: {
         canAccess: true,
-        subArr: [true, false, false],
+        subArr: [true, true, true],
       },
       user: {
         canAccess: true,
@@ -87,6 +117,10 @@ const GroupSchema = new mongoose.Schema({
   },
 });
 const User = mongoose.model('UserAccount', UserSchema);
-const Log = mongoose.model('Log', LogSchema);
 const Group = mongoose.model('Group', GroupSchema);
-module.exports = { User, Log, Group };
+const City = mongoose.model('City', CitySchema);
+const Report = mongoose.model('Report', ReportSchema);
+const DnsLog = mongoose.model('DnsLog', dnsLogSchema);
+const WebLog = mongoose.model('WebLog', webLogSchema);
+
+module.exports = { User, Group, City, DnsLog, WebLog, Report };

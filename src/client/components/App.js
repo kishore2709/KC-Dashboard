@@ -18,7 +18,7 @@ import { ToastProvider } from 'react-toast-notifications';
 // import Setting from './SettingManagement/Setting';
 import ErrorBoundary from 'components/ErrorBoundaries/ErrorBoundaries.jsx';
 import { history } from '../_helpers';
-import { alertActions } from '../_actions';
+import { alertActions,mailActions } from '../_actions';
 import { PrivateRoute } from './PrivateRoute';
 import { LoginPage } from './LoginPage';
 // import { RegisterPage } from './RegisterPage';
@@ -33,7 +33,15 @@ class App extends React.Component {
       dispatch(alertActions.clear());
     });
   }
-
+  componentDidMount(){
+    const {dataMail}=this.props.mailBox;
+    const { dispatch } = this.props;
+    setTimeout(()=> {  
+      alert('Mã độc Mirai đang tấn công vào hệ thống'); 
+      dispatch(mailActions.addMail(dataMail,'Mã độc Mirai đang tấn công vào hệ thống'));
+    }, 5000);
+    
+  }
   render() {
     // const { alert } = this.props;
 
@@ -101,11 +109,12 @@ class App extends React.Component {
 App.propTypes = {
   dispatch: PropTypes.func.isRequired,
   alert: PropTypes.object.isRequired,
+  mailBox:PropTypes.object.isRequired,
 };
 function mapStateToProps(state) {
-  const { alert } = state;
+  const { alert,mailBox } = state;
   return {
-    alert,
+    alert,mailBox
   };
 }
 

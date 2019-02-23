@@ -11,6 +11,7 @@ import { serverStatus } from './serverStatus.reducer';
 import userDialogData from './AIO/userData.reducer';
 import { userTable } from './userTable.reducer';
 import { groupTable } from './groupTable.reducer';
+import { mailBox } from './mailBox.reducer';
 
 const rootReducer = combineReducers({
   dialog,
@@ -25,6 +26,7 @@ const rootReducer = combineReducers({
   userDialogData,
   userTable,
   groupTable,
+  mailBox,
 });
 
 export default rootReducer;

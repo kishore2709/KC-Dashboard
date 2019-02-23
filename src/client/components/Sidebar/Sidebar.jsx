@@ -19,6 +19,8 @@ import HeaderLinks from 'components/Header/HeaderLinks.jsx';
 import { GetUserInfo, PostApi } from '_helpers/Utils/index.js';
 import Autorenew from '@material-ui/icons/Autorenew';
 import Loading from 'components/Loading/Loading.jsx';
+import NumberMail from 'components/NumberMail/NumberMail.jsx';
+
 import sidebarStyle from 'assets/jss/material-dashboard-react/components/sidebarStyle.jsx';
 //
 import Collapse from '@material-ui/core/Collapse';
@@ -53,6 +55,7 @@ class Sidebar extends Component {
   }
 
   componentWillMount() {
+
     console.log('will mount ?');
     PostApi('/api/users/getUserInfo', GetUserInfo())
       .then(res => {
@@ -106,7 +109,12 @@ class Sidebar extends Component {
   }
 
   render() {
-    const { classes, color, logo, image, logoText } = this.props;
+   
+    const { classes, color, logo, image, logoText ,mailBox } = this.props;
+    let flagMail=false;
+     if (mailBox.dataMail!=undefined){
+          if (mailBox.dataMail.length > 0 ) flagMail=true;
+    }
     const { routes, openUserManagementSubComponents } = this.state;
     // console.log(routes);
     const listItemClasses = path =>
@@ -160,7 +168,9 @@ class Sidebar extends Component {
               >
                 <ListItem 
                 key={val.id}
-                  button
+                  button={(flag) =>{
+                    if (flag==true) console.log("====>>> dung la flag ko");
+                  }}
                   className={classes.itemLink + listItemClasses(val.path)}
                 >
                   <ListItemIcon
@@ -221,6 +231,14 @@ class Sidebar extends Component {
                       className={classes.itemText + whiteFontClasses}
                       disableTypography
                     />
+                    {
+                      (flagMail
+                      && prop.path=='/mailBox'
+                      ) && 
+                      <NumberMail
+                          title={this.props.mailBox.dataMail.length}
+                      />
+                    }
                   </ListItem>
                 </NavLink>
               );
@@ -290,8 +308,14 @@ const mapDispatchToProps = dispatch => ({
     dispatch(serverStatusActions.loading(newStatus));
   },
 });
+function mapStateToProps(state) {
+  const { mailBox } = state;
+  return {
+    mailBox
+  };
+}
 const connectedSidebar = connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(Sidebar);
 
