@@ -76,7 +76,7 @@ class Dashboard extends React.Component {
     // console.log(dashboard);
     // console.log(targetCity, data);
     if (data.length === 0) return <Loading />;
-    console.log(data, targetCity);
+    // console.log(data, targetCity);
     const { reports } = data[targetCity];
     // console.log(reports);
     // if (!reports || !Array.isArray(reports)) return <WarningStatus />;

@@ -43,9 +43,6 @@ const styles = theme => ({
 class SimpleMarkers extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      index: 0,
-    };
     this.colors = [warnColor, activeColor];
   }
 
