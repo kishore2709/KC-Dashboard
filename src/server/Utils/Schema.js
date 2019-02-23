@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 // const bcrypt = require('bcrypt');
 const defaultPassword = require('./pwd');
 
-let ObjectId = mongoose.Schema.Types.ObjectId;
+const ObjectId = mongoose.Schema.Types.ObjectId;
 
 // mongoose.connect('mongodb://localhost/usermanager');
 const CitySchema = new mongoose.Schema({
@@ -48,9 +48,13 @@ const UserSchema = new mongoose.Schema({
   permissions: {
     type: Object,
     default: {
+      mailBox: {
+        canAccess: true,
+        subArr: [true, true, true],
+      },
       dashboard: {
         canAccess: true,
-        subArr: [true, false, false],
+        subArr: [true, true, true],
       },
       user: {
         canAccess: true,
@@ -81,9 +85,13 @@ const GroupSchema = new mongoose.Schema({
   permissions: {
     type: Object,
     default: {
+      mailBox: {
+        canAccess: true,
+        subArr: [true, true, true],
+      },
       dashboard: {
         canAccess: true,
-        subArr: [true, false, false],
+        subArr: [true, true, true],
       },
       user: {
         canAccess: true,

@@ -69,7 +69,7 @@ app.use('/api/users', require('./users/users.controller'));
 app.use('/api/groups', require('./groups/groups.controller'));
 
 app.use(errorHandler);
-const mongodbURI = 'mongodb://localhost/usermanager';
+const mongodbURI = 'mongodb://localhost/KCdb';
 const db = mongoose.connection;
 
 db.on('connecting', () => {

@@ -2,9 +2,7 @@
 const config = require('../config.json');
 const Models = require('../Utils/Schema');
 // #### >>>  Init Mongodb
-const User = Models.User;
-const Log = Models.Log;
-const Group = Models.Group;
+const { User, Log, Group } = Models;
 const dashboardService = require('../services/dashboard.js');
 // bcrypt
 const bcrypt = require('bcrypt');
@@ -68,6 +66,7 @@ async function getLog(obj) {
   });
   return ret;
 }
+
 async function checkPwd(obj) {
   let ret = 0;
   // console.log('in CheckPwd async');
@@ -88,6 +87,7 @@ async function checkPwd(obj) {
   });
   return ret;
 }
+
 async function dashboardData() {
   return dashboardService;
 }
@@ -109,6 +109,7 @@ async function getUserInfo(obj) {
   // console.log(ret);
   return ret;
 }
+
 async function getUsers() {
   let ret = 'err';
   await User.find({}, (err, users) => {
