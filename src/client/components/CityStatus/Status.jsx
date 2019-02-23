@@ -43,7 +43,7 @@ class Status extends React.Component {
   render() {
     const { classes, dashboard } = this.props;
     // console.log(dashboard);
-    const { data : cities } = dashboard;
+    const { targetCity, data : cities } = dashboard;
     const OKButton = (
       <ButtonBase>
         <div className={classes.OKFab} />
@@ -77,7 +77,7 @@ class Status extends React.Component {
               alignItems="center"
             >
               <Grid item>
-                <Typography className={classes.typo} align="center">
+                <Typography className={classes.typo} align="center" color={index === targetCity ? 'secondary' : 'primary'} >
                   {city.name}
                 </Typography>
               </Grid>
