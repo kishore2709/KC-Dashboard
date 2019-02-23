@@ -15,7 +15,6 @@ router.post('/dashboardData', dashboardData);
 router.post('/resetPassword', resetPassword);
 router.post('/changePassword', changePassword);
 router.post('/getCitiesInfo', getCitiesInfo);
-
 // router.post('/getLog', getLog);
 // router.post('/saveLog', saveLog);
 module.exports = router;
