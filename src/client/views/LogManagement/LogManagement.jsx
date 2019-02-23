@@ -1,23 +1,76 @@
-import React from "react";
-// @material-ui/core components
-import withStyles from "@material-ui/core/styles/withStyles";
-// core components
-
+import React, { Component } from 'react';
+// loader
 import Loadable from 'react-loadable';
 import TableLoader from 'components/ContentLoader/TableLoader.jsx';
 
-const LogTable = Loadable({
-  loader: () => import(/* webpackPreload: true */'components/LogTable/LogTable.js'),
+// import LineChart from 'components/Chart/LineChart/LineChart.js';
+// import BarLineChart from 'components/Chart/BarLineChart/BarLineChart.js';
+import { generateData } from '_helpers/Utils/genChartData.js';
+// import Paper from '@material-ui/core/Paper';
+import Grid from '@material-ui/core/Grid';
+//
+import { connect } from 'react-redux';
+
+const LineChart = Loadable({
+  loader: () =>
+    import(/* webpackPreload: true */ 'components/Chart/LineChart/LineChart.js'),
   loading: TableLoader,
 });
-class LogManagement extends React.Component {
-  render(){
+// import TableDiscover from 'components/Table/TableDiscover.jsx';
+// const TableDiscover = Loadable({
+//   loader: () =>
+//     import(/* webpackPreload: true */ 'components/Table/TableDiscover.jsx'),
+//   loading: TableLoader,
+// });
+class Discover extends Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    const { dashboard } = this.props;
+    const { data, targetCity } = dashboard;
+    let chartData = [];
+    if (data.length) {
+      chartData = [
+        {
+          label: 'Dns Logs',
+          data: data[targetCity].dnslogs.map(({ timestamp, count }) => ({
+            x: new Date(timestamp),
+            y: count,
+          })).sort((a, b) => (a.x - b.x)),
+        },
+        {
+          label: 'Web Logs',
+          data: data[targetCity].weblogs.map(({ timestamp, count }) => ({
+            x: new Date(timestamp),
+            y: count,
+          })).sort((a, b) => (a.x - b.x)),
+        },
+      ];
+    }
     return (
-    <React.Fragment>
-      <LogTable/>
-    </React.Fragment>
+      <Grid
+        container
+        direction="row"
+        justify="space-evenly"
+        alignItems="center"
+        spacing={24}
+      >
+        {/*
+        <Grid item>
+          <Selections />
+        </Grid>
+        */}
+        <Grid item xs={12}>
+          <LineChart data={chartData} height='500px' />
+        </Grid>
+        {/* <Grid item xs={12}>
+          <TableDiscover />
+        </Grid> */}
+      </Grid>
     );
   }
 }
 
-export default LogManagement;
+export default connect(state => ({ dashboard: state.dashboard }))(Discover);

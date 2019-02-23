@@ -202,7 +202,10 @@ function DataVisualizer(Chart) {
       render() {
         const { startDate, endDate, data, loading, allDataLabel } = this.state;
         // console.log(this.state);
-        const { color } = this.props;
+        const { color, height } = this.props;
+        let chartHeight;
+        if (height) chartHeight = height;
+        else chartHeight = 'auto';
         if (startDate !== null && endDate !== null) {
           return (
             <Card
@@ -304,9 +307,7 @@ function DataVisualizer(Chart) {
                 </Grid>
               </CardActions>
               <CardContent
-                style={{
-
-                }}>
+                style={{ height: chartHeight }}>
                 {loading ? (<LinearProgress />) : (
                   <Chart
                     data={data}
