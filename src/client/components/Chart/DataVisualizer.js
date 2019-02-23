@@ -29,7 +29,7 @@ function DataVisualizer(Chart) {
       if (data.length <= maxCount) return data;
       const blockSize = data.length / maxCount;
       const reduced = [];
-      for (let i = 0; i < data.length; ) {
+      for (let i = 0; i < data.length;) {
         const chunk = data.slice(i, (i += blockSize) + 1);
         reduced.push(_average(chunk));
       }
@@ -47,7 +47,7 @@ function DataVisualizer(Chart) {
         y: Math.round(y / chunk.length),
       };
     };
-    const _color = ['red',  'blue', 'green', 'orange', 'black'];
+    const _color = ['red', 'blue', 'green', 'orange', 'black'];
     const SubComponent = class extends Component {
       constructor(props) {
         super(props);
@@ -68,7 +68,7 @@ function DataVisualizer(Chart) {
       componentDidMount() {
         if (!Array.isArray(this.props.data)) return;
         const allDataLabel = this.props.data.filter(dataRow => dataRow.label && Array.isArray(dataRow.data)).map(dataRow => dataRow.label);
-        this.setState({ 
+        this.setState({
           allDataLabel: allDataLabel,
           dataShow: allDataLabel,
         }, () => {
@@ -210,13 +210,13 @@ function DataVisualizer(Chart) {
                 borderRadius: 10,
                 border: 0,
                 color: 'white',
-                padding: '0 3px',
-                margin: '5px',
+                padding: '0',
+                margin: '0',
                 boxShadow: '0 3px 5px 2px #cccccc',
               }}
             >
-              <CardActions>
-                <Grid container spacing={24} alignItems="center">
+              <CardActions style={{ padding: '1px 4px' }}>
+                <Grid container spacing={0} alignItems="center" >
                   <Grid item xs={12} md={3}>
                     <FormControl>
                       <InputLabel htmlFor="time-select">Chọn nhanh</InputLabel>
@@ -276,7 +276,7 @@ function DataVisualizer(Chart) {
                   </Grid>
                   <Grid item xs={12} md={6}>
                     <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                      <Grid container spacing={24}>
+                      <Grid container spacing={0}>
                         <Grid item xs={6}>
                           <DateTimePicker
                             disabled={loading}
@@ -318,9 +318,9 @@ function DataVisualizer(Chart) {
               </CardContent>
             </Card>
           );
-        } 
-          return (<LinearProgress />);
-        
+        }
+        return (<LinearProgress />);
+
       }
     };
     return <SubComponent {...props[0]} />;
