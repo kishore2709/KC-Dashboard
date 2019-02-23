@@ -179,6 +179,7 @@ function DataVisualizer(Chart) {
 
       render() {
         const { startDate, endDate, data, loading, allDataLabel } = this.state;
+        console.log(this.state);
         const { color } = this.props;
         if (startDate !== null && endDate !== null) {
           return (
