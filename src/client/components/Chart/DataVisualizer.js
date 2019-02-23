@@ -47,7 +47,7 @@ function DataVisualizer(Chart) {
         y: Math.round(y / chunk.length),
       };
     };
-    const _color = Array.from({ length: 10 }, () => randomColor({ luminosity: 'random', hue: 'random' }));
+    const _color = ['red',  'blue', 'green', 'orange', 'black'];
     const SubComponent = class extends Component {
       constructor(props) {
         super(props);
@@ -61,7 +61,7 @@ function DataVisualizer(Chart) {
           loading: true,
           useTR: true,
           dataShow: [],
-          allDataLabel: []
+          allDataLabel: [],
         };
 
       }
@@ -69,7 +69,10 @@ function DataVisualizer(Chart) {
       componentDidMount() {
         if (!Array.isArray(this.props.data)) return;
         const allDataLabel = this.props.data.filter(dataRow => dataRow.label && Array.isArray(dataRow.data)).map(dataRow => dataRow.label);
-        this.setState({ allDataLabel: allDataLabel }, () => {
+        this.setState({ 
+          allDataLabel: allDataLabel,
+          dataShow: allDataLabel,
+        }, () => {
           const endDate = new Date();
           const startDate = new Date(endDate.getTime() - _fourHours);
           this.handleDateRangeChange(startDate, endDate);
