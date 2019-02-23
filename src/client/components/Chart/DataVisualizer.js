@@ -29,7 +29,7 @@ function DataVisualizer(Chart) {
       if (data.length <= maxCount) return data;
       const blockSize = data.length / maxCount;
       const reduced = [];
-      for (let i = 0; i < data.length;) {
+      for (let i = 0; i < data.length; ) {
         const chunk = data.slice(i, (i += blockSize) + 1);
         reduced.push(_average(chunk));
       }
@@ -47,7 +47,9 @@ function DataVisualizer(Chart) {
         y: Math.round(y / chunk.length),
       };
     };
-    const _color = Array.from({ length: 10 }, () => randomColor({ luminosity: 'random', hue: 'random' }));
+    const _color = Array.from({ length: 10 }, () =>
+      randomColor({ luminosity: 'random', hue: 'random' })
+    );
     const SubComponent = class extends Component {
       constructor(props) {
         super(props);
@@ -61,15 +63,16 @@ function DataVisualizer(Chart) {
           loading: true,
           useTR: true,
           dataShow: [],
-          allDataLabel: []
+          allDataLabel: [],
         };
-
       }
 
       componentDidMount() {
         if (!Array.isArray(this.props.data)) return;
-        const allDataLabel = this.props.data.filter(dataRow => dataRow.label && Array.isArray(dataRow.data)).map(dataRow => dataRow.label);
-        this.setState({ allDataLabel: allDataLabel }, () => {
+        const allDataLabel = this.props.data
+          .filter(dataRow => dataRow.label && Array.isArray(dataRow.data))
+          .map(dataRow => dataRow.label);
+        this.setState({ allDataLabel }, () => {
           const endDate = new Date();
           const startDate = new Date(endDate.getTime() - _fourHours);
           this.handleDateRangeChange(startDate, endDate);
@@ -116,43 +119,54 @@ function DataVisualizer(Chart) {
       };
 
       handleDateRangeChange = (startDate, endDate) => {
-        this.setState({
-          loading: true,
-        }, () => {
-          if (!Array.isArray(this.props.data)) return;
-          const { data, opened } = this.props;
-          opened({ startDate, endDate });
-          const newData = data.filter(dataRow => dataRow.label && Array.isArray(dataRow.data))
-            .filter(dataRow => this.state.dataShow.includes(dataRow.label))
-            .map(dataRow => ({
-              label: dataRow.label,
-              data: _filterData(dataRow.data.filter(curData => {
-                if (
-                  curData.x.getTime() >= startDate.getTime() &&
-                  curData.x.getTime() <= endDate.getTime()
-                ) {
-                  return true;
-                }
-                return false;
-              })),
-            }));
-          this.setState({
-            startDate,
-            endDate,
-            data: newData,
-            loading: false,
-          });
-        });
+        this.setState(
+          {
+            loading: true,
+          },
+          () => {
+            if (!Array.isArray(this.props.data)) return;
+            const { data, opened } = this.props;
+            opened({ startDate, endDate });
+            const newData = data
+              .filter(dataRow => dataRow.label && Array.isArray(dataRow.data))
+              .filter(dataRow => this.state.dataShow.includes(dataRow.label))
+              .map(dataRow => ({
+                label: dataRow.label,
+                data: _filterData(
+                  dataRow.data.filter(curData => {
+                    if (
+                      curData.x.getTime() >= startDate.getTime() &&
+                      curData.x.getTime() <= endDate.getTime()
+                    ) {
+                      return true;
+                    }
+                    return false;
+                  })
+                ),
+              }));
+            this.setState({
+              startDate,
+              endDate,
+              data: newData,
+              loading: false,
+            });
+          }
+        );
       };
 
       handleChangeTimeRange = event => {
         const endDate = new Date();
-        const startDate = new Date(endDate.getTime() - event.target.value * 1000);
-        this.setState({
-          useTR: true,
-        }, () => {
-          this.handleDateRangeChange(startDate, endDate);
-        });
+        const startDate = new Date(
+          endDate.getTime() - event.target.value * 1000
+        );
+        this.setState(
+          {
+            useTR: true,
+          },
+          () => {
+            this.handleDateRangeChange(startDate, endDate);
+          }
+        );
       };
 
       handleDateChange = type => date => {
@@ -162,20 +176,29 @@ function DataVisualizer(Chart) {
         } else {
           endDate = date < startDate ? startDate : date;
         }
-        this.setState({
-          useTR: false,
-        }, () => {
-          this.handleDateRangeChange(startDate, endDate);
-        });
+        this.setState(
+          {
+            useTR: false,
+          },
+          () => {
+            this.handleDateRangeChange(startDate, endDate);
+          }
+        );
       };
 
       handleDataShowChange = event => {
-        this.setState({
-          dataShow: event.target.value,
-        }, () => {
-          this.handleDateRangeChange(this.state.startDate, this.state.endDate);
-        });
-      }
+        this.setState(
+          {
+            dataShow: event.target.value,
+          },
+          () => {
+            this.handleDateRangeChange(
+              this.state.startDate,
+              this.state.endDate
+            );
+          }
+        );
+      };
 
       render() {
         const { startDate, endDate, data, loading, allDataLabel } = this.state;
@@ -296,9 +319,9 @@ function DataVisualizer(Chart) {
               </CardContent>
             </Card>
           );
-        } else {
+        } 
           return (<LinearProgress />);
-        }
+        
       }
     };
     return <SubComponent {...props[0]} />;
