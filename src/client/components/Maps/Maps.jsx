@@ -85,7 +85,7 @@ class SimpleMarkers extends Component {
           <Grid item xs={12}>
             <ComposableMap
               projectionConfig={{ scale: 2250 }}
-              width={600}
+              width={550}
               height={530}
               style={{
                 width: '100%',

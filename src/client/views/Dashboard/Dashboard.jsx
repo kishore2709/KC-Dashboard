@@ -84,7 +84,7 @@ class Dashboard extends React.Component {
     // const { attacks, logs, pcaps, bugs, server, website } = reports[0];
 
     return (
-      <GridContainer spacing={0}>
+      <GridContainer spacing={24} style={{width:'100%'}}>
         <GridItem xs={12} md={6} lg={5} className={classes.map}>
           <Grid container direction="row" justify="center" alignItems="center">
             <GridItem>
@@ -107,7 +107,7 @@ class Dashboard extends React.Component {
           >
             <GridContainer>
               <React.Fragment>
-                <GridItem xs={12} sm={12} md={12}>
+                <GridItem xs={12}>
                   <GridContainer>
                     <GridItem xs={12} sm={4} md={4}>
                       <Card>

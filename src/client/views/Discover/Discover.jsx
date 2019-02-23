@@ -55,7 +55,7 @@ class Discover extends Component {
         direction="row"
         justify="space-evenly"
         alignItems="center"
-        spacing={0}
+        spacing={24}
       >
         {/*
         <Grid item>

@@ -207,6 +207,7 @@ function DataVisualizer(Chart) {
           return (
             <Card
               style={{
+                width: '100%',
                 borderRadius: 10,
                 border: 0,
                 color: 'white',
@@ -216,7 +217,7 @@ function DataVisualizer(Chart) {
               }}
             >
               <CardActions style={{ padding: '1px 4px' }}>
-                <Grid container spacing={0} alignItems="center" >
+                <Grid container spacing={8} alignItems="center" >
                   <Grid item xs={12} md={3}>
                     <FormControl>
                       <InputLabel htmlFor="time-select">Chọn nhanh</InputLabel>
@@ -276,7 +277,7 @@ function DataVisualizer(Chart) {
                   </Grid>
                   <Grid item xs={12} md={6}>
                     <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                      <Grid container spacing={0}>
+                      <Grid container spacing={8}>
                         <Grid item xs={6}>
                           <DateTimePicker
                             disabled={loading}
@@ -304,7 +305,7 @@ function DataVisualizer(Chart) {
               </CardActions>
               <CardContent
                 style={{
-                  height: '200px',
+
                 }}>
                 {loading ? (<LinearProgress />) : (
                   <Chart
