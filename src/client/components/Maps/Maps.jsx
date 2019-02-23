@@ -32,6 +32,7 @@ const styles = theme => ({
     position: 'relative',
     border: '2px solid #BD13E2',
     borderRadius: '10px',
+    margin: 'auto',
   },
   status: {
     position: 'absolute',
@@ -65,7 +66,7 @@ class SimpleMarkers extends Component {
       <Paper style={wrapperStyles} className={classes.box}>
         <Grid container>
           <Grid item md={4} xs={12}>
-            <Status/>
+            <Status />
           </Grid>
           {markers.map(val => (
             <ReactTooltip

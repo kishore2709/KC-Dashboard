@@ -54,6 +54,7 @@ const VnMap = Loadable({
 const styles = theme => ({
   map: {
     height: '100%',
+    display: 'flex',
   },
   parent: {
     display: 'flex',
@@ -63,7 +64,6 @@ const styles = theme => ({
   },
 });
 class Dashboard extends React.Component {
-
   componentWillMount() {
     const { getDashboardData } = this.props;
     getDashboardData();
@@ -84,13 +84,10 @@ class Dashboard extends React.Component {
     // const { attacks, logs, pcaps, bugs, server, website } = reports[0];
 
     return (
-      <GridContainer spacing={24} style={{width:'100%'}}>
-        <GridItem xs={12} md={6} lg={5} className={classes.map}>
-          <Grid container direction="row" justify="center" alignItems="center">
-            <GridItem>
-              <VnMap />
-            </GridItem>
-          </Grid>
+      <GridContainer spacing={24} style={{ width: '100%', height: '100%',
+      display: 'flex', }}>
+        <GridItem xs={12} md={6} lg={5} style={{ margin: 'auto'}}>
+          <VnMap />
         </GridItem>
         <GridItem
           xs={12}
@@ -109,7 +106,7 @@ class Dashboard extends React.Component {
               <React.Fragment>
                 <GridItem xs={12}>
                   <GridContainer>
-                    <GridItem xs={12} sm={4} md={4}>
+                    <GridItem xs={12} sm={6} lg={4}>
                       <Card>
                         <CardHeader color="warning" stats icon>
                           <CardIcon color="danger">
@@ -137,7 +134,7 @@ class Dashboard extends React.Component {
                         </CardFooter>
                       </Card>
                     </GridItem>
-                    <GridItem xs={12} sm={4} md={4}>
+                    <GridItem xs={12} sm={6} lg={4}>
                       <Card>
                         <CardHeader color="success" stats icon>
                           <CardIcon color="success">
@@ -159,7 +156,7 @@ class Dashboard extends React.Component {
                         </CardFooter>
                       </Card>
                     </GridItem>
-                    <GridItem xs={12} sm={4} md={4}>
+                    <GridItem xs={12} sm={6} lg={4}>
                       <Card>
                         <CardHeader color="danger" stats icon>
                           <CardIcon color="warning">
