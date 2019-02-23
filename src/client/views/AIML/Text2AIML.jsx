@@ -43,6 +43,12 @@ const Dialog = Loadable({
   loading: TableLoader,
 });
 //
+
+const Questions = Loadable({
+  loader: () => import(/* webpackPreload: true */ './Questions.jsx'),
+  loading: TableLoader,
+});
+
 const styles = theme => ({
   cardCategoryWhite: {
     color: 'rgba(255,255,255,.62)',
@@ -281,6 +287,9 @@ class Text2AIML extends React.Component {
               alignItems="center"
               justify="center"
             >
+              <Grid item xs={12}>
+              <Questions/>
+              </Grid>
               <Grid item xs={6}>
                 <Typography
                   className={classes.border}
