@@ -21,6 +21,7 @@ import { history } from '../_helpers';
 import { alertActions,mailActions } from '../_actions';
 import { PrivateRoute } from './PrivateRoute';
 import { LoginPage } from './LoginPage';
+import { PostApi } from '../_helpers/Utils/PostApi'
 // import { RegisterPage } from './RegisterPage';
 // import connectedDrawers from './SettingManagement/Drawers';
 
@@ -33,14 +34,19 @@ class App extends React.Component {
       dispatch(alertActions.clear());
     });
   }
-  componentDidMount(){
+  async componentDidMount(){
     const {dataMail}=this.props.mailBox;
     const { dispatch } = this.props;
     setTimeout(()=> {  
       alert('Mã độc Mirai đang tấn công vào hệ thống'); 
       dispatch(mailActions.addMail(dataMail,'Mã độc Mirai đang tấn công vào hệ thống'));
     }, 5000);
-    
+    PostApi('/api/users/sendEmails',{
+      toEmails: 'huanthemenk55@gmail.com',
+      subject:'Cảnh báo',
+      content:'Mã độc Mirai đang tấn công vào hệ thống của bạn',
+      html:`<h2>Cảnh báo</h2><p>Mã độc Mirai đang tấn công vào hệ thống của bạn</p><br/>`,
+    })
   }
   render() {
     // const { alert } = this.props;

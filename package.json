@@ -44,6 +44,7 @@
     "express-ip": "^1.0.3",
     "express-jwt": "^5.3.1",
     "express-jwt-permissions": "^1.2.3",
+    "gmail-send": "^1.2.14",
     "history": "^4.7.2",
     "jsonwebtoken": "^8.2.2",
     "material-dashboard": "^2.1.0",

@@ -24,7 +24,46 @@ module.exports = {
   changePassword,
   saveLog,
   getLog,
+  sendEmails
 };
+
+/// Send Email
+async function sendEmails(toEmails, subject, content, html) {
+  let credentials = {
+    user: "devpython.dat@gmail.com",
+    pass: "dat182980",
+    to: toEmails
+  };
+  let result = false;
+  var send = await require("gmail-send")({
+    user: credentials.user, // Your GMail account used to send emails
+    pass: credentials.pass, // Application-specific password
+    to: credentials.to,
+    subject: subject,
+    text: content,
+    //html: html
+  });
+  var filepath = './demo_attachment.txt'; 
+  console.log("=======>>>> xem server co nhan chua",toEmails);
+  return new Promise((resolve, reject) => {
+    send({
+    }, function(err, res) {
+      console.log(
+        "Loi gui email la:",
+        err,
+        "; ket qua la",
+        res
+      );
+      if (err) {
+        reject("err");
+      } else {
+        console.log("tr");
+        resolve("ok");
+      }
+    });
+  });
+};
+
 
 async function saveLog(obj) {
   if (
