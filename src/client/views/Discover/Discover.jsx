@@ -30,13 +30,25 @@ class Discover extends Component {
   render() {
     const { dashboard } = this.props;
     const { data, targetCity } = dashboard;
-    if (data.length)
-      console.log(
-        data[targetCity].dnslogs.map(({ timestamp, count }) => ({
-          x: timestamp,
-          y: count,
-        }))
-      );
+    let chartData = [];
+    if (data.length) {
+      chartData = [
+        {
+          label: 'Dns Logs',
+          data: data[targetCity].dnslogs.map(({ timestamp, count }) => ({
+            x: new Date(timestamp),
+            y: count,
+          })).sort((a, b) => (a.x - b.x)),
+        },
+        {
+          label: 'Web Logs',
+          data: data[targetCity].weblogs.map(({ timestamp, count }) => ({
+            x: new Date(timestamp),
+            y: count,
+          })).sort((a, b) => (a.x - b.x)),
+        },
+      ];
+    }
     return (
       <Grid
         container
@@ -50,24 +62,7 @@ class Discover extends Component {
         </Grid>
         */}
         <Grid item xs={12}>
-          <LineChart
-            data={[
-              {
-                label: 'Dns Logs',
-                data: data[targetCity].dnslogs.map(({ timestamp, count }) => ({
-                  x: new Date(timestamp),
-                  y: count,
-                })),
-              },
-              {
-                label: 'Web Logs',
-                data: data[targetCity].weblogs.map(({ timestamp, count }) => ({
-                  x: new Date(timestamp),
-                  y: count,
-                })),
-              },
-            ]}
-          />
+          <LineChart data={chartData} />
         </Grid>
         {/* <Grid item xs={12}>
           <TableDiscover />
