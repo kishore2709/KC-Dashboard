@@ -11,6 +11,7 @@ import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
 import Button from '@material-ui/core/Button';
+import { aimlActions } from '_actions';
 
 const styles = theme => ({
   btn: {
@@ -182,13 +183,14 @@ class Questions extends React.Component {
       reset,
       submitting,
       formState,
-      submitFailed,
-      error,
+      questionToAIML,
       valid,
       dirty,
+      aiml, // aiml redux
     } = this.props;
     // console.log(values);
     // console.log('fieldList ', fieldList, values);
+    const { topic: topicname } = aiml;
     return (
       <React.Fragment>
         <form onSubmit={handleSubmit}>
@@ -219,7 +221,13 @@ class Questions extends React.Component {
                       className={`${classes.btn} ${classes.info}`}
                       onClick={e => {
                         e.preventDefault();
-                        console.log(formState.activeIndex);
+                        // console.log(formState.activeIndex);
+                        // formState.values.members[index][QA]
+                        const { activeIndex, values } = formState;
+                        questionToAIML({
+                          textquestion: values.members[activeIndex]['Q'],
+                          topicname,
+                        });
                       }}
                       disabled={submitting}
                     >
@@ -277,6 +285,14 @@ const QuestionsForm = reduxForm({
   validate,
 })(Questions);
 
-export default connect(state => ({
-  formState: state.form.QuestionsForm,
-}))(withStyles(styles)(QuestionsForm));
+export default connect(
+  state => ({
+    formState: state.form.QuestionsForm,
+    aiml: state.aiml,
+  }),
+  dispatch => ({
+    questionToAIML: newStatus => {
+      dispatch(aimlActions.questionToAIML(newStatus));
+    },
+  })
+)(withStyles(styles)(QuestionsForm));

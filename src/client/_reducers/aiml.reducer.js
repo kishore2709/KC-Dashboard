@@ -9,7 +9,7 @@ export function aiml(
       return {
         ...state,
         curAIML: action.message,
-      }
+      };
     case aimlConstants.AIML_RECENTLY_DATA:
       return {
         ...state,
