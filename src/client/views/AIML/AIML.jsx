@@ -36,6 +36,11 @@ const RecentlyTable = Loadable({
   loading: TableLoader,
 });
 
+const Questions = Loadable({
+  loader: () => import(/* webpackPreload: true */ './Questions.jsx'),
+  loading: TableLoader,
+});
+
 const styles = {};
 
 class AIML extends React.Component {
@@ -63,7 +68,8 @@ class AIML extends React.Component {
             <SelectForm />
           </Grid>
           <Grid item xs={12} className={classes.Text2AIML}>
-            <Text2AIML
+            <Questions onSubmit={e => { console.log(e) }} />
+            {/* <Text2AIML
               onSubmit={({ members, answer }) => {
                 // save to db
                 members.forEach(({ Q, A }) => {
@@ -122,7 +128,7 @@ class AIML extends React.Component {
                   dispatch(aimlActions.getDataRecentlyTable(aiml.topic));
                 }, 1500);
               }}
-            />
+            /> */}
           </Grid>
           <Grid item xs={12}>
             <RecentlyTable />

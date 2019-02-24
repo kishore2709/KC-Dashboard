@@ -289,7 +289,9 @@ class Text2AIML extends React.Component {
             >
               <Grid item xs={12}>
               <Questions/>
+            
               </Grid>
+              
               <Grid item xs={6}>
                 <Typography
                   className={classes.border}
@@ -349,7 +351,9 @@ class Text2AIML extends React.Component {
                   Save
                 </button>
               </Grid>
+                 
             </Grid>
+            
           </Paper>
         </form>
       </React.Fragment>
