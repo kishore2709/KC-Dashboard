@@ -59,6 +59,10 @@ const styles = theme => ({
   parent: {
     display: 'flex',
   },
+  discover: {
+    padding: '10px',
+    margin: '20px',
+  },
   info: {
     marginTop: '40px',
   },
@@ -84,9 +88,11 @@ class Dashboard extends React.Component {
     // const { attacks, logs, pcaps, bugs, server, website } = reports[0];
 
     return (
-      <GridContainer spacing={24} style={{ width: '100%', height: '100%',
-      display: 'flex', }}>
-        <GridItem xs={12} md={6} lg={5} style={{ margin: 'auto'}}>
+      <GridContainer
+        spacing={24}
+        style={{ width: '100%', height: '100%', display: 'flex' }}
+      >
+        <GridItem xs={12} md={6} lg={5} style={{ margin: 'auto' }}>
           <VnMap />
         </GridItem>
         <GridItem
@@ -105,7 +111,11 @@ class Dashboard extends React.Component {
             <GridContainer>
               <React.Fragment>
                 <GridItem xs={12}>
-                  <GridContainer>
+                  <GridContainer
+                    direction="row"
+                    justify="center"
+                    alignItems="flex-end"
+                  >
                     <GridItem xs={12} sm={6} lg={4}>
                       <Card>
                         <CardHeader color="warning" stats icon>
@@ -189,7 +199,7 @@ class Dashboard extends React.Component {
                             tabContent: (
                               <Tasks
                                 checkedIndexes={[0, 3]}
-                                tasksIndexes={[0, 1]}
+                                tasksIndexes={[0, 1, 2]}
                                 tasks={bugs}
                               />
                             ),
@@ -200,7 +210,7 @@ class Dashboard extends React.Component {
                             tabContent: (
                               <Tasks
                                 checkedIndexes={[0]}
-                                tasksIndexes={[0, 1]}
+                                tasksIndexes={[0, 1, 2]}
                                 tasks={website}
                               />
                             ),
@@ -211,7 +221,7 @@ class Dashboard extends React.Component {
                             tabContent: (
                               <Tasks
                                 checkedIndexes={[1]}
-                                tasksIndexes={[0, 1]}
+                                tasksIndexes={[0, 1, 2]}
                                 tasks={server}
                               />
                             ),
@@ -225,7 +235,7 @@ class Dashboard extends React.Component {
             </GridContainer>
           </div>
         </GridItem>
-        <GridItem xs={12}>
+        <GridItem xs={12} className={classes.discover}>
           <React.Fragment>
             <Discover />
           </React.Fragment>

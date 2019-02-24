@@ -30,9 +30,10 @@ const include = ['VNM'];
 const styles = theme => ({
   box: {
     position: 'relative',
-    border: '2px solid #BD13E2',
-    borderRadius: '10px',
+    border: '0',
+    borderRadius: '6px',
     margin: 'auto',
+    boxShadow: '0 1px 4px 0 rgba(0, 0, 0, 0.14)',
   },
   status: {
     position: 'absolute',
