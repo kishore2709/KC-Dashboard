@@ -22,24 +22,9 @@ import { alertActions,mailActions } from '../_actions';
 import { PrivateRoute } from './PrivateRoute';
 import { LoginPage } from './LoginPage';
 import { PostApi } from '../_helpers/Utils/PostApi'
+import { dateRange } from '../_reducers/dateRange.reducer';
 // import { RegisterPage } from './RegisterPage';
 // import connectedDrawers from './SettingManagement/Drawers';
-var DATA = [
-  {
-    seen: false,
-    content: 'Mã độc Bashlite đang tấn công vào hệ thống của bạn',
-    sender: 'Admin',
-    time: '2019-24-02',
-    location:'Hà Nội'
-  },
-  {
-    seen: true,
-    content: 'Mã độc Mirai đang tấn công vào hệ thống của bạn',
-    sender: 'Admin',
-    time: '2019-24-02',
-    location:'Đà Nẵng'
-  }
-]
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -51,9 +36,20 @@ class App extends React.Component {
   }
   async componentDidMount(){
     const { dispatch } = this.props;
+    let arr=[];
+    let date=new Date();
+    let month=date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1).toString() : (date.getMonth()+1).toString();
+    let day=date.getDate() < 10 ? '0'+date.getDate().toString() : date.getDate().toString();
+    arr.push({
+        seen: false,
+        content: 'Mã độc Bashlite đang tấn công vào hệ thống của bạn',
+        sender: 'Admin',
+        time: '2019-'+month+'-'+day,
+        location:'Hà Nội'
+    })
     setTimeout(()=> {  
       alert('Mã độc Bashlite đang tấn công vào hệ thống'); 
-      dispatch(mailActions.fixMail(DATA));
+      dispatch(mailActions.fixMail(arr));
     }, 2000);
     // PostApi('/api/users/sendEmails',{
     //   toEmails: 'huanthemenk55@gmail.com',
