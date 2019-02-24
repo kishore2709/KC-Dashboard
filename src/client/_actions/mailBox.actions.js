@@ -10,14 +10,20 @@ function addMail(dataMail,message) {
     };
 }
 function resetMail() {
-    console.log("====>>>> xem co vao resetMail ko nhe");
     return { 
         type: mailBoxConstans.RESET_EMAIL,
         dataMail:[] 
       };
   }
-
+  function fixMail(dataMail) {
+    console.log("====>>>> xem co vao fixMail ko nhe",dataMail);
+    return { 
+        type: mailBoxConstans.FIX_EMAIL,
+        dataMail:dataMail
+      };
+  }
 export const mailActions = {
     addMail,
     resetMail,
+    fixMail,
 };

@@ -15,7 +15,12 @@ export function mailBox(state = initialState, action) {
     case mailBoxConstans.RESET_EMAIL:
       return {
         type: mailBoxConstans.RESET_EMAIL,
-        user: action.dataMail,
+        dataMail: action.dataMail,
+      };
+      case mailBoxConstans.FIX_EMAIL:
+      return {
+        type: mailBoxConstans.FIX_EMAIL,
+        dataMail: action.dataMail,
       };
     default:
       return state;

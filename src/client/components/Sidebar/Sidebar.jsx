@@ -101,7 +101,12 @@ class Sidebar extends Component {
     // return true;
     return this.props.location.pathname.indexOf(routeName) > -1;
   }
-
+  numberNotSeen(arr){
+    let res=0;
+      for (let i=0; i < arr.length; i++)
+      if (!arr[i].seen) res++;
+      return res;
+  }
   handleClick() {
     this.setState(state => ({
       openUserManagementSubComponents: !state.openUserManagementSubComponents,
@@ -113,7 +118,7 @@ class Sidebar extends Component {
     const { classes, color, logo, image, logoText ,mailBox } = this.props;
     let flagMail=false;
      if (mailBox.dataMail!=undefined){
-          if (mailBox.dataMail.length > 0 ) flagMail=true;
+          if (this.numberNotSeen(mailBox.dataMail) > 0 ) flagMail=true;
     }
     const { routes, openUserManagementSubComponents } = this.state;
     // console.log(routes);
@@ -236,7 +241,7 @@ class Sidebar extends Component {
                       && prop.path=='/mailBox'
                       ) && 
                       <NumberMail
-                          title={this.props.mailBox.dataMail.length}
+                          title={this.numberNotSeen(this.props.mailBox.dataMail)}
                       />
                     }
                   </ListItem>

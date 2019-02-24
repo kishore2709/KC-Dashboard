@@ -83,6 +83,12 @@ const MailBox = Loadable({
   loading: TableLoader,
 });
 
+// import DetailsMail from 'views/DetailsMail/DetailsMail.jsx';
+const DetailsMail = Loadable({
+  loader: () => import(/* webpackPrefetch: true */ '../views/DetailsMail/DetailsMail.jsx'),
+  loading: TableLoader,
+});
+
 const dashboardRoutes = [
   {
     id: 'dashboard',
@@ -184,6 +190,12 @@ const dashboardRoutes = [
     path: '/',
     to: '/dashboard',
     navbarName: 'Redirect',
+  },
+  {
+    id: 'detailsMail',
+    path: '/detailsMail',
+    component: DetailsMail,
+    navbarName: 'DetailsMail',
   },
 ];
 

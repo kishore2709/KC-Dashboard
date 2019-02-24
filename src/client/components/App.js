@@ -24,7 +24,22 @@ import { LoginPage } from './LoginPage';
 import { PostApi } from '../_helpers/Utils/PostApi'
 // import { RegisterPage } from './RegisterPage';
 // import connectedDrawers from './SettingManagement/Drawers';
-
+var DATA = [
+  {
+    seen: false,
+    content: 'Mã độc Bashlite đang tấn công vào hệ thống của bạn',
+    sender: 'Admin',
+    time: '2019-24-02',
+    location:'Hà Nội'
+  },
+  {
+    seen: true,
+    content: 'Mã độc Mirai đang tấn công vào hệ thống của bạn',
+    sender: 'Admin',
+    time: '2019-24-02',
+    location:'Đà Nẵng'
+  }
+]
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -35,18 +50,17 @@ class App extends React.Component {
     });
   }
   async componentDidMount(){
-    const {dataMail}=this.props.mailBox;
     const { dispatch } = this.props;
     setTimeout(()=> {  
-      alert('Mã độc Mirai đang tấn công vào hệ thống'); 
-      dispatch(mailActions.addMail(dataMail,'Mã độc Mirai đang tấn công vào hệ thống'));
-    }, 5000);
-    PostApi('/api/users/sendEmails',{
-      toEmails: 'huanthemenk55@gmail.com',
-      subject:'Cảnh báo',
-      content:'Mã độc Mirai đang tấn công vào hệ thống của bạn',
-      html:`<h2>Cảnh báo</h2><p>Mã độc Mirai đang tấn công vào hệ thống của bạn</p><br/>`,
-    })
+      alert('Mã độc Bashlite đang tấn công vào hệ thống'); 
+      dispatch(mailActions.fixMail(DATA));
+    }, 2000);
+    // PostApi('/api/users/sendEmails',{
+    //   toEmails: 'huanthemenk55@gmail.com',
+    //   subject:'Cảnh báo',
+    //   content:'Mã độc Bashlite đang tấn công vào hệ thống của bạn',
+    //   html:`<h2>Cảnh báo</h2><p>Mã độc Bashlite đang tấn công vào hệ thống của bạn</p><br/>`,
+    // })
   }
   render() {
     // const { alert } = this.props;
