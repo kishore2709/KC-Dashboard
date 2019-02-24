@@ -18,12 +18,13 @@ import { ToastProvider } from 'react-toast-notifications';
 // import Setting from './SettingManagement/Setting';
 import ErrorBoundary from 'components/ErrorBoundaries/ErrorBoundaries.jsx';
 import { history } from '../_helpers';
-import { alertActions } from '../_actions';
+import { alertActions,mailActions } from '../_actions';
 import { PrivateRoute } from './PrivateRoute';
 import { LoginPage } from './LoginPage';
+import { PostApi } from '../_helpers/Utils/PostApi'
+import { dateRange } from '../_reducers/dateRange.reducer';
 // import { RegisterPage } from './RegisterPage';
 // import connectedDrawers from './SettingManagement/Drawers';
-
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -33,7 +34,30 @@ class App extends React.Component {
       dispatch(alertActions.clear());
     });
   }
-
+  async componentDidMount(){
+    const { dispatch } = this.props;
+    let arr=[];
+    let date=new Date();
+    let month=date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1).toString() : (date.getMonth()+1).toString();
+    let day=date.getDate() < 10 ? '0'+date.getDate().toString() : date.getDate().toString();
+    arr.push({
+        seen: false,
+        content: 'Mã độc Bashlite đang tấn công vào hệ thống của bạn',
+        sender: 'Admin',
+        time: '2019-'+month+'-'+day,
+        location:'Hà Nội'
+    })
+    setTimeout(()=> {  
+      alert('Mã độc Bashlite đang tấn công vào hệ thống'); 
+      dispatch(mailActions.fixMail(arr));
+    }, 2000);
+    // PostApi('/api/users/sendEmails',{
+    //   toEmails: 'huanthemenk55@gmail.com',
+    //   subject:'Cảnh báo',
+    //   content:'Mã độc Bashlite đang tấn công vào hệ thống của bạn',
+    //   html:`<h2>Cảnh báo</h2><p>Mã độc Bashlite đang tấn công vào hệ thống của bạn</p><br/>`,
+    // })
+  }
   render() {
     // const { alert } = this.props;
 
@@ -101,11 +125,12 @@ class App extends React.Component {
 App.propTypes = {
   dispatch: PropTypes.func.isRequired,
   alert: PropTypes.object.isRequired,
+  mailBox:PropTypes.object.isRequired,
 };
 function mapStateToProps(state) {
-  const { alert } = state;
+  const { alert,mailBox } = state;
   return {
-    alert,
+    alert,mailBox
   };
 }
 

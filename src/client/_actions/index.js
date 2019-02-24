@@ -7,3 +7,5 @@ export * from './dateRange.actions';
 export * from './userTable.actions';
 export * from './groupTable.actions';
 export * from './dashboard.actions';
+export * from './mailBox.actions';
+

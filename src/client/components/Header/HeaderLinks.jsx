@@ -54,7 +54,9 @@ class HeaderLinks extends React.Component {
               },
             }}
           />
-          <Button color="white" aria-label="edit" justIcon round>
+          <Button 
+              color="white" 
+              aria-label="edit" justIcon round>
             <Search />
           </Button>
         </div>

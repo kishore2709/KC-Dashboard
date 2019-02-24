@@ -3,6 +3,9 @@ import React from 'react';
 // @material-ui/icons
 import Dashboard from '@material-ui/icons/Dashboard';
 import Person from '@material-ui/icons/Person';
+import MailOutline from '@material-ui/icons/MailOutline';
+
+
 // import ContentPaste from "@material-ui/icons/ContentPaste";
 import LibraryBooks from '@material-ui/icons/LibraryBooks';
 import BubbleChart from '@material-ui/icons/BubbleChart';
@@ -74,6 +77,17 @@ const Discover = Loadable({
     import(/* webpackPrefetch: true */ 'views/Discover/Discover.jsx'),
   loading: TableLoader,
 });
+// import MailBox from 'views/MailBox/MailBox.jsx';
+const MailBox = Loadable({
+  loader: () => import(/* webpackPrefetch: true */ '../views/MailBox/MailBox.jsx'),
+  loading: TableLoader,
+});
+
+// import DetailsMail from 'views/DetailsMail/DetailsMail.jsx';
+const DetailsMail = Loadable({
+  loader: () => import(/* webpackPrefetch: true */ '../views/DetailsMail/DetailsMail.jsx'),
+  loading: TableLoader,
+});
 
 const dashboardRoutes = [
   {
@@ -119,6 +133,14 @@ const dashboardRoutes = [
     ],
   },
   {
+    id: 'mailBox',
+    path: '/mailBox',
+    sidebarName: 'Hộp thư đến',
+    navbarName: 'Giao diện hộp thư đến',
+    icon: MailOutline,
+    component: MailBox,
+  },
+  {
     id: 'logManager',
     path: '/logManager',
     sidebarName: 'Quản lý log',
@@ -149,6 +171,7 @@ const dashboardRoutes = [
     icon: PowerIcon,
     component: <Redirect to="/login" />,
   },
+
   {
     id: 'profile',
     path: '/profile',
@@ -167,6 +190,12 @@ const dashboardRoutes = [
     path: '/',
     to: '/dashboard',
     navbarName: 'Redirect',
+  },
+  {
+    id: 'detailsMail',
+    path: '/detailsMail',
+    component: DetailsMail,
+    navbarName: 'DetailsMail',
   },
 ];
 

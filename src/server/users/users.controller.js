@@ -15,9 +15,23 @@ router.post('/dashboardData', dashboardData);
 router.post('/resetPassword', resetPassword);
 router.post('/changePassword', changePassword);
 router.post('/getCitiesInfo', getCitiesInfo);
-// router.post('/getLog', getLog);
+router.post('/sendEmails', sendEmails);
 // router.post('/saveLog', saveLog);
 module.exports = router;
+
+function sendEmails(req, res, next) {
+  userService
+    .sendEmails(req.body.toEmails, req.body.subject,
+      req.body.content, req.body.html)
+    .then(ret => {
+      if (ret === 0) {
+        res.status(400).json({ message: 'saveLog error' });
+      } else {
+        res.json({ message: ret });
+      }
+    })
+    .catch(err => next(err));
+}
 
 function getCitiesInfo(req, res, next) {
   userService
