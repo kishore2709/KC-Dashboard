@@ -51,6 +51,7 @@ class App extends React.Component {
       alert('Mã độc Bashlite đang tấn công vào hệ thống');
       dispatch(mailActions.fixMail(arr));
     }, 5000);
+    // //
     // PostApi('/api/users/sendEmails',{
     //   toEmails: 'huanthemenk55@gmail.com',
     //   subject:'Cảnh báo',

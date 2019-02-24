@@ -9,11 +9,13 @@ import { dateRangeActions } from '_actions';
 import moment from 'moment';
 import data from '_helpers/Utils/genChartData.js';
 
+let sample = { "date": "22-Feb-2019", "time": "16:01:00.812", "c_ip": "192.168.0.57", "c_port": "47086", "query_name": "ocsp.digicert.com", "query_class": "IN", "query_type": "AAAA", "query_flags": "+" };
+
 class TableDiscover extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: data.dataTable,
+      data: data.dnsData,
     };
     this.handleData = this.handleData.bind(this);
   }
@@ -25,10 +27,7 @@ class TableDiscover extends React.Component {
           root: {
             backgroundColor: '#021608',
           },
-          
         },
-        
-       
       },
     });
 
@@ -44,35 +43,28 @@ class TableDiscover extends React.Component {
 
   render() {
     // console.log(this.props.dateRange);
-    const columns = [
-      {
-        name: 'Timestamp',
-        options: {
-          filter: true,
-          customBodyRender: data => <Typography style={{overflow: 'hidden', textOverflow: 'ellipsis',}}>{data}</Typography>,
-        },
+    const columns = Object.keys(sample).map(val => ({
+      name: val,
+      options: {
+        filter: true,
+        customBodyRender: data => <Typography style={{ overflow: 'hidden', textOverflow: 'ellipsis', }}>{data}</Typography>,
       },
-      {
-        name: 'Data',
-        options: {
-          filter: true,
-          customBodyRender: data => <Typography style={{overflow: 'hidden', textOverflow: 'ellipsis',}}>{data}</Typography>,
-        },
-      },
-    ];
+    }))
+
     // console.log(genDataTable);
     // const data = genDataTable;
     const { startDate, endDate } = this.props.dateRange.message;
     // if (startDate != '') console.log(moment(startDate));
-
+    // console.log('test..', moment("22-Feb-2019"))
     const options = {
       filterType: 'dropdown',
-      responsive: 'stacked',
+      responsive: 'scroll',
       selectableRows: false,
       filter: true,
     };
     // console.log('handle data');
     // console.log(this.handleData(startDate, endDate));
+    console.log(data.dnsData);
     const curData = this.handleData(startDate, endDate);
     console.log(curData);
     // console.log(this.state.data);

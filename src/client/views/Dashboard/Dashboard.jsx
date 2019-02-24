@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 // hot
-import { hot } from 'react-hot-loader/root';
+// import { hot } from 'react-hot-loader/root';
 // @material-ui/core
 import withStyles from '@material-ui/core/styles/withStyles';
 import Icon from '@material-ui/core/Icon';
@@ -266,6 +266,4 @@ const connectedDashboard = connect(
   mapStateToProps,
   mapDispatchToProps
 )(withToastManager(Dashboard));
-export default hot(
-  withStyles({ ...styles, ...dashboardStyle })(connectedDashboard)
-);
+export default withStyles({ ...styles, ...dashboardStyle })(connectedDashboard);
