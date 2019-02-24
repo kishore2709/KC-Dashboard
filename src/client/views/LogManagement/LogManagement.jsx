@@ -10,6 +10,7 @@ import { generateData } from '_helpers/Utils/genChartData.js';
 import Grid from '@material-ui/core/Grid';
 //
 import { connect } from 'react-redux';
+import { dashboardActions } from '_actions';
 
 const LineChart = Loadable({
   loader: () =>
@@ -17,14 +18,25 @@ const LineChart = Loadable({
   loading: TableLoader,
 });
 // import TableDiscover from 'components/Table/TableDiscover.jsx';
-// const TableDiscover = Loadable({
-//   loader: () =>
-//     import(/* webpackPreload: true */ 'components/Table/TableDiscover.jsx'),
-//   loading: TableLoader,
-// });
+const DNSTable = Loadable({
+  loader: () =>
+    import(/* webpackPreload: true */ './DNSTable.jsx'),
+  loading: TableLoader,
+});
+
+const WebTable = Loadable({
+  loader: () =>
+    import(/* webpackPreload: true */ './WebTable.jsx'),
+  loading: TableLoader,
+});
 class Discover extends Component {
   constructor(props) {
     super(props);
+  }
+
+  componentWillMount() {
+    const { getDashboardData } = this.props;
+    getDashboardData();
   }
 
   render() {
@@ -63,14 +75,22 @@ class Discover extends Component {
         </Grid>
         */}
         <Grid item xs={12}>
-          <LineChart data={chartData} height='500px' />
+          <LineChart data={chartData} height='300px' />
         </Grid>
-        {/* <Grid item xs={12}>
-          <TableDiscover />
-        </Grid> */}
+        <Grid item xs={12}>
+          <DNSTable />
+        </Grid>
+        <Grid item xs={12}>
+          <WebTable/>
+        </Grid>
       </Grid>
     );
   }
 }
 
-export default connect(state => ({ dashboard: state.dashboard }))(Discover);
+const mapDispatchToProps = dispatch => ({
+  getDashboardData: newStatus => {
+    dispatch(dashboardActions.get(newStatus));
+  },
+});
+export default connect(state => ({ dashboard: state.dashboard }), mapDispatchToProps)(Discover);
