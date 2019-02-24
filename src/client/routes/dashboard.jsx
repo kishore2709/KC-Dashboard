@@ -135,7 +135,7 @@ const dashboardRoutes = [
   {
     id: 'mailBox',
     path: '/mailBox',
-    sidebarName: 'Hộp thư đến',
+    sidebarName: 'Hòm thư cảnh báo',
     navbarName: 'Giao diện hộp thư đến',
     icon: MailOutline,
     component: MailBox,

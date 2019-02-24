@@ -59,7 +59,7 @@ class MailBox extends React.Component {
     return (
       <div>
         <h2>
-          Hộp thư đến
+          Hòm thư cảnh báo
         </h2>
         {
           this.checkFomat(this.props.mailBox.dataMail).map((value, index) => {

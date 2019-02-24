@@ -18,7 +18,7 @@ import { ToastProvider } from 'react-toast-notifications';
 // import Setting from './SettingManagement/Setting';
 import ErrorBoundary from 'components/ErrorBoundaries/ErrorBoundaries.jsx';
 import { history } from '../_helpers';
-import { alertActions,mailActions } from '../_actions';
+import { alertActions, mailActions } from '../_actions';
 import { PrivateRoute } from './PrivateRoute';
 import { LoginPage } from './LoginPage';
 import { PostApi } from '../_helpers/Utils/PostApi'
@@ -34,23 +34,23 @@ class App extends React.Component {
       dispatch(alertActions.clear());
     });
   }
-  async componentDidMount(){
+  async componentDidMount() {
     const { dispatch } = this.props;
-    let arr=[];
-    let date=new Date();
-    let month=date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1).toString() : (date.getMonth()+1).toString();
-    let day=date.getDate() < 10 ? '0'+date.getDate().toString() : date.getDate().toString();
+    let arr = [];
+    let date = new Date();
+    let month = date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1).toString() : (date.getMonth() + 1).toString();
+    let day = date.getDate() < 10 ? '0' + date.getDate().toString() : date.getDate().toString();
     arr.push({
-        seen: false,
-        content: 'Mã độc Bashlite đang tấn công vào hệ thống của bạn',
-        sender: 'Admin',
-        time: '2019-'+month+'-'+day,
-        location:'Hà Nội'
+      seen: false,
+      content: 'Mã độc Bashlite đang tấn công vào hệ thống của bạn',
+      sender: 'Admin',
+      time: '2019-' + month + '-' + day,
+      location: 'Hà Nội'
     })
-    setTimeout(()=> {  
-      alert('Mã độc Bashlite đang tấn công vào hệ thống'); 
+    setTimeout(() => {
+      alert('Mã độc Bashlite đang tấn công vào hệ thống');
       dispatch(mailActions.fixMail(arr));
-    }, 2000);
+    }, 5000);
     // PostApi('/api/users/sendEmails',{
     //   toEmails: 'huanthemenk55@gmail.com',
     //   subject:'Cảnh báo',
@@ -125,12 +125,12 @@ class App extends React.Component {
 App.propTypes = {
   dispatch: PropTypes.func.isRequired,
   alert: PropTypes.object.isRequired,
-  mailBox:PropTypes.object.isRequired,
+  mailBox: PropTypes.object.isRequired,
 };
 function mapStateToProps(state) {
-  const { alert,mailBox } = state;
+  const { alert, mailBox } = state;
   return {
-    alert,mailBox
+    alert, mailBox
   };
 }
 
