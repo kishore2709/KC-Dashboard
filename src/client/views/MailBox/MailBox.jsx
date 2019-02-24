@@ -18,6 +18,7 @@ const styles = {
     justifyContent: 'space-between',
     paddingLeft: '3%',
     paddingRight: '3%',
+    marginTop: '5px',
   },
   textSender: {
     fontSize: "12px",
@@ -94,7 +95,11 @@ class MailBox extends React.Component {
               </Button>
               {
                 this.state.arrModal[index]===true && 
-                <div style={{paddingLeft:'3%',backgroundColor: '#f5f5f5',border:1,borderRadius:"3px",paddingTop:'5px',paddingBottom:'5px'}}>
+                <div style={{
+                            paddingLeft:'3%',backgroundColor: '#f5f5f5',
+                            border:1,borderRadius:"3px",paddingTop:'5px',
+                            paddingBottom:'5px'
+                            }}>
                       <p style={{fontWeight:'bold'}}>Chi tiết</p>
                       <p>
                         Nội dung: {value.content} 
