@@ -141,13 +141,15 @@ async function getLog(obj) {
 }
 
 async function checkPwd(obj) {
-  let ret = 0;
+  const ret = 0;
   const { sub: id, dat } = obj;
-  return User.findById(id).exec().then(user => {
-    if (!user) throw new Error(user);
-    if (user.password !== dat) throw new Error('wrong pass');
-    return user;
-  })
+  return User.findById(id)
+    .exec()
+    .then(user => {
+      if (!user) throw new Error(user);
+      if (user.password !== dat) throw new Error('wrong pass');
+      return user;
+    });
 }
 
 async function dashboardData() {
@@ -164,88 +166,85 @@ async function getUsers() {
 }
 
 async function addDb(obj) {
-  let ret = 0;
-  // console.log(obj);
   if (!obj || !('username' in obj) || !('role' in obj)) return 0;
-
   // to lowercase;
   obj.username = obj.username.toString().toLowerCase();
   obj.role = obj.role.toString().toLowerCase();
-  // check Username exist?
-  let tmpUsers;
-  let tmpUsers = User.find({ username: obj.username }).exec();
-  // if (Array.isArray(tmpUsers) && tmpUsers.length > 0) return 0;
 
-  // check role - groupname exist ? -> set Permission Group for user
-  let groupUserPermission;
-  await Group.find({ groupname: obj.role }, (err, docs) => {
-    if (err) return 0;
-    if (docs.length === 0) return;
-    groupUserPermission = docs[0].permissions;
-  });
-
-  // add User to db
-  const user = new User({ ...obj, permissions: groupUserPermission });
-  await new Promise(resolve =>
-    user.save((err, newUser) => {
-      if (err) {
-        console.log('add db err');
-      } else {
-        console.log('add ok');
-        ret = newUser;
-        resolve(ret);
-      }
+  return User.find({ username: obj.username })
+    .exec()
+    .then(user => {
+      console.log('in check username');
+      // check Username exist?
+      if (Array.isArray(user) && user.length > 0) throw new Error('user exist');
+      return user;
     })
-  );
-  return ret;
+    .then(() => {
+      console.log('in check groups...');
+      // check role - groupname exist ? -> set Permission Group for user
+      return Group.find({ groupname: obj.role })
+        .exec()
+        .then(docs => {
+          if (docs.length === 0) throw new Error('length == 0');
+          return docs[0].permissions;
+        })
+        .then(groupUserPermission => {
+          // add User to db
+          const user = new User({ ...obj, permissions: groupUserPermission });
+          return new Promise((resolve, reject) => {
+            user.save((err, newUser) => {
+              if (err) {
+                reject(err);
+              } else {
+                console.log('add user ok');
+                resolve(newUser);
+              }
+            });
+          });
+        });
+    });
+  // if (Array.isArray(tmpUsers) && tmpUsers.length > 0) return 0;
 }
 
 async function deleteDb(obj) {
   if (!obj || !('id' in obj)) return 0;
   const { id, ...rest } = obj;
-  let ret = 0;
-  console.log(id, rest);
-  await User.findByIdAndRemove(id, err => {
-    if (err) console.log(err);
-    else {
-      console.log('Delete ok');
-      ret = 1;
-    }
-  });
-  return ret;
+  return User.findByIdAndRemove(id).exec();
 }
+
 async function updateDb(objArr) {
-  let ret = 0;
-  // console.log(objArr);
-  for (const obj of objArr) {
-    // check error
-    if (!obj || !('username' in obj) || !('id' in obj)) return 0;
-    // to lowerCase
-    obj.username = obj.username.toString().toLowerCase();
-    // ensure no update password
-    let { id, username, ...rest } = obj;
-    if ('password' in rest) {
-      const { password, ...restTwo } = rest;
-      rest = restTwo;
-    }
-    if ('oldPassword' in rest) {
-      const { oldPassword, ...restThree } = rest;
-      rest = restThree;
-    }
-    if ('newPassword' in rest) {
-      const { newPassword, ...restFour } = rest;
-      rest = restFour;
-    }
-    console.log(rest);
-    await User.findByIdAndUpdate(id, { $set: rest }, err => {
-      if (err) console.log('Update db error');
-      else {
-        console.log('update ok');
-        ret = 1;
-      }
-    });
-  }
-  return ret;
+  const promises = objArr.map(
+    async obj =>
+      new Promise((resolve, reject) => {
+        if (!obj || !('username' in obj) || !('id' in obj))
+          reject('key error in user');
+        // to lowerCase
+        obj.username = obj.username.toString().toLowerCase();
+        // ensure no update password
+        let { id, username, ...rest } = obj;
+        if ('password' in rest) {
+          const { password, ...restTwo } = rest;
+          rest = restTwo;
+        }
+        if ('oldPassword' in rest) {
+          const { oldPassword, ...restThree } = rest;
+          rest = restThree;
+        }
+        if ('newPassword' in rest) {
+          const { newPassword, ...restFour } = rest;
+          rest = restFour;
+        }
+        // console.log(rest);
+        User.findByIdAndUpdate(id, { $set: rest })
+          .exec()
+          .then(res => {
+            if (!res) throw new Error(res);
+            resolve(res);
+          })
+          .catch(err => reject(err));
+      })
+  );
+  return Promise.all(promises);
 }
 
 async function authenticate(obj) {
@@ -319,21 +318,11 @@ async function getAll() {
 }
 
 async function resetPassword(obj) {
-  let ret = 0;
   let { id, password, ...rest } = obj;
   password = defaultPassword;
-  await User.findByIdAndUpdate(
-    id,
-    { $set: { ...rest, password, changePwd: true } },
-    err => {
-      if (err) console.log('Reset pwd error');
-      else {
-        console.log('reset pwd ok');
-        ret = 1;
-      }
-    }
-  );
-  return ret;
+  return User.findByIdAndUpdate(id, {
+    $set: { ...rest, password, changePwd: true },
+  }).exec();
 }
 
 async function changePassword(obj) {

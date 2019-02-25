@@ -30,7 +30,7 @@ function sendEmails(req, res, next) {
         res.json({ message: ret });
       }
     })
-    .catch(err => next(err));
+    .catch(err => { console.log(err); next(err) });
 }
 
 function getCitiesInfo(req, res, next) {
@@ -43,7 +43,7 @@ function getCitiesInfo(req, res, next) {
         res.json({ message: ret });
       }
     })
-    .catch(err => next(err));
+    .catch(err => { console.log(err); next(err) });
 }
 
 function changePassword(req, res, next) {
@@ -56,20 +56,20 @@ function changePassword(req, res, next) {
         res.json({ message: ret });
       }
     })
-    .catch(err => next(err));
+    .catch(err => { console.log(err); next(err) });
 }
 
 function resetPassword(req, res, next) {
   userService
     .resetPassword(req.body)
     .then(ret => {
-      if (ret === 0) {
+      if (!ret) {
         res.status(400).json({ message: 'reset pwd error' });
       } else {
         res.json({ message: 'ok' });
       }
     })
-    .catch(err => next(err));
+    .catch(err => { console.log(err); next(err) });
 }
 
 function dashboardData(req, res, next) {
@@ -102,9 +102,9 @@ function dashboardData(req, res, next) {
             res.json(jsonAns);
           }
         })
-        .catch(err => next(err));
+        .catch(err => { console.log(err); next(err) });
     })
-    .catch(err => next(err));
+    .catch(err => { console.log(err); next(err) });
 
   // console.log('in dashboard data controlller');
 }
@@ -122,33 +122,35 @@ function getUserInfo(req, res, next) {
         res.json(ret);
       }
     })
-    .catch(err => next(err));
+    .catch(err => { console.log(err); next(err) });
 }
+
 function addDb(req, res, next) {
   userService
     .addDb(req.body)
     .then(ret => {
-      // console.log(ret);
-      if (ret === 0) {
-        res.status(400).json({ message: 'delete db error' });
+      console.log(' in add Dbbbbbbbbbbbbbbbbb');
+      if (!ret) {
+        res.status(400).json({ message: 'add db error' });
       } else {
-        // console.log(ret);
+        console.log(ret);
         res.json(ret);
       }
     })
-    .catch(err => next(err));
+    .catch(err => { console.log('???', err); next(err) });
 }
+
 function deleteDb(req, res, next) {
   userService
     .deleteDb(req.body)
     .then(ret => {
-      if (ret === 0) {
+      if (!ret) {
         res.status(400).json({ message: 'delete db error' });
       } else {
         res.json({ message: 'ok' });
       }
     })
-    .catch(err => next(err));
+    .catch(err => { console.log(err); next(err) });
 }
 function getUsers(req, res, next) {
   userService
@@ -160,20 +162,20 @@ function getUsers(req, res, next) {
         res.json(ret);
       }
     })
-    .catch(err => next(err));
+    .catch(err => { console.log(err); next(err) });
 }
 
 function updateDb(req, res, next) {
   userService
     .updateDb(req.body)
     .then(ret => {
-      if (ret === 0) {
+      if (!ret) {
         res.status(400).json({ message: 'update db error' });
       } else {
         res.json({ message: 'ok' });
       }
     })
-    .catch(err => next(err));
+    .catch(err => { console.log(err); next(err) });
 }
 
 function authenticate(req, res, next) {
@@ -184,7 +186,7 @@ function authenticate(req, res, next) {
         ? res.json(user)
         : res.status(400).json({ message: 'Username or password is incorrect' })
     )
-    .catch(err => next(err));
+    .catch(err => { console.log(err); next(err) });
 }
 
 function getAll(req, res, next) {
@@ -192,5 +194,5 @@ function getAll(req, res, next) {
   userService
     .getAll()
     .then(users => res.json(users))
-    .catch(err => next(err));
+    .catch(err => { console.log(err); next(err) });
 }

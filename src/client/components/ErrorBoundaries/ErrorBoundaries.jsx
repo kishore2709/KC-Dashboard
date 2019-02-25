@@ -24,9 +24,9 @@ class ErrorBoundary extends React.Component {
       // console.log('in Error boundaries');
       setTimeout(() => {
         // auto logout when get errors :v
-        this.props.dispatch(userActions.logout());
-        history.push('/login');
-        window.location.reload();
+        // this.props.dispatch(userActions.logout());
+        // history.push('/login');
+        // window.location.reload();
       }, 2000);
       return (
         <div>
