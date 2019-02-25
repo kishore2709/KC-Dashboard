@@ -26,6 +26,7 @@ module.exports = {
   getLog,
   getCitiesInfo,
   sendEmails,
+  sendSMS,
 };
 
 async function getCitiesInfo() {
@@ -100,7 +101,21 @@ async function sendEmails(toEmails, subject, content, html) {
     });
   });
 };
+// Send SMS
+async function sendSMS(toSMS, content) {
+  const Nexmo = require('nexmo');
+  const nexmo = new Nexmo({
+    apiKey: '916a1fdc',
+    apiSecret: 'hpoFIzrIpW8jjRyQ'
+  })
 
+  const from = 'Nexmo'
+  const to = toSMS
+  const text = content
+  console.log("====>>>> xen co gui sms ko");
+  nexmo.message.sendSms(from, to, text)
+  return true;
+}
 async function saveLog(obj) {
   if (
     !obj ||
