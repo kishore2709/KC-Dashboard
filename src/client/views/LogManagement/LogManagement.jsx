@@ -29,6 +29,12 @@ const WebTable = Loadable({
     import(/* webpackPreload: true */ './WebTable.jsx'),
   loading: TableLoader,
 });
+
+const LogTable = Loadable({
+  loader: () => import(/* webpackPreload: true */'components/LogTable/LogTable.js'),
+  loading: TableLoader,
+});
+
 class Discover extends Component {
   constructor(props) {
     super(props);
@@ -74,14 +80,18 @@ class Discover extends Component {
           <Selections />
         </Grid>
         */}
+        
         <Grid item xs={12}>
-          <LineChart data={chartData} height='300px' />
+          <LineChart data={chartData} height='200px' />
         </Grid>
         <Grid item xs={12}>
           <DNSTable />
         </Grid>
         <Grid item xs={12}>
           <WebTable/>
+        </Grid>
+        <Grid item xs={12}>
+          <LogTable />
         </Grid>
       </Grid>
     );

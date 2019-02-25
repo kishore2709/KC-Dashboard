@@ -21,18 +21,18 @@ class LogTable extends Component {
   }
 
   componentWillMount() {
-    // PostApi('/api/users/getLog', {})
-    //   .then(res => {
-    //     if (!res || res === 'err') {
-    //       console.log('err get log info');
-    //     } else {
-    //       // console.log(res);
-    //       this.setState({ data: res });
-    //     }
-    //   })
-    //   .catch(err => {
-    //     console.log('geterr get log info err');
-    //   });
+    PostApi('/api/users/getLog', {})
+      .then(res => {
+        if (!res || res === 'err') {
+          console.log('err get log info');
+        } else {
+          // console.log(res);
+          this.setState({ data: res });
+        }
+      })
+      .catch(err => {
+        console.log('geterr get log info err');
+      });
   }
   render() {
     console.log(this.state.data);

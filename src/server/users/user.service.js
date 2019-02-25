@@ -100,44 +100,33 @@ async function sendEmails(toEmails, subject, content, html) {
 }
 
 async function saveLog(obj) {
-  if (
-    !obj ||
-    !('username' in obj) ||
-    !('timestamp' in obj) ||
-    !('status' in obj) ||
-    !('isLogin' in obj) ||
-    !('ip' in obj)
-  )
-    return 0;
-  let { username, timestamp, status, isLogin, ip } = obj;
-  username = username.toString().toLowerCase();
-  const log = new Log({ username, timestamp, status, isLogin, ip });
-  let ret = 0;
-  await new Promise(resolve =>
+
+  return new Promise((resolve, reject) => {
+    // console.log(obj);
+    if (
+      !obj ||
+      !('username' in obj) ||
+      !('timestamp' in obj) ||
+      !('status' in obj) ||
+      !('isLogin' in obj) ||
+      !('ip' in obj)
+    )
+      return reject(obj);
+    // console.log(obj);
+    let { username, timestamp, status, isLogin, ip } = obj;
+    username = username.toString().toLowerCase();
+    const log = new Log({ username, timestamp, status, isLogin, ip });
     log.save((err, newLog) => {
-      // console.log(err, newLog);
-      if (err) {
-        console.log('add db log err');
-      } else {
-        console.log('add log ok');
-        ret = 1;
-        resolve(ret);
-      }
+      // console.log(err, newLog, 'svae ok');
+      if (err) reject(err);
+      else resolve(newLog);
     })
+  }
   );
-  return ret;
 }
 
 async function getLog(obj) {
-  let ret = 0;
-  await Log.find({}, (err, logs) => {
-    if (err) console.log('get db logs error');
-    else {
-      console.log('get db logs ok');
-      ret = [...logs];
-    }
-  });
-  return ret;
+  return Log.find({}).exec();
 }
 
 async function checkPwd(obj) {

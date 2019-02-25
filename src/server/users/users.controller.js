@@ -3,21 +3,36 @@
 const router = express.Router();
 const userService = require('./user.service');
 
-// routes
-router.post('/authenticate', authenticate);
-router.get('/getAll', getAll);
-router.post('/updateDb', updateDb);
-router.post('/getUsers', getUsers);
-router.post('/deleteDb', deleteDb);
-router.post('/addDb', addDb);
-router.post('/getUserInfo', getUserInfo);
-router.post('/dashboardData', dashboardData);
-router.post('/resetPassword', resetPassword);
-router.post('/changePassword', changePassword);
-router.post('/getCitiesInfo', getCitiesInfo);
-router.post('/sendEmails', sendEmails);
-// router.post('/saveLog', saveLog);
-module.exports = router;
+
+
+function saveLog(req, res, next) {
+  console.log('inSavelog');
+  userService
+    .saveLog({ ...req.body, ip: req.ipAddr })
+    .then(ret => {
+      if (!ret) {
+        res.status(400).json({ message: 'saveLog error' });
+      } else {
+        res.json({ message: ret });
+      }
+    })
+    .catch(err => next(err));
+}
+
+function getLog(req, res, next) {
+  // console.log('??');
+  userService
+    .getLog(req.body)
+    .then(ret => {
+      if (!ret) {
+        res.status(400).json({ message: 'getLog error' });
+      } else {
+        res.json({ message: ret });
+      }
+    })
+    .catch(err => next(err));
+}
+
 
 function sendEmails(req, res, next) {
   userService
@@ -196,3 +211,21 @@ function getAll(req, res, next) {
     .then(users => res.json(users))
     .catch(err => { console.log(err); next(err) });
 }
+
+// routes
+router.post('/authenticate', authenticate);
+router.get('/getAll', getAll);
+router.post('/updateDb', updateDb);
+router.post('/getUsers', getUsers);
+router.post('/deleteDb', deleteDb);
+router.post('/addDb', addDb);
+router.post('/getUserInfo', getUserInfo);
+router.post('/dashboardData', dashboardData);
+router.post('/resetPassword', resetPassword);
+router.post('/changePassword', changePassword);
+router.post('/getCitiesInfo', getCitiesInfo);
+router.post('/sendEmails', sendEmails);
+router.post('/getLog', getLog);
+router.post('/saveLog', saveLog);
+// router.post('/saveLog', saveLog);
+module.exports = router;
