@@ -1,9 +1,10 @@
 const mongoose = require('mongoose');
 const Models = require('../Utils/Schema');
+const ip = require('../Utils/ListIpAddress');
 
 const { User, Group, City, DnsLog, WebLog, Report } = Models;
 // connect db
-mongoose.connect('mongodb://localhost/KCdb');
+mongoose.connect(ip.db);
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 // get Data

@@ -8,7 +8,7 @@ const errorHandler = require('./_helpers/error-handler');
 const jwt = require('./_helpers/jwt');
 const userService = require('./users/user.service');
 // const Model = require('./Utils/Schema');
-
+const ip = require('./Utils/ListIpAddress');
 const jsonParser = bodyParser.json();
 // Nodejs
 const urlencodedParser = bodyParser.urlencoded({ extended: false });
@@ -45,7 +45,7 @@ const sendEmails = async (toEmails, subject, content, html) => {
   });
   console.log("* [example 1.1] sending test email");
   return new Promise((resolve, reject) => {
-    send({}, function(err, res) {
+    send({}, function (err, res) {
       console.log(
         "* [example 1.1] send() callback returned: err:",
         err,
@@ -61,7 +61,7 @@ const sendEmails = async (toEmails, subject, content, html) => {
     });
   });
 };
-app.post("/api/sendEmails", jsonParser, function(req, res) {
+app.post("/api/sendEmails", jsonParser, function (req, res) {
   console.log(req.body);
 
   htmlContent = req.body.askAns
@@ -87,10 +87,6 @@ app.post("/api/sendEmails", jsonParser, function(req, res) {
       res.send({ status: "err" });
     });
 });
-
-
-
-
 
 app.use(cors());
 // for f5 deploy..
@@ -125,8 +121,9 @@ app.use((req, res, next) => {
       })
       .catch(err => {
         console.log(err);
-        res.status(404).send();
         console.log('in recheck passwd err');
+        res.status(404).send();
+
       });
   }
 });
@@ -145,7 +142,7 @@ app.use('/api/users', require('./users/users.controller'));
 app.use('/api/groups', require('./groups/groups.controller'));
 
 app.use(errorHandler);
-const mongodbURI = 'mongodb://localhost/KCdb';
+// const mongodbURI = 'mongodb://localhost/KCdb';
 const db = mongoose.connection;
 
 db.on('connecting', () => {
@@ -178,7 +175,7 @@ db.on('disconnected', () => {
 });
 
 mongoose.connect(
-  mongodbURI,
+  ip.db,
   { server: { auto_reconnect: true } }
 );
 // ////////#$################
