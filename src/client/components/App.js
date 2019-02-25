@@ -35,8 +35,6 @@ class App extends React.Component {
   }
 
   render() {
-    // const { alert } = this.props;
-
     return (
       <div>
         <ErrorBoundary>
@@ -47,7 +45,6 @@ class App extends React.Component {
                   <Switch>
                     <Route path="/login" component={LoginPage} />
                     {indexRoutes.map((prop, key) => {
-                      console.log(prop);
                       return (
                         <PrivateRoute
                           path={prop.path}
@@ -57,37 +54,6 @@ class App extends React.Component {
                       );
                     })}
                   </Switch>
-                  {/*
-              <div>
-                <Header>
-                  <Switch>
-                    <PrivateRoute exact path="/" component={Home} />
-                    <PrivateRoute
-                      exact
-                      path="/log_management"
-                      component={LogManagement}
-                    />
-                    <PrivateRoute
-                      exact
-                      path="/manageUser"
-                      component={DevTable}
-                    />
-                    <PrivateRoute
-                      exact
-                      path="/manageUser/accessManagement"
-                      component={AccessManagement}
-                    />
-                    <PrivateRoute
-                      exact
-                      path="/service_management"
-                      component={ServiceManagement}
-                    />
-                    <Route path="/login" component={LoginPage} />
-                    <Route path="/register" component={RegisterPage} />
-                  </Switch>
-                </Header>
-              </div>
-              */}
                 </Router>
               </div>
             </div>

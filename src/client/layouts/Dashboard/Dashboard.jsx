@@ -21,16 +21,18 @@ import dashboardRoutes from "routes/dashboard.jsx";
 import dashboardStyle from "assets/jss/material-dashboard-react/layouts/dashboardStyle.jsx";
 
 import image from "assets/img/sidebar-3.jpg";
-import logo from "assets/img/ptit-logo.png";
+import logo from "assets/img/ais_logo.png";
 import ChangePasswordDialog from "components/Dialogs/ChangePasswordDialog.jsx";
 import { GetUserInfo } from "_helpers/Utils/";
 const switchRoutes = (
   <Switch>
-    {(dashboardRoutes.filter(val=> ('subNavBar' in val))[0].subNavBar.map((prop, key) => {
-      // console.log('???');
-      // console.log(prop);
-      return <Route path={prop.path} component={prop.component} key={prop.id} />;
-    })).concat(
+    {dashboardRoutes.filter(val=> ('subPaths' in val)).map(val => {
+        val.subPaths.map((prop, key) => {
+          // console.log('???');
+          // console.log(prop);
+          return <Route path={prop.path} component={prop.component} key={prop.id} />;
+        })
+    }).concat(
       dashboardRoutes.map((prop, key) => {
         if (prop.redirect)
           return <Redirect from={prop.path} to={prop.to} key={prop.id} />;
@@ -88,7 +90,7 @@ class App extends React.Component {
       <div className={classes.wrapper}>
         <Sidebar
           routes={dashboardRoutes}
-          logoText={"PTIT Dashboard"}
+          logoText={"AIS Dashboard"}
           logo={logo}
           image={image}
           handleDrawerToggle={this.handleDrawerToggle}
