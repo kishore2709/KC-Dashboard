@@ -9,6 +9,7 @@ function get() {
   return dispatch => {
     PostApi('/api/users/getCitiesInfo', {})
       .then(ret => {
+        console.log('in get cities', ret);
         if (!ret || !('message' in ret)) throw new Error(ret);
         dispatch(set(ret.message));
       })

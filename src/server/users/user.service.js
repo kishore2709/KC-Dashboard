@@ -33,6 +33,7 @@ async function getCitiesInfo() {
   await City.find({}, (err, ret) => {
     if (!err) cities = ret;
   });
+  console.log('in cities'.cities);
   if (!cities || !Array.isArray(cities)) return false;
   const result = [];
   for (let i = 0; i < cities.length; i++) {
