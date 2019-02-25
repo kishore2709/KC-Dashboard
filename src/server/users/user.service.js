@@ -146,6 +146,7 @@ async function checkPwd(obj) {
   // console.log('in CheckPwd async');
   // console.log(obj);
   const { sub: id, dat } = obj;
+  console.log(id, dat);
   await User.findById(id, (err, users) => {
     if (err) console.log('get db checkpwd users error');
     else {
