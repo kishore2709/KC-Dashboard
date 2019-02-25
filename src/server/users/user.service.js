@@ -172,7 +172,8 @@ async function getUserInfo(obj) {
   const { _id, ...rest } = obj;
   let ret = 'err';
   // console.log(obj);
-  // console.log(_id);
+  console.log(' in get UserInfo');
+  console.log(_id);
   await User.findById(_id, (err, users) => {
     if (err) console.log('get db users error');
     else {
@@ -181,8 +182,8 @@ async function getUserInfo(obj) {
       ret = users;
     }
   });
-  // console.log('wtf');
-  // console.log(ret);
+  console.log('wtf');
+  console.log(ret);
   return ret;
 }
 
