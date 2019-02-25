@@ -115,7 +115,7 @@ function getUserInfo(req, res, next) {
     .getUserInfo(req.body)
     .then(ret => {
       // console.log(ret);
-      if (ret === 0) {
+      if (!ret) {
         res.status(400).json({ message: 'find userinfo in db error' });
       } else {
         // console.log(ret);

@@ -28,78 +28,76 @@ module.exports = {
   sendEmails,
 };
 
-async function getCitiesInfo() {
-  let cities;
-  await City.find({}, (err, ret) => {
-    if (!err) cities = ret;
-  });
-  console.log('in cities', cities);
-  if (!cities || !Array.isArray(cities)) return false;
-  const result = [];
-  for (let i = 0; i < cities.length; i++) {
-    let dnslogs;
-    let weblogs;
-    let reports;
-    const { _id: id, markerOffset, name, coordinates, ip, status } = cities[i];
-    await DnsLog.find({ city: id }, (err, ret) => {
-      if (!err) dnslogs = ret;
-    });
-    await WebLog.find({ city: id }, (err, ret) => {
-      if (!err) weblogs = ret;
-    });
-    await Report.find({ city: id }, (err, ret) => {
-      if (!err) reports = ret;
-    });
-    result.push({
-      dnslogs,
-      weblogs,
-      reports,
-      id,
-      markerOffset,
-      name,
-      coordinates,
-      ip,
-      status,
-    });
-  }
-  return result;
+async function forArray(arr) {
+  const promises = arr.map(
+    async city =>
+      new Promise((resolve, reject) => {
+        const { _id: id, markerOffset, name, coordinates, ip, status } = city;
+        const dnslogs = DnsLog.find({ city: id }).exec();
+        const weblogs = WebLog.find({ city: id }).exec();
+        const reports = Report.find({ city: id }).exec();
+        Promise.all([dnslogs, weblogs, reports])
+          .then(values => {
+            resolve({
+              dnslogs: values[0],
+              weblogs: values[1],
+              reports: values[2],
+              id,
+              markerOffset,
+              name,
+              coordinates,
+              ip,
+              status,
+            });
+          })
+          .catch(err => reject(err));
+      })
+  );
+  return Promise.all(promises);
 }
-/// Send Email
+
+async function getCitiesInfo() {
+  return new Promise((resolve, reject) => {
+    const cities = City.find({}).exec();
+    cities.then(cities => {
+      // console.log('in cities', cities);
+      if (!cities || !Array.isArray(cities)) return reject(false);
+      forArray(cities)
+        .then(res => resolve(res))
+        .catch(err => reject(err));
+    });
+  });
+}
+// / Send Email
 async function sendEmails(toEmails, subject, content, html) {
-  let credentials = {
-    user: "devpython.dat@gmail.com",
-    pass: "dat182980",
-    to: toEmails
+  const credentials = {
+    user: 'devpython.dat@gmail.com',
+    pass: 'dat182980',
+    to: toEmails,
   };
-  let result = false;
-  var send = await require("gmail-send")({
+  const result = false;
+  const send = await require('gmail-send')({
     user: credentials.user, // Your GMail account used to send emails
     pass: credentials.pass, // Application-specific password
     to: credentials.to,
-    subject: subject,
+    subject,
     text: content,
-    //html: html
+    // html: html
   });
-  var filepath = './demo_attachment.txt';
-  console.log("=======>>>> xem server co nhan chua", toEmails);
+  const filepath = './demo_attachment.txt';
+  // console.log("=======>>>> xem server co nhan chua", toEmails);
   return new Promise((resolve, reject) => {
-    send({
-    }, function (err, res) {
-      console.log(
-        "Loi gui email la:",
-        err,
-        "; ket qua la",
-        res
-      );
+    send({}, (err, res) => {
+      console.log('Loi gui email la:', err, '; ket qua la', res);
       if (err) {
-        reject("err");
+        reject('err');
       } else {
-        console.log("tr");
-        resolve("ok");
+        console.log('tr');
+        resolve('ok');
       }
     });
   });
-};
+}
 
 async function saveLog(obj) {
   if (
@@ -144,24 +142,12 @@ async function getLog(obj) {
 
 async function checkPwd(obj) {
   let ret = 0;
-  // console.log('in CheckPwd async');
-  // console.log(obj);
   const { sub: id, dat } = obj;
-  console.log(id, dat);
-  await User.findById(id, (err, users) => {
-    if (err) console.log('get db checkpwd users error');
-    else {
-      // console.log('get db checkpwd users ok');
-      // console.log(dat);
-      // console.log(users);
-      if (!users || !('password' in users)) {
-        ret = 0;
-        return 0;
-      }
-      if (users.password === dat) ret = 1;
-    }
-  });
-  return ret;
+  return User.findById(id).exec().then(user => {
+    if (!user) throw new Error(user);
+    if (user.password !== dat) throw new Error('wrong pass');
+    return user;
+  })
 }
 
 async function dashboardData() {
@@ -170,35 +156,11 @@ async function dashboardData() {
 
 async function getUserInfo(obj) {
   const { _id, ...rest } = obj;
-  let ret = 'err';
-  // console.log(obj);
-  console.log(' in get UserInfo');
-  console.log(_id);
-  await User.findById(_id, (err, users) => {
-    if (err) console.log('get db users error');
-    else {
-      console.log('get db users ok');
-      // console.log(users);
-      ret = users;
-    }
-  });
-  console.log('wtf');
-  console.log(ret);
-  return ret;
+  return User.findById(_id).exec();
 }
 
 async function getUsers() {
-  let ret = 'err';
-  await User.find({}, (err, users) => {
-    if (err) console.log('get db users error');
-    else {
-      console.log('get db users ok');
-      ret = [...users];
-    }
-  });
-  // console.log('wtf');
-  // console.log(ret);
-  return ret;
+  return User.find({}).exec();
 }
 
 async function addDb(obj) {
@@ -211,10 +173,8 @@ async function addDb(obj) {
   obj.role = obj.role.toString().toLowerCase();
   // check Username exist?
   let tmpUsers;
-  await User.find({ username: obj.username }, (err, docs) => {
-    tmpUsers = docs;
-  });
-  if (Array.isArray(tmpUsers) && tmpUsers.length > 0) return 0;
+  let tmpUsers = User.find({ username: obj.username }).exec();
+  // if (Array.isArray(tmpUsers) && tmpUsers.length > 0) return 0;
 
   // check role - groupname exist ? -> set Permission Group for user
   let groupUserPermission;
@@ -237,8 +197,6 @@ async function addDb(obj) {
       }
     })
   );
-  // console.log('wtf');
-  // console.log(ret);
   return ret;
 }
 
