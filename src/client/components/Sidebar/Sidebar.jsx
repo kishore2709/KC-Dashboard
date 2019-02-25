@@ -59,14 +59,14 @@ class Sidebar extends Component {
     PostApi('/api/users/getUserInfo', GetUserInfo())
       .then(res => {
         // console.log('in then proomse');
-        if (res === 'err') {
+        if (!res || res === 'err') {
           // alertErr();
           this.props.error('err');
           console.log('err');
           console.log('err get user info');
         } else {
           // console.log(res);
-          if (!('permissions' in res)) throw new Error('permission not found in respones');
+          if (!res || !('permissions' in res)) throw new Error('permission not found in respones');
           const validKeys = Object.keys(res.permissions).filter(
             val => res.permissions[val].canAccess
           );

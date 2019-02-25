@@ -169,7 +169,7 @@ db.on('reconnected', () => {
 db.on('disconnected', () => {
   console.log('MongoDB disconnected!');
   mongoose.connect(
-    mongodbURI,
+    ip.db,
     { server: { auto_reconnect: true } }
   );
 });
