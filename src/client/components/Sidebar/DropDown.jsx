@@ -7,25 +7,31 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Collapse from '@material-ui/core/Collapse';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
+import DoneIcon from '@material-ui/icons/Done';
 import { NavLink } from 'react-router-dom';
 import classNames from 'classnames';
-import EditSolid from 'assets/img/edit-solid.svg';
+import { connect } from 'react-redux';
 import sidebarStyle from 'assets/jss/material-dashboard-react/components/sidebarStyle.jsx';
 import SvgIcon from '@material-ui/core/SvgIcon';
 import { withRouter } from 'react-router-dom';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import IconButton from '@material-ui/core/IconButton';
+import { aimlActions } from '_actions';
 
 class DropDown extends Component {
   constructor(props) {
     super(props);
     this.state = { open: false };
+    // this.handleClick = this.handleClick.bind(this);
   }
 
   activeRoute(routeName) {
     return window.location.pathname.indexOf(routeName) > -1;
   }
 
+  handleClick = (e, idChatbot) => {
+    this.props.saveInfo({ idChatbot })
+  }
   render() {
     const { open } = this.state;
     const {
@@ -36,7 +42,9 @@ class DropDown extends Component {
       id,
       classes,
       color,
+      aiml
     } = this.props;
+    const { listchatbot, idChatbot } = aiml;
     const listItemClasses = path =>
       classNames({
         [` ${classes[color]}`]: this.activeRoute(path),
@@ -64,12 +72,12 @@ class DropDown extends Component {
             disableTypography
           />
           <ListItemSecondaryAction>
-            <IconButton>
-              <SvgIcon
-                onClick={e => {
-                  this.props.history.push(path);
-                }}
-              >
+            <IconButton
+              onClick={e => {
+                this.props.history.push(path);
+              }}
+            >
+              <SvgIcon>
                 <svg
                   aria-hidden="true"
                   focusable="false"
@@ -91,25 +99,26 @@ class DropDown extends Component {
         </ListItem>
         <Collapse in={open} timeout="auto" unmountOnExit>
           <List disablePadding className={classes.nested}>
-            {subPaths.map((val, index) => (
+            {listchatbot.map((val, index) => (
               <NavLink
-                to={val.path}
+                to='#'
                 className={classes.item}
                 activeClassName="active"
                 key={index}
               >
                 <ListItem
                   button
-                  className={classes.itemLink + listItemClasses(val.path)}
+                  className={classes.itemLink}
+                  onClick={(e) => {this.handleClick(e, index)}}
                 >
                   <ListItemIcon
-                    className={classes.itemIcon + whiteFontClasses(val.path)}
+                    className={classes.itemIcon}
                   >
-                    <val.icon />
+                    {val.id_chatbot === idChatbot ? <DoneIcon /> : <div/>}
                   </ListItemIcon>
                   <ListItemText
-                    primary={val.sidebarName}
-                    className={classes.itemText + whiteFontClasses(val.path)}
+                    primary={val.chatbot_name}
+                    className={classes.itemText}
                     disableTypography
                   />
                 </ListItem>
@@ -122,4 +131,11 @@ class DropDown extends Component {
   }
 }
 
-export default withRouter(withStyles(sidebarStyle)(DropDown));
+export default connect(
+  state => ({ aiml: state.aiml }),
+  dispatch => ({
+    saveInfo: newStatus => {
+      dispatch(aimlActions.saveInfo(newStatus));
+    },
+  })
+)(withRouter(withStyles(sidebarStyle)(DropDown)));

@@ -1,26 +1,16 @@
-// import React from 'react';
 import React from 'react';
 // @material-ui/icons
 import Dashboard from '@material-ui/icons/Dashboard';
 import Person from '@material-ui/icons/Person';
-// import ContentPaste from "@material-ui/icons/ContentPaste";
-// import LibraryBooks from '@material-ui/icons/LibraryBooks';
-// import BubbleChart from '@material-ui/icons/BubbleChart';
-// import LocationOn from '@material-ui/icons/LocationOn';
-// import Notifications from '@material-ui/icons/Notifications';
-// import AccessIcon from '@material-ui/icons/AccessibilityNew';
 import PowerIcon from '@material-ui/icons/PowerOff';
-// import Unarchive from '@material-ui/icons/Unarchive';
 // Loadable
 import Loadable from 'react-loadable';
 import TableLoader from 'components/ContentLoader/TableLoader.jsx';
-// import Icons from 'views/Icons/Icons.jsx';
-// import NotificationsPage from 'views/Notifications/Notifications.jsx';
 import { Redirect } from 'react-router-dom';
+import { PostApi, ip } from '_helpers/Utils';
+import { aimlActions } from '_actions';
+import { store } from '_helpers';
 
-// core components/views
-
-// import UserProfile from 'views/UserProfile/UserProfile.jsx';
 const UserProfile = Loadable({
   loader: () =>
     import(/* webpackChunkName: "UserProfile", webpackPrefetch: true */ 'views/UserProfile/UserProfile.jsx'),
@@ -33,16 +23,39 @@ const AIML = Loadable({
   loading: TableLoader,
 });
 
-const ChatBot = Loadable({
-  loader: () =>
-    import(/* webpackChunkName: "ChatBot", webpackPrefetch: true */ 'views/ChatBot/ChatBot.jsx'),
+const ChatBot = Loadable.Map({
+  loader: {
+    ChatBotComponent: () =>
+      import(/* webpackChunkName: "ChatBot", webpackPrefetch: true */ 'views/ChatBot/ChatBot.jsx'),
+    arrayItems: () =>
+      new Promise(resolve => {
+        resolve(store.dispatch(aimlActions.getListChatbot()));
+      }),
+  },
   loading: TableLoader,
+  render(loaded, props) {
+    const ChatBot = loaded.ChatBotComponent.default;
+    return <ChatBot {...props} />;
+  },
 });
 
-const Topic = Loadable({
-  loader: () =>
-    import(/* webpackChunkName: "Topic", webpackPrefetch: true */ 'views/Topic/Topic.jsx'),
+const Topic = Loadable.Map({
+  loader: {
+    TopicComponent: () =>
+      import(/* webpackChunkName: "Topic", webpackPrefetch: true */ 'views/Topic/Topic.jsx'),
+    arrayItems: () =>
+      new Promise(resolve => {
+        setTimeout(() => {
+          resolve(['Câu hỏi chung']);
+        }, 2000);
+      }),
+  },
   loading: TableLoader,
+  render(loaded, props) {
+    const Topic = loaded.TopicComponent.default;
+    const { arrayItems } = loaded;
+    return <Topic {...props} arrayItems={arrayItems} />;
+  },
 });
 
 const dashboardRoutes = [

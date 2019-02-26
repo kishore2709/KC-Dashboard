@@ -37,22 +37,16 @@ const styles = theme => ({
   },
   list: {
     padding: '10px',
-
-    // boxShadow: '2px 1px 2px 1px #888888',
   },
 });
 
-const chatbots = ['Thái Bình', 'Cần Thơ', 'Hà Nội'];
+// const chatbots = ['Thái Bình', 'Cần Thơ', 'Hà Nội'];
 
 class SelectedListItem extends React.Component {
   render() {
-    const { classes } = this.props;
+    const { classes, listname, placeholder, arrayItems } = this.props;
     const EditIcon = (
-      <SvgIcon
-        onClick={e => {
-          this.props.history.push('/Chatbot');
-        }}
-      >
+      <SvgIcon>
         <svg
           aria-hidden="true"
           focusable="false"
@@ -70,7 +64,7 @@ class SelectedListItem extends React.Component {
         </svg>
       </SvgIcon>
     );
-
+    // console.log(listname, arrayItems);
     return (
       <div className={classes.root}>
         <List
@@ -83,7 +77,7 @@ class SelectedListItem extends React.Component {
               color="primary"
               style={{ fontSize: '16px' }}
             >
-              Danh sách chatbot
+              {listname}
             </ListSubheader>
           }
         >
@@ -93,16 +87,16 @@ class SelectedListItem extends React.Component {
             className={classes.container}
           >
             <Grid container className={classes.center}>
-              <Grid xs={9}>
+              <Grid item xs={9}>
                 <Input
-                  placeholder="Nhập tên chatbot"
+                  placeholder={placeholder}
                   fullWidth
                   inputProps={{
                     'aria-label': 'Description',
                   }}
                 />
               </Grid>
-              <Grid xs={3}>
+              <Grid item xs={3}>
                 <Button
                   variant="contained"
                   color="primary"
@@ -113,12 +107,19 @@ class SelectedListItem extends React.Component {
               </Grid>
             </Grid>
           </ListItem>
-          {chatbots.map((val, index) => (
-            <React.Fragment>
+          {arrayItems.map((val, index) => (
+            <React.Fragment key={index}>
               <ListItem button key={index}>
-                <ListItemText primary={val} />
+                <ListItemText primary={val.name} />
                 <ListItemSecondaryAction>
-                  <IconButton aria-label="Edit">{EditIcon}</IconButton>
+                  <IconButton
+                    aria-label="Edit"
+                    onClick={e => {
+                      this.props.history.push('/Chatbot');
+                    }}
+                  >
+                    {EditIcon}
+                  </IconButton>
                   <IconButton aria-label="Delete">
                     <HighlightOff />
                   </IconButton>

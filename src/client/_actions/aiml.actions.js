@@ -1,4 +1,5 @@
-import { PostApiForm, ip } from '_helpers/Utils';
+import { PostApiForm, ip, PostApi } from '_helpers/Utils';
+import { func } from 'prop-types';
 import { aimlConstants } from '../_constants';
 import { dialogActions } from './dialog.actions.js';
 
@@ -7,7 +8,7 @@ function setDataRecentlyTable(message) {
 }
 
 function getDataRecentlyTable(topicname) {
-  return function(dispatch) {
+  return function (dispatch) {
     PostApiForm(`${ip.server}/aimlquestions/listtop10`, { topicname })
       .then(res => {
         console.log('in get data table', res, topicname);
@@ -24,6 +25,27 @@ function getDataRecentlyTable(topicname) {
 
 function saveInfo(message) {
   return { type: aimlConstants.AIML_SERVER_INFO, message };
+}
+
+function getListChatbot(message) {
+  console.log('in actions get Litschatbot');
+  return dispatch => {
+    PostApi(`${ip.server}/chatbots`, {}).then(res => {
+      console.log('in getListChatbot actionsss', res);
+      if (Array.isArray(res)) dispatch(saveInfo({ listchatbot: res }));
+    });
+  };
+}
+
+function getListTopic(message) {
+  const { chatbot } = message;
+  return dispatch => {
+    PostApi(`${ip.server}/topics/getbychatbotname`, {
+      chatbotname: chatbot,
+    }).then(res => {
+      if (Array.isArray(res)) dispatch(saveInfo({ listtopic: res }));
+    });
+  };
 }
 
 function saveCurrentQuestionAIML(message) {
@@ -70,4 +92,6 @@ export const aimlActions = {
   saveInfo,
   getDataRecentlyTable,
   questionToAIML,
+  getListChatbot,
+  getListTopic,
 };

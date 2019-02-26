@@ -10,7 +10,7 @@ import withStyles from "@material-ui/core/styles/withStyles";
 // core components
 import Header from "components/Header/Header.jsx";
 import Footer from "components/Footer/Footer.jsx";
-import Sidebar from "components/Sidebar/Sidebar.jsx";
+// import Sidebar from "components/Sidebar/Sidebar.jsx";
 // import UserPermission from 'views/UserPermission/UserPermission.jsx';
 import { connect } from 'react-redux';
 import { dialogActions } from '_actions';
@@ -24,6 +24,30 @@ import image from "assets/img/sidebar-3.jpg";
 import logo from "assets/img/ais_logo.png";
 import ChangePasswordDialog from "components/Dialogs/ChangePasswordDialog.jsx";
 import { GetUserInfo } from "_helpers/Utils/";
+
+// loader
+import Loadable from 'react-loadable';
+import TableLoader from 'components/ContentLoader/TableLoader.jsx';
+import { aimlActions } from '_actions';
+import { store } from '_helpers';
+
+const Sidebar = Loadable.Map({
+  loader: {
+    SidebarComponent: () =>
+      import(/* webpackChunkName: "Sidebar", webpackPrefetch: true */ 'components/Sidebar/Sidebar.jsx'),
+    arrayItems: () =>
+      new Promise(resolve => {
+        resolve(store.dispatch(aimlActions.getListChatbot()));
+      }),
+  },
+  loading: TableLoader,
+  render(loaded, props) {
+    const Sidebar = loaded.SidebarComponent.default;
+    return <Sidebar {...props} />;
+  },
+});
+
+
 const switchRoutes = (
   <Switch>
     {dashboardRoutes.filter(val=> ('subPaths' in val)).map(val => {
