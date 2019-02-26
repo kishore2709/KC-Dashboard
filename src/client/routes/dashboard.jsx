@@ -3,6 +3,7 @@ import React from 'react';
 import Dashboard from '@material-ui/icons/Dashboard';
 import Person from '@material-ui/icons/Person';
 import PowerIcon from '@material-ui/icons/PowerOff';
+import AddCircleOutline from '@material-ui/icons/AddCircleOutline';
 // Loadable
 import Loadable from 'react-loadable';
 import TableLoader from 'components/ContentLoader/TableLoader.jsx';
@@ -97,6 +98,13 @@ const dashboardRoutes = [
         icon: Dashboard,
       },
     ],
+  },
+  {
+    id: 'aiml',
+    path: '/aiml',
+    sidebarName: 'Q/A',
+    component: AIML,
+    icon: AddCircleOutline,
   },
   {
     id: 'profile',

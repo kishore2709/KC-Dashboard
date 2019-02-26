@@ -12,6 +12,9 @@ import { withStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
 import Button from '@material-ui/core/Button';
 import { aimlActions } from '_actions';
+import IconButton from '@material-ui/core/IconButton';
+import HighlightOff from '@material-ui/icons/HighlightOff';
+import AddCircleOutline from '@material-ui/icons/AddCircleOutline';
 
 const styles = theme => ({
   btn: {
@@ -48,7 +51,7 @@ const styles = theme => ({
     border: '1px solid black',
   },
   cardHeader: {
-    border: '1px solid black',
+    // border: '1px solid black',
     background: '#47A6EB',
     boxSizing: 'border-box',
     height: '20px',
@@ -56,13 +59,14 @@ const styles = theme => ({
     textAlign: 'center',
   },
   title: {
-    border: '1px solid black',
-    boxSizing: 'border-box',
+    // border: '1px solid black',
+    // boxSizing: 'border-box',
     height: 'auto',
     color: 'black',
     fontSize: '18px',
     textAlign: 'center',
     fontWeight: 'bold',
+    margin: 'auto',
   },
   input: {
     border: '1px solid black',
@@ -71,12 +75,27 @@ const styles = theme => ({
     textOverflow: 'ellipsis',
     fontSize: '14px',
     height: '30px',
+    padding: '2px',
     width: '100%',
   },
   cardContent: {
-    border: '1px solid black',
+    // border: '1px solid black',
     boxSizing: 'border-box',
     display: 'flex',
+  },
+  container: {
+    display: 'flex',
+  },
+  children: {
+    margin: 'auto',
+  },
+  childrenQ: {
+    marginRight: '25px',
+    width: '100%',
+  },
+  childrenA: {
+    marginLeft: '25px',
+    width: '100%',
   },
   /* image */
 });
@@ -94,7 +113,7 @@ const renderField = ({
   console.log(formState);
   if (formState.disableArray) console.log(formState.disableArray[index]);
   return (
-    <div>
+    <React.Fragment>
       <input
         {...input}
         type={type}
@@ -112,7 +131,7 @@ const renderField = ({
           ? formState.values.members[index][QA]
           : ''}
       </ReactTooltip>
-    </div>
+    </React.Fragment>
   );
 };
 const renderMembers = ({
@@ -127,31 +146,46 @@ const renderMembers = ({
   console.log('??');
   return (
     // console.log(submitting, valid, dirty);
-    <Grid container direction="row" justify="center" alignItems="center">
-      <Grid item xs={6}>
+    <Grid container direction="row" alignItems="center">
+      <Grid item xs={1} />
+      <Grid item xs={5} className={classes.container}>
         <Typography className={classes.title}>Câu hỏi đầy đủ</Typography>
       </Grid>
-      <Grid item xs={6}>
+      <Grid item xs={5} className={classes.container}>
         <Typography className={classes.title}>Pattern</Typography>
       </Grid>
+      <Grid item xs={1} />
       {fields.map((member, index) => (
         <React.Fragment>
-          <Grid item xs={6}>
-            <Field
-              name={`${member}.Q`}
-              label={`${member}.Q`}
-              component={renderField}
-              props={{ classes, formState, index, QA: 'Q' }}
-            />
+          <Grid item xs={1} className={classes.container}>
+            <IconButton aria-label="Add" className={classes.children}>
+              <AddCircleOutline />
+            </IconButton>
           </Grid>
-
-          <Grid item xs={6}>
-            <Field
-              name={`${member}.A`}
-              label={`${member}.A`}
-              component={renderField}
-              props={{ classes, formState, index, QA: 'A' }}
-            />
+          <Grid item xs={5} className={classes.container}>
+            <div className={classes.childrenQ}>
+              <Field
+                name={`${member}.Q`}
+                label={`${member}.Q`}
+                component={renderField}
+                props={{ classes, formState, index, QA: 'Q' }}
+              />
+            </div>
+          </Grid>
+          <Grid item xs={5} className={classes.container}>
+            <div className={classes.childrenA}>
+              <Field
+                name={`${member}.A`}
+                label={`${member}.A`}
+                component={renderField}
+                props={{ classes, formState, index, QA: 'A' }}
+              />
+            </div>
+          </Grid>
+          <Grid item xs={1} className={classes.container}>
+            <IconButton aria-label="Delete" className={classes.children}>
+              <HighlightOff />
+            </IconButton>
           </Grid>
         </React.Fragment>
       ))}
@@ -195,7 +229,6 @@ class Questions extends React.Component {
       <React.Fragment>
         <form onSubmit={handleSubmit}>
           <Card className={classes.card}>
-            <CardHeader className={classes.cardHeader} title="CÂU HỎI" />
             <CardContent>
               <Grid
                 container
@@ -203,7 +236,7 @@ class Questions extends React.Component {
                 justify="center"
                 alignItems="center"
               >
-                <Grid item xs={12} md={8} className={classes.cardContent}>
+                <Grid item xs={12} className={classes.cardContent}>
                   <FieldArray
                     name="members"
                     component={renderMembers}
@@ -225,7 +258,7 @@ class Questions extends React.Component {
                         // formState.values.members[index][QA]
                         const { activeIndex, values } = formState;
                         questionToAIML({
-                          textquestion: values.members[activeIndex]['Q'],
+                          textquestion: values.members[activeIndex].Q,
                           topicname,
                         });
                       }}

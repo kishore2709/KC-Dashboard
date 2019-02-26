@@ -18,7 +18,7 @@ import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import IconButton from '@material-ui/core/IconButton';
 import { aimlActions } from '_actions';
 
-class DropDown extends Component {
+class DropDownTopic extends Component {
   constructor(props) {
     super(props);
     this.state = { open: false };
@@ -130,4 +130,4 @@ export default connect(
       dispatch(aimlActions.saveInfo(newStatus));
     },
   })
-)(withRouter(withStyles(sidebarStyle)(DropDown)));
+)(withRouter(withStyles(sidebarStyle)(DropDownTopic)));

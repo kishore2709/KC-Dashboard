@@ -24,7 +24,9 @@ import sidebarStyle from 'assets/jss/material-dashboard-react/components/sidebar
 import { connect } from 'react-redux';
 import { serverStatusConstants } from '_constants';
 import { serverStatusActions } from '_actions';
-import DropDown from './DropDown';
+import DropDownChatbot from 'views/ChatBot/DropDownChatbot';
+import DropDownTopic from 'views/Topic/DropDownTopic';
+
 // /
 
 class Sidebar extends Component {
@@ -54,7 +56,8 @@ class Sidebar extends Component {
           });
           if (prop.path !== '/dashboard')
             if ('subPaths' in prop) {
-              return <DropDown {...prop} color key={key} />;
+              if (prop.path === '/chatbot') return <DropDownChatbot {...prop} color key={key} />;
+              if (prop.path === '/topic') return <DropDownTopic {...prop} color key={key} />;
               // return NavUserManagement(prop, key);
             } else
               return (

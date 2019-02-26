@@ -25,6 +25,7 @@ export async function PostApi(url, json) {
     .then(response => response)
     .catch(error => {
       console.log(`Stm went wronggggg${error}`);
+      throw new Error(error);
       // console.log(error.message);
       // if (error.message == 'Need logout') throw new Error('Goout');
     });
@@ -62,9 +63,9 @@ export async function PostApiForm(url, json) {
       // return Promise.reject(new Error('err status != 200'));
       // console.log('Something went wrong on api server!');
     })
-    .then(response => response)
-    .catch(error => {
-      console.log(`Stm went wronggggg${error}`);
-    });
+    .then(response => response);
+  // .catch(error => {
+  //   console.log(`Stm went wronggggg${error}`);
+  // });
   return result;
 }

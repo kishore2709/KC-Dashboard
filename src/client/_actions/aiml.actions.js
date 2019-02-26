@@ -8,7 +8,7 @@ function setDataRecentlyTable(message) {
 }
 
 function getDataRecentlyTable(topicname) {
-  return function (dispatch) {
+  return function(dispatch) {
     PostApiForm(`${ip.server}/aimlquestions/listtop10`, { topicname })
       .then(res => {
         console.log('in get data table', res, topicname);
@@ -27,12 +27,41 @@ function saveInfo(message) {
   return { type: aimlConstants.AIML_SERVER_INFO, message };
 }
 
+function saveInfoChatbot(message) {
+  return dispatch => {
+    const { idChatbot, chatbot } = message;
+    dispatch(saveInfo(message));
+    dispatch(getListTopic({ chatbot }));
+  };
+}
 function getListChatbot(message) {
-  console.log('in actions get Litschatbot');
   return dispatch => {
     PostApi(`${ip.server}/chatbots`, {}).then(res => {
-      console.log('in getListChatbot actionsss', res);
+      // console.log('in getListChatbot actionsss', res);
       if (Array.isArray(res)) dispatch(saveInfo({ listchatbot: res }));
+      else throw new Error(res);
+    });
+  };
+}
+
+function addChatbot(message) {
+  const { chatbot: chatbotname } = message;
+  return dispatch => {
+    PostApiForm(`${ip.server}/chatbots/add`, { chatbotname }).then(res => {
+      if (res == 'OK') dispatch(getListChatbot());
+      else throw new Error(res);
+    });
+  };
+}
+
+function deleteChatbot(message) {
+  const { chatbot: chatbotname } = message;
+  return dispatch => {
+    PostApiForm(`${ip.server}/chatbots/deletechatbotbyname`, {
+      chatbotname,
+    }).then(res => {
+      if (res == 'OK') dispatch(getListChatbot());
+      else throw new Error(res);
     });
   };
 }
@@ -94,4 +123,6 @@ export const aimlActions = {
   questionToAIML,
   getListChatbot,
   getListTopic,
+  addChatbot,
+  deleteChatbot,
 };

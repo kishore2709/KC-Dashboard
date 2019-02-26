@@ -18,7 +18,7 @@ import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import IconButton from '@material-ui/core/IconButton';
 import { aimlActions } from '_actions';
 
-class DropDown extends Component {
+class DropDownChatbot extends Component {
   constructor(props) {
     super(props);
     this.state = { open: false };
@@ -30,7 +30,7 @@ class DropDown extends Component {
   }
 
   handleClick = (e, idChatbot, chatbot) => {
-    this.props.saveInfo({ idChatbot, chatbot });
+    this.props.saveInfoChatbot({ idChatbot, chatbot });
   };
 
   render() {
@@ -126,8 +126,8 @@ class DropDown extends Component {
 export default connect(
   state => ({ aiml: state.aiml }),
   dispatch => ({
-    saveInfo: newStatus => {
-      dispatch(aimlActions.saveInfo(newStatus));
+    saveInfoChatbot: newStatus => {
+      dispatch(aimlActions.saveInfoChatbot(newStatus));
     },
   })
-)(withRouter(withStyles(sidebarStyle)(DropDown)));
+)(withRouter(withStyles(sidebarStyle)(DropDownChatbot)));

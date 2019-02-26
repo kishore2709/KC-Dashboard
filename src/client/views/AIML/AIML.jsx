@@ -64,9 +64,6 @@ class AIML extends React.Component {
       <React.Fragment>
         <NotificationSystem ref={this.notificationSystem} />
         <Grid container spacing={24}>
-          <Grid item xs={12}>
-            <SelectForm />
-          </Grid>
           <Grid item xs={12} className={classes.Text2AIML}>
             <Questions onSubmit={e => { console.log(e) }} />
             {/* <Text2AIML
