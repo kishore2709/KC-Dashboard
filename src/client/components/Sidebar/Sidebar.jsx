@@ -27,11 +27,6 @@ import { serverStatusActions } from '_actions';
 import DropDown from './DropDown';
 // /
 
-const options = [
-  { value: 'chocolate', label: 'Chocolate' },
-  { value: 'strawberry', label: 'Strawberry' },
-  { value: 'vanilla', label: 'Vanilla' },
-];
 class Sidebar extends Component {
   constructor(props) {
     super(props);

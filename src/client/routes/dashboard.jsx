@@ -33,6 +33,18 @@ const AIML = Loadable({
   loading: TableLoader,
 });
 
+const ChatBot = Loadable({
+  loader: () =>
+    import(/* webpackChunkName: "ChatBot", webpackPrefetch: true */ 'views/ChatBot/ChatBot.jsx'),
+  loading: TableLoader,
+});
+
+const Topic = Loadable({
+  loader: () =>
+    import(/* webpackChunkName: "Topic", webpackPrefetch: true */ 'views/Topic/Topic.jsx'),
+  loading: TableLoader,
+});
+
 const dashboardRoutes = [
   {
     id: 'dashboard',
@@ -46,6 +58,7 @@ const dashboardRoutes = [
     path: '/chatbot',
     sidebarName: 'Chọn Chatbot',
     icon: Dashboard,
+    component: ChatBot,
     subPaths: [
       { id: 'user', path: '/user', sidebarName: 'Nhập liệu', icon: Dashboard },
       {
@@ -61,6 +74,7 @@ const dashboardRoutes = [
     path: '/topic',
     sidebarName: 'Chọn Topic',
     icon: Dashboard,
+    component: Topic,
     subPaths: [
       { id: 'user', path: '/user', sidebarName: 'Nhập liệu', icon: Dashboard },
       {
