@@ -83,7 +83,7 @@ function saveCurrentQuestionAIML(message) {
 
 function questionToAIML(message) {
   return dispatch => {
-    const { textquestion, topicname } = message;
+    const { textquestion, topicname, id } = message;
     PostApiForm(`${ip.server}/aimlquestions/getaimlfromtext`, {
       textquestion,
     })
@@ -97,6 +97,7 @@ function questionToAIML(message) {
           aimlpatternfromtext: res.aiml_pattern,
           topicname,
         }).then(res => {
+          console.log(' in similar ', res);
           if (!res || !Array.isArray(res)) throw new Error('err');
           // console.log('in []', res);
           // console.log(res);
@@ -104,7 +105,7 @@ function questionToAIML(message) {
             dialogActions.dialogAIML({
               open: true,
               message: res,
-              id: index,
+              id,
             })
           );
         });

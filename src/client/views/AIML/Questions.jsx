@@ -109,31 +109,29 @@ const renderField = ({
   label,
   type,
   meta: { touched, error },
-}) => {
-  console.log(formState);
-  if (formState.disableArray) console.log(formState.disableArray[index]);
-  return (
-    <React.Fragment>
-      <input
-        {...input}
-        type={type}
-        data-tip=""
-        data-for={label}
-        className={classes.input}
-        placeholder={touched && error ? error : ''}
-        disabled={
-          QA == 'A' && formState.disableArray && formState.disableArray[index]
-        }
-      />
+}) => (
+  // console.log(formState);
+  // if (formState.disableArray) console.log(formState.disableArray[index]);
+  <React.Fragment>
+    <input
+      {...input}
+      type={type}
+      data-tip=""
+      data-for={label}
+      className={classes.input}
+      placeholder={touched && error ? error : ''}
+      disabled={
+        QA == 'A' && formState.disableArray && formState.disableArray[index]
+      }
+    />
 
-      <ReactTooltip id={label}>
-        {formState && formState.values
-          ? formState.values.members[index][QA]
-          : ''}
-      </ReactTooltip>
-    </React.Fragment>
-  );
-};
+    <ReactTooltip id={label}>
+      {formState && formState.values && formState.values.members[index]
+        ? formState.values.members[index][QA]
+        : ''}
+    </ReactTooltip>
+  </React.Fragment>
+);
 const renderMembers = ({
   submitting,
   valid,
@@ -143,7 +141,10 @@ const renderMembers = ({
   classes,
   meta: { error, submitFailed },
 }) => {
-  console.log('??');
+  // fields.push();
+
+  if (fields.length === 0) fields.push();
+  console.log(fields);
   return (
     // console.log(submitting, valid, dirty);
     <Grid container direction="row" alignItems="center">
@@ -158,7 +159,12 @@ const renderMembers = ({
       {fields.map((member, index) => (
         <React.Fragment>
           <Grid item xs={1} className={classes.container}>
-            <IconButton aria-label="Add" className={classes.children}>
+            <IconButton
+              aria-label="Add"
+              className={classes.children}
+              onClick={() => fields.push()}
+              disabled={(submitting || !valid) && dirty}
+            >
               <AddCircleOutline />
             </IconButton>
           </Grid>
@@ -183,27 +189,20 @@ const renderMembers = ({
             </div>
           </Grid>
           <Grid item xs={1} className={classes.container}>
-            <IconButton aria-label="Delete" className={classes.children}>
+            <IconButton
+              aria-label="Delete"
+              className={classes.children}
+              onClick={() => {
+                if (fields.length > 1) fields.remove(index);
+              }}
+            >
               <HighlightOff />
             </IconButton>
           </Grid>
         </React.Fragment>
       ))}
       <Grid item xs={12}>
-        <Grid container direction="row" justify="center" alignItems="center">
-          <Grid item>
-            <Button
-              variant="outlined"
-              size="small"
-              color="primary"
-              onClick={() => fields.push({})}
-              disabled={(submitting || !valid) && dirty}
-            >
-              <AddIcon /> Thêm mới
-            </Button>
-            {submitFailed && error && <span>{error}</span>}
-          </Grid>
-        </Grid>
+        {submitFailed && error && <span>{error}</span>}
       </Grid>
     </Grid>
   );
@@ -260,6 +259,7 @@ class Questions extends React.Component {
                         questionToAIML({
                           textquestion: values.members[activeIndex].Q,
                           topicname,
+                          id: activeIndex,
                         });
                       }}
                       disabled={submitting}
@@ -296,7 +296,6 @@ const validate = values => {
     const membersArrayErrors = [];
     values.members.forEach((member, memberIndex) => {
       const memberErrors = {};
-      console.log(member);
       if (!member || !member.Q) {
         memberErrors.Q = 'Required';
         membersArrayErrors[memberIndex] = memberErrors;

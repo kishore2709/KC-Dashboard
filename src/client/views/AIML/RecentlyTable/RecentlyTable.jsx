@@ -63,7 +63,6 @@ class RecentlyTable extends React.Component {
       selectableRows: false,
     };
     const data = aiml.data.map(val => [val.aiml_question, val.aiml_answer]);
-    console.log(data);
     return (
       <React.Fragment>
         <MUIDataTable
