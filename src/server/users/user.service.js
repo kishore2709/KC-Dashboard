@@ -1,4 +1,5 @@
 ﻿const jwt = require('jsonwebtoken');
+const PythonShell = require('python-shell');
 const config = require('../config.json');
 const Models = require('../Utils/Schema');
 // #### >>>  Init Mongodb
@@ -34,7 +35,7 @@ async function getCitiesInfo() {
   await City.find({}, (err, ret) => {
     if (!err) cities = ret;
   });
-  console.log('in cities', cities);
+  //console.log('in cities', cities);
   if (!cities || !Array.isArray(cities)) return false;
   const result = [];
   for (let i = 0; i < cities.length; i++) {
@@ -101,19 +102,30 @@ async function sendEmails(toEmails, subject, content, html) {
     });
   });
 };
-// Send SMS
-async function sendSMS(toSMS, content) {
-  const Nexmo = require('nexmo');
-  const nexmo = new Nexmo({
-    apiKey: '916a1fdc',
-    apiSecret: 'hpoFIzrIpW8jjRyQ'
-  })
+// Send SMS by API
+// async function sendSMS(toSMS, content) {
+//   const Nexmo = require('nexmo');
+//   const nexmo = new Nexmo({
+//     apiKey: '916a1fdc',
+//     apiSecret: 'hpoFIzrIpW8jjRyQ'
+//   })
 
-  const from = 'Nexmo'
-  const to = toSMS
-  const text = content
-  console.log("====>>>> xen co gui sms ko");
-  nexmo.message.sendSms(from, to, text)
+//   const from = 'Nexmo'
+//   const to = toSMS
+//   const text = content
+//   console.log("====>>>> xen co gui sms ko");
+//   nexmo.message.sendSms(from, to, text)
+//   return true;
+// }
+// Send SMS by Dcom
+async function sendSMS(toSMS, content) {
+  const exec =require('child_process').exec;
+ 
+  let res="python src/server/users/SendSMS.py ";
+  res=res+toSMS.toString() + " "+'"'+content+'"';
+  const { stdout, stderr } = await exec(
+     res
+  );
   return true;
 }
 async function saveLog(obj) {
@@ -197,8 +209,8 @@ async function getUserInfo(obj) {
       ret = users;
     }
   });
-  console.log('wtf');
-  console.log(ret);
+  //console.log('wtf');
+  //console.log(ret);
   return ret;
 }
 
