@@ -29,14 +29,14 @@ class DropDownTopic extends Component {
     return window.location.pathname.indexOf(routeName) > -1;
   }
 
-  handleClick = (e, idChatbot, chatbot) => {
-    this.props.saveInfo({ idChatbot, chatbot });
+  handleClick = (e, topic) => {
+    this.props.saveInfo({ topic });
   };
 
   render() {
     const { open } = this.state;
     const { path, subPaths, icon, id, classes, color, aiml } = this.props;
-    const { chatbot, listchatbot, idChatbot } = aiml;
+    const { topic, listtopic } = aiml;
     const listItemClasses = path =>
       classNames({
         [` ${classes[color]}`]: this.activeRoute(path),
@@ -59,7 +59,7 @@ class DropDownTopic extends Component {
             {open ? <ExpandLess /> : <ExpandMore />}
           </ListItemIcon>
           <ListItemText
-            primary={chatbot || 'Chọn Chatbot'}
+            primary={topic || 'Chọn Topic'}
             className={classes.itemText + whiteFontClasses(path)}
             disableTypography
           />
@@ -91,7 +91,7 @@ class DropDownTopic extends Component {
         </ListItem>
         <Collapse in={open} timeout="auto" unmountOnExit>
           <List disablePadding className={classes.nested}>
-            {listchatbot.map((val, index) => (
+            {listtopic.map((val, index) => (
               <NavLink
                 to="#"
                 className={classes.item}
@@ -102,14 +102,14 @@ class DropDownTopic extends Component {
                   button
                   className={classes.itemLink}
                   onClick={e => {
-                    this.handleClick(e, val.id_chatbot, val.chatbot_name);
+                    this.handleClick(e, val.topic_name);
                   }}
                 >
                   <ListItemIcon className={classes.itemIcon}>
-                    {val.id_chatbot === idChatbot ? <DoneIcon /> : <div />}
+                    {val.topic_name === topic ? <DoneIcon /> : <div />}
                   </ListItemIcon>
                   <ListItemText
-                    primary={val.chatbot_name}
+                    primary={val.topic_name}
                     className={classes.itemText}
                     disableTypography
                   />

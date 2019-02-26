@@ -156,7 +156,16 @@ class SelectedListItem extends React.Component {
                   >
                     {EditIcon}
                   </IconButton>
-                  <IconButton aria-label="Delete">
+                  <IconButton
+                    aria-label="Delete"
+                    onClick={e => {
+                      this.props.dispatch(
+                        aimlActions.deleteChatbot({
+                          chatbot: val.chatbot_name,
+                        })
+                      );
+                    }}
+                  >
                     <HighlightOff />
                   </IconButton>
                 </ListItemSecondaryAction>

@@ -49,19 +49,19 @@ class ListTopic extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      newChatbot: '',
+      newTopic: '',
     };
     this.notificationSystem = React.createRef();
   }
 
   handleInputChange = e => {
-    this.setState({ newChatbot: e.target.value });
+    this.setState({ newTopic: e.target.value });
   };
 
-  handleAddChatbot = () => {
+  handleAddTopic = chatbot => {
     const { dispatch } = this.props;
-    const { newChatbot } = this.state;
-    dispatch(aimlActions.addChatbot({ chatbot: newChatbot }));
+    const { newTopic } = this.state;
+    dispatch(aimlActions.addTopic({ topic: newTopic, chatbot }));
   };
 
   addNotification = (event, message, level) => {
@@ -76,7 +76,7 @@ class ListTopic extends React.Component {
 
   render() {
     const { classes, listname, placeholder, aiml } = this.props;
-    const { listchatbot } = aiml;
+    const { listtopic, chatbot } = aiml;
 
     const EditIcon = (
       <SvgIcon>
@@ -116,7 +116,7 @@ class ListTopic extends React.Component {
           }
         >
           <ListItem
-            key="AddChatbot"
+            key="AddTopic"
             alignItems="center"
             className={classes.container}
           >
@@ -136,17 +136,19 @@ class ListTopic extends React.Component {
                   variant="contained"
                   color="primary"
                   className={classes.button}
-                  onClick={this.handleAddChatbot}
+                  onClick={() => {
+                    this.handleAddTopic(chatbot);
+                  }}
                 >
                   Thêm
                 </Button>
               </Grid>
             </Grid>
           </ListItem>
-          {listchatbot.map((val, index) => (
+          {listtopic.map((val, index) => (
             <React.Fragment key={index}>
               <ListItem button key={index}>
-                <ListItemText primary={val.chatbot_name} />
+                <ListItemText primary={val.topic_name} />
                 <ListItemSecondaryAction>
                   <IconButton
                     aria-label="Edit"

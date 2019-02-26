@@ -8,7 +8,7 @@ function setDataRecentlyTable(message) {
 }
 
 function getDataRecentlyTable(topicname) {
-  return function(dispatch) {
+  return function (dispatch) {
     PostApiForm(`${ip.server}/aimlquestions/listtop10`, { topicname })
       .then(res => {
         console.log('in get data table', res, topicname);
@@ -48,7 +48,18 @@ function addChatbot(message) {
   const { chatbot: chatbotname } = message;
   return dispatch => {
     PostApiForm(`${ip.server}/chatbots/add`, { chatbotname }).then(res => {
-      if (res == 'OK') dispatch(getListChatbot());
+      if (res && 'result' in res && res.result) dispatch(getListChatbot());
+      else throw new Error(res);
+    });
+  };
+}
+
+function addTopic(message) {
+  const { topic: topicname, chatbot } = message;
+  return dispatch => {
+    PostApiForm(`${ip.server}/topics/add`, { topicname }).then(res => {
+      if (res && 'result' in res && res.result)
+        dispatch(getListTopic({ chatbot }));
       else throw new Error(res);
     });
   };
@@ -60,7 +71,7 @@ function deleteChatbot(message) {
     PostApiForm(`${ip.server}/chatbots/deletechatbotbyname`, {
       chatbotname,
     }).then(res => {
-      if (res == 'OK') dispatch(getListChatbot());
+      if (res && 'result' in res && res.result) dispatch(getListChatbot());
       else throw new Error(res);
     });
   };
@@ -120,10 +131,12 @@ export const aimlActions = {
   setDataRecentlyTable,
   saveCurrentQuestionAIML,
   saveInfo,
+  saveInfoChatbot,
   getDataRecentlyTable,
   questionToAIML,
   getListChatbot,
   getListTopic,
   addChatbot,
+  addTopic,
   deleteChatbot,
 };

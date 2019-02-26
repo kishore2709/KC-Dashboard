@@ -1,6 +1,5 @@
 import React from 'react';
 import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
 import Grid from '@material-ui/core/Grid';
@@ -48,6 +47,7 @@ const styles = theme => ({
   },
 
   card: {
+    margin: '15px 5px 15px 5px',
     border: '1px solid black',
   },
   cardHeader: {
@@ -67,6 +67,16 @@ const styles = theme => ({
     textAlign: 'center',
     fontWeight: 'bold',
     margin: 'auto',
+  },
+  titleAnswer: {
+    // border: '1px solid black',
+    // boxSizing: 'border-box',
+    height: 'auto',
+    color: 'black',
+    fontSize: '18px',
+    textAlign: 'center',
+    fontWeight: 'bold',
+    margin: '0 0 5px 0',
   },
   input: {
     border: '1px solid black',
@@ -100,6 +110,35 @@ const styles = theme => ({
   /* image */
 });
 
+const renderFieldAnswer = ({
+  index,
+  classes,
+  formState,
+  input,
+  label,
+  type,
+  meta: { touched, error },
+}) => (
+  // console.log(formState);
+  // if (formState.disableArray) console.log(formState.disableArray[index]);
+  <React.Fragment>
+    <input
+      {...input}
+      type={type}
+      data-tip=""
+      data-for={label}
+      className={classes.input}
+      placeholder={touched && error ? error : ''}
+    />
+
+    <ReactTooltip id={label}>
+      {formState && formState.values && formState.values.answers
+        ? formState.values.answers
+        : ''}
+    </ReactTooltip>
+  </React.Fragment>
+);
+
 const renderField = ({
   index,
   QA,
@@ -132,6 +171,7 @@ const renderField = ({
     </ReactTooltip>
   </React.Fragment>
 );
+
 const renderMembers = ({
   submitting,
   valid,
@@ -281,6 +321,34 @@ class Questions extends React.Component {
               </Grid>
             </CardContent>
           </Card>
+          {/* //// */}
+          <Card className={classes.card}>
+            <CardContent>
+              <Typography className={classes.titleAnswer}>
+                Câu trả lời
+              </Typography>
+
+              <Field
+                name="answer"
+                label="answer"
+                component={renderFieldAnswer}
+                props={{ classes, formState }}
+              />
+            </CardContent>
+          </Card>
+
+          <Grid container direction="row" justify="center" alignItems="center">
+            <Grid item>
+              <Button
+                variant="contained"
+                size="large"
+                color="primary"
+                type="submit"
+              >
+                Lưu
+              </Button>
+            </Grid>
+          </Grid>
         </form>
       </React.Fragment>
     );
