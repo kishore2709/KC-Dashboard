@@ -40,11 +40,16 @@ const rootReducer = combineReducers({
     QuestionsForm: (state, action) => {
       switch (action.type) {
         case actionTypes.ARRAY_PUSH:
-          return {
-            ...state,
-            disableArray:
-              'disableArray' in state ? state.disableArray.push(true) : [true],
-          };
+          const len = state.values.members.length - 1;
+          let newState = { ...state };
+          if (!('disableArray' in newState)) newState.disableArray = {};
+          newState.disableArray[`members[${len}].A`] = true;
+          return newState;
+        case actionTypes.CHANGE:
+          newState = { ...state };
+          if (action.meta.field[action.meta.field.length - 1] === 'A')
+            newState.disableArray[action.meta.field] = false;
+          return newState;
         case actionTypes.FOCUS:
           return {
             ...state,

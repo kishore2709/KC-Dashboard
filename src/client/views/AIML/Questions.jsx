@@ -5,7 +5,7 @@ import CardHeader from '@material-ui/core/CardHeader';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import ReactTooltip from 'react-tooltip';
-import { Field, reduxForm, FieldArray } from 'redux-form';
+import { Field, reduxForm, FieldArray, change } from 'redux-form';
 import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
@@ -14,6 +14,20 @@ import { aimlActions } from '_actions';
 import IconButton from '@material-ui/core/IconButton';
 import HighlightOff from '@material-ui/icons/HighlightOff';
 import AddCircleOutline from '@material-ui/icons/AddCircleOutline';
+
+import Loadable from 'react-loadable';
+import TableLoader from 'components/ContentLoader/TableLoader.jsx';
+
+const DialogSecond = Loadable({
+  loader: () => import(/* webpackPreload: true */ './Dialog2/DialogSecond.jsx'),
+  loading: TableLoader,
+});
+// import Dialog from './Dialog1/Dialog.jsx';
+const Dialog = Loadable({
+  loader: () => import(/* webpackPreload: true */ './Dialog1/Dialog.jsx'),
+  loading: TableLoader,
+});
+//
 
 const styles = theme => ({
   btn: {
@@ -148,29 +162,29 @@ const renderField = ({
   label,
   type,
   meta: { touched, error },
-}) => (
-  // console.log(formState);
-  // if (formState.disableArray) console.log(formState.disableArray[index]);
-  <React.Fragment>
-    <input
-      {...input}
-      type={type}
-      data-tip=""
-      data-for={label}
-      className={classes.input}
-      placeholder={touched && error ? error : ''}
-      disabled={
-        QA == 'A' && formState.disableArray && formState.disableArray[index]
-      }
-    />
+}) => {
+  if (formState.disableArray) console.log(formState.disableArray[label], label);
+  return (
+    // if (formState.disableArray) console.log(formState.disableArray[index]);
+    <React.Fragment>
+      <input
+        {...input}
+        type={type}
+        data-tip=""
+        data-for={label}
+        className={classes.input}
+        placeholder={touched && error ? error : ''}
+        disabled={formState.disableArray && formState.disableArray[label]}
+      />
 
-    <ReactTooltip id={label}>
-      {formState && formState.values && formState.values.members[index]
-        ? formState.values.members[index][QA]
-        : ''}
-    </ReactTooltip>
-  </React.Fragment>
-);
+      <ReactTooltip id={label}>
+        {formState && formState.values && formState.values.members[index]
+          ? formState.values.members[index][QA]
+          : ''}
+      </ReactTooltip>
+    </React.Fragment>
+  );
+};
 
 const renderMembers = ({
   submitting,
@@ -184,7 +198,7 @@ const renderMembers = ({
   // fields.push();
 
   if (fields.length === 0) fields.push();
-  console.log(fields);
+  console.log(submitting, valid, dirty);
   return (
     // console.log(submitting, valid, dirty);
     <Grid container direction="row" alignItems="center">
@@ -203,7 +217,7 @@ const renderMembers = ({
               aria-label="Add"
               className={classes.children}
               onClick={() => fields.push()}
-              disabled={(submitting || !valid) && dirty}
+              disabled={'members' in formState.syncErrors}
             >
               <AddCircleOutline />
             </IconButton>
@@ -259,14 +273,30 @@ class Questions extends React.Component {
       questionToAIML,
       valid,
       dirty,
+      form,
       aiml, // aiml redux
     } = this.props;
-    // console.log(values);
     // console.log('fieldList ', fieldList, values);
     const { topic: topicname } = aiml;
     return (
       <React.Fragment>
         <form onSubmit={handleSubmit}>
+          <Dialog
+            onSubmit={({ e, id }) => {
+              // console.log(e);
+              console.log('?????');
+              console.log(id, e);
+              this.props.dispatch(change(form, id, e));
+            }}
+          />
+          <DialogSecond
+            onSubmit={({ e, id }) => {
+              // console.log(e);
+              // console.log('?????');
+              // console.log(id, e);
+              this.props.dispatch(change(form, id, e));
+            }}
+          />
           <Card className={classes.card}>
             <CardContent>
               <Grid
@@ -299,7 +329,7 @@ class Questions extends React.Component {
                         questionToAIML({
                           textquestion: values.members[activeIndex].Q,
                           topicname,
-                          id: activeIndex,
+                          id: `members[${activeIndex}].A`,
                         });
                       }}
                       disabled={submitting}

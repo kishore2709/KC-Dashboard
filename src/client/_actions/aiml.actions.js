@@ -8,7 +8,7 @@ function setDataRecentlyTable(message) {
 }
 
 function getDataRecentlyTable(topicname) {
-  return function (dispatch) {
+  return function(dispatch) {
     PostApiForm(`${ip.server}/aimlquestions/listtop10`, { topicname })
       .then(res => {
         console.log('in get data table', res, topicname);
@@ -58,6 +58,7 @@ function addTopic(message) {
   const { topic: topicname, chatbot } = message;
   return dispatch => {
     PostApiForm(`${ip.server}/topics/add`, { topicname }).then(res => {
+      console.log(res);
       if (res && 'result' in res && res.result)
         dispatch(getListTopic({ chatbot }));
       else throw new Error(res);
@@ -97,33 +98,30 @@ function questionToAIML(message) {
     const { textquestion, topicname, id } = message;
     PostApiForm(`${ip.server}/aimlquestions/getaimlfromtext`, {
       textquestion,
-    })
-      .then(res => {
-        console.log(res);
-        if (!res || !('aiml_pattern' in res)) throw new Error('err');
-        // Save current AIML Question
-        dispatch(saveCurrentQuestionAIML(res.aiml_pattern));
-        // Show cau hoi tuong tu trong Dialog1
-        PostApiForm(`${ip.server}/aimlquestions/getsimilarpatternindb`, {
-          aimlpatternfromtext: res.aiml_pattern,
-          topicname,
-        }).then(res => {
-          console.log(' in similar ', res);
-          if (!res || !Array.isArray(res)) throw new Error('err');
-          // console.log('in []', res);
-          // console.log(res);
-          dispatch(
-            dialogActions.dialogAIML({
-              open: true,
-              message: res,
-              id,
-            })
-          );
-        });
-      })
-      .catch(err => {
-        console.log(err);
+    }).then(res => {
+      // console.log(res);
+      if (!res || !('aiml_pattern' in res)) throw new Error('err');
+      // Save current AIML Question
+      dispatch(saveCurrentQuestionAIML(res.aiml_pattern));
+      // Show cau hoi tuong tu trong Dialog1
+      // console.log(' similar params..', res.aiml_pattern, topicname);
+      PostApiForm(`${ip.server}/aimlquestions/getsimilarpatternindb`, {
+        aimlpatternfromtext: res.aiml_pattern,
+        topicname,
+      }).then(res => {
+        // console.log(' in similar ', res);
+        if (!res || !Array.isArray(res)) throw new Error('err');
+        console.log('in []', res);
+        // console.log(res);
+        dispatch(
+          dialogActions.dialogAIML({
+            open: true,
+            message: res,
+            id,
+          })
+        );
       });
+    });
   };
 }
 
