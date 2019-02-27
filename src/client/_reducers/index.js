@@ -5,6 +5,7 @@ import { actionTypes } from 'redux-form';
 // import { formActions } from '_actions';
 // import { formConstants } from '_constants';
 
+import { reducer as notifications } from 'react-notification-system-redux';
 import { authentication } from './authentication.reducer';
 import { registration } from './registration.reducer';
 import { users } from './users.reducer';
@@ -26,6 +27,7 @@ const FieldNameToNumber = str =>
 const NumberToFieldName = (num, QA) => `members[${num.toString()}].${QA}`;
 
 const rootReducer = combineReducers({
+  notifications,
   dialog,
   aimlLoader,
   aiml,
@@ -48,7 +50,6 @@ const rootReducer = combineReducers({
         case actionTypes.CHANGE:
           const newState2 = JSON.parse(JSON.stringify(state));
           if (action.meta.field[action.meta.field.length - 1] === 'A') {
-            console.log('??????????????????===================', newState2);
             newState2.disableArray[action.meta.field] = false;
           }
           return { ...newState2 };

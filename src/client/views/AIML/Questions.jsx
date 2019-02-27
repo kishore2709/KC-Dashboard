@@ -146,8 +146,8 @@ const renderFieldAnswer = ({
     />
 
     <ReactTooltip id={label}>
-      {formState && formState.values && formState.values.answers
-        ? formState.values.answers
+      {formState && formState.values && formState.values.answer
+        ? formState.values.answer
         : ''}
     </ReactTooltip>
   </React.Fragment>
@@ -214,14 +214,20 @@ const renderMembers = ({
       {fields.map((member, index) => (
         <React.Fragment>
           <Grid item xs={1} className={classes.container}>
-            <IconButton
-              aria-label="Add"
-              className={classes.children}
-              onClick={() => fields.push()}
-              disabled={'members' in formState.syncErrors}
-            >
-              <AddCircleOutline />
-            </IconButton>
+            {index === fields.length - 1 ? (
+              <IconButton
+                aria-label="Add"
+                className={classes.children}
+                onClick={() => fields.push()}
+                disabled={
+                  formState.syncErrors && 'members' in formState.syncErrors
+                }
+              >
+                <AddCircleOutline />
+              </IconButton>
+            ) : (
+              <React.Fragment />
+            )}
           </Grid>
           <Grid item xs={5} className={classes.container}>
             <div className={classes.childrenQ}>

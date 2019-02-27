@@ -106,6 +106,7 @@ class ListTopic extends React.Component {
           component="nav"
           subheader={
             <ListSubheader
+              disableSticky
               component="div"
               align="center"
               color="primary"
@@ -158,7 +159,11 @@ class ListTopic extends React.Component {
                   >
                     {EditIcon}
                   </IconButton>
-                  <IconButton aria-label="Delete">
+                  <IconButton aria-label="Delete" onClick={() => {
+                    this.props.dispatch(aimlActions.deleteTopic({
+                      chatbot, topic : val.topic_name,
+                    }))
+                  }}>
                     <HighlightOff />
                   </IconButton>
                 </ListItemSecondaryAction>

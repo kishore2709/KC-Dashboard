@@ -30,6 +30,8 @@ import Loadable from 'react-loadable';
 import TableLoader from 'components/ContentLoader/TableLoader.jsx';
 import { aimlActions } from '_actions';
 import { store } from '_helpers';
+// noti
+import Notifications from 'react-notification-system-redux';
 
 const Sidebar = Loadable.Map({
   loader: {
@@ -104,7 +106,18 @@ class App extends React.Component {
     window.removeEventListener("resize", this.resizeFunction);
   }
   render() {
-    const { classes, openDialogPwdForm, ...rest } = this.props;
+    const style = {
+      NotificationItem: { // Override the notification item
+        DefaultStyle: { // Applied to every notification, regardless of the notification level
+          margin: '10px 5px 2px 1px'
+        },
+        success: { // Applied only to the success notification item
+          color: 'red',
+          backgroundColor: 'black',
+        }
+      }
+    };
+    const { classes, openDialogPwdForm, notifications, ...rest } = this.props;
     const user = GetUserInfo();
     // console.log('in dashboard')
     // console.log(switchRoutes);
@@ -112,6 +125,10 @@ class App extends React.Component {
     openDialogPwdForm(user.changePwd);
     return (
       <div className={classes.wrapper}>
+            <Notifications
+        notifications={notifications}
+        style={style}
+      />
         <Sidebar
           routes={dashboardRoutes}
           logoText={"AIS Dashboard"}
@@ -156,7 +173,7 @@ const mapDispatchToProps = dispatch => ({
 
 export default withStyles(dashboardStyle)(
   connect(
-    null,
+    state => ({   notifications: state.notifications, }),
     mapDispatchToProps
   )(withToastManager(App))
 );

@@ -7,7 +7,6 @@ import './App.css';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import indexRoutes from 'routes/index.jsx';
-import { ToastProvider } from 'react-toast-notifications';
 // import { connectedHeaderPage as Header } from './Header/Header';
 // import Home from './Home/Home';
 // import LogManagement from './LogManagement/LogManagement';
@@ -17,12 +16,14 @@ import { ToastProvider } from 'react-toast-notifications';
 // import PermanentDrawerLeft from './AdminManagement/ManageUser';
 // import Setting from './SettingManagement/Setting';
 import ErrorBoundary from 'components/ErrorBoundaries/ErrorBoundaries.jsx';
+
 import { history } from '../_helpers';
 import { alertActions } from '../_actions';
 import { PrivateRoute } from './PrivateRoute';
 import { LoginPage } from './LoginPage';
 // import { RegisterPage } from './RegisterPage';
 // import connectedDrawers from './SettingManagement/Drawers';
+// noti
 
 class App extends React.Component {
   constructor(props) {
@@ -38,26 +39,22 @@ class App extends React.Component {
     return (
       <div>
         <ErrorBoundary>
-          <ToastProvider>
+          <div>
             <div>
-              <div>
-                <Router history={history}>
-                  <Switch>
-                    <Route path="/login" component={LoginPage} />
-                    {indexRoutes.map((prop, key) => {
-                      return (
-                        <PrivateRoute
-                          path={prop.path}
-                          component={prop.component}
-                          key={key}
-                        />
-                      );
-                    })}
-                  </Switch>
-                </Router>
-              </div>
+              <Router history={history}>
+                <Switch>
+                  <Route path="/login" component={LoginPage} />
+                  {indexRoutes.map((prop, key) => (
+                    <PrivateRoute
+                      path={prop.path}
+                      component={prop.component}
+                      key={key}
+                    />
+                  ))}
+                </Switch>
+              </Router>
             </div>
-          </ToastProvider>
+          </div>
         </ErrorBoundary>
       </div>
     );

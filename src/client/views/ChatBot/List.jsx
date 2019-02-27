@@ -106,6 +106,7 @@ class SelectedListItem extends React.Component {
           component="nav"
           subheader={
             <ListSubheader
+              disableSticky
               component="div"
               align="center"
               color="primary"
