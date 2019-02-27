@@ -14,6 +14,7 @@ import { connect } from 'react-redux';
 
 const styles = theme => ({
   root: {
+    margin: 0,
     display: 'flex',
   },
   formControl: {
@@ -41,7 +42,13 @@ class RadioButtonsGroup extends React.Component {
     // console.log(message);
     // const { arr } = this.state;
     return (
-      <Grid container className={classes.root}>
+      <Grid
+        container
+        direction="row"
+        justify="center"
+        alignItems="center"
+        className={classes.root}
+      >
         <Grid item xs={12}>
           <FormControl component="fieldset" className={classes.formControl}>
             <RadioGroup
@@ -56,20 +63,29 @@ class RadioButtonsGroup extends React.Component {
                   value={index.toString()}
                   control={<Radio />}
                   label={
-                    <React.Fragment>
-                      <TextField
-                        id="outlined-bare"
-                        value={val.aiml_question}
-                        margin="normal"
-                        variant="outlined"
-                      />
-                      <TextField
-                        id="outlined-bare"
-                        value={val.aiml_answer}
-                        margin="normal"
-                        variant="outlined"
-                      />
-                    </React.Fragment>
+                    <Grid
+                      container
+                      direction="row"
+                      justify="center"
+                      alignItems="center"
+                    >
+                      <Grid item>
+                        <TextField
+                          id="outlined-bare"
+                          value={val.aiml_question}
+                          margin="normal"
+                          variant="outlined"
+                        />
+                      </Grid>
+                      <Grid item>
+                        <TextField
+                          id="outlined-bare"
+                          value={val.aiml_answer}
+                          margin="normal"
+                          variant="outlined"
+                        />
+                      </Grid>
+                    </Grid>
                   }
                 />
               ))}
@@ -119,4 +135,6 @@ RadioButtonsGroup.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default connect(state=>({dialog: state.dialog,}))(withStyles(styles)(RadioButtonsGroup));
+export default connect(state => ({ dialog: state.dialog }))(
+  withStyles(styles)(RadioButtonsGroup)
+);

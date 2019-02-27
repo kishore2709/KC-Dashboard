@@ -9,7 +9,9 @@ import { drawerWidth } from 'assets/jss/material-dashboard-react.jsx';
 
 const styles = theme => ({
   table: {
-    width: `calc(100% - ${drawerWidth}px)`,
+    // width: `calc(100% - ${drawerWidth}px)`,
+    margin: '0px 5px',
+    border: '1px solid black',
   },
   parent: {
     display: 'flex',
@@ -64,14 +66,15 @@ class RecentlyTable extends React.Component {
     };
     const data = aiml.data.map(val => [val.aiml_question, val.aiml_answer]);
     return (
-      <React.Fragment>
+      <div className={classes.table}>
         <MUIDataTable
-          title="GẦN ĐÂY"
+          
+          title="Câu hỏi gần đây"
           data={data}
           columns={columns}
           options={options}
         />
-      </React.Fragment>
+      </div>
     );
   }
 }

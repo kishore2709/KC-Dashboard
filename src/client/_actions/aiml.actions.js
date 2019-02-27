@@ -184,7 +184,7 @@ function questionToAIML(message) {
     PostApiForm(`${ip.server}/aimlquestions/getaimlfromtext`, {
       textquestion,
     }).then(res => {
-      // console.log(res);
+      console.log(res, topicname, id);
       if (!res || !('aiml_pattern' in res)) throw new Error('err');
       // Save current AIML Question
       dispatch(saveCurrentQuestionAIML(res.aiml_pattern));
