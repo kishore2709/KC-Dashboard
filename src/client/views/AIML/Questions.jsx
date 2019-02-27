@@ -198,7 +198,7 @@ const renderMembers = ({
   // fields.push();
 
   if (fields.length === 0) fields.push();
-  console.log(submitting, valid, dirty);
+  // console.log(submitting, valid, dirty);
   return (
     // console.log(submitting, valid, dirty);
     <Grid container direction="row" alignItems="center">
@@ -295,6 +295,9 @@ class Questions extends React.Component {
               // console.log('?????');
               // console.log(id, e);
               this.props.dispatch(change(form, id, e));
+            }}
+            onCancel={({ id }) => {
+              this.props.dispatch(change(form, id, ''));
             }}
           />
           <Card className={classes.card}>

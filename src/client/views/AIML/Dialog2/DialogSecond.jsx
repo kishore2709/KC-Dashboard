@@ -42,11 +42,12 @@ class DialogFormComponent extends React.Component {
           <DialogFormAIML
             onSave={e => {
               // console.log(e);
-              this.props.onSubmit({e, id});
+              this.props.onSubmit({ e, id });
               this.handleClose();
             }}
             onCancel={() => {
               this.handleClose();
+              this.props.onCancel({ id });
             }}
           />
         </DialogContent>

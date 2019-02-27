@@ -12,8 +12,8 @@ import { dialogActions } from '_actions';
 // import { Field, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
-import DialogFormAIML from './DialogForm.jsx';
 import { PostApiForm, ip } from '_helpers/Utils';
+import DialogFormAIML from './DialogForm.jsx';
 
 // styles
 const styles = theme => ({
@@ -23,14 +23,15 @@ const styles = theme => ({
   },
 });
 class DialogFormComponent extends React.Component {
-  handleClose() {
+  handleClose = () => {
+    console.log('in close dialog 1');
     this.props.dialogAIMLFunc({ open: false, message: [], id: 0 });
-  }
+  };
 
   render() {
     const { dialog, classes, aiml, dialogAIMLFuncSecond } = this.props;
     const { open, id } = dialog.dialogAIML;
-    const { curAIML, topic:topicname} = aiml;
+    const { curAIML, topic: topicname } = aiml;
     // console.log(open, message);
     // console.log(classes.dialog);
     return (
@@ -50,16 +51,14 @@ class DialogFormComponent extends React.Component {
             onCancel={() => {
               this.handleClose();
               // Neu ko chon o Dialog 1 -> Sang goi y Dialog 2
-              PostApiForm(
-                `${ip.server  }/aimlquestions/getsimilarpatternindb`,
-                { aimlpatternfromtext: curAIML, topicname  }
-              ).then(res => {
+              PostApiForm(`${ip.server}/aimlquestions/getsimilarpatternindb`, {
+                aimlpatternfromtext: curAIML,
+                topicname,
+              }).then(res => {
                 console.log(' in doalog step 2..', res);
-                if (!res || !(Array.isArray(res))) throw new Error('err');
-                else
-                dialogAIMLFuncSecond({ open: true, message: res, id });
-              }).catch(err=>{console.log(err)});
-              
+                if (!res || !Array.isArray(res)) throw new Error('err');
+                else dialogAIMLFuncSecond({ open: true, message: res, id });
+              });
             }}
           />
         </DialogContent>
