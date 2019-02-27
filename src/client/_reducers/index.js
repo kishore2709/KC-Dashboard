@@ -41,15 +41,17 @@ const rootReducer = combineReducers({
       switch (action.type) {
         case actionTypes.ARRAY_PUSH:
           const len = state.values.members.length - 1;
-          let newState = { ...state };
+          const newState = JSON.parse(JSON.stringify(state));
           if (!('disableArray' in newState)) newState.disableArray = {};
           newState.disableArray[`members[${len}].A`] = true;
-          return newState;
+          return { ...newState };
         case actionTypes.CHANGE:
-          newState = { ...state };
-          if (action.meta.field[action.meta.field.length - 1] === 'A')
-            newState.disableArray[action.meta.field] = false;
-          return newState;
+          const newState2 = JSON.parse(JSON.stringify(state));
+          if (action.meta.field[action.meta.field.length - 1] === 'A') {
+            console.log('??????????????????===================', newState2);
+            newState2.disableArray[action.meta.field] = false;
+          }
+          return { ...newState2 };
         case actionTypes.FOCUS:
           return {
             ...state,

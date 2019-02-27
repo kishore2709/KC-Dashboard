@@ -8,7 +8,7 @@ function setDataRecentlyTable(message) {
 }
 
 function getDataRecentlyTable(topicname) {
-  return function(dispatch) {
+  return function (dispatch) {
     PostApiForm(`${ip.server}/aimlquestions/listtop10`, { topicname })
       .then(res => {
         console.log('in get data table', res, topicname);
@@ -109,7 +109,7 @@ function questionToAIML(message) {
         aimlpatternfromtext: res.aiml_pattern,
         topicname,
       }).then(res => {
-        // console.log(' in similar ', res);
+        console.log(' in similar ', res);
         if (!res || !Array.isArray(res)) throw new Error('err');
         console.log('in []', res);
         // console.log(res);

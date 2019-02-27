@@ -163,7 +163,8 @@ const renderField = ({
   type,
   meta: { touched, error },
 }) => {
-  if (formState.disableArray) console.log(formState.disableArray[label], label);
+  console.log();
+  // if (formState.disableArray) console.log(formState.disableArray[label], label);
   return (
     // if (formState.disableArray) console.log(formState.disableArray[index]);
     <React.Fragment>
