@@ -14,7 +14,7 @@ import { aimlActions } from '_actions';
 //
 import Grid from '@material-ui/core/Grid';
 // hot
-
+import { hot } from 'react-hot-loader';
 //
 
 const Text2AIML = Loadable({

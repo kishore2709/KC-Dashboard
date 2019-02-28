@@ -2,26 +2,29 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
 import Grid from '@material-ui/core/Grid';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormControl from '@material-ui/core/FormControl';
-import FormLabel from '@material-ui/core/FormLabel';
+import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import { connect } from 'react-redux';
+import ReactTooltip from 'react-tooltip';
 
 const styles = theme => ({
   root: {
     margin: 0,
     display: 'flex',
+    width: '100%',
   },
   formControl: {
-    margin: theme.spacing.unit * 3,
+    margin: theme.spacing.unit,
   },
   group: {
     margin: `${theme.spacing.unit}px 0`,
+  },
+  textField: {
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
   },
 });
 
@@ -50,47 +53,63 @@ class RadioButtonsGroup extends React.Component {
         className={classes.root}
       >
         <Grid item xs={12}>
-          <FormControl component="fieldset" className={classes.formControl}>
-            <RadioGroup
-              aria-label="Gender"
-              name="gender1"
-              className={classes.group}
-              value={this.state.value}
-              onChange={this.handleChange}
-            >
-              {message.map((val, index) => (
-                <FormControlLabel
-                  value={index.toString()}
-                  control={<Radio />}
-                  label={
-                    <Grid
-                      container
-                      direction="row"
-                      justify="center"
-                      alignItems="center"
-                    >
-                      <Grid item>
-                        <TextField
-                          id="outlined-bare"
-                          value={val.aiml_question}
-                          margin="normal"
-                          variant="outlined"
-                        />
-                      </Grid>
-                      <Grid item>
-                        <TextField
-                          id="outlined-bare"
-                          value={val.aiml_answer}
-                          margin="normal"
-                          variant="outlined"
-                        />
-                      </Grid>
-                    </Grid>
-                  }
+          <Grid container>
+            <Grid item xs={1} />
+            <Grid item xs={5}>
+              <Typography align="center" color="primary" variant="h6">
+                Pattern
+              </Typography>
+            </Grid>
+            <Grid item xs={5}>
+              <Typography align="center" color="primary" variant="h6">
+                Template
+              </Typography>
+              <Grid item xs={1} />
+            </Grid>
+          </Grid>
+        </Grid>
+        <Grid item xs={12}>
+          {message.map((val, index) => (
+            <Grid container direction="row" alignItems="center">
+              <Grid item xs={1}>
+                <Radio
+                  onClick={() => {
+                    this.setState({ value: index });
+                  }}
                 />
-              ))}
-            </RadioGroup>
-          </FormControl>
+              </Grid>
+              <Grid item xs={5}>
+                <TextField
+                  id="outlined-bare"
+                  value={val.aiml_question}
+                  margin="dense"
+                  variant="outlined"
+                  fullWidth
+                  data-tip=""
+                  data-for={`dialogform${index}.Q`}
+                  className={classes.textField}
+                />
+                <ReactTooltip id={`dialogform${index}.Q`}>
+                  {val.aiml_question}
+                </ReactTooltip>
+              </Grid>
+              <Grid item xs={5}>
+                <TextField
+                  id="outlined-bare"
+                  value={val.aiml_answer}
+                  margin="dense"
+                  variant="outlined"
+                  fullWidth
+                  data-tip=""
+                  data-for={`dialogform${index}.A`}
+                  className={classes.textField}
+                />
+                <ReactTooltip id={`dialogform${index}.A`}>
+                  {val.aiml_answer}
+                </ReactTooltip>
+              </Grid>
+            </Grid>
+          ))}
         </Grid>
         <Grid item xs={12}>
           <Grid item>
@@ -104,12 +123,13 @@ class RadioButtonsGroup extends React.Component {
                 variant="contained"
                 color="secondary"
                 className={classes.button}
+                disabled={!message[this.state.value]}
                 onClick={() => {
                   if (!message[this.state.value]) return;
                   this.props.onSave(message[this.state.value].aiml_question);
                 }}
               >
-                Save
+                Chọn
               </Button>
               <Grid item>
                 <Button
@@ -120,7 +140,7 @@ class RadioButtonsGroup extends React.Component {
                     this.props.onCancel();
                   }}
                 >
-                  Cancel
+                  Tiếp tục
                 </Button>
               </Grid>
             </Grid>

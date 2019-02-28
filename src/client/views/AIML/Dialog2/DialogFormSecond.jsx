@@ -11,16 +11,23 @@ import FormLabel from '@material-ui/core/FormLabel';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import { connect } from 'react-redux';
+import ReactTooltip from 'react-tooltip';
 
 const styles = theme => ({
   root: {
     display: 'flex',
+    width: '100%',
   },
   formControl: {
-    margin: theme.spacing.unit * 3,
+    margin: theme.spacing.unit,
   },
   group: {
     margin: `${theme.spacing.unit}px 0`,
+  },
+  textField: {
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
   },
 });
 
@@ -41,34 +48,40 @@ class RadioButtonsGroup extends React.Component {
     // console.log('in dialog second form..',message);
     // const { arr } = this.state;
     return (
-      <Grid container className={classes.root}>
+      <Grid
+        container
+        direction="row"
+        justify="center"
+        alignItems="center"
+        className={classes.root}
+      >
         <Grid item xs={12}>
-          <FormControl component="fieldset" className={classes.formControl}>
-            <RadioGroup
-              aria-label="Gender"
-              name="gender1"
-              className={classes.group}
-              value={this.state.value}
-              onChange={this.handleChange}
-            >
-              {message.map((val, index) => (
-                <FormControlLabel
-                  value={index.toString()}
-                  control={<Radio />}
-                  label={
-                    <React.Fragment>
-                      <TextField
-                        id="outlined-bare"
-                        value={val.aiml_question}
-                        margin="normal"
-                        variant="outlined"
-                      />
-                    </React.Fragment>
-                  }
+          {message.map((val, index) => (
+            <Grid container direction="row" alignItems="center">
+              <Grid item xs={1}>
+                <Radio
+                  onClick={() => {
+                    this.setState({ value: index });
+                  }}
                 />
-              ))}
-            </RadioGroup>
-          </FormControl>
+              </Grid>
+              <Grid item xs={10}>
+                <TextField
+                  id="outlined-bare"
+                  value={val.aiml_question}
+                  margin="dense"
+                  variant="outlined"
+                  fullWidth
+                  data-tip=""
+                  data-for={`dialogform${index}.Q`}
+                  className={classes.textField}
+                />
+                <ReactTooltip id={`dialogform${index}.Q`}>
+                  {val.aiml_question}
+                </ReactTooltip>
+              </Grid>
+            </Grid>
+          ))}
         </Grid>
         <Grid item xs={12}>
           <Grid item>
@@ -82,12 +95,13 @@ class RadioButtonsGroup extends React.Component {
                 variant="contained"
                 color="secondary"
                 className={classes.button}
+                disabled={!message[this.state.value]}
                 onClick={() => {
                   if (!message[this.state.value]) return;
                   this.props.onSave(message[this.state.value].aiml_question);
                 }}
               >
-                Save
+                Chọn
               </Button>
               <Grid item>
                 <Button
@@ -98,7 +112,7 @@ class RadioButtonsGroup extends React.Component {
                     this.props.onCancel();
                   }}
                 >
-                  Cancel
+                  Bỏ qua
                 </Button>
               </Grid>
             </Grid>
@@ -113,4 +127,6 @@ RadioButtonsGroup.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default connect(state=>({dialog: state.dialog,}))(withStyles(styles)(RadioButtonsGroup));
+export default connect(state => ({ dialog: state.dialog }))(
+  withStyles(styles)(RadioButtonsGroup)
+);

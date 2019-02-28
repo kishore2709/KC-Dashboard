@@ -1,11 +1,12 @@
 import React from 'react';
+import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import withMobileDialog from '@material-ui/core/withMobileDialog';
+
 // core
 // redux-form
 import { dialogActions } from '_actions';
@@ -19,6 +20,9 @@ const styles = theme => ({
   border: {
     border: '3px solid red',
     borderRadius: '15px',
+  },
+  title: {
+    marginTop: '15px',
   },
 });
 class DialogFormComponent extends React.Component {
@@ -36,8 +40,17 @@ class DialogFormComponent extends React.Component {
         open={open}
         onClose={this.handleClose}
         aria-labelledby="form-dialog-title"
+        fullWidth
+        maxWidth="sm"
       >
-        <DialogTitle id="form-dialog-title">Gợi ý</DialogTitle>
+        <Typography
+          align="center"
+          color="primary"
+          variant="title"
+          className={classes.title}
+        >
+          Gợi ý
+        </Typography>
         <DialogContent>
           <DialogFormAIML
             onSave={e => {
@@ -67,4 +80,4 @@ export default connect(
     dialog: state.dialog,
   }),
   mapDispatchToProps
-)(withStyles(styles)(DialogFormComponent));
+)(withStyles(styles)(withMobileDialog()(DialogFormComponent)));

@@ -5,7 +5,7 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
+import Typography from '@material-ui/core/Typography';
 // core
 // redux-form
 import { dialogActions } from '_actions';
@@ -13,6 +13,7 @@ import { dialogActions } from '_actions';
 import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
 import { PostApiForm, ip } from '_helpers/Utils';
+import withMobileDialog from '@material-ui/core/withMobileDialog';
 import DialogFormAIML from './DialogForm.jsx';
 
 // styles
@@ -20,6 +21,9 @@ const styles = theme => ({
   border: {
     border: '3px solid red',
     borderRadius: '15px',
+  },
+  title: {
+    marginTop: '15px',
   },
 });
 class DialogFormComponent extends React.Component {
@@ -39,8 +43,17 @@ class DialogFormComponent extends React.Component {
         open={open}
         onClose={this.handleClose}
         aria-labelledby="form-dialog-title"
+        fullWidth
+        maxWidth="md"
       >
-        <DialogTitle id="form-dialog-title">Các mẫu đã có</DialogTitle>
+        <Typography
+          align="center"
+          color="primary"
+          variant="title"
+          className={classes.title}
+        >
+          Các mẫu đã có
+        </Typography>
         <DialogContent>
           <DialogFormAIML
             onSave={e => {
@@ -82,4 +95,4 @@ export default connect(
     aiml: state.aiml,
   }),
   mapDispatchToProps
-)(withStyles(styles)(DialogFormComponent));
+)(withStyles(styles)(withMobileDialog()(DialogFormComponent)));

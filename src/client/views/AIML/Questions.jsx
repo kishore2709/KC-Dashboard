@@ -354,7 +354,7 @@ class Questions extends React.Component {
                       disabled={pristine || submitting}
                       onClick={reset}
                     >
-                      Reset
+                      Làm lại
                     </button>
                   </Grid>
                 </Grid>

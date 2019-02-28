@@ -3,6 +3,7 @@ import { PostApiForm, ip } from '_helpers/Utils';
 import { aimlActions } from '_actions';
 import { connect } from 'react-redux';
 import { Typography } from '@material-ui/core';
+import Paper from '@material-ui/core/Paper';
 import MUIDataTable from 'mui-datatables';
 import withStyles from '@material-ui/core/styles/withStyles';
 import { drawerWidth } from 'assets/jss/material-dashboard-react.jsx';
@@ -66,15 +67,14 @@ class RecentlyTable extends React.Component {
     };
     const data = aiml.data.map(val => [val.aiml_question, val.aiml_answer]);
     return (
-      <div className={classes.table}>
+      <Paper className={classes.table}>
         <MUIDataTable
-          
           title="Câu hỏi gần đây"
           data={data}
           columns={columns}
           options={options}
         />
-      </div>
+      </Paper>
     );
   }
 }
