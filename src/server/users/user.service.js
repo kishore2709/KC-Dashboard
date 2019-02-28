@@ -1,5 +1,4 @@
 ﻿const jwt = require('jsonwebtoken');
-const PythonShell = require('python-shell');
 const config = require('../config.json');
 const Models = require('../Utils/Schema');
 // #### >>>  Init Mongodb
@@ -119,10 +118,11 @@ async function sendEmails(toEmails, subject, content, html) {
 // }
 // Send SMS by Dcom
 async function sendSMS(toSMS, content) {
+  console.log('in SendSMS');
   const exec = require('child_process').exec;
 
   let res = 'python src/server/users/SendSMS.py ';
-  res = `${res + toSMS.toString()  } ` + `"${  content  }"`;
+  res = `${res + toSMS.toString()} ` + `"${content}"`;
   const { stdout, stderr } = await exec(res);
   return true;
 }

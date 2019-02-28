@@ -41,17 +41,17 @@ class App extends React.Component {
     const date = new Date();
     const month =
       date.getMonth() + 1 < 10
-        ? '0' + (date.getMonth() + 1).toString()
+        ? `0${(date.getMonth() + 1).toString()}`
         : (date.getMonth() + 1).toString();
     const day =
       date.getDate() < 10
-        ? '0' + date.getDate().toString()
+        ? `0${date.getDate().toString()}`
         : date.getDate().toString();
     arr.push({
       seen: false,
       content: 'Mã độc Bashlite đang tấn công vào hệ thống của bạn',
       sender: 'Admin',
-      time: `2019-${  month  }-${  day}`,
+      time: `2019-${month}-${day}`,
       location: 'Hà Nội',
     });
     setTimeout(() => {
@@ -60,19 +60,19 @@ class App extends React.Component {
     }, 5000);
     //
 
-    //  PostApi('/api/users/sendSMS',{
-    //   toSMS: '84812305814',
+    // PostApi('/api/users/sendSMS', {
+    //   toSMS: '0985061316',
     //   // content:'Mã độc Bashlite đang tấn công vào hệ thống của bạn',
-    //   content:'Ma doc Bashlite dang tan cong vao he thong cua ban',
-    // })
+    //   content: 'Ma doc Bashlite dang tan cong vao he thong cua ban',
+    // });
 
-    // //
-    // PostApi('/api/users/sendEmails',{
-    //   toEmails: 'huanthemenk55@gmail.com',
-    //   subject:'Cảnh báo',
-    //   content:'Mã độc Bashlite đang tấn công vào hệ thống của bạn',
-    //   html:`<h2>Cảnh báo</h2><p>Mã độc Bashlite đang tấn công vào hệ thống của bạn</p><br/>`,
-    // })
+    //
+    // PostApi('/api/users/sendEmails', {
+    //   toEmails: 'mikelhpdatke@gmail.com',
+    //   subject: 'Cảnh báo',
+    //   content: 'Mã độc Bashlite đang tấn công vào hệ thống của bạn',
+    //   html: `<h2>Cảnh báo</h2><p>Mã độc Bashlite đang tấn công vào hệ thống của bạn</p><br/>`,
+    // });
   }
 
   render() {

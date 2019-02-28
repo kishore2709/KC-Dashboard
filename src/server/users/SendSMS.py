@@ -1,6 +1,6 @@
 import serial
 import sys
-def send_text(number, text, path='COM10'):
+def send_text(number, text, path='COM5'):
     ser = serial.Serial(path, 9600,timeout=1)
     if not ser.isOpen():
         ser.open()
