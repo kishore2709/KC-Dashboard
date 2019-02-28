@@ -52,12 +52,12 @@ const Sidebar = Loadable.Map({
 
 const switchRoutes = (
   <Switch>
-    {dashboardRoutes.filter(val=> ('subPaths' in val)).map(val => {
-        val.subPaths.map((prop, key) => {
-          // console.log('???');
-          // console.log(prop);
-          return <Route path={prop.path} component={prop.component} key={prop.id} />;
-        })
+    {dashboardRoutes.filter(val => ('subPaths' in val)).map(val => {
+      val.subPaths.map((prop, key) => {
+        // console.log('???');
+        // console.log(prop);
+        return <Route path={prop.path} component={prop.component} key={prop.id} />;
+      })
     }).concat(
       dashboardRoutes.map((prop, key) => {
         if (prop.redirect)
@@ -65,7 +65,7 @@ const switchRoutes = (
         return <Route path={prop.path} component={prop.component} key={prop.id} />;
       })
     )}
-    
+
   </Switch>
 );
 
@@ -125,10 +125,10 @@ class App extends React.Component {
     openDialogPwdForm(user.changePwd);
     return (
       <div className={classes.wrapper}>
-            <Notifications
-        notifications={notifications}
-        style={style}
-      />
+        <Notifications
+          notifications={notifications}
+          style={style}
+        />
         <Sidebar
           routes={dashboardRoutes}
           logoText={"AIS Dashboard"}
@@ -140,21 +140,21 @@ class App extends React.Component {
           {...rest}
         />
         <div className={classes.mainPanel} ref="mainPanel">
-          <ChangePasswordDialog/>
-          <Header
+          <ChangePasswordDialog />
+          {/* <Header
             routes={dashboardRoutes}
             handleDrawerToggle={this.handleDrawerToggle}
             {...rest}
-          />
+          /> */}
           {/* On the /maps route we want the map to be on full screen - this is not possible if the content and conatiner classes are present because they have some paddings which would make the map smaller */}
           {this.getRoute() ? (
             <div className={classes.content}>
               <div className={classes.container}>{switchRoutes}</div>
             </div>
           ) : (
-            <div className={classes.map}>{switchRoutes}</div>
-          )}
-          {this.getRoute() ? <Footer /> : null}
+              <div className={classes.map}>{switchRoutes}</div>
+            )}
+          {/* {this.getRoute() ? <Footer /> : null} */}
         </div>
       </div>
     );
@@ -173,7 +173,7 @@ const mapDispatchToProps = dispatch => ({
 
 export default withStyles(dashboardStyle)(
   connect(
-    state => ({   notifications: state.notifications, }),
+    state => ({ notifications: state.notifications, }),
     mapDispatchToProps
   )(withToastManager(App))
 );

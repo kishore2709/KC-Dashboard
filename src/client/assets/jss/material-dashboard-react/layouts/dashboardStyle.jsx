@@ -1,36 +1,36 @@
 import {
   drawerWidth,
   transition,
-  container
-} from "assets/jss/material-dashboard-react.jsx";
+  container,
+} from 'assets/jss/material-dashboard-react.jsx';
 
 const appStyle = theme => ({
   wrapper: {
-    position: "relative",
-    top: "0",
-    height: "100vh"
+    position: 'relative',
+    top: '0',
+    height: '100vh',
   },
   mainPanel: {
-    [theme.breakpoints.up("md")]: {
-      width: `calc(100% - ${drawerWidth}px)`
+    [theme.breakpoints.up('md')]: {
+      width: `calc(100% - ${drawerWidth}px)`,
     },
-    overflow: "auto",
-    position: "relative",
-    float: "right",
+    overflow: 'auto',
+    position: 'relative',
+    float: 'right',
     ...transition,
-    maxHeight: "100%",
-    width: "100%",
-    overflowScrolling: "touch"
+    maxHeight: '100%',
+    width: '100%',
+    overflowScrolling: 'touch',
   },
   content: {
-    marginTop: "30px",
-    padding: "30px 15px",
-    minHeight: "calc(100vh - 123px)"
+    marginTop: '10px',
+    padding: '5px 15px',
+    minHeight: 'calc(100vh - 123px)',
   },
   container,
   map: {
-    marginTop: "0px"
-  }
+    marginTop: '0px',
+  },
 });
 
 export default appStyle;
