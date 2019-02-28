@@ -21,7 +21,7 @@ import { history } from '../_helpers';
 import { alertActions, mailActions } from '../_actions';
 import { PrivateRoute } from './PrivateRoute';
 import { LoginPage } from './LoginPage';
-import { PostApi } from '../_helpers/Utils/PostApi'
+import { PostApi } from '../_helpers/Utils/PostApi';
 import { dateRange } from '../_reducers/dateRange.reducer';
 // import { RegisterPage } from './RegisterPage';
 // import connectedDrawers from './SettingManagement/Drawers';
@@ -34,24 +34,39 @@ class App extends React.Component {
       dispatch(alertActions.clear());
     });
   }
+
   async componentDidMount() {
     const { dispatch } = this.props;
-    let arr = [];
-    let date = new Date();
-    let month = date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1).toString() : (date.getMonth() + 1).toString();
-    let day = date.getDate() < 10 ? '0' + date.getDate().toString() : date.getDate().toString();
+    const arr = [];
+    const date = new Date();
+    const month =
+      date.getMonth() + 1 < 10
+        ? '0' + (date.getMonth() + 1).toString()
+        : (date.getMonth() + 1).toString();
+    const day =
+      date.getDate() < 10
+        ? '0' + date.getDate().toString()
+        : date.getDate().toString();
     arr.push({
       seen: false,
       content: 'Mã độc Bashlite đang tấn công vào hệ thống của bạn',
       sender: 'Admin',
-      time: '2019-' + month + '-' + day,
-      location: 'Hà Nội'
-    })
+      time: `2019-${  month  }-${  day}`,
+      location: 'Hà Nội',
+    });
     setTimeout(() => {
       alert('Mã độc Bashlite đang tấn công vào hệ thống');
       dispatch(mailActions.fixMail(arr));
     }, 5000);
     //
+
+    //  PostApi('/api/users/sendSMS',{
+    //   toSMS: '84812305814',
+    //   // content:'Mã độc Bashlite đang tấn công vào hệ thống của bạn',
+    //   content:'Ma doc Bashlite dang tan cong vao he thong cua ban',
+    // })
+
+    // //
     // PostApi('/api/users/sendEmails',{
     //   toEmails: 'huanthemenk55@gmail.com',
     //   subject:'Cảnh báo',
@@ -59,13 +74,14 @@ class App extends React.Component {
     //   html:`<h2>Cảnh báo</h2><p>Mã độc Bashlite đang tấn công vào hệ thống của bạn</p><br/>`,
     // })
   }
+
   render() {
     // const { alert } = this.props;
 
     return (
       <div>
         <ErrorBoundary>
-          <ToastProvider placement='bottom-right'>
+          <ToastProvider placement="bottom-right">
             <div>
               <div>
                 <Router history={history}>
@@ -118,7 +134,7 @@ class App extends React.Component {
             </div>
           </ToastProvider>
         </ErrorBoundary>
-      </div >
+      </div>
     );
   }
 }
@@ -131,7 +147,8 @@ App.propTypes = {
 function mapStateToProps(state) {
   const { alert, mailBox } = state;
   return {
-    alert, mailBox
+    alert,
+    mailBox,
   };
 }
 

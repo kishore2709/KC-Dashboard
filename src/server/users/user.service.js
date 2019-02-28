@@ -1,4 +1,5 @@
 ﻿const jwt = require('jsonwebtoken');
+const PythonShell = require('python-shell');
 const config = require('../config.json');
 const Models = require('../Utils/Schema');
 // #### >>>  Init Mongodb
@@ -26,6 +27,7 @@ module.exports = {
   getLog,
   getCitiesInfo,
   sendEmails,
+  sendSMS,
 };
 
 async function forArray(arr) {
@@ -57,6 +59,7 @@ async function forArray(arr) {
 }
 
 async function getCitiesInfo() {
+<<<<<<< HEAD
   return new Promise((resolve, reject) => {
     const cities = City.find({}).exec();
     cities.then(cities => {
@@ -65,6 +68,39 @@ async function getCitiesInfo() {
       forArray(cities)
         .then(res => resolve(res))
         .catch(err => reject(err));
+=======
+  let cities;
+  await City.find({}, (err, ret) => {
+    if (!err) cities = ret;
+  });
+  //console.log('in cities', cities);
+  if (!cities || !Array.isArray(cities)) return false;
+  const result = [];
+  for (let i = 0; i < cities.length; i++) {
+    let dnslogs;
+    let weblogs;
+    let reports;
+    const { _id: id, markerOffset, name, coordinates, ip, status } = cities[i];
+    await DnsLog.find({ city: id }, (err, ret) => {
+      if (!err) dnslogs = ret;
+    });
+    await WebLog.find({ city: id }, (err, ret) => {
+      if (!err) weblogs = ret;
+    });
+    await Report.find({ city: id }, (err, ret) => {
+      if (!err) reports = ret;
+    });
+    result.push({
+      dnslogs,
+      weblogs,
+      reports,
+      id,
+      markerOffset,
+      name,
+      coordinates,
+      ip,
+      status,
+>>>>>>> origin/ForHuan
     });
   });
 }
@@ -97,8 +133,37 @@ async function sendEmails(toEmails, subject, content, html) {
       }
     });
   });
+<<<<<<< HEAD
 }
+=======
+};
+// Send SMS by API
+// async function sendSMS(toSMS, content) {
+//   const Nexmo = require('nexmo');
+//   const nexmo = new Nexmo({
+//     apiKey: '916a1fdc',
+//     apiSecret: 'hpoFIzrIpW8jjRyQ'
+//   })
+>>>>>>> origin/ForHuan
 
+//   const from = 'Nexmo'
+//   const to = toSMS
+//   const text = content
+//   console.log("====>>>> xen co gui sms ko");
+//   nexmo.message.sendSms(from, to, text)
+//   return true;
+// }
+// Send SMS by Dcom
+async function sendSMS(toSMS, content) {
+  const exec =require('child_process').exec;
+ 
+  let res="python src/server/users/SendSMS.py ";
+  res=res+toSMS.toString() + " "+'"'+content+'"';
+  const { stdout, stderr } = await exec(
+     res
+  );
+  return true;
+}
 async function saveLog(obj) {
 
   return new Promise((resolve, reject) => {
@@ -147,7 +212,25 @@ async function dashboardData() {
 
 async function getUserInfo(obj) {
   const { _id, ...rest } = obj;
+<<<<<<< HEAD
   return User.findById(_id).exec();
+=======
+  let ret = 'err';
+  // console.log(obj);
+  console.log(' in get UserInfo');
+  console.log(_id);
+  await User.findById(_id, (err, users) => {
+    if (err) console.log('get db users error');
+    else {
+      console.log('get db users ok');
+      // console.log(users);
+      ret = users;
+    }
+  });
+  //console.log('wtf');
+  //console.log(ret);
+  return ret;
+>>>>>>> origin/ForHuan
 }
 
 async function getUsers() {
