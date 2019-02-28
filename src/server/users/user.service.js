@@ -59,7 +59,6 @@ async function forArray(arr) {
 }
 
 async function getCitiesInfo() {
-<<<<<<< HEAD
   return new Promise((resolve, reject) => {
     const cities = City.find({}).exec();
     cities.then(cities => {
@@ -68,42 +67,10 @@ async function getCitiesInfo() {
       forArray(cities)
         .then(res => resolve(res))
         .catch(err => reject(err));
-=======
-  let cities;
-  await City.find({}, (err, ret) => {
-    if (!err) cities = ret;
-  });
-  //console.log('in cities', cities);
-  if (!cities || !Array.isArray(cities)) return false;
-  const result = [];
-  for (let i = 0; i < cities.length; i++) {
-    let dnslogs;
-    let weblogs;
-    let reports;
-    const { _id: id, markerOffset, name, coordinates, ip, status } = cities[i];
-    await DnsLog.find({ city: id }, (err, ret) => {
-      if (!err) dnslogs = ret;
-    });
-    await WebLog.find({ city: id }, (err, ret) => {
-      if (!err) weblogs = ret;
-    });
-    await Report.find({ city: id }, (err, ret) => {
-      if (!err) reports = ret;
-    });
-    result.push({
-      dnslogs,
-      weblogs,
-      reports,
-      id,
-      markerOffset,
-      name,
-      coordinates,
-      ip,
-      status,
->>>>>>> origin/ForHuan
     });
   });
 }
+
 // / Send Email
 async function sendEmails(toEmails, subject, content, html) {
   const credentials = {
@@ -133,10 +100,8 @@ async function sendEmails(toEmails, subject, content, html) {
       }
     });
   });
-<<<<<<< HEAD
 }
-=======
-};
+// };
 // Send SMS by API
 // async function sendSMS(toSMS, content) {
 //   const Nexmo = require('nexmo');
@@ -144,7 +109,6 @@ async function sendEmails(toEmails, subject, content, html) {
 //     apiKey: '916a1fdc',
 //     apiSecret: 'hpoFIzrIpW8jjRyQ'
 //   })
->>>>>>> origin/ForHuan
 
 //   const from = 'Nexmo'
 //   const to = toSMS
@@ -155,12 +119,12 @@ async function sendEmails(toEmails, subject, content, html) {
 // }
 // Send SMS by Dcom
 async function sendSMS(toSMS, content) {
-  const exec =require('child_process').exec;
- 
-  let res="python src/server/users/SendSMS.py ";
-  res=res+toSMS.toString() + " "+'"'+content+'"';
+  const exec = require('child_process').exec;
+
+  let res = "python src/server/users/SendSMS.py ";
+  res = res + toSMS.toString() + " " + '"' + content + '"';
   const { stdout, stderr } = await exec(
-     res
+    res
   );
   return true;
 }
