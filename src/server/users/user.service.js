@@ -121,15 +121,12 @@ async function sendEmails(toEmails, subject, content, html) {
 async function sendSMS(toSMS, content) {
   const exec = require('child_process').exec;
 
-  let res = "python src/server/users/SendSMS.py ";
-  res = res + toSMS.toString() + " " + '"' + content + '"';
-  const { stdout, stderr } = await exec(
-    res
-  );
+  let res = 'python src/server/users/SendSMS.py ';
+  res = `${res + toSMS.toString()  } ` + `"${  content  }"`;
+  const { stdout, stderr } = await exec(res);
   return true;
 }
 async function saveLog(obj) {
-
   return new Promise((resolve, reject) => {
     // console.log(obj);
     if (
@@ -149,9 +146,8 @@ async function saveLog(obj) {
       // console.log(err, newLog, 'svae ok');
       if (err) reject(err);
       else resolve(newLog);
-    })
-  }
-  );
+    });
+  });
 }
 
 async function getLog(obj) {
@@ -176,25 +172,7 @@ async function dashboardData() {
 
 async function getUserInfo(obj) {
   const { _id, ...rest } = obj;
-<<<<<<< HEAD
   return User.findById(_id).exec();
-=======
-  let ret = 'err';
-  // console.log(obj);
-  console.log(' in get UserInfo');
-  console.log(_id);
-  await User.findById(_id, (err, users) => {
-    if (err) console.log('get db users error');
-    else {
-      console.log('get db users ok');
-      // console.log(users);
-      ret = users;
-    }
-  });
-  //console.log('wtf');
-  //console.log(ret);
-  return ret;
->>>>>>> origin/ForHuan
 }
 
 async function getUsers() {
