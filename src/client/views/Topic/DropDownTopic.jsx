@@ -31,6 +31,7 @@ class DropDownTopic extends Component {
 
   handleClick = (e, topic) => {
     this.props.saveInfo({ topic });
+    this.props.getDataRecentlyTable(topic);
   };
 
   render() {
@@ -128,6 +129,9 @@ export default connect(
   dispatch => ({
     saveInfo: newStatus => {
       dispatch(aimlActions.saveInfo(newStatus));
+    },
+    getDataRecentlyTable: newStatus => {
+      dispatch(aimlActions.getDataRecentlyTable(newStatus));
     },
   })
 )(withRouter(withStyles(sidebarStyle)(DropDownTopic)));
