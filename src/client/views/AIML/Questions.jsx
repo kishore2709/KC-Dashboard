@@ -32,6 +32,7 @@ const Dialog = Loadable({
 const styles = theme => ({
   btn: {
     border: '2px solid black',
+    borderRadius: '5px',
     backgroundColor: 'white',
     color: 'black',
     padding: '4px 10px',
@@ -379,14 +380,13 @@ class Questions extends React.Component {
 
           <Grid container direction="row" justify="center" alignItems="center">
             <Grid item>
-              <Button
-                variant="contained"
-                size="large"
-                color="primary"
+              <button
                 type="submit"
+                className={`${classes.btn} ${classes.info}`}
+                disabled={submitting}
               >
                 Lưu
-              </Button>
+              </button>
             </Grid>
           </Grid>
         </form>
