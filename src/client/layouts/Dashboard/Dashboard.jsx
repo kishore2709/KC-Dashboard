@@ -49,7 +49,13 @@ const Sidebar = Loadable.Map({
   },
 });
 
-
+const homeRoute = (
+  <Switch>
+    {dashboardRoutes.filter(val => val.path === '/home').map((prop, key) => {
+      return <Route path={prop.path} component={prop.component} key={prop.id} />;
+    })}
+  </Switch>
+)
 const switchRoutes = (
   <Switch>
     {dashboardRoutes.filter(val => ('subPaths' in val)).map(val => {
@@ -65,9 +71,9 @@ const switchRoutes = (
         return <Route path={prop.path} component={prop.component} key={prop.id} />;
       })
     )}
-
   </Switch>
 );
+
 
 class App extends React.Component {
   constructor(props) {
@@ -89,14 +95,14 @@ class App extends React.Component {
     }
   }
   componentDidMount() {
-    if (navigator.platform.indexOf("Win") > -1) {
-      const ps = new PerfectScrollbar(this.refs.mainPanel);
-    }
+    // if (navigator.platform.indexOf("Win") > -1) {
+    //   const ps = new PerfectScrollbar(this.refs.mainPanel);
+    // }
     window.addEventListener("resize", this.resizeFunction);
   }
   componentDidUpdate(e) {
     if (e.history.location.pathname !== e.location.pathname) {
-      this.refs.mainPanel.scrollTop = 0;
+      // this.refs.mainPanel.scrollTop = 0;
       if (this.state.mobileOpen) {
         this.setState({ mobileOpen: false });
       }
@@ -118,46 +124,58 @@ class App extends React.Component {
       }
     };
     const { classes, openDialogPwdForm, notifications, ...rest } = this.props;
-    const user = GetUserInfo();
-    // console.log('in dashboard')
-    // console.log(switchRoutes);
-    if (!user || (!('changePwd' in user))) throw new Error('cannot get User Info');
-    openDialogPwdForm(user.changePwd);
-    return (
-      <div className={classes.wrapper}>
-        <Notifications
-          notifications={notifications}
-          style={style}
-        />
-        <Sidebar
-          routes={dashboardRoutes}
-          logoText={"AIS Dashboard"}
-          logo={logo}
-          image={image}
-          handleDrawerToggle={this.handleDrawerToggle}
-          open={this.state.mobileOpen}
-          color="red"
-          {...rest}
-        />
-        <div className={classes.mainPanel} ref="mainPanel">
-          <ChangePasswordDialog />
-          {/* <Header
-            routes={dashboardRoutes}
-            handleDrawerToggle={this.handleDrawerToggle}
-            {...rest}
-          /> */}
-          {/* On the /maps route we want the map to be on full screen - this is not possible if the content and conatiner classes are present because they have some paddings which would make the map smaller */}
-          {this.getRoute() ? (
-            <div className={classes.content}>
-              <div className={classes.container}>{switchRoutes}</div>
+    // case path ===/home -> show home page
+    const HomeLayout = ({ component: Component, ...rest }) => {
+      return (
+        <Route {...rest} render={matchProps => (
+          <div className={classes.wrapper}>
+            <Component {...matchProps} />
+          </div>
+        )} />
+      )
+    }
+    const DashboardLayout = ({ component: Component, ...rest }) => {
+      return (
+        <Route {...rest} render={matchProps => (
+          <div className={classes.wrapper}>
+            <Notifications
+              notifications={notifications}
+              style={style}
+            />
+            <Sidebar
+              routes={dashboardRoutes}
+              logoText={"AIS Dashboard"}
+              logo={logo}
+              image={image}
+              handleDrawerToggle={this.handleDrawerToggle}
+              open={this.state.mobileOpen}
+              color="red"
+              {...rest}
+            />
+            <div className={classes.mainPanel} ref="mainPanel">
+              <div className={classes.content}>
+                <div className={classes.container}><Component {...matchProps} /></div>
+              </div>
             </div>
-          ) : (
-              <div className={classes.map}>{switchRoutes}</div>
-            )}
-          {/* {this.getRoute() ? <Footer /> : null} */}
-        </div>
-      </div>
-    );
+          </div>
+        )} />
+      )
+    }
+    return <Switch>
+      {
+        dashboardRoutes.filter(val => val.path ==='/home').map((prop, key) => (
+          <HomeLayout path='/home' component={prop.component} key={prop.id}  />
+        ))
+        .concat(
+          dashboardRoutes.filter(val => !(val.path === '/home')).map((prop, key) => { 
+            if (prop.redirect)
+            return <Redirect from={prop.path} to={prop.to} key={prop.id} />;
+            return (
+            <DashboardLayout path={prop.path} component={prop.component} key={prop.id}/>
+          )})
+        )
+      }
+    </Switch>
   }
 }
 

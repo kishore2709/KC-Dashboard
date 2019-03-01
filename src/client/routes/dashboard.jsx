@@ -11,6 +11,15 @@ import { Redirect } from 'react-router-dom';
 import { PostApi, ip } from '_helpers/Utils';
 import { aimlActions } from '_actions';
 import { store } from '_helpers';
+import SvgIcon from '@material-ui/core/SvgIcon';
+
+function HomeIcon(props) {
+  return (
+    <SvgIcon {...props}>
+      <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
+    </SvgIcon>
+  );
+}
 
 const UserProfile = Loadable({
   loader: () =>
@@ -21,6 +30,12 @@ const UserProfile = Loadable({
 const AIML = Loadable({
   loader: () =>
     import(/* webpackChunkName: "AIML", webpackPrefetch: true */ 'views/AIML/AIML.jsx'),
+  loading: TableLoader,
+});
+
+const Home = Loadable({
+  loader: () =>
+    import(/* webpackChunkName: "Home", webpackPrefetch: true */ 'views/Home/Home.jsx'),
   loading: TableLoader,
 });
 
@@ -61,11 +76,18 @@ const Topic = Loadable.Map({
 
 const dashboardRoutes = [
   {
+    id: 'home',
+    path: '/home',
+    sidebarName: 'Home',
+    icon: HomeIcon,
+    component: Home,
+  },
+  {
     id: 'dashboard',
     path: '/dashboard',
     sidebarName: 'Dashboard',
-    icon: Dashboard,
-    // component: AIML,
+    icon: HomeIcon,
+    // component: ,
   },
   {
     id: 'chatbot',
@@ -126,7 +148,7 @@ const dashboardRoutes = [
     id: 'redirect',
     redirect: true,
     path: '/',
-    to: '/aiml',
+    to: '/home',
     navbarName: 'Redirect',
   },
 ];

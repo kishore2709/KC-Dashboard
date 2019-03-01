@@ -9,6 +9,8 @@ const appStyle = theme => ({
     position: 'relative',
     top: '0',
     height: '100vh',
+    fontFamily: 'Roboto',
+    fontSize: '14px',
   },
   mainPanel: {
     [theme.breakpoints.up('md')]: {

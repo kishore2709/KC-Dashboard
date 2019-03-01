@@ -54,7 +54,7 @@ class Sidebar extends Component {
           const whiteFontClasses = classNames({
             [` ${classes.whiteFont}`]: this.activeRoute(prop.path),
           });
-          if (prop.path !== '/dashboard')
+          if (prop.path !== '/dashboard' && prop.path !== '/home')
             if ('subPaths' in prop) {
               if (prop.path === '/chatbot') return <DropDownChatbot {...prop} color key={key} />;
               if (prop.path === '/topic') return <DropDownTopic {...prop} color key={key} />;
