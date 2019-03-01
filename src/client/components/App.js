@@ -16,7 +16,7 @@ import indexRoutes from 'routes/index.jsx';
 // import PermanentDrawerLeft from './AdminManagement/ManageUser';
 // import Setting from './SettingManagement/Setting';
 import ErrorBoundary from 'components/ErrorBoundaries/ErrorBoundaries.jsx';
-
+import withStyles from "@material-ui/core/styles/withStyles";
 import { history } from '../_helpers';
 import { alertActions } from '../_actions';
 import { PrivateRoute } from './PrivateRoute';
@@ -24,6 +24,15 @@ import { LoginPage } from './LoginPage';
 // import { RegisterPage } from './RegisterPage';
 // import connectedDrawers from './SettingManagement/Drawers';
 // noti
+import dashboardStyle from "assets/jss/material-dashboard-react/layouts/dashboardStyle.jsx";
+
+import Loadable from 'react-loadable';
+import TableLoader from 'components/ContentLoader/TableLoader.jsx';
+const Home = Loadable({
+  loader: () =>
+    import(/* webpackChunkName: "Home", webpackPrefetch: true */ 'views/Home/Home.jsx'),
+  loading: TableLoader,
+});
 
 class App extends React.Component {
   constructor(props) {
@@ -36,6 +45,16 @@ class App extends React.Component {
   }
 
   render() {
+    const { classes } = this.props;
+    const HomeLayout = ({ component: Component, ...rest }) => {
+      return (
+        <Route {...rest} render={matchProps => (
+          <div className={classes.wrapper}>
+            <Component {...matchProps} />
+          </div>
+        )} />
+      )
+    }
     return (
       <div>
         <ErrorBoundary>
@@ -44,6 +63,7 @@ class App extends React.Component {
               <Router history={history}>
                 <Switch>
                   <Route path="/login" component={LoginPage} />
+                  <HomeLayout exact path='/' component={Home} />
                   {indexRoutes.map((prop, key) => (
                     <PrivateRoute
                       path={prop.path}
@@ -72,5 +92,5 @@ function mapStateToProps(state) {
   };
 }
 
-const connectedApp = connect(mapStateToProps)(App);
+const connectedApp = withStyles(dashboardStyle)(connect(mapStateToProps)(App));
 export { connectedApp as App };

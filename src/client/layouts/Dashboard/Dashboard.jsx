@@ -3,13 +3,13 @@ import React from "react";
 import PropTypes from "prop-types";
 import { Switch, Route, Redirect } from "react-router-dom";
 // creates a beautiful scrollbar
-import PerfectScrollbar from "perfect-scrollbar";
+// import PerfectScrollbar from "perfect-scrollbar";
 import "perfect-scrollbar/css/perfect-scrollbar.css";
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
 // core components
-import Header from "components/Header/Header.jsx";
-import Footer from "components/Footer/Footer.jsx";
+// import Header from "components/Header/Header.jsx";
+// import Footer from "components/Footer/Footer.jsx";
 // import Sidebar from "components/Sidebar/Sidebar.jsx";
 // import UserPermission from 'views/UserPermission/UserPermission.jsx';
 import { connect } from 'react-redux';
@@ -22,8 +22,9 @@ import dashboardStyle from "assets/jss/material-dashboard-react/layouts/dashboar
 
 import image from "assets/img/sidebar-3.jpg";
 import logo from "assets/img/ais_logo.png";
-import ChangePasswordDialog from "components/Dialogs/ChangePasswordDialog.jsx";
-import { GetUserInfo } from "_helpers/Utils/";
+// import ChangePasswordDialog from "components/Dialogs/ChangePasswordDialog.jsx";
+// import { GetUserInfo } from "_helpers/Utils/";
+import { PrivateRoute } from '../../components/PrivateRoute';
 
 // loader
 import Loadable from 'react-loadable';
@@ -163,17 +164,13 @@ class App extends React.Component {
     }
     return <Switch>
       {
-        dashboardRoutes.filter(val => val.path ==='/home').map((prop, key) => (
-          <HomeLayout path='/home' component={prop.component} key={prop.id}  />
-        ))
-        .concat(
-          dashboardRoutes.filter(val => !(val.path === '/home')).map((prop, key) => { 
-            if (prop.redirect)
+        dashboardRoutes.filter(val => !(val.path === '/home')).map((prop, key) => {
+          if (prop.redirect)
             return <Redirect from={prop.path} to={prop.to} key={prop.id} />;
-            return (
-            <DashboardLayout path={prop.path} component={prop.component} key={prop.id}/>
-          )})
-        )
+          return (
+            <DashboardLayout path={prop.path} component={prop.component} key={prop.id} />
+          )
+        })
       }
     </Switch>
   }

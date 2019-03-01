@@ -101,7 +101,7 @@ const styles = theme => ({
     width: '80vh',
   },
   flexBox: {
-    height:'100%',
+    height: '100%',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
@@ -244,7 +244,7 @@ class Home extends React.Component {
                   Các dịch vụ
                 </Typography>
               </NavLink>
-              <NavLink to="#" className={classes.navButton}>
+              <NavLink to="/login" className={classes.navButton}>
                 <Typography variant="subtitle1" color="inherit" noWrap>
                   Đăng nhập
                 </Typography>
