@@ -16,11 +16,14 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import MailIcon from '@material-ui/icons/Mail';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
+import Grid from '@material-ui/core/Grid';
 import { hot } from 'react-hot-loader';
 import { NavLink } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import Avatar from '@material-ui/core/Avatar';
 import AISLogo from 'assets/img/ais_logo.png';
+import BackgroundImg from 'assets/img/background_img.png';
+
 const styles = theme => ({
   navlink: {
     color: 'inherit',
@@ -85,6 +88,28 @@ const styles = theme => ({
     [theme.breakpoints.up('md')]: {
       display: 'none',
     },
+  },
+  content: {
+    background: '#7C4DFF',
+    width: '100%',
+    height: 'calc(100vh - 60px)', // header:60, footer: 150px,
+    minHeight: '350px',
+    color: 'white',
+  },
+  bgImg: {
+    height: '80vh',
+    width: '80vh',
+  },
+  flexBox: {
+    height:'100%',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  flexContent: {
+    margin: '15px 2px',
+    padding: '15px 15px',
   },
 });
 
@@ -153,6 +178,38 @@ class Home extends React.Component {
       </Menu>
     );
 
+    const Content = (
+      <Grid container style={{ height: '100%' }}>
+        <Grid item xs={12} md={7}>
+          <div className={classes.flexBox}>
+            <Typography
+              className={classes.flexContent}
+              variant="h2"
+              align="center"
+              color="inherit"
+            >
+              Chatbot for <span style={{ fontWeight: 'bold' }}>Marketing</span>
+            </Typography>
+            <Typography
+              className={classes.flexContent}
+              variant="h6"
+              align="center"
+              color="inherit"
+            >
+              Build intelligent conversational agents on the leading platform
+            </Typography>
+          </div>
+        </Grid>
+        <Grid item xs={12} md={5} className={classes.flexBox}>
+          <img
+            className={classes.flexContent}
+            alt="background image"
+            src={BackgroundImg}
+            className={classes.bgImg}
+          />
+        </Grid>
+      </Grid>
+    );
     return (
       <div className={classes.root}>
         <AppBar
@@ -188,7 +245,7 @@ class Home extends React.Component {
                 </Typography>
               </NavLink>
               <NavLink to="#" className={classes.navButton}>
-              <Typography variant="subtitle1" color="inherit" noWrap >
+                <Typography variant="subtitle1" color="inherit" noWrap>
                   Đăng nhập
                 </Typography>
               </NavLink>
@@ -205,6 +262,7 @@ class Home extends React.Component {
           </Toolbar>
         </AppBar>
         {renderMobileMenu}
+        <div className={classes.content}>{Content}</div>
       </div>
     );
   }
