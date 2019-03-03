@@ -4,6 +4,7 @@ import Dashboard from '@material-ui/icons/Dashboard';
 import Person from '@material-ui/icons/Person';
 import PowerIcon from '@material-ui/icons/PowerOff';
 import AddCircleOutline from '@material-ui/icons/AddCircleOutline';
+import AssignmentIcon from '@material-ui/icons/Assignment';
 // Loadable
 import Loadable from 'react-loadable';
 import TableLoader from 'components/ContentLoader/TableLoader.jsx';
@@ -33,11 +34,30 @@ const AIML = Loadable({
   loading: TableLoader,
 });
 
-// const Home = Loadable({
-//   loader: () =>
-//     import(/* webpackChunkName: "Home", webpackPrefetch: true */ 'views/Home/Home.jsx'),
-//   loading: TableLoader,
-// });
+const ChatbotManagement = Loadable({
+  loader: () =>
+    import(/* webpackChunkName: "ChatbotManagement", webpackPrefetch: true */ 'views/ChatbotManagement/ChatbotManagement.jsx'),
+  loading: TableLoader,
+});
+
+//chat bot create//////////////////////
+const CustomQuestion = Loadable({
+  loader: () =>
+    import(/* webpackChunkName: "CustomQuestion", webpackPrefetch: true */ 'views/CreateChatbot/CustomQuestion.jsx'),
+  loading: TableLoader,
+});
+
+const BasicInfo = Loadable({
+  loader: () =>
+    import(/* webpackChunkName: "BasicInfo", webpackPrefetch: true */ 'views/CreateChatbot/BasicInfo.jsx'),
+  loading: TableLoader,
+});
+
+const DefaultQuestion = Loadable({
+  loader: () =>
+    import(/* webpackChunkName: "DefaultQuestion", webpackPrefetch: true */ 'views/CreateChatbot/DefaultQuestion.jsx'),
+  loading: TableLoader,
+});
 
 const ChatBot = Loadable.Map({
   loader: {
@@ -90,36 +110,37 @@ const dashboardRoutes = [
   //   component: <div>Hello</div>,
   // },
   {
-    id: 'chatbot',
-    path: '/chatbot',
-    sidebarName: 'Chọn Chatbot',
-    icon: Dashboard,
-    component: ChatBot,
-    subPaths: [
-      { id: 'user', path: '/user', sidebarName: 'Nhập liệu', icon: Dashboard },
-      {
-        id: 'user',
-        path: '/user',
-        sidebarName: 'Nhập liệu',
-        icon: Dashboard,
-      },
-    ],
+    id: 'chatbotManagement',
+    path: '/chatbotManagement',
+    sidebarName: 'Quản lý Chatbot',
+    icon: AssignmentIcon,
+    component: ChatbotManagement,
   },
   {
-    id: 'topic',
-    path: '/topic',
-    sidebarName: 'Chọn Topic',
-    icon: Dashboard,
-    component: Topic,
+    id: 'createChatbot',
+    path: '/createChatbot',
+    sidebarName: 'Tạo Chatbot',
+    icon: AssignmentIcon,
     subPaths: [
-      { id: 'user', path: '/user', sidebarName: 'Nhập liệu', icon: Dashboard },
       {
-        id: 'user',
-        path: '/user',
-        sidebarName: 'Nhập liệu',
-        icon: Dashboard,
+        id: 'basicInfo',
+        path: '/basicInfo',
+        sidebarName: 'Thông tin cơ bản',
+        component: BasicInfo,
       },
-    ],
+      {
+        id: 'defaultQuestion',
+        path: '/defaultQuestion',
+        sidebarName: 'Nhập câu hỏi mặc định',
+        component: DefaultQuestion,
+      },
+      {
+        id: 'customQuestion',
+        path: '/customQuestion',
+        sidebarName: 'Nhập dữ liệu cá nhân',
+        component: CustomQuestion,
+      },
+    ]
   },
   {
     id: 'aiml',

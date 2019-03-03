@@ -164,6 +164,12 @@ class App extends React.Component {
     }
     return <Switch>
       {
+        dashboardRoutes.filter(val => ('subPaths' in val)).map((prop, key) => {
+          return prop.subPaths.map((propSecond, keySecond) => (
+            <DashboardLayout path={propSecond.path} component={propSecond.component} key={propSecond.id} />
+          ))
+        })
+        .concat(
         dashboardRoutes.filter(val => !(val.path === '/home')).map((prop, key) => {
           if (prop.redirect)
             return <Redirect from={prop.path} to={prop.to} key={prop.id} />;
@@ -171,6 +177,7 @@ class App extends React.Component {
             <DashboardLayout path={prop.path} component={prop.component} key={prop.id} />
           )
         })
+        )
       }
     </Switch>
   }
