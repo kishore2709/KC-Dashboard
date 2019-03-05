@@ -109,12 +109,14 @@ async function sendEmails(toEmails, subject, content, html) {
 //     apiKey: '916a1fdc',
 //     apiSecret: 'hpoFIzrIpW8jjRyQ'
 //   })
-
+// const opts = {
+//   "type": "unicode"
+// }
 //   const from = 'Nexmo'
 //   const to = toSMS
 //   const text = content
 //   console.log("====>>>> xen co gui sms ko");
-//   nexmo.message.sendSms(from, to, text)
+//   nexmo.message.sendSms(from, to, text,opts)
 //   return true;
 // }
 // Send SMS by Dcom

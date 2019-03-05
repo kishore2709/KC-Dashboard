@@ -52,11 +52,11 @@ class App extends React.Component {
       dispatch(mailActions.fixMail(arr));
     }, 5000);
 
-
     //  PostApi('/api/users/sendSMS',{
-    //   toSMS: '84812305814',
+    //   // toSMS: '84347116109',
     //   // content:'Mã độc Bashlite đang tấn công vào hệ thống của bạn',
-    //   content:'Ma doc Bashlite dang tan cong vao he thong cua ban',
+    //   toSMS: '0888018123',
+    //   content:"(Demo KC SMS) Ma doc Bashlite dang tan cong vao he thong cua ban",
     // })
   
 

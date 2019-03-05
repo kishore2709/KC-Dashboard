@@ -1,6 +1,6 @@
 import serial
 import sys
-def send_text(number, text, path='COM10'):
+def send_text(number, text, path='COM5'):
     ser = serial.Serial(path, 9600,timeout=1)
     if not ser.isOpen():
         ser.open()
@@ -12,6 +12,4 @@ def send_text(number, text, path='COM10'):
     ser.write(("%s\x1a" % text).encode())
     print (ser.readlines())
     ser.close()
-print (sys.argv[1])
-print (sys.argv[2])
 send_text(sys.argv[1], sys.argv[2])
