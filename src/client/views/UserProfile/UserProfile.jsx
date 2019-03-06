@@ -136,9 +136,7 @@ class UserProfile extends React.Component {
               <h6 className={classes.cardCategory}>{fullname}</h6>
               <h4 className={classes.cardTitle}>{username}</h4>
               <p className={classes.description}>
-                Don't be scared of the truth because we need to restart the
-                human foundation in truth And I love you like Kanye loves Kanye
-                I love Rick Owens’ bed design but the back is...
+                
               </p>
               <Button color="primary" round>
                 Theo dõi

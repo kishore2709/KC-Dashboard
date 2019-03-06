@@ -4,6 +4,7 @@ import React from 'react';
 import Dashboard from '@material-ui/icons/Dashboard';
 import Person from '@material-ui/icons/Person';
 import MailOutline from '@material-ui/icons/MailOutline';
+import ExitToApp from '@material-ui/icons/ExitToApp';
 
 
 // import ContentPaste from "@material-ui/icons/ContentPaste";
@@ -89,6 +90,11 @@ const DetailsMail = Loadable({
   loading: TableLoader,
 });
 
+// import ExportData from 'views/ExportData/ExportData.jsx';
+const ExportData = Loadable({
+  loader: () => import(/* webpackPrefetch: true */ '../views/ExportData/ExportData.jsx'),
+  loading: TableLoader,
+});
 const dashboardRoutes = [
   {
     id: 'dashboard',
@@ -139,6 +145,14 @@ const dashboardRoutes = [
     navbarName: 'Giao diện hộp thư đến',
     icon: MailOutline,
     component: MailBox,
+  },
+  {
+    id: 'exportData',
+    path: '/exportData',
+    sidebarName: 'Xuất dữ liệu',
+    navbarName: 'Giao diện xuất dữ liệu',
+    icon: ExitToApp,
+    component: ExportData,
   },
   {
     id: 'logManager',

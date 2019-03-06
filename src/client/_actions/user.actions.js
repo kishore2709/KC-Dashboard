@@ -10,42 +10,42 @@ function login(username, password) {
     return { type: userConstants.LOGIN_REQUEST, user };
   }
   function success(user) {
-    // PostApi('/api/users/saveLog', {
-    //   status: true,
-    //   isLogin: true,
-    //   username: user,
-    //   timestamp: moment().format('MMMM Do YYYY, h:mm:ss a'),
-    // })
-    //   .then(ret => {
-    //     if (!ret || !('message' in ret)) console.log('Error in send log to sv');
-    //     else {
-    //       console.log(ret);
-    //       console.log('send log to sv ok!');
-    //     }
-    //   })
-    //   .catch(err => {
-    //     console.log(err, 'send log err');
-    //   });
+    PostApi('/api/users/saveLog', {
+      status: true,
+      isLogin: true,
+      username: user,
+      timestamp: moment().format('MMMM Do YYYY, h:mm:ss a'),
+    })
+      .then(ret => {
+        if (!ret || !('message' in ret)) console.log('Error in send log to sv');
+        else {
+          console.log(ret);
+          console.log('send log to sv ok!');
+        }
+      })
+      .catch(err => {
+        console.log(err, 'send log err');
+      });
     return { type: userConstants.LOGIN_SUCCESS, user };
   }
   function failure(error, user) {
-    // PostApi('/api/users/saveLog', {
-    //   status: false,
-    //   isLogin: true,
-    //   username: user,
-    //   timestamp: moment().format('MMMM Do YYYY, h:mm:ss a'),
-    // })
-    //   .then(ret => {
-    //     console.log(ret);
-    //     if (!ret || !('message' in ret)) console.log('Error in send log to sv');
-    //     else {
-    //       console.log(ret);
-    //       console.log('send log to sv ok!');
-    //     }
-    //   })
-    //   .catch(err => {
-    //     console.log(err, 'send log err');
-    //   });
+    PostApi('/api/users/saveLog', {
+      status: false,
+      isLogin: true,
+      username: user,
+      timestamp: moment().format('MMMM Do YYYY, h:mm:ss a'),
+    })
+      .then(ret => {
+        console.log(ret);
+        if (!ret || !('message' in ret)) console.log('Error in send log to sv');
+        else {
+          console.log(ret);
+          console.log('send log to sv ok!');
+        }
+      })
+      .catch(err => {
+        console.log(err, 'send log err');
+      });
     return { type: userConstants.LOGIN_FAILURE, error };
   }
   return dispatch => {
@@ -69,22 +69,22 @@ function logout() {
   // console.log('in logout action');
   // console.log(user);
   if (!(!user || !('username' in user)))
-    // PostApi('/api/users/saveLog', {
-    //   status: true,
-    //   isLogin: false,
-    //   username: user.username,
-    //   timestamp: moment().format('MMMM Do YYYY, h:mm:ss a'),
-    // })
-    //   .then(ret => {
-    //     if (!ret || !('message' in ret)) console.log('Error in send log to sv');
-    //     else {
-    //       // console.log(ret);
-    //       // console.log('send log to sv ok!');
-    //     }
-    //   })
-    //   .catch(err => {
-    //     console.log(err, 'send log err');
-    //   });
+    PostApi('/api/users/saveLog', {
+      status: true,
+      isLogin: false,
+      username: user.username,
+      timestamp: moment().format('MMMM Do YYYY, h:mm:ss a'),
+    })
+      .then(ret => {
+        if (!ret || !('message' in ret)) console.log('Error in send log to sv');
+        else {
+          // console.log(ret);
+          // console.log('send log to sv ok!');
+        }
+      })
+      .catch(err => {
+        console.log(err, 'send log err');
+      });
   userService.logout();
   return { type: userConstants.LOGOUT };
 }

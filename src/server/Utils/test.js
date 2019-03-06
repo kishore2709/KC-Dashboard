@@ -1,16 +1,21 @@
-const mongoose = require('mongoose');
-// const bcrypt = require('bcrypt');
-const ip = require('../Utils/ListIpAddress');
+Promise.resolve('f')
+    // 1. Receive "foo", concatenate "bar" to it, and resolve that to the next then
+    .then(function (string) {
+        return new Promise(function (resolve, reject) {
+            setTimeout(function () {
+                string += 'bar';
+                resolve(string);
+            }, 6300);
+        });
+    })
+    // 2. receive "foobar", register a callback function to work on that string
+    // and print it to the console, but not before returning the unworked on
+    // string to the next then
+    .then(function (string) {
+        console.log(string);
+    })
 
-mongoose.connect(ip.db);
-const db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
-
-const saltRounds = 10;
-const myPlaintextPassword = '1';
-const Schemas = require('../Utils/Schema');
-const UserSchema = Schemas.UserSchema;
-const User = mongoose.model('User', UserSchema);
-User.find({}, (err, docs) => {
-    console.log(err, docs);
-})
+// logs, in order:
+// Last Then: oops... didn't bother to instantiate and return a promise in the prior then so the sequence may be a bit surprising
+// foobar
+// foobarbaz

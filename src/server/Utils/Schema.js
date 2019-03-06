@@ -52,6 +52,10 @@ const UserSchema = new mongoose.Schema({
         canAccess: true,
         subArr: [true, true, true],
       },
+      exportData: {
+        canAccess: true,
+        subArr: [true, true, true],
+      },
       dashboard: {
         canAccess: true,
         subArr: [true, true, true],
@@ -89,6 +93,10 @@ const GroupSchema = new mongoose.Schema({
         canAccess: true,
         subArr: [true, true, true],
       },
+      exportData: {
+        canAccess: true,
+        subArr: [true, true, true],
+      },
       dashboard: {
         canAccess: true,
         subArr: [true, true, true],
@@ -116,11 +124,21 @@ const GroupSchema = new mongoose.Schema({
     },
   },
 });
+
+const LogSchema = new mongoose.Schema({
+  timestamp: String,
+  isLogin: Boolean,
+  username: String,
+  status: Boolean,
+  ip: String,
+});
+
 const User = mongoose.model('UserAccount', UserSchema);
 const Group = mongoose.model('Group', GroupSchema);
 const City = mongoose.model('City', CitySchema);
 const Report = mongoose.model('Report', ReportSchema);
 const DnsLog = mongoose.model('DnsLog', dnsLogSchema);
 const WebLog = mongoose.model('WebLog', webLogSchema);
+const Log = mongoose.model('LogInOut', LogSchema);
 
-module.exports = { User, Group, City, DnsLog, WebLog, Report };
+module.exports = { User, Group, City, DnsLog, WebLog, Report, Log };

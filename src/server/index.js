@@ -114,7 +114,7 @@ app.use((req, res, next) => {
           console.log('in recheck passwd has ret', ret);
           res.status(404).send();
         } else {
-          console.log(ret);
+          // console.log(ret);
           console.log('ok in recheck');
           next();
         }

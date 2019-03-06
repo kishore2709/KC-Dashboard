@@ -178,8 +178,9 @@ let MaterialUiForm = props => {
                 onClick={handleSubmit(data => {
                   props.onResetPassword(data);
                 })}
+                disabled={props.dialog.new ? true : false}
               >
-                Reset Password
+                Khôi phục mật khẩu
               </button>
             </Grid>
           </Grid>
@@ -197,7 +198,7 @@ let MaterialUiForm = props => {
                 type="submit"
                 disabled={pristine || submitting}
               >
-                {props.dialog.new ? 'Add' : 'Submit'}
+                {props.dialog.new ? 'Thêm' : 'Lưu'}
               </button>
             </Grid>
             <Grid item>
@@ -208,7 +209,7 @@ let MaterialUiForm = props => {
                   props.onCancel();
                 }}
               >
-                Cancel
+                Huỷ
               </button>
             </Grid>
           </Grid>
