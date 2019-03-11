@@ -8,7 +8,7 @@
     "build": "npm run pack",
     "server": "nodemon src/server/index.js",
     "client": "webpack-dev-server -d --mode development",
-    "start": "npm run build && node src/server/index.js",
+    "start": "npm run build && node --max-old-space-size=4096 src/server/index.js",
     "dev": "npx concurrently \"npm run server\" \"npm run client\"",
     "eslint": "eslint --fix --ext .js,.vue src/client"
   },
@@ -39,6 +39,7 @@
     "chartist": "0.10.1",
     "chartjs-plugin-zoom": "^0.6.6",
     "classnames": "2.2.6",
+    "co": "^4.6.0",
     "cors": "^2.8.4",
     "date-fns": "^2.0.0-alpha.25",
     "express": "^4.16.3",

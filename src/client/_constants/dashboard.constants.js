@@ -1,4 +1,6 @@
 export const dashboardConstants = {
   SET: 'DASHBOARD_SET_DATA',
   CHANGE_CITY: 'DASHBOARD_CHANGE_CITY',
+  FETCH_DATA: 'FETCH_DATA',
+  FETCH_DATA_DONE: 'FETCH_DATA_DONE',
 };

@@ -1,6 +1,7 @@
 ﻿const jwt = require('jsonwebtoken');
 const config = require('../config.json');
 const Models = require('../Utils/Schema');
+const co = require('co');
 // #### >>>  Init Mongodb
 const { User, Log, Group, City, DnsLog, WebLog, Report } = Models;
 const dashboardService = require('../services/dashboard.js');
@@ -29,19 +30,53 @@ module.exports = {
   sendSMS,
 };
 
-async function forArray(arr) {
+async function forArray(arr, start, end) {
+  const _reduce = (data, maxCount) => {
+    if (data.length <= maxCount) return data;
+    const blockSize = data.length / maxCount;
+    const reduced = [];
+    for (let i = 0; i < data.length;) {
+      const chunk = data.slice(i, (i += blockSize) + 1);
+      reduced.push(_average(chunk));
+    }
+    return reduced;
+  };
+  const _average = chunk => {
+    let timestamp = 0;
+    let count = 0;
+    let city = '';
+    for (let i = 0; i < chunk.length; i++) {
+      timestamp += chunk[i].timestamp.getTime();
+      count += chunk[i].count;
+      city = chunk[i].city;
+    }
+    return {
+      timestamp: new Date(Math.round(timestamp / chunk.length)),
+      count: Math.round(count / chunk.length),
+      city: city,
+    };
+  };
   const promises = arr.map(
     async city =>
       new Promise((resolve, reject) => {
         const { _id: id, markerOffset, name, coordinates, ip, status } = city;
-        const dnslogs = DnsLog.find({ city: id }).exec();
-        const weblogs = WebLog.find({ city: id }).exec();
-        const reports = Report.find({ city: id }).exec();
+        let dnsQuery = DnsLog.find({ city: id })
+        let webQuery = WebLog.find({ city: id })
+        let reportsQuery = Report.find({ city: id })
+        if (start && end) {
+          dnsQuery = dnsQuery.where('timestamp').gte(start).lte(end)
+          webQuery = webQuery.where('timestamp').gte(start).lte(end)
+        }
+        const dnslogs = dnsQuery.exec();
+        const weblogs = webQuery.exec();
+        const reports = reportsQuery.exec();
         Promise.all([dnslogs, weblogs, reports])
           .then(values => {
+            const dnsarr = _reduce(values[0], 200);
+            const webarr = _reduce(values[1], 200);
             resolve({
-              dnslogs: values[0],
-              weblogs: values[1],
+              dnslogs: dnsarr,
+              weblogs: webarr,
               reports: values[2],
               id,
               markerOffset,
@@ -52,18 +87,18 @@ async function forArray(arr) {
             });
           })
           .catch(err => reject(err));
-      })
+      }) 
   );
-  return Promise.all(promises);
+  return Promise.all(promises); 
 }
 
-async function getCitiesInfo() {
+async function getCitiesInfo(start, end) {
   return new Promise((resolve, reject) => {
     const cities = City.find({}).exec();
     cities.then(cities => {
       // console.log('in cities', cities);
       if (!cities || !Array.isArray(cities)) return reject(false);
-      forArray(cities)
+      forArray(cities, start, end)
         .then(res => resolve(res))
         .catch(err => reject(err));
     });

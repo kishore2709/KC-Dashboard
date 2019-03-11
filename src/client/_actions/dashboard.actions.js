@@ -5,16 +5,27 @@ function set(message) {
   return { type: dashboardConstants.SET, message };
 }
 
-function get() {
+function get(status) {
   return dispatch => {
-    PostApi('/api/users/getCitiesInfo', {})
+    dispatch({
+      type: dashboardConstants.FETCH_DATA,
+    });
+    PostApi(`/api/users/getCitiesInfo${status && status.startDate && status.endDate 
+      ? '?start=' + status.startDate.getTime() + '&end=' + status.endDate.getTime()
+      : ''}`, {})
       .then(ret => {
         console.log('in get cities', ret);
         if (!ret || !('message' in ret)) throw new Error(ret);
         dispatch(set(ret.message));
+        dispatch({
+          type: dashboardConstants.FETCH_DATA_DONE,
+        });
       })
       .catch(err => {
         console.log(err);
+        dispatch({
+          type: dashboardConstants.FETCH_DATA_DONE,
+        });
       });
   };
 }

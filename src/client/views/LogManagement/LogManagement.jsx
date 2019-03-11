@@ -36,23 +36,32 @@ const LogTable = Loadable({
 });
 
 class Discover extends Component {
+
   constructor(props) {
     super(props);
   }
 
-  componentWillMount() {
+  componentDidMount() {
     const { getDashboardData } = this.props;
     getDashboardData();
+  }
+
+  handleDateRangeChange = (startDate, endDate) => {
+    const { getDashboardData } = this.props;
+    getDashboardData({startDate, endDate});
   }
 
   render() {
     const { dashboard } = this.props;
     const { data, targetCity } = dashboard;
+    console.log(dashboard);
     let chartData = [];
+    let startDate = new Date();
+    let endDate = new Date();
     if (data.length) {
       chartData = [
         {
-          label: 'Dns Logs',
+          label: 'DNS Logs',
           data: data[targetCity].dnslogs.map(({ timestamp, count }) => ({
             x: new Date(timestamp),
             y: count,
@@ -66,6 +75,18 @@ class Discover extends Component {
           })).sort((a, b) => (a.x - b.x)),
         },
       ];
+      chartData[0].data = chartData[0].data.length > 0 
+                          ? chartData[0].data
+                          : [{x: new Date()}]
+      chartData[1].data = chartData[1].data.length > 0 
+                          ? chartData[1].data
+                          : [{x: new Date()}]
+      startDate = chartData[0].data[0].x < chartData[1].data[0].x 
+                    ? chartData[0].data[0].x 
+                    : chartData[1].data[0].x
+      endDate = chartData[0].data[chartData[0].data.length - 1].x > chartData[1].data[chartData[1].data.length - 1].x 
+                    ? chartData[0].data[chartData[0].data.length - 1].x 
+                    : chartData[1].data[chartData[1].data.length - 1].x
     }
     return (
       <Grid
@@ -82,7 +103,15 @@ class Discover extends Component {
         */}
         
         <Grid item xs={12}>
-          <LineChart data={chartData} height='200px' />
+          <LineChart 
+            data={chartData} 
+            height='200px' 
+            fireUpDateRangeChange={this.handleDateRangeChange}
+            allDataLabel={['DNS Logs', 'Web Logs']}
+            startDate={startDate}
+            endDate={endDate}
+            loading={dashboard.loading}
+          />
         </Grid>
         <Grid item xs={12}>
           <DNSTable />

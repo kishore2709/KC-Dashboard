@@ -237,10 +237,8 @@ class Dashboard extends React.Component {
             </GridContainer>
           </div>
         </GridItem>
-        <GridItem xs={12} className={classes.discover}>
-          <React.Fragment>
-            <Discover />
-          </React.Fragment>
+        <GridItem xs={12}>
+          <Discover />
         </GridItem>
       </GridContainer>
     );

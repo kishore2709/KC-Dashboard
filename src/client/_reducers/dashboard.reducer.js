@@ -4,6 +4,7 @@ export function dashboard(
   state = {
     targetCity: 0,
     data: [],
+    loading: false,
   },
   action
 ) {
@@ -18,7 +19,17 @@ export function dashboard(
         ...state,
         targetCity: action.message,
       };
-    default:
+    case dashboardConstants.FETCH_DATA:
+      return {
+        ...state,
+        loading: true,
+      }
+    case dashboardConstants.FETCH_DATA_DONE:
+      return {
+        ...state,
+        loading: false,
+      }
+    default: 
       return state;
   }
 }
