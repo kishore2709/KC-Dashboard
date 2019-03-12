@@ -68,9 +68,14 @@ const styles = theme => ({
   },
 });
 class Dashboard extends React.Component {
+  
   componentWillMount() {
+    this.handleDateRangeChange(new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), new Date());
+  }
+
+  handleDateRangeChange = (startDate, endDate) => {
     const { getDashboardData } = this.props;
-    getDashboardData();
+    getDashboardData({startDate, endDate});
   }
 
   render() {

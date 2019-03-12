@@ -41,12 +41,13 @@ class Discover extends Component {
     super(props);
   }
 
+  /*
   componentDidMount() {
-    this.handleDateRangeChange(new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), new Date());
+    this.handleDateRangeChange(new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), new Date());
   }
+  */
 
   handleDateRangeChange = (startDate, endDate) => {
-    console.log('xxxxxxxxx', startDate, endDate);
     const { getDashboardData } = this.props;
     getDashboardData({startDate, endDate});
   }
