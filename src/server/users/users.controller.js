@@ -83,7 +83,7 @@ function sendSMS(req, res, next) {
 }
 
 function getCitiesInfo(req, res, next) {
-  let {start, end} = req.query;
+  let { start, end } = req.query;
   if (start && end) {
     start = new Date(parseInt(start, 10));
     end = new Date(parseInt(end, 10));

@@ -10,7 +10,8 @@ function get(status) {
     dispatch({
       type: dashboardConstants.FETCH_DATA,
     });
-    PostApi(`/api/users/getCitiesInfo${status && status.startDate && status.endDate 
+    console.log(' in get ddashboard Actions', status);
+    PostApi(`/api/users/getCitiesInfo${status && status.startDate && status.endDate
       ? '?start=' + status.startDate.getTime() + '&end=' + status.endDate.getTime()
       : ''}`, {})
       .then(ret => {
