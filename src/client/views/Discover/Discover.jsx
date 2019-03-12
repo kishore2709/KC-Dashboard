@@ -25,11 +25,11 @@ class Discover extends Component {
   }
 
   componentDidMount() {
-    const { getDashboardData } = this.props;
-    getDashboardData();
+    this.handleDateRangeChange(new Date(Date.now - 24 * 60 * 60 * 1000), new Date());
   }
 
   handleDateRangeChange = (startDate, endDate) => {
+    console.log('xxxxxxxxx', startDate, endDate);
     const { getDashboardData } = this.props;
     getDashboardData({startDate, endDate});
   }
@@ -37,7 +37,6 @@ class Discover extends Component {
   render() {
     const { dashboard } = this.props;
     const { data, targetCity } = dashboard;
-    console.log(dashboard);
     let chartData = [];
     let startDate = new Date();
     let endDate = new Date();
@@ -58,18 +57,26 @@ class Discover extends Component {
           })).sort((a, b) => (a.x - b.x)),
         },
       ];
-      chartData[0].data = chartData[0].data.length > 0 
+      if (data[targetCity].startDate != null) {
+        startDate = new Date(parseInt(data[targetCity].startDate, 10))
+      } else {
+        chartData[0].data = chartData[0].data.length > 0 
                           ? chartData[0].data
                           : [{x: new Date()}]
-      chartData[1].data = chartData[1].data.length > 0 
+        startDate = chartData[0].data[0].x < chartData[1].data[0].x 
+                    ? chartData[0].data[0].x 
+                    : chartData[1].data[0].x  
+      }
+      if (data[targetCity].endDate != null) {
+        endDate = new Date(parseInt(data[targetCity].endDate, 10))
+      } else {
+        chartData[1].data = chartData[1].data.length > 0 
                           ? chartData[1].data
                           : [{x: new Date()}]
-      startDate = chartData[0].data[0].x < chartData[1].data[0].x 
-                    ? chartData[0].data[0].x 
-                    : chartData[1].data[0].x
-      endDate = chartData[0].data[chartData[0].data.length - 1].x > chartData[1].data[chartData[1].data.length - 1].x 
+        endDate = chartData[0].data[chartData[0].data.length - 1].x > chartData[1].data[chartData[1].data.length - 1].x 
                     ? chartData[0].data[chartData[0].data.length - 1].x 
-                    : chartData[1].data[chartData[1].data.length - 1].x
+                    : chartData[1].data[chartData[1].data.length - 1].x  
+      }
     }
     return (
       <Grid

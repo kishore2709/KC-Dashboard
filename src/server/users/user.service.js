@@ -31,52 +31,121 @@ module.exports = {
 };
 
 async function forArray(arr, start, end) {
-  const _reduce = (data, maxCount) => {
-    if (data.length <= maxCount) return data;
-    const blockSize = data.length / maxCount;
-    const reduced = [];
-    for (let i = 0; i < data.length;) {
-      const chunk = data.slice(i, (i += blockSize) + 1);
-      reduced.push(_average(chunk));
-    }
-    return reduced;
-  };
-  const _average = chunk => {
-    let timestamp = 0;
-    let count = 0;
-    let city = '';
-    for (let i = 0; i < chunk.length; i++) {
-      timestamp += chunk[i].timestamp.getTime();
-      count += chunk[i].count;
-      city = chunk[i].city;
-    }
-    return {
-      timestamp: new Date(Math.round(timestamp / chunk.length)),
-      count: Math.round(count / chunk.length),
-      city: city,
-    };
-  };
   const promises = arr.map(
     async city =>
       new Promise((resolve, reject) => {
         const { _id: id, markerOffset, name, coordinates, ip, status } = city;
-        let dnsQuery = DnsLog.find({ city: id })
-        let webQuery = WebLog.find({ city: id })
-        let reportsQuery = Report.find({ city: id })
+        let dnsArr = [];
+        let webArr = [];
+        let dnsLogs = DnsLog.find({ city: id })
+        let webLogs = WebLog.find({ city: id })
         if (start && end) {
-          dnsQuery = dnsQuery.where('timestamp').gte(start).lte(end)
-          webQuery = webQuery.where('timestamp').gte(start).lte(end)
+          dnsLogs = dnsLogs.where('timestamp').gte(start).lte(end)
+          webLogs = webLogs.where('timestamp').gte(start).lte(end)
         }
-        const dnslogs = dnsQuery.exec();
-        const weblogs = webQuery.exec();
+        dnsLogs = dnsLogs.countDocuments().exec().then(dnsCount => {
+          let dnsQuery = DnsLog.find({ city: id });
+          if (start && end) {
+            dnsQuery = dnsQuery.where('timestamp').gte(start).lte(end)
+          }
+          if (dnsCount <= 200) {
+            return dnsQuery.exec()
+          } else {
+            let timestamp = 0;
+            let count = 0;
+            let city = '';
+            let counter = 0;
+            let chunkSize = Math.round(dnsCount / 200);
+            const dnsCursor = dnsQuery.cursor();
+            return co(function*() {
+              for (let dns = yield dnsCursor.next(); dns != null; dns = yield dnsCursor.next()) {
+                timestamp += dns.timestamp.getTime()
+                count += dns.count
+                city = dns.city
+                counter += 1
+                if (counter >= chunkSize) {
+                  dnsArr.push({
+                    timestamp: new Date(Math.round(timestamp / counter)),
+                    count: Math.round(count / counter),
+                    city: city,
+                  })
+                  timestamp = 0;
+                  count = 0;
+                  city = '';
+                  counter = 0;
+                }  
+              }
+            }).then(() => {
+              if (counter > 0) {
+                dnsArr.push({
+                  timestamp: new Date(Math.round(timestamp / counter)),
+                  count: Math.round(count / counter),
+                  city: city,
+                })
+                timestamp = 0;
+                count = 0;
+                city = '';
+                counter = 0;
+              }
+              return Promise.resolve(dnsArr);
+            });
+          }
+        })
+        webLogs = webLogs.countDocuments().exec().then(webCount => {
+          let webQuery = WebLog.find({ city: id });
+          if (start && end) {
+            webQuery = webQuery.where('timestamp').gte(start).lte(end)
+          }
+          if (webCount <= 200) {
+            return webQuery.exec()
+          } else {
+            let timestamp = 0;
+            let count = 0;
+            let city = '';
+            let counter = 0;
+            let chunkSize = Math.round(webCount / 200);
+            const webCursor = webQuery.cursor();
+            return co(function*() {
+              for (let web = yield webCursor.next(); web != null; web = yield webCursor.next()) {
+                timestamp += web.timestamp.getTime()
+                count += web.count
+                city = web.city
+                counter += 1
+                if (counter >= chunkSize) {
+                  webArr.push({
+                    timestamp: new Date(Math.round(timestamp / counter)),
+                    count: Math.round(count / counter),
+                    city: city,
+                  })
+                  timestamp = 0;
+                  count = 0;
+                  city = '';
+                  counter = 0;
+                }  
+              }
+            }).then(() => {
+              if (counter > 0) {
+                webArr.push({
+                  timestamp: new Date(Math.round(timestamp / counter)),
+                  count: Math.round(count / counter),
+                  city: city,
+                })
+                timestamp = 0;
+                count = 0;
+                city = '';
+                counter = 0;
+              }
+              return Promise.resolve(webArr);
+            });
+          }
+        })
+        let reportsQuery = Report.find({ city: id })
         const reports = reportsQuery.exec();
-        Promise.all([dnslogs, weblogs, reports])
+        Promise.all([dnsLogs, webLogs, reports])
           .then(values => {
-            const dnsarr = _reduce(values[0], 200);
-            const webarr = _reduce(values[1], 200);
             resolve({
-              dnslogs: dnsarr,
-              weblogs: webarr,
+              dnslogs: values[0],
+              weblogs: values[1],
               reports: values[2],
               id,
               markerOffset,
@@ -84,6 +153,8 @@ async function forArray(arr, start, end) {
               coordinates,
               ip,
               status,
+              startDate: start.getTime(),
+              endDate: end.getTime(),
             });
           })
           .catch(err => reject(err));

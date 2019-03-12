@@ -16,23 +16,22 @@ const chartData = require('../../client/_helpers/Utils/genChartData.js');
 
 async function addLogData(cities, index) {
   console.log('Start adding data in threat', index);
-  let cur = new Date();
-  for (let i = 1; i <= 1500000; i++) {
+  let cur = new Date(2019, 0, 1)
+  for (let i = 1; i <= 1000000; i++) {
     cur = new Date(cur.getTime() + Math.random() * 60 * 1000);
     const dns = new DnsLog({
       city: cities[i % 3]._id,
       timestamp: cur,
       count: Math.round(Math.random() * 1000 + 1),
     });
-    await dns.save()
     cur = new Date(cur.getTime() + Math.random() * 60 * 1000);
     const web = new WebLog({
       city: cities[i % 3]._id,
       timestamp: cur,
       count: Math.round(Math.random() * 1000 + 1),
     });
-    await web.save()
-    if (i % 1500 === 0) console.log(`Threat ${index}: ${i / 15000}% completed`);
+    await Promise.all([dns.save(), web.save()]);
+    if (i % 1000 === 0) console.log(`Threat ${index}: ${i / 10000}% completed`);
   }
   return Promise.resolve(1);
 }
@@ -57,7 +56,7 @@ db.once('open', () => {
       console.log('save group ok');
     })
   );
-  console.log('Adding 4.5 millions of log datas in 4s');
+  console.log('Adding 3 millions of log datas in 3s');
   const cities = citiesData.map(city => new City(city));
   cities.map((city, index) =>
     city.save((err, city1) => {
@@ -100,7 +99,7 @@ db.once('open', () => {
           });
         });
         */
-      setTimeout(() => addLogData(cities, index), 4000);
+      setTimeout(() => addLogData(cities, index), 3000);
     })
   );
 });

@@ -173,14 +173,7 @@ function DataVisualizer(Chart) {
         const startDate = new Date(
           endDate.getTime() - event.target.value * 1000
         );
-        this.setState(
-          {
-            useTR: true,
-          },
-          () => {
-            this.handleDateRangeChange(startDate, endDate);
-          }
-        );
+        this.handleDateRangeChange(startDate, endDate);
       };
 
       handleDateChange = type => date => {
@@ -190,14 +183,7 @@ function DataVisualizer(Chart) {
         } else {
           endDate = date < startDate ? startDate : date;
         }
-        this.setState(
-          {
-            useTR: false,
-          },
-          () => {
-            this.handleDateRangeChange(startDate, endDate);
-          }
-        );
+        this.handleDateRangeChange(startDate, endDate);
       };
 
       handleDataShowChange = event => {
