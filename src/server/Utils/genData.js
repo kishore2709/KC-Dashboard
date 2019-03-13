@@ -36,9 +36,19 @@ async function addLogData(cities, index) {
   return Promise.resolve(1);
 }
 
+async function deleteCollection() {
+  const promises = [User, Group, City, DnsLog, WebLog, Report].map(async (val) => {
+    await val.collection.drop();
+  });
+  await Promise.all(promises);
+  console.log('Drop collections done!');
+}
+
 db.once('open', () => {
   // we're connected!
   console.log('connected to database..');
+  console.log('Drop old Collection..');
+
   // console.log(citiesData);
   // user
   const users = usersData.map(val => new User(val));
@@ -72,34 +82,35 @@ db.once('open', () => {
         if (err) console.log(err);
         console.log('save report ok');
       })
-        /*
-        // dnslog
-        const dnsLogsData = chartData.generateData(2000).chartData;
-        // console.log(dnsLogsData);
-        const dnsLogs = dnsLogsData.map(({ x: timestamp, y: count }) => {
-          const dnsLog = { city: city1._id, timestamp, count };
-          return new DnsLog(dnsLog);
+      /*
+      // dnslog
+      const dnsLogsData = chartData.generateData(2000).chartData;
+      // console.log(dnsLogsData);
+      const dnsLogs = dnsLogsData.map(({ x: timestamp, y: count }) => {
+        const dnsLog = { city: city1._id, timestamp, count };
+        return new DnsLog(dnsLog);
+      });
+      dnsLogs.map(dnsLog => {
+        dnsLog.save((err, dnsLog1) => {
+          if (err) console.log(err);
+          console.log('save dnsLog ok', i);
         });
-        dnsLogs.map(dnsLog => {
-          dnsLog.save((err, dnsLog1) => {
-            if (err) console.log(err);
-            console.log('save dnsLog ok', i);
-          });
+      });
+      // weblog
+      const webLogsData = chartData.generateData(2000).chartData;
+      const webLogs = webLogsData.map(({ x: timestamp, y: count }) => {
+        const webLog = { city: city1._id, timestamp, count };
+        return new WebLog(webLog);
+      });
+      webLogs.map(webLog => {
+        webLog.save((err, webLog1) => {
+          if (err) console.log(err);
+          console.log('save webLog ok', i);
         });
-        // weblog
-        const webLogsData = chartData.generateData(2000).chartData;
-        const webLogs = webLogsData.map(({ x: timestamp, y: count }) => {
-          const webLog = { city: city1._id, timestamp, count };
-          return new WebLog(webLog);
-        });
-        webLogs.map(webLog => {
-          webLog.save((err, webLog1) => {
-            if (err) console.log(err);
-            console.log('save webLog ok', i);
-          });
-        });
-        */
+      });
+      */
       setTimeout(() => addLogData(cities, index), 3000);
+      // setTimeout(() => deleteCollection(), 3000);
     })
   );
 });
