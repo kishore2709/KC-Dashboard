@@ -16,15 +16,13 @@ const app = express();
 app.use(jsonParser);
 app.use(urlencodedParser);
 app.use(express.static('dist'));
-//Send mail to Gmail
-
-
-
-
-// app.get("/api/getUsername", (req, res) =>
-//   res.send({ username: os.userInfo().username })
-// );
-
+// gzip compress
+app.get('*.js', (req, res, next) => {
+  req.url += '.br';
+  res.set('Content-Encoding', 'br');
+  next();
+});
+// Send mail to Gmail
 const sendEmails = async (toEmails, subject, content, html) => {
   let credentials = {
     user: "huanthemenk55@gmail.com",

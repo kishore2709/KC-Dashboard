@@ -145,7 +145,7 @@ const dashboardRoutes = [
     path: '/logManager',
     sidebarName: 'Quản lý log',
     navbarName: 'Giao diện quản lý log truy cập',
-    icon: 'content_paste',
+    icon: LibraryBooks,
     component: LogManagement,
   },
   {

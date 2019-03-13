@@ -5,10 +5,13 @@ const webpack = require('webpack');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 const outputDirectory = 'dist';
-
-module.exports = {
+//
+var BrotliPlugin = require('brotli-webpack-plugin');
+var CompressionPlugin = require('compression-webpack-plugin');
+//
+module.exports = (env, argv) => ({
   entry: { app: ['@babel/polyfill', './src/client/index.js'] },
-  devtool: 'inline-source-map',
+  // devtool: 'inline-source-map',
   output: {
     path: path.join(__dirname, outputDirectory),
     filename: 'bundle.js',
@@ -43,7 +46,17 @@ module.exports = {
       favicon: './public/favicon.ico',
     }),
     new webpack.HotModuleReplacementPlugin(),
-    new BundleAnalyzerPlugin(),
+    // dev
+    // new BundleAnalyzerPlugin(),
+    // proc
+    new webpack.optimize.AggressiveMergingPlugin(), //Merge chunks 
+    new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /en/),
+    new BrotliPlugin({
+      asset: '[path].br[query]',
+      test: /\.(js|css|html|svg)$/,
+      threshold: 10240,
+      minRatio: 0.8
+    })
   ],
   devServer: {
     historyApiFallback: true,
@@ -58,4 +71,9 @@ module.exports = {
       },
     },
   },
-};
+  optimization: {
+    splitChunks: {
+      chunks: 'all'
+    },
+  }
+});

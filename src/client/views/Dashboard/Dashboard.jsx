@@ -6,6 +6,9 @@ import PropTypes from 'prop-types';
 import withStyles from '@material-ui/core/styles/withStyles';
 import Icon from '@material-ui/core/Icon';
 import Store from '@material-ui/icons/Store';
+import Info from '@material-ui/icons/Info';
+import FileCopy from '@material-ui/icons/FileCopy';
+
 import Warning from '@material-ui/icons/Warning';
 import DateRange from '@material-ui/icons/DateRange';
 import LocalOffer from '@material-ui/icons/LocalOffer';
@@ -68,14 +71,14 @@ const styles = theme => ({
   },
 });
 class Dashboard extends React.Component {
-  
+
   componentWillMount() {
     this.handleDateRangeChange(new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), new Date());
   }
 
   handleDateRangeChange = (startDate, endDate) => {
     const { getDashboardData } = this.props;
-    getDashboardData({startDate, endDate});
+    getDashboardData({ startDate, endDate });
   }
 
   render() {
@@ -127,7 +130,7 @@ class Dashboard extends React.Component {
                       <Card>
                         <CardHeader color="warning" stats icon>
                           <CardIcon color="danger">
-                            <Icon>info_outline</Icon>
+                            <Info />
                           </CardIcon>
                           <Typography
                             component="span"
@@ -177,7 +180,7 @@ class Dashboard extends React.Component {
                       <Card>
                         <CardHeader color="danger" stats icon>
                           <CardIcon color="warning">
-                            <Icon>content_copy</Icon>
+                            <FileCopy />
                           </CardIcon>
                           <Typography
                             component="span"
