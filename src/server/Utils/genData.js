@@ -40,7 +40,8 @@ async function deleteCollection() {
   const promises = [User, Group, City, DnsLog, WebLog, Report].map(async (val) => {
     await val.collection.drop();
   });
-  await Promise.all(promises);
+  await Promise.all(promises)
+    .catch(err => console.log(err));
   console.log('Drop collections done!');
 }
 

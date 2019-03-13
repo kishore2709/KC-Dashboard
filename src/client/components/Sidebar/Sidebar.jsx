@@ -134,10 +134,7 @@ class Sidebar extends Component {
       });
 
     const NavUserManagement = (prop, key) => (
-      // console.log('in navusermanagement');
-      // console.log(prop);
-      // console.log(classes.itemText + whiteFontClasses);
-      <React.Fragment>
+      <React.Fragment key={key}>
         <ListItem
           button
           onClick={this.handleClick}

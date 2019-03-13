@@ -54,10 +54,10 @@ class App extends React.Component {
       time: `2019-${month}-${day}`,
       location: 'Hà Nội',
     });
-    setTimeout(() => {
-      alert('Mã độc Bashlite đang tấn công vào hệ thống');
-      dispatch(mailActions.fixMail(arr));
-    }, 5000);
+    // setTimeout(() => {
+    //   alert('Mã độc Bashlite đang tấn công vào hệ thống');
+    //   dispatch(mailActions.fixMail(arr));
+    // }, 5000);
     //
 
     // PostApi('/api/users/sendSMS', {
@@ -88,7 +88,7 @@ class App extends React.Component {
                   <Switch>
                     <Route path="/login" component={LoginPage} />
                     {indexRoutes.map((prop, key) => {
-                      console.log(prop);
+                      // console.log(prop);
                       return (
                         <PrivateRoute
                           path={prop.path}
@@ -98,37 +98,6 @@ class App extends React.Component {
                       );
                     })}
                   </Switch>
-                  {/*
-              <div>
-                <Header>
-                  <Switch>
-                    <PrivateRoute exact path="/" component={Home} />
-                    <PrivateRoute
-                      exact
-                      path="/log_management"
-                      component={LogManagement}
-                    />
-                    <PrivateRoute
-                      exact
-                      path="/manageUser"
-                      component={DevTable}
-                    />
-                    <PrivateRoute
-                      exact
-                      path="/manageUser/accessManagement"
-                      component={AccessManagement}
-                    />
-                    <PrivateRoute
-                      exact
-                      path="/service_management"
-                      component={ServiceManagement}
-                    />
-                    <Route path="/login" component={LoginPage} />
-                    <Route path="/register" component={RegisterPage} />
-                  </Switch>
-                </Header>
-              </div>
-              */}
                 </Router>
               </div>
             </div>

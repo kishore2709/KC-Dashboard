@@ -69,8 +69,9 @@ class SimpleMarkers extends Component {
           <Grid item md={4} xs={12}>
             <Status />
           </Grid>
-          {markers.map(val => (
+          {markers.map((val, key) => (
             <ReactTooltip
+              key={key}
               place="right"
               type="info"
               effect="float"
@@ -141,8 +142,8 @@ class SimpleMarkers extends Component {
                         // hover: { fill: '#FFFFFF' },
                         // pressed: { fill: '#FF5722' },
                       }}
-                      // onMouseMove={this.handleMove.bind(this)}
-                      // onMouseLeave={this.handleLeave.bind(this)}
+                    // onMouseMove={this.handleMove.bind(this)}
+                    // onMouseLeave={this.handleLeave.bind(this)}
                     >
                       <circle
                         data-tip

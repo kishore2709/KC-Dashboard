@@ -7,7 +7,7 @@ import ButtonBase from '@material-ui/core/ButtonBase';
 import { colors } from 'assets/colors/colors.jsx';
 import { connect } from 'react-redux';
 import { dashboardActions } from '_actions';
-const { active : activeColor, warn : warnColor } = colors;
+const { active: activeColor, warn: warnColor } = colors;
 
 const styles = theme => ({
   typo: {
@@ -43,7 +43,7 @@ class Status extends React.Component {
   render() {
     const { classes, dashboard } = this.props;
     // console.log(dashboard);
-    const { targetCity, data : cities } = dashboard;
+    const { targetCity, data: cities } = dashboard;
     const OKButton = (
       <ButtonBase>
         <div className={classes.OKFab} />
@@ -71,6 +71,7 @@ class Status extends React.Component {
           </Grid>
           {cities.map((city, index) => (
             <Grid
+              key={index}
               container
               direction="row"
               justify="center"
@@ -82,7 +83,7 @@ class Status extends React.Component {
                 </Typography>
               </Grid>
               <Grid item>
-                <Typography className={classes.typo} align="center" onClick={()=>{
+                <Typography className={classes.typo} align="center" onClick={() => {
                   this.props.changeCity(index)
                 }}>
                   {city.status ? OKButton : WarnButton}
@@ -97,9 +98,9 @@ class Status extends React.Component {
 }
 
 export default connect(state => ({
-  dashboard : state.dashboard,
+  dashboard: state.dashboard,
 }), dispatch => ({
-  changeCity: newStatus=>{
-      dispatch(dashboardActions.changeCity(newStatus))
+  changeCity: newStatus => {
+    dispatch(dashboardActions.changeCity(newStatus))
   }
 }))(withStyles(styles)(Status));
