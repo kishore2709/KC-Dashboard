@@ -41,62 +41,44 @@ class Discover extends Component {
     super(props);
   }
 
-  /*
-  componentDidMount() {
-    this.handleDateRangeChange(new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), new Date());
+  componentWillMount() {
+    const startDate = this.props.dashboard.dateRange.start || new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
+    const endDate = this.props.dashboard.dateRange.end || new Date()
+    this.handleDateRangeChange(startDate, endDate);
   }
-  */
 
   handleDateRangeChange = (startDate, endDate) => {
-    const { getDashboardData } = this.props;
-    getDashboardData({startDate, endDate});
+    const { getDashboardData, dashboard } = this.props;
+    getDashboardData({
+      ...dashboard,
+      dateRange: {
+        start: startDate,
+        end: endDate,
+      },
+    });
   }
 
   render() {
     const { dashboard } = this.props;
-    const { data, targetCity } = dashboard;
-    console.log('DASHBOARD', dashboard)
-    let chartData = [];
-    let startDate = new Date();
-    let endDate = new Date();
-    if (data.length) {
-      chartData = [
-        {
-          label: 'DNS Logs',
-          data: data[targetCity].dnslogs.map(({ timestamp, count }) => ({
-            x: new Date(timestamp),
-            y: count,
-          })).sort((a, b) => (a.x - b.x)),
-        },
-        {
-          label: 'Web Logs',
-          data: data[targetCity].weblogs.map(({ timestamp, count }) => ({
-            x: new Date(timestamp),
-            y: count,
-          })).sort((a, b) => (a.x - b.x)),
-        },
-      ];
-      if (data[targetCity].startDate != null) {
-        startDate = new Date(parseInt(data[targetCity].startDate, 10))
-      } else {
-        chartData[0].data = chartData[0].data.length > 0 
-                          ? chartData[0].data
-                          : [{x: new Date()}]
-        startDate = chartData[0].data[0].x < chartData[1].data[0].x 
-                    ? chartData[0].data[0].x 
-                    : chartData[1].data[0].x  
-      }
-      if (data[targetCity].endDate != null) {
-        endDate = new Date(parseInt(data[targetCity].endDate, 10))
-      } else {
-        chartData[1].data = chartData[1].data.length > 0 
-                          ? chartData[1].data
-                          : [{x: new Date()}]
-        endDate = chartData[0].data[chartData[0].data.length - 1].x > chartData[1].data[chartData[1].data.length - 1].x 
-                    ? chartData[0].data[chartData[0].data.length - 1].x 
-                    : chartData[1].data[chartData[1].data.length - 1].x  
-      }
-    }
+    const { data } = dashboard;
+    const chartData = [
+      {
+        label: 'DNS Logs',
+        data: data.dnslogs.map(({ timestamp, count }) => ({
+          x: new Date(timestamp),
+          y: count,
+        })).sort((a, b) => (a.x - b.x)),
+      },
+      {
+        label: 'Web Logs',
+        data: data.weblogs.map(({ timestamp, count }) => ({
+          x: new Date(timestamp),
+          y: count,
+        })).sort((a, b) => (a.x - b.x)),
+      },
+    ];
+    const startDate = dashboard.dateRange.start
+    const endDate = dashboard.dateRange.end
     return (
       <Grid
         container
@@ -140,5 +122,8 @@ const mapDispatchToProps = dispatch => ({
   getDashboardData: newStatus => {
     dispatch(dashboardActions.get(newStatus));
   },
+  changeDateRange: newStatus => {
+    dispatch(dashboardActions.changeDateRange(newStatus));
+  }
 });
 export default connect(state => ({ dashboard: state.dashboard }), mapDispatchToProps)(Discover);

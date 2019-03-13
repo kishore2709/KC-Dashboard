@@ -83,14 +83,25 @@ function sendSMS(req, res, next) {
 }
 
 function getCitiesInfo(req, res, next) {
-  let { start, end } = req.query;
-  if (start && end) {
-    start = new Date(parseInt(start, 10));
-    end = new Date(parseInt(end, 10));
-  }
-  console.log(start, end)
-  userService
-    .getCitiesInfo(start, end)
+  const start = new Date(parseInt(req.query.start, 10))
+  const end = new Date(parseInt(req.query.end, 10))
+  const city = parseInt(req.query.city, 10)
+  Promise.all([userService.getCitiesInfo(city, start, end), userService.getAllCities()])
+    .then(ret => {
+      if (!ret || !ret[0] || !ret[1]) {
+        res.status(400).json({ message: 'getCity error' });
+      } else {
+        res.json({ message: ret[0], cities: ret[1] });
+      }
+    })
+    .catch(err => {
+      console.log(err);
+      next(err);
+    });
+}
+
+function getCities(req, res, next) {
+  userService.getAllCities()
     .then(ret => {
       if (!ret) {
         res.status(400).json({ message: 'getCity error' });
@@ -303,5 +314,6 @@ router.post('/getCitiesInfo', getCitiesInfo);
 router.post('/sendEmails', sendEmails);
 router.post('/getLog', getLog);
 router.post('/saveLog', saveLog);
+router.post('/getCities', getCities);
 // router.post('/saveLog', saveLog);
 module.exports = router;

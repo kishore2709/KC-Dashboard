@@ -43,7 +43,8 @@ class Status extends React.Component {
   render() {
     const { classes, dashboard } = this.props;
     // console.log(dashboard);
-    const { targetCity, data: cities } = dashboard;
+    const { targetCity } = dashboard;
+    const cities = dashboard.cities || [];
     const OKButton = (
       <ButtonBase>
         <div className={classes.OKFab} />
@@ -84,7 +85,10 @@ class Status extends React.Component {
               </Grid>
               <Grid item>
                 <Typography className={classes.typo} align="center" onClick={() => {
-                  this.props.changeCity(index)
+                  this.props.changeCity({
+                    ...dashboard,
+                    targetCity: index,
+                  })
                 }}>
                   {city.status ? OKButton : WarnButton}
                 </Typography>
@@ -101,6 +105,6 @@ export default connect(state => ({
   dashboard: state.dashboard,
 }), dispatch => ({
   changeCity: newStatus => {
-    dispatch(dashboardActions.changeCity(newStatus))
+    dispatch(dashboardActions.get(newStatus))
   }
 }))(withStyles(styles)(Status));

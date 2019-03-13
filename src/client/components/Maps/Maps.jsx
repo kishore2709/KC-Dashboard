@@ -16,6 +16,7 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Status from 'components/CityStatus/Status.jsx';
 import { colors } from 'assets/colors/colors.jsx';
+import { dashboardActions } from '_actions';
 
 const { active: activeColor, warn: warnColor } = colors;
 
@@ -48,20 +49,13 @@ class SimpleMarkers extends Component {
     this.colors = [warnColor, activeColor];
   }
 
-  componentDidMount() {
-    // setInterval(() => {
-    //   this.setState(state => ({
-    //     index: 1 - state.index,
-    //   }));
-    // }, 1000);
-  }
-
   render() {
-    const { classes, data } = this.props;
+    const { classes, dashboard } = this.props;
     // console.log(dashboard);
+    const data = dashboard.cities || []
     const markers = data;
     // console.log('in render..');
-    // console.log(markers);
+    console.log('xx', markers);
     // console.log(dispatch);
     return (
       <Paper style={wrapperStyles} className={classes.box}>
@@ -181,6 +175,6 @@ class SimpleMarkers extends Component {
   }
 }
 
-export default connect(state => ({ app: state, data: state.dashboard.data }))(
+export default connect(state => ({ app: state, dashboard: state.dashboard }))(
   withStyles(styles)(SimpleMarkers)
 );

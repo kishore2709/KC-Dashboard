@@ -6,18 +6,22 @@ function set(message) {
 }
 
 function get(status) {
+  return doRequest(status)
+}
+
+function doRequest(status) {
+  console.log(status)
   return dispatch => {
     dispatch({
       type: dashboardConstants.FETCH_DATA,
     });
-    // console.log(' in get ddashboard Actions', status);
-    PostApi(`/api/users/getCitiesInfo${status && status.startDate && status.endDate
-      ? '?start=' + status.startDate.getTime() + '&end=' + status.endDate.getTime()
-      : ''}`, {})
+    PostApi(`/api/users/getCitiesInfo?city=${status.targetCity}&start=${status.dateRange.start.getTime()}&end=${status.dateRange.end.getTime()}`, {})
       .then(ret => {
-        // console.log('in get cities', ret);
-        if (!ret || !('message' in ret)) throw new Error(ret);
+        if (!ret || !('message' in ret) || !('cities' in ret)) throw new Error(ret);
         dispatch(set(ret.message));
+        dispatch(changeDateRange(status.dateRange))
+        dispatch(changeCity(status.targetCity))
+        dispatch(setCities(ret.cities))
         dispatch({
           type: dashboardConstants.FETCH_DATA_DONE,
         });
@@ -28,7 +32,28 @@ function get(status) {
           type: dashboardConstants.FETCH_DATA_DONE,
         });
       });
-  };
+  }
+};
+
+function setCities(message) {
+  return { type: dashboardConstants.SET_CITY, message };
+}
+
+function getAllCities() {
+  return dispatch => {
+    PostApi(`/api/users/getCities`, {})
+      .then(ret => {
+        if (!ret || !('message' in ret)) throw new Error(ret);
+        dispatch(setCities(ret.message));
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }
+}
+
+function changeDateRange(message) {
+  return { type: dashboardConstants.CHANGE_DATE_RANGE, message };
 }
 
 function changeCity(message) {
@@ -38,5 +63,7 @@ function changeCity(message) {
 export const dashboardActions = {
   get,
   changeCity,
+  changeDateRange,
   set,
+  getAllCities,
 };

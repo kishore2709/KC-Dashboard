@@ -71,25 +71,33 @@ const styles = theme => ({
   },
 });
 class Dashboard extends React.Component {
-
+  
   componentWillMount() {
-    this.handleDateRangeChange(new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), new Date());
+    const startDate = this.props.dashboard.dateRange.start || new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
+    const endDate = this.props.dashboard.dateRange.end || new Date()
+    this.handleDateRangeChange(startDate, endDate);
   }
 
   handleDateRangeChange = (startDate, endDate) => {
-    const { getDashboardData } = this.props;
-    getDashboardData({ startDate, endDate });
+    const { getDashboardData, dashboard } = this.props;
+    getDashboardData({
+      ...dashboard,
+      dateRange: {
+        start: startDate,
+        end: endDate,
+      },
+    });
   }
 
   render() {
     const { classes, dashboard } = this.props;
     // const { data } = this.state;
     const { targetCity, data } = dashboard;
-    // console.log(dashboard);
+    console.log(dashboard);
     // console.log(targetCity, data);
     if (data.length === 0) return <Loading />;
     // console.log(data, targetCity);
-    const { reports } = data[targetCity];
+    const { reports } = data;
     // console.log(reports);
     if (!reports) return <Loading />;
     // if (!reports || !Array.isArray(reports)) return <WarningStatus />;
@@ -268,6 +276,9 @@ const mapDispatchToProps = dispatch => ({
   getDashboardData: newStatus => {
     dispatch(dashboardActions.get(newStatus));
   },
+  changeDateRange: newStatus => {
+    dispatch(dashboardActions.changeDateRange(newStatus));
+  }
 });
 
 const connectedDashboard = connect(
