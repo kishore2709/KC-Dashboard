@@ -102,7 +102,7 @@ class LoginPage extends React.Component {
               Sai tên người dùng hoặc mật khẩu
             </Typography>
           )}
-          <form className={classes.form} onSubmit={this.handleSubmit}>
+          <form className={classes.form} onSubmit={() => this.handleSubmit}>
             <FormControl margin="normal" required fullWidth>
               <InputLabel htmlFor="username">Tên người dùng</InputLabel>
               <Input
