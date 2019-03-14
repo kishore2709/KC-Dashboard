@@ -10,6 +10,9 @@ import withStyles from "@material-ui/core/styles/withStyles";
 // core components
 import Header from "components/Header/Header.jsx";
 import Footer from "components/Footer/Footer.jsx";
+
+import Loadable from 'react-loadable';
+import ListLoader from 'components/ContentLoader/ListLoader.jsx';
 import Sidebar from "components/Sidebar/Sidebar.jsx";
 // import UserPermission from 'views/UserPermission/UserPermission.jsx';
 import { connect } from 'react-redux';
@@ -26,7 +29,7 @@ import ChangePasswordDialog from "components/Dialogs/ChangePasswordDialog.jsx";
 import { GetUserInfo } from "_helpers/Utils/";
 const switchRoutes = (
   <Switch>
-    {(dashboardRoutes.filter(val=> ('subNavBar' in val))[0].subNavBar.map((prop, key) => {
+    {(dashboardRoutes.filter(val => ('subNavBar' in val))[0].subNavBar.map((prop, key) => {
       // console.log('???');
       // console.log(prop);
       return <Route path={prop.path} component={prop.component} key={prop.id} />;
@@ -37,7 +40,7 @@ const switchRoutes = (
         return <Route path={prop.path} component={prop.component} key={prop.id} />;
       })
     )}
-    
+
   </Switch>
 );
 
@@ -97,7 +100,7 @@ class App extends React.Component {
           {...rest}
         />
         <div className={classes.mainPanel} ref="mainPanel">
-          <ChangePasswordDialog/>
+          <ChangePasswordDialog />
           <Header
             routes={dashboardRoutes}
             handleDrawerToggle={this.handleDrawerToggle}
@@ -109,8 +112,8 @@ class App extends React.Component {
               <div className={classes.container}>{switchRoutes}</div>
             </div>
           ) : (
-            <div className={classes.map}>{switchRoutes}</div>
-          )}
+              <div className={classes.map}>{switchRoutes}</div>
+            )}
           {this.getRoute() ? <Footer /> : null}
         </div>
       </div>

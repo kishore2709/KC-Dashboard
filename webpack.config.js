@@ -49,14 +49,14 @@ module.exports = (env, argv) => ({
     // dev
     // new BundleAnalyzerPlugin(),
     // proc
-    new webpack.optimize.AggressiveMergingPlugin(), //Merge chunks 
-    new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /en/),
-    new BrotliPlugin({
-      asset: '[path].br[query]',
-      test: /\.(js|css|html|svg)$/,
-      threshold: 10240,
-      minRatio: 0.8
-    })
+    // new webpack.optimize.AggressiveMergingPlugin(), //Merge chunks 
+    // new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /en/),
+    // new BrotliPlugin({
+    //   asset: '[path].br[query]',
+    //   test: /\.(js|css|html|svg)$/,
+    //   threshold: 10240,
+    //   minRatio: 0.8
+    // })
   ],
   devServer: {
     historyApiFallback: true,

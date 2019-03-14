@@ -1,15 +1,15 @@
-import React from "react"
-import ContentLoader from "react-content-loader"
+import React from 'react';
+import ContentLoader from 'react-content-loader';
 
 const Loader = props => {
-  const random = Math.random() * (1 - 0.7) + 0.7
+  const random = Math.random() * (1 - 0.7) + 0.7;
   return (
     <ContentLoader
       height={40}
       width={1060}
       speed={2}
       primaryColor="#c877fd"
-		  secondaryColor="#d8fdc1"
+      secondaryColor="#d8fdc1"
       {...props}
     >
       <rect x="0" y="15" rx="4" ry="4" width="6" height="6.4" />
@@ -21,24 +21,24 @@ const Loader = props => {
 
       <rect x="0" y="39" rx="6" ry="6" width="1060" height=".3" />
     </ContentLoader>
-  )
-}
+  );
+};
 
 const MyLoader = () => (
   <React.Fragment>
     {Array(10)
-      .fill("")
+      .fill('')
       .map((e, i) => (
         <Loader key={i} style={{ opacity: Number(2 / i).toFixed(1) }} />
       ))}
   </React.Fragment>
-)
+);
 
 MyLoader.metadata = {
-  name: "PTIT",
-  github: "KCDASHBOARD",
-  description: "Table with the width of the dynamic rows",
-  filename: "KC-table"
-}
+  name: 'PTIT',
+  github: 'KCDASHBOARD',
+  description: 'Table with the width of the dynamic rows',
+  filename: 'KC-table'
+};
 
 export default MyLoader;

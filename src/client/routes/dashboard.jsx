@@ -35,10 +35,12 @@ const GroupPermission = Loadable({
   loading: TableLoader,
 });
 // import DashboardPage from 'views/Dashboard/Dashboard.jsx';
+
+// const DashboardLoader = <div style={{ marginTop: '100px' }}><TableLoader /></div>;
 const DashboardPage = Loadable({
   loader: () =>
     import(/* webpackPrefetch: true */ 'views/Dashboard/Dashboard.jsx'),
-  loading: TableLoader,
+  loading: () => <div style={{ marginTop: '100px' }}><TableLoader /></div>,
 });
 // import UserManagement from 'views/UserManagement/UserManagement.jsx';
 const UserManagement = Loadable({
@@ -148,22 +150,22 @@ const dashboardRoutes = [
     icon: LibraryBooks,
     component: LogManagement,
   },
-  {
-    id: 'serviceManager',
-    path: '/serviceManager',
-    sidebarName: 'Quản lý dịch vụ',
-    navbarName: 'Giao diện quản lý dịch vụ truy cập',
-    icon: LibraryBooks,
-    component: ServiceManager,
-  },
-  {
-    id: 'attackReport',
-    path: '/attackReport',
-    sidebarName: 'Phát hiện tấn công',
-    navbarName: 'Giao diện phát hiện tấn công',
-    icon: BubbleChart,
-    component: AttackReport,
-  },
+  // {
+  //   id: 'serviceManager',
+  //   path: '/serviceManager',
+  //   sidebarName: 'Quản lý dịch vụ',
+  //   navbarName: 'Giao diện quản lý dịch vụ truy cập',
+  //   icon: LibraryBooks,
+  //   component: ServiceManager,
+  // },
+  // {
+  //   id: 'attackReport',
+  //   path: '/attackReport',
+  //   sidebarName: 'Phát hiện tấn công',
+  //   navbarName: 'Giao diện phát hiện tấn công',
+  //   icon: BubbleChart,
+  //   component: AttackReport,
+  // },
   {
     id: 'login',
     path: '/login',

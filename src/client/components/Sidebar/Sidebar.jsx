@@ -22,15 +22,18 @@ import Loading from 'components/Loading/Loading.jsx';
 import NumberMail from 'components/NumberMail/NumberMail.jsx';
 
 import sidebarStyle from 'assets/jss/material-dashboard-react/components/sidebarStyle.jsx';
-//
+//icon
+import PowerIcon from '@material-ui/icons/PowerOff';
+
 import Collapse from '@material-ui/core/Collapse';
-import InboxIcon from '@material-ui/icons/Inbox';
+// import InboxIcon from '@material-ui/icons/Inbox';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 // / redux
 import { connect } from 'react-redux';
-import { serverStatusConstants } from '_constants';
+// import { serverStatusConstants } from '_constants';
 import { serverStatusActions } from '_actions';
+import { Redirect } from 'react-router-dom';
 
 class Sidebar extends Component {
   constructor(props) {
@@ -48,8 +51,15 @@ class Sidebar extends Component {
           icon: Autorenew,
           component: Loading,
         },
+        {
+          id: 'login',
+          path: '/login',
+          sidebarName: 'Đăng xuất',
+          icon: PowerIcon,
+          component: <Redirect to="/login" />,
+        },
       ],
-      openUserManagementSubComponents: ['/userGroup','/permission','/manageUser'].includes(window.location.pathname),
+      openUserManagementSubComponents: ['/userGroup', '/permission', '/manageUser'].includes(window.location.pathname),
     };
     this.handleClick = this.handleClick.bind(this);
   }
@@ -102,11 +112,11 @@ class Sidebar extends Component {
     // return true;
     return this.props.location.pathname.indexOf(routeName) > -1;
   }
-  numberNotSeen(arr){
-    let res=0;
-      for (let i=0; i < arr.length; i++)
+  numberNotSeen(arr) {
+    let res = 0;
+    for (let i = 0; i < arr.length; i++)
       if (!arr[i].seen) res++;
-      return res;
+    return res;
   }
   handleClick() {
     this.setState(state => ({
@@ -115,11 +125,11 @@ class Sidebar extends Component {
   }
 
   render() {
-   
-    const { classes, color, logo, image, logoText ,mailBox } = this.props;
-    let flagMail=false;
-     if (mailBox.dataMail!=undefined){
-          if (this.numberNotSeen(mailBox.dataMail) > 0 ) flagMail=true;
+
+    const { classes, color, logo, image, logoText, mailBox } = this.props;
+    let flagMail = false;
+    if (mailBox.dataMail != undefined) {
+      if (this.numberNotSeen(mailBox.dataMail) > 0) flagMail = true;
     }
     const { routes, openUserManagementSubComponents } = this.state;
     // console.log(routes);
@@ -153,8 +163,8 @@ class Sidebar extends Component {
           {this.state.openUserManagementSubComponents ? (
             <ExpandLess />
           ) : (
-            <ExpandMore />
-          )}
+              <ExpandMore />
+            )}
         </ListItem>
         <Collapse
           in={openUserManagementSubComponents}
@@ -169,10 +179,10 @@ class Sidebar extends Component {
                 activeClassName="active"
                 key={val.id}
               >
-                <ListItem 
-                key={val.id}
-                  button={(flag) =>{
-                    if (flag==true) console.log("====>>> dung la flag ko");
+                <ListItem
+                  key={val.id}
+                  button={(flag) => {
+                    if (flag == true) console.log("====>>> dung la flag ko");
                   }}
                   className={classes.itemLink + listItemClasses(val.path)}
                 >
@@ -226,8 +236,8 @@ class Sidebar extends Component {
                       {typeof prop.icon === 'string' ? (
                         <Icon>{prop.icon}</Icon>
                       ) : (
-                        <prop.icon />
-                      )}
+                          <prop.icon />
+                        )}
                     </ListItemIcon>
                     <ListItemText
                       primary={prop.sidebarName}
@@ -236,10 +246,10 @@ class Sidebar extends Component {
                     />
                     {
                       (flagMail
-                      && prop.path=='/mailBox'
-                      ) && 
+                        && prop.path == '/mailBox'
+                      ) &&
                       <NumberMail
-                          title={this.numberNotSeen(this.props.mailBox.dataMail)}
+                        title={this.numberNotSeen(this.props.mailBox.dataMail)}
                       />
                     }
                   </ListItem>
