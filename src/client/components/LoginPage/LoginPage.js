@@ -66,16 +66,16 @@ class LoginPage extends React.Component {
       submitted: false,
     };
 
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+    // this.handleChange = this.handleChange.bind(this);
+    // this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleChange(e) {
+  handleChange = e => {
     const { name, value } = e.target;
     this.setState({ [name]: value });
-  }
+  };
 
-  handleSubmit(e) {
+  handleSubmit = e => {
     e.preventDefault();
     this.setState({ submitted: true });
     const { username, password } = this.state;
@@ -83,7 +83,7 @@ class LoginPage extends React.Component {
     if (username && password) {
       dispatch(userActions.login(username, password));
     }
-  }
+  };
 
   render() {
     const { authentication, alert } = this.props;
@@ -102,7 +102,7 @@ class LoginPage extends React.Component {
               Sai tên người dùng hoặc mật khẩu
             </Typography>
           )}
-          <form className={classes.form} onSubmit={() => this.handleSubmit}>
+          <form className={classes.form} onSubmit={this.handleSubmit}>
             <FormControl margin="normal" required fullWidth>
               <InputLabel htmlFor="username">Tên người dùng</InputLabel>
               <Input

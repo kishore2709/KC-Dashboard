@@ -181,9 +181,7 @@ class Sidebar extends Component {
               >
                 <ListItem
                   key={val.id}
-                  button={(flag) => {
-                    if (flag == true) console.log("====>>> dung la flag ko");
-                  }}
+                  button
                   className={classes.itemLink + listItemClasses(val.path)}
                 >
                   <ListItemIcon
