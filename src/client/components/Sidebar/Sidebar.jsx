@@ -77,12 +77,14 @@ class Sidebar extends Component {
         } else {
           // console.log(res);
           if (!res || !('permissions' in res)) throw new Error('permission not found in respones');
+          console.log(res.permissions);
           const validKeys = Object.keys(res.permissions).filter(
             val => res.permissions[val].canAccess
           );
           // / console.log(validKeys);
           const curRoutes = this.props.routes;
-          // console.log(curRoutes);
+          console.log(curRoutes);
+          console.log(validKeys);
           const desRoutes = curRoutes.filter(
             val => validKeys.indexOf(val.id) !== -1
           );
@@ -132,7 +134,8 @@ class Sidebar extends Component {
       if (this.numberNotSeen(mailBox.dataMail) > 0) flagMail = true;
     }
     const { routes, openUserManagementSubComponents } = this.state;
-    // console.log(routes);
+    console.log('??');
+    console.log(routes);
     const listItemClasses = path =>
       classNames({
         [` ${classes[color]}`]: this.activeRoute(path),
@@ -214,6 +217,7 @@ class Sidebar extends Component {
           const whiteFontClasses = classNames({
             [` ${classes.whiteFont}`]: this.activeRoute(prop.path),
           });
+          // console.log(prop.path);
           if (prop.path !== '/profile')
             if (prop.path == '/user') return NavUserManagement(prop, key);
             else

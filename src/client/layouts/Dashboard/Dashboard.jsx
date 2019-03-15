@@ -84,6 +84,7 @@ class App extends React.Component {
     const { classes, openDialogPwdForm, ...rest } = this.props;
     const user = GetUserInfo();
     // console.log('in dashboard')
+    // console.log(dashboardRoutes);
     // console.log(switchRoutes);
     if (!user || (!('changePwd' in user))) throw new Error('cannot get User Info');
     openDialogPwdForm(user.changePwd);

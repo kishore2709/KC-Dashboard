@@ -120,7 +120,7 @@ class UserProfile extends React.Component {
                 Chỉnh sửa thông tin cá nhân của bạn
               </p>
             </CardHeader>
-            <CardBody>
+            <CardBody style={{padding: '10px'}}>
               <UserProfileForm onSubmit={this.handleSubmit.bind(this)} />;
             </CardBody>
           </Card>

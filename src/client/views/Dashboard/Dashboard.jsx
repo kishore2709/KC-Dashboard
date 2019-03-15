@@ -132,7 +132,7 @@ class Dashboard extends React.Component {
                   <GridContainer
                     direction="row"
                     justify="center"
-                    alignItems="flex-end"
+                    alignItems="stretch"
                   >
                     <GridItem xs={12} sm={6} lg={4}>
                       <Card>
@@ -144,7 +144,7 @@ class Dashboard extends React.Component {
                             component="span"
                             className={classes.cardCategory}
                           >
-                            Số cuộc tấn công
+                            Số tấn công
                           </Typography>
                           <CardBody>
                             <h3 className={classes.cardTitle}>{attacks}</h3>
@@ -201,7 +201,7 @@ class Dashboard extends React.Component {
                         <CardFooter stats>
                           <div className={classes.stats}>
                             <LocalOffer />
-                            Truy xuất từ cơ sở dữ liệu
+                            Mongodb
                           </div>
                         </CardFooter>
                       </Card>

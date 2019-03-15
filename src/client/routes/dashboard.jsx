@@ -81,7 +81,7 @@ const Discover = Loadable({
 });
 // import MailBox from 'views/MailBox/MailBox.jsx';
 const MailBox = Loadable({
-  loader: () => import(/* webpackPrefetch: true */ '../views/MailBox/MailBox.jsx'),
+  loader: () => import(/* webpackPrefetch: true */ 'views/MailBox/MailBox.jsx'),
   loading: TableLoader,
 });
 
