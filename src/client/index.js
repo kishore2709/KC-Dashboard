@@ -4,6 +4,7 @@ import './index.css';
 // import { BrowserRouter, HashRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { App } from './components/App';
+// import Google from './components/Google';
 import * as serviceWorker from './serviceWorker';
 import 'assets/css/material-dashboard-react.css?v=1.5.0';
 

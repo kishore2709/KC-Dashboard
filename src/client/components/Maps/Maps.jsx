@@ -16,8 +16,9 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Status from 'components/CityStatus/Status.jsx';
 import { colors } from 'assets/colors/colors.jsx';
+import { dashboardActions } from '_actions';
 
-const { active : activeColor, warn : warnColor } = colors;
+const { active: activeColor, warn: warnColor } = colors;
 
 const wrapperStyles = {
   width: '100%',
@@ -30,8 +31,10 @@ const include = ['VNM'];
 const styles = theme => ({
   box: {
     position: 'relative',
-    border: '2px solid #BD13E2',
-    borderRadius: '10px',
+    border: '0',
+    borderRadius: '6px',
+    margin: 'auto',
+    boxShadow: '0 1px 4px 0 rgba(0, 0, 0, 0.14)',
   },
   status: {
     position: 'absolute',
@@ -40,62 +43,29 @@ const styles = theme => ({
   },
 });
 
-const markers = [
-  {
-    id: 1,
-    markerOffset: -35,
-    name: 'Hà Nội',
-    coordinates: [105.6525, 20.9755],
-    ip: '16.30.3.2',
-    status: true,
-  },
-  {
-    id: 2,
-    markerOffset: -35,
-    name: 'Đà Nẵng',
-    coordinates: [108.2119, 16.068],
-    ip: '16.32.3.2',
-    status: false,
-  },
-  {
-    id: 3,
-    markerOffset: -35,
-    name: 'Hồ Chí Minh',
-    coordinates: [106.69509, 10.76472],
-    ip: '16.30.32.2',
-    status: true,
-  },
-];
-
 class SimpleMarkers extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      index: 0,
-    };
     this.colors = [warnColor, activeColor];
   }
 
-  componentDidMount() {
-    setInterval(() => {
-      this.setState(state => ({
-        index: 1 - state.index,
-      }));
-    }, 1000);
-  }
-
   render() {
-    const { classes } = this.props;
+    const { classes, dashboard } = this.props;
+    // console.log(dashboard);
+    const data = dashboard.cities || []
+    const markers = data;
     // console.log('in render..');
+    // console.log('Map will rerender????', markers);
     // console.log(dispatch);
     return (
       <Paper style={wrapperStyles} className={classes.box}>
         <Grid container>
           <Grid item md={4} xs={12}>
-            <Status cities={markers} />
+            <Status />
           </Grid>
-          {markers.map(val => (
+          {markers.map((val, key) => (
             <ReactTooltip
+              key={key}
               place="right"
               type="info"
               effect="float"
@@ -112,7 +82,7 @@ class SimpleMarkers extends Component {
           <Grid item xs={12}>
             <ComposableMap
               projectionConfig={{ scale: 2250 }}
-              width={600}
+              width={550}
               height={530}
               style={{
                 width: '100%',
@@ -160,12 +130,14 @@ class SimpleMarkers extends Component {
                       key={i}
                       marker={marker}
                       style={{
-                        default: { fill: (marker.status ? activeColor : warnColor ) },
+                        default: {
+                          fill: marker.status ? activeColor : warnColor,
+                        },
                         // hover: { fill: '#FFFFFF' },
                         // pressed: { fill: '#FF5722' },
                       }}
-                      // onMouseMove={this.handleMove.bind(this)}
-                      // onMouseLeave={this.handleLeave.bind(this)}
+                    // onMouseMove={this.handleMove.bind(this)}
+                    // onMouseLeave={this.handleLeave.bind(this)}
                     >
                       <circle
                         data-tip
@@ -203,6 +175,6 @@ class SimpleMarkers extends Component {
   }
 }
 
-export default connect(state => ({ app: state }))(
+export default connect(state => ({ dashboard: state.dashboard }))(
   withStyles(styles)(SimpleMarkers)
 );

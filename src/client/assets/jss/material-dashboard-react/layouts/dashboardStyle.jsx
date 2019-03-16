@@ -24,13 +24,13 @@ const appStyle = theme => ({
   },
   content: {
     marginTop: '50px',
-    padding: '30px 10px',
+    padding: '30px 0px',
     minHeight: 'calc(100vh - 123px)',
   },
   container,
   map: {
     marginTop: '5px',
-    marginRight: '5px',
+    //marginRight: '5px',
   },
 });
 

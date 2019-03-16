@@ -45,18 +45,22 @@ class LineChartCore extends Component {
   };
 
   render() {
-    const { data, startDate, endDate, classes, color } = this.props;
+    const { data, dataShow, startDate, endDate, classes, color } = this.props;
+
+    const datasets = data
+    .filter(dataRow => dataShow.includes(dataRow.label))
+    .map((dataRow, key) => ({
+      label: dataRow.label,
+      data: dataRow.data,
+      borderColor: color[key],
+      backgroundColor: 'rgba(0, 0, 0, 0.0)',
+    }));
 
     return (
       <Line
         ref={reference => (this.chartReference = reference)}
         data={{
-          datasets: data.map((dataRow, key) => ({
-            label: dataRow.label,
-            data: dataRow.data,
-            borderColor: color[key],
-            backgroundColor: 'rgba(0, 0, 0, 0.0)',
-          })),
+          datasets: datasets,
         }}
         onElementsClick={this.handleElementsClick}
         options={{

@@ -9,60 +9,89 @@ import { generateData } from '_helpers/Utils/genChartData.js';
 // import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 //
-// import BarChart from 'components/Chart/BarChart/BarChart.js';
-const BarChart = Loadable({
-  loader: () => import(/* webpackPreload: true */ 'components/Chart/BarChart/BarChart.js'),
-  loading: TableLoader,
-});
+import { connect } from 'react-redux';
+import { dashboardActions } from '_actions';
 
 const LineChart = Loadable({
-  loader: () => import(/* webpackPreload: true */ 'components/Chart/LineChart/LineChart.js'),
-  loading: TableLoader,
-});
-// import Selections from 'components/SelectionControls/Selections.jsx';
-// import Checkboxs from 'components/SelectionControls/Checkboxs.jsx';
-
-// import TableDiscover from 'components/Table/TableDiscover.jsx';
-const TableDiscover = Loadable({
   loader: () =>
-    import(/* webpackPreload: true */ 'components/Table/TableDiscover.jsx'),
+    import(/* webpackPreload: true */ 'components/Chart/LineChart/LineChart.js'),
   loading: TableLoader,
 });
+
 class Discover extends Component {
+
   constructor(props) {
     super(props);
   }
 
+  /*
+  componentDidMount() {
+    this.handleDateRangeChange(new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), new Date());
+  }
+  */
+
+  handleDateRangeChange = (startDate, endDate) => {
+    const { getDashboardData, dashboard } = this.props;
+    getDashboardData({
+      ...dashboard,
+      dateRange: {
+        start: startDate,
+        end: endDate,
+      },
+    });
+  }
+
   render() {
+    const { dashboard } = this.props;
+    const { data } = dashboard;
+    const chartData = [
+      {
+        label: 'DNS Logs',
+        data: data.dnslogs.map(({ timestamp, count }) => ({
+          x: new Date(timestamp),
+          y: count,
+        })).sort((a, b) => (a.x - b.x)),
+      },
+      {
+        label: 'Web Logs',
+        data: data.weblogs.map(({ timestamp, count }) => ({
+          x: new Date(timestamp),
+          y: count,
+        })).sort((a, b) => (a.x - b.x)),
+      },
+    ];
+    const startDate = dashboard.dateRange.start
+    const endDate = dashboard.dateRange.end
     return (
       <Grid
         container
         direction="row"
         justify="space-evenly"
         alignItems="center"
+        spacing={24}
       >
-        {/*
-        <Grid item>
-          <Selections />
-        </Grid>
-        */}
         <Grid item xs={12}>
-          <LineChart data={[
-            {label: 'Data 1', data: generateData(2000).chartData},  // ok
-            {data: generateData(2000).chartData},                   // failed, thiếu label
-            {label: 'Data 3', data: generateData(2000).chartData},  // ok
-            {label: 'Data 4'},                                      // failed, thiếu data
-            {label: 'Data 5', data: generateData(2000).chartData},  // ok
-            {label: 6, data: generateData(2000).chartData},         // ok
-            {label: 'Data 7', data: 'generateData(2000).chartData'},// failed, data phải là array
-          ]} />
-        </Grid>
-        <Grid item xs={12}>
-          <TableDiscover />
+          <LineChart 
+            data={chartData} 
+            height='200px' 
+            fireUpDateRangeChange={this.handleDateRangeChange}
+            allDataLabel={['DNS Logs', 'Web Logs']}
+            startDate={startDate}
+            endDate={endDate}
+            loading={dashboard.loading}
+          />
         </Grid>
       </Grid>
     );
   }
 }
 
-export default Discover;
+const mapDispatchToProps = dispatch => ({
+  getDashboardData: newStatus => {
+    dispatch(dashboardActions.get(newStatus));
+  },
+  changeDateRange: newStatus => {
+    dispatch(dashboardActions.changeDateRange(newStatus));
+  }
+});
+export default connect(state => ({ dashboard: state.dashboard }), mapDispatchToProps)(Discover);

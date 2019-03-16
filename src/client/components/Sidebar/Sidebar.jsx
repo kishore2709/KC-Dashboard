@@ -19,16 +19,21 @@ import HeaderLinks from 'components/Header/HeaderLinks.jsx';
 import { GetUserInfo, PostApi } from '_helpers/Utils/index.js';
 import Autorenew from '@material-ui/icons/Autorenew';
 import Loading from 'components/Loading/Loading.jsx';
+import NumberMail from 'components/NumberMail/NumberMail.jsx';
+
 import sidebarStyle from 'assets/jss/material-dashboard-react/components/sidebarStyle.jsx';
-//
+//icon
+import PowerIcon from '@material-ui/icons/PowerOff';
+
 import Collapse from '@material-ui/core/Collapse';
-import InboxIcon from '@material-ui/icons/Inbox';
+// import InboxIcon from '@material-ui/icons/Inbox';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 // / redux
 import { connect } from 'react-redux';
-import { serverStatusConstants } from '_constants';
+// import { serverStatusConstants } from '_constants';
 import { serverStatusActions } from '_actions';
+import { Redirect } from 'react-router-dom';
 
 class Sidebar extends Component {
   constructor(props) {
@@ -46,29 +51,40 @@ class Sidebar extends Component {
           icon: Autorenew,
           component: Loading,
         },
+        {
+          id: 'login',
+          path: '/login',
+          sidebarName: 'Đăng xuất',
+          icon: PowerIcon,
+          component: <Redirect to="/login" />,
+        },
       ],
-      openUserManagementSubComponents: ['/userGroup','/permission','/manageUser'].includes(window.location.pathname),
+      openUserManagementSubComponents: ['/userGroup', '/permission', '/manageUser'].includes(window.location.pathname),
     };
     this.handleClick = this.handleClick.bind(this);
   }
 
   componentWillMount() {
-    console.log('will mount ?');
+    // console.log('will mount ?');
     PostApi('/api/users/getUserInfo', GetUserInfo())
       .then(res => {
         // console.log('in then proomse');
-        if (res === 'err') {
+        if (!res || res === 'err') {
           // alertErr();
           this.props.error('err');
+          console.log('err');
           console.log('err get user info');
         } else {
           // console.log(res);
+          if (!res || !('permissions' in res)) throw new Error('permission not found in respones');
+          // console.log(res.permissions);
           const validKeys = Object.keys(res.permissions).filter(
             val => res.permissions[val].canAccess
           );
           // / console.log(validKeys);
           const curRoutes = this.props.routes;
-          console.log(curRoutes);
+          // console.log(curRoutes);
+          // console.log(validKeys);
           const desRoutes = curRoutes.filter(
             val => validKeys.indexOf(val.id) !== -1
           );
@@ -80,7 +96,7 @@ class Sidebar extends Component {
           );
           this.setState({ routes: [...desRoutes, ...restSidebar] });
           this.props.success('ok');
-          console.log(res.permissions);
+          // console.log(res.permissions);
           // console.log(desRoutes);
         }
       })
@@ -98,7 +114,12 @@ class Sidebar extends Component {
     // return true;
     return this.props.location.pathname.indexOf(routeName) > -1;
   }
-
+  numberNotSeen(arr) {
+    let res = 0;
+    for (let i = 0; i < arr.length; i++)
+      if (!arr[i].seen) res++;
+    return res;
+  }
   handleClick() {
     this.setState(state => ({
       openUserManagementSubComponents: !state.openUserManagementSubComponents,
@@ -106,8 +127,14 @@ class Sidebar extends Component {
   }
 
   render() {
-    const { classes, color, logo, image, logoText } = this.props;
+
+    const { classes, color, logo, image, logoText, mailBox } = this.props;
+    let flagMail = false;
+    if (mailBox.dataMail != undefined) {
+      if (this.numberNotSeen(mailBox.dataMail) > 0) flagMail = true;
+    }
     const { routes, openUserManagementSubComponents } = this.state;
+    // console.log('??');
     // console.log(routes);
     const listItemClasses = path =>
       classNames({
@@ -120,10 +147,7 @@ class Sidebar extends Component {
       });
 
     const NavUserManagement = (prop, key) => (
-      // console.log('in navusermanagement');
-      // console.log(prop);
-      // console.log(classes.itemText + whiteFontClasses);
-      <React.Fragment>
+      <React.Fragment key={key}>
         <ListItem
           button
           onClick={this.handleClick}
@@ -142,8 +166,8 @@ class Sidebar extends Component {
           {this.state.openUserManagementSubComponents ? (
             <ExpandLess />
           ) : (
-            <ExpandMore />
-          )}
+              <ExpandMore />
+            )}
         </ListItem>
         <Collapse
           in={openUserManagementSubComponents}
@@ -158,8 +182,8 @@ class Sidebar extends Component {
                 activeClassName="active"
                 key={val.id}
               >
-                <ListItem 
-                key={val.id}
+                <ListItem
+                  key={val.id}
                   button
                   className={classes.itemLink + listItemClasses(val.path)}
                 >
@@ -193,6 +217,7 @@ class Sidebar extends Component {
           const whiteFontClasses = classNames({
             [` ${classes.whiteFont}`]: this.activeRoute(prop.path),
           });
+          // console.log(prop.path);
           if (prop.path !== '/profile')
             if (prop.path == '/user') return NavUserManagement(prop, key);
             else
@@ -213,14 +238,22 @@ class Sidebar extends Component {
                       {typeof prop.icon === 'string' ? (
                         <Icon>{prop.icon}</Icon>
                       ) : (
-                        <prop.icon />
-                      )}
+                          <prop.icon />
+                        )}
                     </ListItemIcon>
                     <ListItemText
                       primary={prop.sidebarName}
                       className={classes.itemText + whiteFontClasses}
                       disableTypography
                     />
+                    {
+                      (flagMail
+                        && prop.path == '/mailBox'
+                      ) &&
+                      <NumberMail
+                        title={this.numberNotSeen(this.props.mailBox.dataMail)}
+                      />
+                    }
                   </ListItem>
                 </NavLink>
               );
@@ -290,8 +323,14 @@ const mapDispatchToProps = dispatch => ({
     dispatch(serverStatusActions.loading(newStatus));
   },
 });
+function mapStateToProps(state) {
+  const { mailBox } = state;
+  return {
+    mailBox
+  };
+}
 const connectedSidebar = connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(Sidebar);
 

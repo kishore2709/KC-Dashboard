@@ -1,15 +1,11 @@
-const mongoose = require('mongoose');
-// const bcrypt = require('bcrypt');
-
-mongoose.connect('mongodb://localhost/usermanager');
-const db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
-
-const saltRounds = 10;
-const myPlaintextPassword = '1';
-const Schemas = require('../Utils/Schema');
-const UserSchema = Schemas.UserSchema;
-const User = mongoose.model('User', UserSchema);
-User.find({}, (err, docs) =>{
-    console.log(err, docs);
-})
+var co = require('co');
+co(function* () {
+    var result = yield new Promise(resolve => {
+        setTimeout(() => { resolve(1) }, 3000);
+    });
+    return result;
+}).then(function (value) {
+    console.log(value);
+}, function (err) {
+    console.error(err.stack);
+});

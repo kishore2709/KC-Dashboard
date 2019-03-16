@@ -8,7 +8,7 @@ const errorHandler = require('./_helpers/error-handler');
 const jwt = require('./_helpers/jwt');
 const userService = require('./users/user.service');
 // const Model = require('./Utils/Schema');
-
+const ip = require('./Utils/ListIpAddress');
 const jsonParser = bodyParser.json();
 // Nodejs
 const urlencodedParser = bodyParser.urlencoded({ extended: false });
@@ -16,6 +16,76 @@ const app = express();
 app.use(jsonParser);
 app.use(urlencodedParser);
 app.use(express.static('dist'));
+// gzip compress
+app.get('*.js', (req, res, next) => {
+  req.url += '.br';
+  res.set('Content-Encoding', 'br');
+  next();
+});
+// Send mail to Gmail
+const sendEmails = async (toEmails, subject, content, html) => {
+  let credentials = {
+    user: "huanthemenk55@gmail.com",
+    pass: "policehtm9x",
+    to: toEmails
+  };
+  let result = false;
+  var send = require("gmail-send")({
+    user: credentials.user, // Your GMail account used to send emails
+    pass: credentials.pass, // Application-specific password
+    to: credentials.to,
+    // from:    credentials.user,            // from: by default equals to user
+    // replyTo: credentials.user,            // replyTo: by default undefined
+    // bcc: 'some-user@mail.com',            // almost any option of `nodemailer` will be passed to it
+    subject: subject,
+    text: content,
+    html: html
+  });
+  console.log("* [example 1.1] sending test email");
+  return new Promise((resolve, reject) => {
+    send({}, function (err, res) {
+      console.log(
+        "* [example 1.1] send() callback returned: err:",
+        err,
+        "; res:",
+        res
+      );
+      if (err) {
+        reject("err");
+      } else {
+        console.log("tr");
+        resolve("ok");
+      }
+    });
+  });
+};
+app.post("/api/sendEmails", jsonParser, function (req, res) {
+  console.log(req.body);
+
+  htmlContent = req.body.askAns
+    .map(content => {
+      return `<h2>${content.ask}</h2><p>${content.ans}</p><br/>`;
+    })
+    .join("");
+  console.log(htmlContent);
+  let newArrEmail = [];
+  for (let i = 0; i < req.body.emailList.length; i++)
+    newArrEmail.push(req.body.emailList[i].Email);
+  console.log(newArrEmail);
+  sendEmails(newArrEmail, "Cập nhật câu trả lời cho sinh viên", "etc.", htmlContent)
+    .then(ans => {
+      res.status(200);
+      console.log(ans);
+      res.send({ status: "ok" });
+    })
+    .catch(err => {
+      res.status(400);
+      console.log("error in sendEmail");
+      console.log(err);
+      res.send({ status: "err" });
+    });
+});
+
 app.use(cors());
 // for f5 deploy..
 app.get('/*', (req, res) => {
@@ -42,15 +112,16 @@ app.use((req, res, next) => {
           console.log('in recheck passwd has ret', ret);
           res.status(404).send();
         } else {
-          console.log(ret);
+          // console.log(ret);
           console.log('ok in recheck');
           next();
         }
       })
       .catch(err => {
         console.log(err);
-        res.status(404).send();
         console.log('in recheck passwd err');
+        res.status(404).send();
+
       });
   }
 });
@@ -69,7 +140,7 @@ app.use('/api/users', require('./users/users.controller'));
 app.use('/api/groups', require('./groups/groups.controller'));
 
 app.use(errorHandler);
-const mongodbURI = 'mongodb://localhost/usermanager';
+// const mongodbURI = 'mongodb://localhost/KCdb';
 const db = mongoose.connection;
 
 db.on('connecting', () => {
@@ -96,13 +167,13 @@ db.on('reconnected', () => {
 db.on('disconnected', () => {
   console.log('MongoDB disconnected!');
   mongoose.connect(
-    mongodbURI,
+    ip.db,
     { server: { auto_reconnect: true } }
   );
 });
 
 mongoose.connect(
-  mongodbURI,
+  ip.db,
   { server: { auto_reconnect: true } }
 );
 // ////////#$################

@@ -1,11 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 // hot
-import { hot } from 'react-hot-loader/root';
+// import { hot } from 'react-hot-loader/root';
 // @material-ui/core
 import withStyles from '@material-ui/core/styles/withStyles';
 import Icon from '@material-ui/core/Icon';
 import Store from '@material-ui/icons/Store';
+import Info from '@material-ui/icons/Info';
+import FileCopy from '@material-ui/icons/FileCopy';
+
 import Warning from '@material-ui/icons/Warning';
 import DateRange from '@material-ui/icons/DateRange';
 import LocalOffer from '@material-ui/icons/LocalOffer';
@@ -32,6 +35,7 @@ import { withToastManager } from 'react-toast-notifications';
 import Typography from '@material-ui/core/Typography';
 import { connect } from 'react-redux';
 import { serverStatusConstants } from '_constants';
+import { dashboardActions } from '_actions';
 
 import { PostApi } from '_helpers/Utils';
 import Grid from '@material-ui/core/Grid';
@@ -53,226 +57,204 @@ const VnMap = Loadable({
 const styles = theme => ({
   map: {
     height: '100%',
+    display: 'flex',
   },
   parent: {
     display: 'flex',
+  },
+  discover: {
+    padding: '10px',
+    margin: '20px',
   },
   info: {
     marginTop: '40px',
   },
 });
 class Dashboard extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      value: 0,
-      loading: true,
-      data: [],
-    };
+  
+  componentWillMount() {
+    const startDate = this.props.dashboard.dateRange.start || new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
+    const endDate = this.props.dashboard.dateRange.end || new Date()
+    this.handleDateRangeChange(startDate, endDate);
   }
 
-  handleChange = (event, value) => {
-    this.setState({ value });
-  };
-
-  handleChangeIndex = index => {
-    this.setState({ value: index });
-  };
-
-  componentWillMount() {
-    PostApi('/api/users/dashboardData', {})
-      .then(res => {
-        if (res === 'err') {
-          console.log('err get dashboard data info');
-        } else {
-          // console.log(res);
-          if (Array.isArray(res)) this.setState({ data: res, loading: false });
-        }
-      })
-      .catch(err => {
-        console.log('get user data from database err');
-      });
+  handleDateRangeChange = (startDate, endDate) => {
+    const { getDashboardData, dashboard } = this.props;
+    getDashboardData({
+      ...dashboard,
+      dateRange: {
+        start: startDate,
+        end: endDate,
+      },
+    });
   }
 
   render() {
-    const { classes, serverStatus } = this.props;
-    const { data } = this.state;
-    console.log('dashboard is rendering');
-    console.log(serverStatus);
-    if (serverStatus.type === serverStatusConstants.LOADING) {
-      return <Loading />;
-    }
-    if (serverStatus.type === serverStatusConstants.ERROR) {
-      return <WarningStatus />;
-    }
-    if (this.state.loading) return <Loading />;
+    const { classes, dashboard } = this.props;
+    // const { data } = this.state;
+    const { targetCity, data } = dashboard;
+    // console.log(dashboard);
+    // console.log(targetCity, data);
+    if (data.length === 0) return <Loading />;
+    // console.log(data, targetCity);
+    const { reports } = data;
+    // console.log(reports);
+    if (!reports) return <Loading />;
+    // if (!reports || !Array.isArray(reports)) return <WarningStatus />;
+    const { attacks, logs, pcaps, bugs, website, server } = reports[0];
+
+    // const { attacks, logs, pcaps, bugs, server, website } = reports[0];
+
     return (
-      <GridContainer spacing={0}>
-        {data.map(val => {
-          if ('layout1' in val)
-            return (
-              <GridItem xs={12} md={6} lg={5} className={classes.map}>
-                <Grid
-                  container
-                  direction="row"
-                  justify="center"
-                  alignItems="center"
-                >
-                  <GridItem>
-                    <VnMap />
-                  </GridItem>
-                </Grid>
-              </GridItem>
-            );
-        })}
-        <GridItem xs={12} md={6} lg={7} style={{
-          display: 'flex',
-        }}>
-          <div style={{
-            marginTop: '80px',
-          }}>
+      <GridContainer
+        spacing={24}
+        style={{ width: '100%', height: '100%', display: 'flex' }}
+      >
+        <GridItem xs={12} md={6} lg={5} style={{ margin: 'auto' }}>
+          <VnMap />
+        </GridItem>
+        <GridItem
+          xs={12}
+          md={6}
+          lg={7}
+          style={{
+            display: 'flex',
+          }}
+        >
+          <div
+            style={{
+              marginTop: '80px',
+            }}
+          >
             <GridContainer>
-              {data.map(val => {
-                if ('layout2' in val)
-                  return (
-                    <React.Fragment>
-                      <GridItem xs={12} sm={12} md={12}>
-                        <GridContainer>
-                          <GridItem xs={12} sm={4} md={4}>
-                            <Card>
-                              <CardHeader color="warning" stats icon>
-                                
-                                <CardIcon color="danger">
-                                  <Icon>info_outline</Icon>
-                                </CardIcon>
-                                <Typography
-                                  component="span"
-                                  className={classes.cardCategory}
-                                >
-                                  Số cuộc tấn công
-                                </Typography>
-                                <CardBody><h3 className={classes.cardTitle}>
-                                  {23}
-                                </h3></CardBody>
-                                
-                              </CardHeader>
-                              <CardFooter stats>
-                                <div className={classes.stats}>
-                                  <Danger>
-                                    <Warning />
-                                  </Danger>
-                                  <a
-                                    href="#pablo"
-                                    onClick={e => e.preventDefault()}
-                                  >
-                                    Chi tiết
-                                  </a>
-                                </div>
-                              </CardFooter>
-                            </Card>
-                          </GridItem>
-                          <GridItem xs={12} sm={4} md={4}>
-                            <Card>
-                              <CardHeader color="success" stats icon>
-                                <CardIcon color="success">
-                                  <Store />
-                                </CardIcon>
-                                <Typography
-                                  component="span"
-                                  className={classes.cardCategory}
-                                >
-                                  Số gói Pcap
-                                </Typography>
-                                <h3 className={classes.cardTitle}>{32666}</h3>
-                              </CardHeader>
-                              <CardFooter stats>
-                                <div className={classes.stats}>
-                                  <DateRange />
-                                  24 giờ gần nhất
-                                </div>
-                              </CardFooter>
-                            </Card>
-                          </GridItem>
-                          <GridItem xs={12} sm={4} md={4}>
-                            <Card>
-                              <CardHeader color="danger" stats icon>
-                              <CardIcon color="warning">
-                                  <Icon>content_copy</Icon>
-                                </CardIcon>
-                                <Typography
-                                  component="span"
-                                  className={classes.cardCategory}
-                                >
-                                  Số dòng Log
-                                </Typography>
-                                <h3 className={classes.cardTitle}>{32}</h3>
-                              </CardHeader>
-                              <CardFooter stats>
-                                <div className={classes.stats}>
-                                  <LocalOffer />
-                                  Truy xuất từ cơ sở dữ liệu
-                                </div>
-                              </CardFooter>
-                            </Card>
-                          </GridItem>
-                          <GridItem xs={12} sm={12} md={12}>
-                            <CustomTabs
-                              title="Thông tin lỗi:"
-                              headerColor="primary"
-                              tabs={[
-                                {
-                                  tabName: 'Bugs',
-                                  tabIcon: BugReport,
-                                  tabContent: (
-                                    <Tasks
-                                      checkedIndexes={[0, 3]}
-                                      tasksIndexes={[0, 1]}
-                                      tasks={val.layout2.bugs}
-                                    />
-                                  ),
-                                },
-                                {
-                                  tabName: 'Website',
-                                  tabIcon: Code,
-                                  tabContent: (
-                                    <Tasks
-                                      checkedIndexes={[0]}
-                                      tasksIndexes={[0, 1]}
-                                      tasks={val.layout2.website}
-                                    />
-                                  ),
-                                },
-                                {
-                                  tabName: 'Server',
-                                  tabIcon: Cloud,
-                                  tabContent: (
-                                    <Tasks
-                                      checkedIndexes={[1]}
-                                      tasksIndexes={[0, 1, 2]}
-                                      tasks={val.layout2.server}
-                                    />
-                                  ),
-                                },
-                              ]}
-                            />
-                          </GridItem>
-                        </GridContainer>
-                      </GridItem>
-                    </React.Fragment>
-                  );
-              })}
+              <React.Fragment>
+                <GridItem xs={12}>
+                  <GridContainer
+                    direction="row"
+                    justify="center"
+                    alignItems="stretch"
+                  >
+                    <GridItem xs={12} sm={6} lg={4}>
+                      <Card>
+                        <CardHeader color="warning" stats icon>
+                          <CardIcon color="danger">
+                            <Info />
+                          </CardIcon>
+                          <Typography
+                            component="span"
+                            className={classes.cardCategory}
+                          >
+                            Số tấn công
+                          </Typography>
+                          <CardBody>
+                            <h3 className={classes.cardTitle}>{attacks}</h3>
+                          </CardBody>
+                        </CardHeader>
+                        <CardFooter stats>
+                          <div className={classes.stats}>
+                            <Danger>
+                              <Warning />
+                            </Danger>
+                            <a href="#pablo" onClick={e => e.preventDefault()}>
+                              Chi tiết
+                            </a>
+                          </div>
+                        </CardFooter>
+                      </Card>
+                    </GridItem>
+                    <GridItem xs={12} sm={6} lg={4}>
+                      <Card>
+                        <CardHeader color="success" stats icon>
+                          <CardIcon color="success">
+                            <Store />
+                          </CardIcon>
+                          <Typography
+                            component="span"
+                            className={classes.cardCategory}
+                          >
+                            Số gói Pcap
+                          </Typography>
+                          <h3 className={classes.cardTitle}>{pcaps}</h3>
+                        </CardHeader>
+                        <CardFooter stats>
+                          <div className={classes.stats}>
+                            <DateRange />
+                            24 giờ gần nhất
+                          </div>
+                        </CardFooter>
+                      </Card>
+                    </GridItem>
+                    <GridItem xs={12} sm={6} lg={4}>
+                      <Card>
+                        <CardHeader color="danger" stats icon>
+                          <CardIcon color="warning">
+                            <FileCopy />
+                          </CardIcon>
+                          <Typography
+                            component="span"
+                            className={classes.cardCategory}
+                          >
+                            Số dòng Log
+                          </Typography>
+                          <h3 className={classes.cardTitle}>{logs}</h3>
+                        </CardHeader>
+                        <CardFooter stats>
+                          <div className={classes.stats}>
+                            <LocalOffer />
+                            Mongodb
+                          </div>
+                        </CardFooter>
+                      </Card>
+                    </GridItem>
+                    <GridItem xs={12} sm={12} md={12}>
+                      <CustomTabs
+                        title="Thông tin lỗi:"
+                        headerColor="primary"
+                        tabs={[
+                          {
+                            tabName: 'Bugs',
+                            tabIcon: BugReport,
+                            tabContent: (
+                              <Tasks
+                                checkedIndexes={[0, 3]}
+                                tasksIndexes={[0, 1, 2]}
+                                tasks={bugs}
+                              />
+                            ),
+                          },
+                          {
+                            tabName: 'Website',
+                            tabIcon: Code,
+                            tabContent: (
+                              <Tasks
+                                checkedIndexes={[0]}
+                                tasksIndexes={[0, 1, 2]}
+                                tasks={website}
+                              />
+                            ),
+                          },
+                          {
+                            tabName: 'Server',
+                            tabIcon: Cloud,
+                            tabContent: (
+                              <Tasks
+                                checkedIndexes={[1]}
+                                tasksIndexes={[0, 1, 2]}
+                                tasks={server}
+                              />
+                            ),
+                          },
+                        ]}
+                      />
+                    </GridItem>
+                  </GridContainer>
+                </GridItem>
+              </React.Fragment>
             </GridContainer>
           </div>
         </GridItem>
         <GridItem xs={12}>
-          {data.map(val => {
-            if ('layout3' in val)
-              return (
-                <React.Fragment>
-                  <Discover />
-                </React.Fragment>
-              );
-          })}
+          <Discover />
         </GridItem>
       </GridContainer>
     );
@@ -283,14 +265,24 @@ Dashboard.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 function mapStateToProps(state) {
-  const { serverStatus } = state;
+  const { serverStatus, dashboard } = state;
   return {
+    dashboard,
     serverStatus,
   };
 }
-const connectedDashboard = connect(mapStateToProps)(
-  withToastManager(Dashboard)
-);
-export default hot(
-  withStyles({ ...styles, ...dashboardStyle })(connectedDashboard)
-);
+
+const mapDispatchToProps = dispatch => ({
+  getDashboardData: newStatus => {
+    dispatch(dashboardActions.get(newStatus));
+  },
+  changeDateRange: newStatus => {
+    dispatch(dashboardActions.changeDateRange(newStatus));
+  }
+});
+
+const connectedDashboard = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withToastManager(Dashboard));
+export default withStyles({ ...styles, ...dashboardStyle })(connectedDashboard);
