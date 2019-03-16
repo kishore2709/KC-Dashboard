@@ -7,6 +7,7 @@ import ButtonBase from '@material-ui/core/ButtonBase';
 import { colors } from 'assets/colors/colors.jsx';
 import { connect } from 'react-redux';
 import { dashboardActions } from '_actions';
+
 const { active: activeColor, warn: warnColor } = colors;
 
 const styles = theme => ({
@@ -43,7 +44,7 @@ class Status extends React.Component {
   render() {
     const { classes, dashboard } = this.props;
     // console.log(dashboard);
-    const { targetCity } = dashboard;
+    const { targetCity, loading } = dashboard;
     const cities = dashboard.cities || [];
     const OKButton = (
       <ButtonBase>
@@ -77,19 +78,28 @@ class Status extends React.Component {
               direction="row"
               justify="center"
               alignItems="center"
+              style={loading ? { pointerEvents: 'none', opacity: '0.4' } : {}}
             >
               <Grid item>
-                <Typography className={classes.typo} align="center" color={index === targetCity ? 'secondary' : 'primary'} >
+                <Typography
+                  className={classes.typo}
+                  align="center"
+                  color={index === targetCity ? 'secondary' : 'primary'}
+                >
                   {city.name}
                 </Typography>
               </Grid>
               <Grid item>
-                <Typography className={classes.typo} align="center" onClick={() => {
-                  this.props.changeCity({
-                    ...dashboard,
-                    targetCity: index,
-                  })
-                }}>
+                <Typography
+                  className={classes.typo}
+                  align="center"
+                  onClick={() => {
+                    this.props.changeCity({
+                      ...dashboard,
+                      targetCity: index,
+                    });
+                  }}
+                >
                   {city.status ? OKButton : WarnButton}
                 </Typography>
               </Grid>
@@ -101,10 +111,13 @@ class Status extends React.Component {
   }
 }
 
-export default connect(state => ({
-  dashboard: state.dashboard,
-}), dispatch => ({
-  changeCity: newStatus => {
-    dispatch(dashboardActions.get(newStatus))
-  }
-}))(withStyles(styles)(Status));
+export default connect(
+  state => ({
+    dashboard: state.dashboard,
+  }),
+  dispatch => ({
+    changeCity: newStatus => {
+      dispatch(dashboardActions.get(newStatus));
+    },
+  })
+)(withStyles(styles)(Status));

@@ -77,14 +77,14 @@ class Sidebar extends Component {
         } else {
           // console.log(res);
           if (!res || !('permissions' in res)) throw new Error('permission not found in respones');
-          console.log(res.permissions);
+          // console.log(res.permissions);
           const validKeys = Object.keys(res.permissions).filter(
             val => res.permissions[val].canAccess
           );
           // / console.log(validKeys);
           const curRoutes = this.props.routes;
-          console.log(curRoutes);
-          console.log(validKeys);
+          // console.log(curRoutes);
+          // console.log(validKeys);
           const desRoutes = curRoutes.filter(
             val => validKeys.indexOf(val.id) !== -1
           );
@@ -134,8 +134,8 @@ class Sidebar extends Component {
       if (this.numberNotSeen(mailBox.dataMail) > 0) flagMail = true;
     }
     const { routes, openUserManagementSubComponents } = this.state;
-    console.log('??');
-    console.log(routes);
+    // console.log('??');
+    // console.log(routes);
     const listItemClasses = path =>
       classNames({
         [` ${classes[color]}`]: this.activeRoute(path),

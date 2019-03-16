@@ -93,7 +93,7 @@ class Dashboard extends React.Component {
     const { classes, dashboard } = this.props;
     // const { data } = this.state;
     const { targetCity, data } = dashboard;
-    console.log(dashboard);
+    // console.log(dashboard);
     // console.log(targetCity, data);
     if (data.length === 0) return <Loading />;
     // console.log(data, targetCity);

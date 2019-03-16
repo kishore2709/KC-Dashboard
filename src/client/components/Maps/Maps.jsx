@@ -55,7 +55,7 @@ class SimpleMarkers extends Component {
     const data = dashboard.cities || []
     const markers = data;
     // console.log('in render..');
-    console.log('xx', markers);
+    // console.log('Map will rerender????', markers);
     // console.log(dispatch);
     return (
       <Paper style={wrapperStyles} className={classes.box}>
@@ -175,6 +175,6 @@ class SimpleMarkers extends Component {
   }
 }
 
-export default connect(state => ({ app: state, dashboard: state.dashboard }))(
+export default connect(state => ({ dashboard: state.dashboard }))(
   withStyles(styles)(SimpleMarkers)
 );
