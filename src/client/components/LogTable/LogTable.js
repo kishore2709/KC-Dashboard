@@ -4,20 +4,25 @@ import PropTypes from 'prop-types';
 import MUIDataTable from 'mui-datatables';
 import { Typography, Grid } from '@material-ui/core';
 import { PostApi } from '_helpers/Utils';
+import { makePdf } from '_helpers/Utils/';
+// icon
+import IconButton from '@material-ui/core/IconButton';
+import Tooltip from '@material-ui/core/Tooltip';
+import ArrowDownward from '@material-ui/icons/ArrowDownward';
 
 const styles = theme => ({
   canOverflow: {
     overflow: 'hidden',
     textOverflow: 'ellipsis',
-  }
+  },
 });
 
 class LogTable extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: {}
-    }
+      data: {},
+    };
   }
 
   componentWillMount() {
@@ -34,6 +39,7 @@ class LogTable extends Component {
         console.log('geterr get log info err');
       });
   }
+
   render() {
     console.log(this.state.data);
     const logData = _DataParser(this.state.data);
@@ -43,21 +49,27 @@ class LogTable extends Component {
         name: 'Time',
         options: {
           filter: false,
-          customBodyRender: data => <Typography className={classes.canOverflow}>{data}</Typography>,
+          customBodyRender: data => (
+            <Typography className={classes.canOverflow}>{data}</Typography>
+          ),
         },
       },
       {
         name: 'Username',
         options: {
-          customBodyRender: data => <Typography className={classes.canOverflow}>{data}</Typography>,
+          customBodyRender: data => (
+            <Typography className={classes.canOverflow}>{data}</Typography>
+          ),
         },
       },
       {
         name: 'IP Address',
         options: {
           filter: false,
-          customBodyRender: data => <Typography className={classes.canOverflow}>{data}</Typography>,
-        }
+          customBodyRender: data => (
+            <Typography className={classes.canOverflow}>{data}</Typography>
+          ),
+        },
       },
       {
         name: 'Status',
@@ -68,29 +80,74 @@ class LogTable extends Component {
                 Success
               </Typography>
             ) : (
-                <Typography variant="caption" color="error">
-                  Error
+              <Typography variant="caption" color="error">
+                Error
               </Typography>
-              ),
+            ),
         },
       },
     ];
 
     const options = {
-      filter: true,
       filterType: 'dropdown',
-      responsive: 'stacked',
+      responsive: 'scroll',
+      selectableRows: false,
+      filter: true,
       rowsPerPage: 5,
       rowsPerPageOptions: [5, 10, 20],
       page: 0,
-      selectableRows: false,
+      textLabels: {
+        body: {
+          noMatch: 'Hiện tại chưa có dữ liệu',
+          toolTip: 'Sắp xếp',
+        },
+        pagination: {
+          next: 'Trang tiếp',
+          previous: 'Trang trước',
+          rowsPerPage: 'Số dòng mỗi trang',
+          displayRows: 'của',
+        },
+        toolbar: {
+          search: 'Tìm kiếm',
+          downloadCsv: 'Xuất bản dạng CSV',
+          print: 'Xuất bản ra máy in',
+          viewColumns: 'Bộ lọc cột',
+          filterTable: 'Bộ lọc bảng',
+        },
+        filter: {
+          all: 'Tất cả',
+          title: 'Bộ lọc',
+          reset: 'Làm lại',
+        },
+        viewColumns: {
+          title: 'Hiển thị cột',
+          titleAria: 'Ẩn/hiện bảng các cột',
+        },
+        selectedRows: {
+          text: 'cột đã được chọn',
+          delete: 'Xóa',
+          deleteAria: 'Xóa cột đã chọn',
+        },
+      },
+      customToolbar: () => (
+        <Tooltip title="Xuất bản dạng PDF">
+          <IconButton
+            aria-label="Xuất bản PDF"
+            onClick={() => {
+              makePdf(columns, curData);
+            }}
+          >
+            <ArrowDownward />
+          </IconButton>
+        </Tooltip>
+      ),
     };
 
     return (
       <Grid container spacing={24}>
         <Grid item xs={12}>
           <MUIDataTable
-            title={'Thông tin logs đăng nhập'}
+            title="Thông tin logs đăng nhập"
             data={logData.in}
             columns={columns}
             options={options}
@@ -98,7 +155,7 @@ class LogTable extends Component {
         </Grid>
         <Grid item xs={12}>
           <MUIDataTable
-            title={'Thông tin Logs đăng xuất'}
+            title="Thông tin Logs đăng xuất"
             data={logData.out}
             columns={columns}
             options={options}
@@ -120,13 +177,22 @@ function _DataParser(data) {
   const logData = {
     in: data.message
       .filter(curLog => curLog.isLogin)
-      .map(curLog => [curLog.timestamp, curLog.username, curLog.ip, curLog.status]),
+      .map(curLog => [
+        curLog.timestamp,
+        curLog.username,
+        curLog.ip,
+        curLog.status,
+      ]),
     out: data.message
       .filter(curLog => !curLog.isLogin)
-      .map(curLog => [curLog.timestamp, curLog.username, curLog.ip, curLog.status]),
+      .map(curLog => [
+        curLog.timestamp,
+        curLog.username,
+        curLog.ip,
+        curLog.status,
+      ]),
   };
   return logData;
 }
 
-const _data = {
-};
+const _data = {};

@@ -54,106 +54,114 @@ function getDataOneCity(city, start, end) {
       .countDocuments()
       .exec()
       .then(dnsCount => {
-      let dnsQuery = DnsLog.find({ city: id });
-      if (start && end) {
-        dnsQuery = dnsQuery.where('timestamp').gte(start).lte(end)
-      }
-      if (dnsCount <= 200) {
-        return dnsQuery.exec()
-      } 
-        let timestamp = 0
-        let count = 0
-        let city = ''
-        let counter = 0
-        let arrSize = -1
-        let chunkSize = Math.round(dnsCount / 200)
-        const dnsCursor = dnsQuery.cursor()
-        return new Promise((resolve, reject) => {
-          dnsCursor.on('data', dns => {
-            timestamp += dns.timestamp.getTime()
-            count += dns.count
-            city = dns.city
-            counter += 1
-            if (counter >= chunkSize) {
-              dnsArr[++arrSize] = {
-                timestamp: new Date(Math.round(timestamp / counter)),
-                count: Math.round(count / counter),
-                city: city,
-              }
-              timestamp = 0;
-              count = 0;
-              city = '';
-              counter = 0;
-            }  
-          }).on('end', () => {
-            if (counter > 0) {
-              dnsArr[++arrSize] = {
-                timestamp: new Date(Math.round(timestamp / counter)),
-                count: Math.round(count / counter),
-                city: city,
-              }
-              timestamp = 0;
-              count = 0;
-              city = '';
-              counter = 0;
-            }
-            resolve(dnsArr.filter(dns => dns != null))
-          })
-        })
-      
-    })
-    webLogs = webLogs
-      .countDocuments()
-      .exec()
-      .then(webCount => {
-      let webQuery = WebLog.find({ city: id });
-      if (start && end) {
-        webQuery = webQuery.where('timestamp').gte(start).lte(end)
-      }
-      if (webCount <= 200) {
-        return webQuery.exec()
-      } 
+        let dnsQuery = DnsLog.find({ city: id });
+        if (start && end) {
+          dnsQuery = dnsQuery
+            .where('timestamp')
+            .gte(start)
+            .lte(end);
+        }
+        if (dnsCount <= 200) {
+          return dnsQuery.exec();
+        }
         let timestamp = 0;
         let count = 0;
         let city = '';
         let counter = 0;
         let arrSize = -1;
-        let chunkSize = Math.round(webCount / 200);
+        const chunkSize = Math.round(dnsCount / 200);
+        const dnsCursor = dnsQuery.cursor();
+        return new Promise((resolve, reject) => {
+          dnsCursor
+            .on('data', dns => {
+              timestamp += dns.timestamp.getTime();
+              count += dns.count;
+              city = dns.city;
+              counter += 1;
+              if (counter >= chunkSize) {
+                dnsArr[++arrSize] = {
+                  timestamp: new Date(Math.round(timestamp / counter)),
+                  count: Math.round(count / counter),
+                  city,
+                };
+                timestamp = 0;
+                count = 0;
+                city = '';
+                counter = 0;
+              }
+            })
+            .on('end', () => {
+              if (counter > 0) {
+                dnsArr[++arrSize] = {
+                  timestamp: new Date(Math.round(timestamp / counter)),
+                  count: Math.round(count / counter),
+                  city,
+                };
+                timestamp = 0;
+                count = 0;
+                city = '';
+                counter = 0;
+              }
+              resolve(dnsArr.filter(dns => dns != null));
+            });
+        });
+      });
+    webLogs = webLogs
+      .countDocuments()
+      .exec()
+      .then(webCount => {
+        let webQuery = WebLog.find({ city: id });
+        if (start && end) {
+          webQuery = webQuery
+            .where('timestamp')
+            .gte(start)
+            .lte(end);
+        }
+        if (webCount <= 200) {
+          return webQuery.exec();
+        }
+        let timestamp = 0;
+        let count = 0;
+        let city = '';
+        let counter = 0;
+        let arrSize = -1;
+        const chunkSize = Math.round(webCount / 200);
         const webCursor = webQuery.cursor();
         return new Promise((resolve, reject) => {
-          webCursor.on('data', web => {
-            timestamp += web.timestamp.getTime()
-            count += web.count
-            city = web.city
-            counter += 1
-            if (counter >= chunkSize) {
-              webArr[++arrSize] = {
-                timestamp: new Date(Math.round(timestamp / counter)),
-                count: Math.round(count / counter),
-                city: city,
+          webCursor
+            .on('data', web => {
+              timestamp += web.timestamp.getTime();
+              count += web.count;
+              city = web.city;
+              counter += 1;
+              if (counter >= chunkSize) {
+                webArr[++arrSize] = {
+                  timestamp: new Date(Math.round(timestamp / counter)),
+                  count: Math.round(count / counter),
+                  city,
+                };
+                timestamp = 0;
+                count = 0;
+                city = '';
+                counter = 0;
               }
-              timestamp = 0;
-              count = 0;
-              city = '';
-              counter = 0;
-            }
-          }).on('end', () => {
-            if (counter > 0) {
-              webArr[++arrSize] = {
-                timestamp: new Date(Math.round(timestamp / counter)),
-                count: Math.round(count / counter),
-                city: city,
+            })
+            .on('end', () => {
+              if (counter > 0) {
+                webArr[++arrSize] = {
+                  timestamp: new Date(Math.round(timestamp / counter)),
+                  count: Math.round(count / counter),
+                  city,
+                };
+                timestamp = 0;
+                count = 0;
+                city = '';
+                counter = 0;
               }
-              timestamp = 0;
-              count = 0;
-              city = '';
-              counter = 0;
-            }
-            resolve(webArr.filter(web => web != null))
-          });
-        })
-      
-    })
+              resolve(webArr.filter(web => web != null));
+            });
+        });
+      });
     const reportsQuery = Report.find({ city: id });
     const reports = reportsQuery.exec();
     Promise.all([dnsLogs, webLogs, reports])
@@ -263,7 +271,7 @@ async function sendEmails(toEmails, subject, content, html) {
 // }
 // Send SMS by Dcom
 async function sendSMS(toSMS, content) {
-  const {exec} = require('child_process');
+  const { exec } = require('child_process');
 
   let res = 'python src/server/users/SendSMS.py ';
   res = `${res + toSMS.toString()} ` + `"${content}"`;
@@ -274,7 +282,12 @@ async function getData(data) {
   const strFake = {
     columns: ['Time', 'Computer', 'Content', 'Status'],
     data: [
-      ['2019-03-04', 'Number 01', 'Mirai is attacking your system', 'NY'],
+      [
+        '2019-03-04',
+        'Number 01',
+        'Mã độc mirai đang tấn công máy chủ Hà Nội',
+        'NY',
+      ],
       ['2019-03-03', 'Number 02', 'Bashlite is attacking your system', 'CT'],
       ['2019-03-02', 'Number 03', 'Mirai is attacking your system', 'FL'],
       ['2019-03-01', 'Number 04', 'Trojan is attacking your system', 'TX'],

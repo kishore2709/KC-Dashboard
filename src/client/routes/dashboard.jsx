@@ -6,7 +6,6 @@ import Person from '@material-ui/icons/Person';
 import MailOutline from '@material-ui/icons/MailOutline';
 import ExitToApp from '@material-ui/icons/ExitToApp';
 
-
 // import ContentPaste from "@material-ui/icons/ContentPaste";
 import LibraryBooks from '@material-ui/icons/LibraryBooks';
 import BubbleChart from '@material-ui/icons/BubbleChart';
@@ -41,7 +40,11 @@ const GroupPermission = Loadable({
 const DashboardPage = Loadable({
   loader: () =>
     import(/* webpackPrefetch: true */ 'views/Dashboard/Dashboard.jsx'),
-  loading: () => <div style={{ marginTop: '100px' }}><TableLoader /></div>,
+  loading: () => (
+    <div style={{ marginTop: '100px' }}>
+      <TableLoader />
+    </div>
+  ),
 });
 // import UserManagement from 'views/UserManagement/UserManagement.jsx';
 const UserManagement = Loadable({
@@ -56,11 +59,11 @@ const LogManagement = Loadable({
   loading: TableLoader,
 });
 // import ServiceManager from 'views/ServiceManager/ServiceManager.jsx';
-const ServiceManager = Loadable({
-  loader: () =>
-    import(/* webpackPrefetch: true */ 'views/ServiceManager/ServiceManager.jsx'),
-  loading: TableLoader,
-});
+// const ServiceManager = Loadable({
+//   loader: () =>
+//     import(/* webpackPrefetch: true */ 'views/ServiceManager/ServiceManager.jsx'),
+//   loading: TableLoader,
+// });
 // import AttackReport from 'views/AttackReport/AttackReport.jsx';
 const AttackReport = Loadable({
   loader: () =>
@@ -88,15 +91,16 @@ const MailBox = Loadable({
 
 // import DetailsMail from 'views/DetailsMail/DetailsMail.jsx';
 const DetailsMail = Loadable({
-  loader: () => import(/* webpackPrefetch: true */ '../views/DetailsMail/DetailsMail.jsx'),
+  loader: () =>
+    import(/* webpackPrefetch: true */ '../views/DetailsMail/DetailsMail.jsx'),
   loading: TableLoader,
 });
 
-// import ExportData from 'views/ExportData/ExportData.jsx';
-const ExportData = Loadable({
-  loader: () => import(/* webpackPrefetch: true */ '../views/ExportData/ExportData.jsx'),
-  loading: TableLoader,
-});
+// // import ExportData from 'views/ExportData/ExportData.jsx';
+// const ExportData = Loadable({
+//   loader: () => import(/* webpackPrefetch: true */ '../views/ExportData/ExportData.jsx'),
+//   loading: TableLoader,
+// });
 const dashboardRoutes = [
   {
     id: 'dashboard',
@@ -148,14 +152,14 @@ const dashboardRoutes = [
     icon: MailOutline,
     component: MailBox,
   },
-  {
-    id: 'exportData',
-    path: '/exportData',
-    sidebarName: 'Xuất dữ liệu',
-    navbarName: 'Giao diện xuất dữ liệu',
-    icon: ExitToApp,
-    component: ExportData,
-  },
+  // {
+  //   id: 'exportData',
+  //   path: '/exportData',
+  //   sidebarName: 'Xuất dữ liệu',
+  //   navbarName: 'Giao diện xuất dữ liệu',
+  //   icon: ExitToApp,
+  //   component: ExportData,
+  // },
   {
     id: 'logManager',
     path: '/logManager',
