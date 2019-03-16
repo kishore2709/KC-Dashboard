@@ -1,7 +1,7 @@
 ﻿const jwt = require('jsonwebtoken');
+const co = require('co');
 const config = require('../config.json');
 const Models = require('../Utils/Schema');
-const co = require('co');
 // #### >>>  Init Mongodb
 const { User, Log, Group, City, DnsLog, WebLog, Report } = Models;
 const dashboardService = require('../services/dashboard.js');
@@ -29,28 +29,38 @@ module.exports = {
   sendEmails,
   sendSMS,
   getAllCities,
+  getData,
 };
 
 function getDataOneCity(city, start, end) {
-  console.log(city, start, end)
+  console.log(city, start, end);
   return new Promise((resolve, reject) => {
     const { id } = city;
-    let dnsArr = new Array(300);
-    let webArr = new Array(300);
-    let dnsLogs = DnsLog.find({ city: id })
-    let webLogs = WebLog.find({ city: id })
+    const dnsArr = new Array(300);
+    const webArr = new Array(300);
+    let dnsLogs = DnsLog.find({ city: id });
+    let webLogs = WebLog.find({ city: id });
     if (start && end) {
-      dnsLogs = dnsLogs.where('timestamp').gte(start).lte(end)
-      webLogs = webLogs.where('timestamp').gte(start).lte(end)
+      dnsLogs = dnsLogs
+        .where('timestamp')
+        .gte(start)
+        .lte(end);
+      webLogs = webLogs
+        .where('timestamp')
+        .gte(start)
+        .lte(end);
     }
-    dnsLogs = dnsLogs.countDocuments().exec().then(dnsCount => {
+    dnsLogs = dnsLogs
+      .countDocuments()
+      .exec()
+      .then(dnsCount => {
       let dnsQuery = DnsLog.find({ city: id });
       if (start && end) {
         dnsQuery = dnsQuery.where('timestamp').gte(start).lte(end)
       }
       if (dnsCount <= 200) {
         return dnsQuery.exec()
-      } else {
+      } 
         let timestamp = 0
         let count = 0
         let city = ''
@@ -90,16 +100,19 @@ function getDataOneCity(city, start, end) {
             resolve(dnsArr.filter(dns => dns != null))
           })
         })
-      }
+      
     })
-    webLogs = webLogs.countDocuments().exec().then(webCount => {
+    webLogs = webLogs
+      .countDocuments()
+      .exec()
+      .then(webCount => {
       let webQuery = WebLog.find({ city: id });
       if (start && end) {
         webQuery = webQuery.where('timestamp').gte(start).lte(end)
       }
       if (webCount <= 200) {
         return webQuery.exec()
-      } else {
+      } 
         let timestamp = 0;
         let count = 0;
         let city = '';
@@ -139,9 +152,9 @@ function getDataOneCity(city, start, end) {
             resolve(webArr.filter(web => web != null))
           });
         })
-      }
+      
     })
-    let reportsQuery = Report.find({ city: id })
+    const reportsQuery = Report.find({ city: id });
     const reports = reportsQuery.exec();
     Promise.all([dnsLogs, webLogs, reports])
       .then(values => {
@@ -152,33 +165,41 @@ function getDataOneCity(city, start, end) {
         });
       })
       .catch(err => reject(err));
-  }) 
+  });
 }
 
 async function forArray(arr, start, end) {
-  const promises = arr.map(
-    async city => getDataOneCity(city, start, end)
-  );
-  return Promise.all(promises); 
+  const promises = arr.map(async city => getDataOneCity(city, start, end));
+  return Promise.all(promises);
 }
 
 async function getAllCities() {
   return new Promise((resolve, reject) => {
     const cities = City.find({}).exec();
     cities
-    .then(cities => resolve(cities.map(city => {
-        const { _id: id, markerOffset, name, coordinates, ip, status } = city;
-        return {
-          id,
-          markerOffset,
-          name,
-          coordinates,
-          ip,
-          status,
-        }
-      })
-    ))
-    .catch(err => reject(err));
+      .then(cities =>
+        resolve(
+          cities.map(city => {
+            const {
+              _id: id,
+              markerOffset,
+              name,
+              coordinates,
+              ip,
+              status,
+            } = city;
+            return {
+              id,
+              markerOffset,
+              name,
+              coordinates,
+              ip,
+              status,
+            };
+          })
+        )
+      )
+      .catch(err => reject(err));
   });
 }
 
@@ -186,8 +207,8 @@ async function getCitiesInfo(city, start, end) {
   return new Promise((resolve, reject) => {
     getAllCities().then(cities => {
       getDataOneCity(cities[city], start, end)
-      .then(res => resolve(res))
-      .catch(err => reject(err))
+        .then(res => resolve(res))
+        .catch(err => reject(err));
     });
   });
 }
@@ -230,23 +251,36 @@ async function sendEmails(toEmails, subject, content, html) {
 //     apiKey: '916a1fdc',
 //     apiSecret: 'hpoFIzrIpW8jjRyQ'
 //   })
-
+// const opts = {
+//   "type": "unicode"
+// }
 //   const from = 'Nexmo'
 //   const to = toSMS
 //   const text = content
 //   console.log("====>>>> xen co gui sms ko");
-//   nexmo.message.sendSms(from, to, text)
+//   nexmo.message.sendSms(from, to, text,opts)
 //   return true;
 // }
 // Send SMS by Dcom
 async function sendSMS(toSMS, content) {
-  console.log('in SendSMS');
-  const exec = require('child_process').exec;
+  const {exec} = require('child_process');
 
   let res = 'python src/server/users/SendSMS.py ';
   res = `${res + toSMS.toString()} ` + `"${content}"`;
   const { stdout, stderr } = await exec(res);
   return true;
+}
+async function getData(data) {
+  const strFake = {
+    columns: ['Time', 'Computer', 'Content', 'Status'],
+    data: [
+      ['2019-03-04', 'Number 01', 'Mirai is attacking your system', 'NY'],
+      ['2019-03-03', 'Number 02', 'Bashlite is attacking your system', 'CT'],
+      ['2019-03-02', 'Number 03', 'Mirai is attacking your system', 'FL'],
+      ['2019-03-01', 'Number 04', 'Trojan is attacking your system', 'TX'],
+    ],
+  };
+  return strFake;
 }
 async function saveLog(obj) {
   return new Promise((resolve, reject) => {

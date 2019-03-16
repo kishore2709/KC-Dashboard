@@ -45,6 +45,7 @@ router.post('/changePassword', changePassword);
 router.post('/getCitiesInfo', getCitiesInfo);
 router.post('/sendEmails', sendEmails);
 router.post('/sendSMS', sendSMS);
+router.post('/getData', getData);
 // router.post('/saveLog', saveLog);
 module.exports = router;
 
@@ -74,6 +75,18 @@ function sendSMS(req, res, next) {
     .sendSMS(req.body.toSMS, req.body.content)
     .then(ret => {
       if (ret === 0) {
+        res.status(400).json({ message: 'saveLog error' });
+      } else {
+        res.json({ message: ret });
+      }
+    })
+    .catch(err => next(err));
+}
+function getData(req, res, next) {
+  userService
+    .getData(req.body)
+    .then(ret => {
+      if (!ret) {
         res.status(400).json({ message: 'saveLog error' });
       } else {
         res.json({ message: ret });

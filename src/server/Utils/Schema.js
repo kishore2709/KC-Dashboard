@@ -52,6 +52,10 @@ const UserSchema = new mongoose.Schema({
         canAccess: true,
         subArr: [true, true, true],
       },
+      exportData: {
+        canAccess: true,
+        subArr: [true, true, true],
+      },
       dashboard: {
         canAccess: true,
         subArr: [true, true, true],
@@ -86,6 +90,10 @@ const GroupSchema = new mongoose.Schema({
     type: Object,
     default: {
       mailBox: {
+        canAccess: true,
+        subArr: [true, true, true],
+      },
+      exportData: {
         canAccess: true,
         subArr: [true, true, true],
       },

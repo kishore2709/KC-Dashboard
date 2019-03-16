@@ -12,6 +12,4 @@ def send_text(number, text, path='COM5'):
     ser.write(("%s\x1a" % text).encode())
     print (ser.readlines())
     ser.close()
-print (sys.argv[1])
-print (sys.argv[2])
 send_text(sys.argv[1], sys.argv[2])
