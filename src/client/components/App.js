@@ -54,11 +54,10 @@ class App extends React.Component {
       time: `2019-${month}-${day}`,
       location: 'Hà Nội',
     });
-    // setTimeout(() => {
-    //   alert('Mã độc Bashlite đang tấn công vào hệ thống');
-    //   dispatch(mailActions.fixMail(arr));
-    // }, 5000);
-    //
+    setTimeout(() => {
+      alert('Mã độc Bashlite đang tấn công vào hệ thống');
+      dispatch(mailActions.fixMail(arr));
+    }, 5000);
 
     // PostApi('/api/users/sendSMS', {
     //   toSMS: '0985061316',
@@ -87,16 +86,16 @@ class App extends React.Component {
                 <Router history={history}>
                   <Switch>
                     <Route path="/login" component={LoginPage} />
-                    {indexRoutes.map((prop, key) => {
+                    {indexRoutes.map((prop, key) => 
                       // console.log(prop);
-                      return (
+                       (
                         <PrivateRoute
                           path={prop.path}
                           component={prop.component}
                           key={key}
                         />
-                      );
-                    })}
+                      )
+                    )}
                   </Switch>
                 </Router>
               </div>
