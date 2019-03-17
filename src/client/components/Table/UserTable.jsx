@@ -3,7 +3,7 @@ import { withStyles } from '@material-ui/core/styles';
 
 import MUIDataTable from 'mui-datatables';
 // import FormControlLabel from '@material-ui/core/FormControlLabel';
-//import Switch from '@material-ui/core/Switch';
+// import Switch from '@material-ui/core/Switch';
 import Button from '@material-ui/core/Button';
 import EditIcon from '@material-ui/icons/BorderColor';
 import IconButton from '@material-ui/core/IconButton';
@@ -15,8 +15,8 @@ import { connect } from 'react-redux';
 import { withToastManager } from 'react-toast-notifications';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import { Typography } from '@material-ui/core';
-import CustomFooter from './CustomFooter.jsx';
 import ButtonBase from '@material-ui/core/ButtonBase';
+import CustomFooter from './CustomFooter.jsx';
 
 // import TableLoader from 'components/ContentLoader/TableLoader.jsx';
 // import { List } from 'react-content-loader'
@@ -42,7 +42,8 @@ class UserTable extends React.Component {
     PostApi('/api/users/getUsers', {})
       .then(res => {
         // console.log(res);
-        if (!res || !Array.isArray(res) || 'message' in res || res === 'err') return 0;
+        if (!res || !Array.isArray(res) || 'message' in res || res === 'err')
+          return 0;
         const result = res.map(x => {
           const { _id, ...rest } = x;
           return { id: _id, ...rest };
@@ -57,7 +58,8 @@ class UserTable extends React.Component {
       });
     PostApi('/api/groups/getGroups', {})
       .then(res => {
-        if (!res || !Array.isArray(res) || 'message' in res || res === 'err') return 0;
+        if (!res || !Array.isArray(res) || 'message' in res || res === 'err')
+          return 0;
         // console.log('get Groups..');
         // console.log(res);
         this.props.setGroup(res);
@@ -125,36 +127,34 @@ class UserTable extends React.Component {
         options: {
           filter: true,
           customBodyRender: (value, tableMeta, updateValue) => (
-           <ButtonBase>
-            <EditIcon
-              fontSize='small'
-              color='action'
-              titleAccess='Chỉnh sửa thông tin người dùng'
-              onClick={() => {
-              const {
-                fullname,
-                email,
-                phonenumber,
-                role,
-                status,
-                username,
-                id,
-              } = this.props.userTable[tableMeta.rowIndex];
-              this.props.openDialog(true);
-              update({
-                fullname,
-                email,
-                phonenumber,
-                role,
-                status,
-                username,
-                id,
-                    });
-                  }}
-                />
+            <ButtonBase>
+              <EditIcon
+                fontSize="small"
+                color="action"
+                titleAccess="Chỉnh sửa thông tin người dùng"
+                onClick={() => {
+                  const {
+                    fullname,
+                    email,
+                    phonenumber,
+                    role,
+                    status,
+                    username,
+                    id,
+                  } = this.props.userTable[tableMeta.rowIndex];
+                  this.props.openDialog(true);
+                  update({
+                    fullname,
+                    email,
+                    phonenumber,
+                    role,
+                    status,
+                    username,
+                    id,
+                  });
+                }}
+              />
             </ButtonBase>
-
-            
           ),
         },
       },
@@ -166,8 +166,12 @@ class UserTable extends React.Component {
     });
     // console.log(data);
     const options = {
-      filter: true,
       selectableRows: true,
+      filter: false,
+      print: false,
+      download: false,
+      viewColumns: false,
+      sort: false,
       filterType: 'dropdown',
       responsive: 'stacked',
       customToolbar: () => (
@@ -233,7 +237,7 @@ class UserTable extends React.Component {
 
     return (
       <React.Fragment>
-        <UserDialog groups={this.state.groups}/>
+        <UserDialog groups={this.state.groups} />
         <MUIDataTable
           title="Danh sách người dùng"
           data={data}

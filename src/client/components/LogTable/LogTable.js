@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import MUIDataTable from 'mui-datatables';
 import { Typography, Grid } from '@material-ui/core';
 import { PostApi } from '_helpers/Utils';
-import { makePdf } from '_helpers/Utils/';
+import { makePdf, MakeExcel } from '_helpers/Utils/';
 // icon
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
@@ -41,7 +41,7 @@ class LogTable extends Component {
   }
 
   render() {
-    console.log(this.state.data);
+    // console.log(this.state.data);
     const logData = _DataParser(this.state.data);
     const { classes } = this.props;
     const columns = [
@@ -88,11 +88,15 @@ class LogTable extends Component {
       },
     ];
 
-    const options = {
+    const optionsLogin = {
       filterType: 'dropdown',
       responsive: 'scroll',
       selectableRows: false,
-      filter: true,
+      filter: false,
+      print: false,
+      download: false,
+      viewColumns: false,
+      sort: false,
       rowsPerPage: 5,
       rowsPerPageOptions: [5, 10, 20],
       page: 0,
@@ -130,19 +134,91 @@ class LogTable extends Component {
         },
       },
       customToolbar: () => (
-        <Tooltip title="Xuất bản dạng PDF">
-          <IconButton
-            aria-label="Xuất bản PDF"
-            onClick={() => {
-              makePdf(columns, curData);
-            }}
-          >
-            <ArrowDownward />
-          </IconButton>
-        </Tooltip>
+        <React.Fragment>
+          <Tooltip title="Xuất bản dạng PDF">
+            <IconButton
+              aria-label="Xuất bản PDF"
+              onClick={() => {
+                makePdf(columns, curData);
+              }}
+            >
+              <ArrowDownward />
+            </IconButton>
+          </Tooltip>
+          <MakeExcel
+            name="Login_Report"
+            data={[{ columns: columns.map(val => val.name), data: logData.in }]}
+          />
+        </React.Fragment>
       ),
     };
 
+    const optionsLogout = {
+      filterType: 'dropdown',
+      responsive: 'scroll',
+      selectableRows: false,
+      filter: false,
+      print: false,
+      download: false,
+      viewColumns: false,
+      sort: false,
+      rowsPerPage: 5,
+      rowsPerPageOptions: [5, 10, 20],
+      page: 0,
+      textLabels: {
+        body: {
+          noMatch: 'Hiện tại chưa có dữ liệu',
+          toolTip: 'Sắp xếp',
+        },
+        pagination: {
+          next: 'Trang tiếp',
+          previous: 'Trang trước',
+          rowsPerPage: 'Số dòng mỗi trang',
+          displayRows: 'của',
+        },
+        toolbar: {
+          search: 'Tìm kiếm',
+          downloadCsv: 'Xuất bản dạng CSV',
+          print: 'Xuất bản ra máy in',
+          viewColumns: 'Bộ lọc cột',
+          filterTable: 'Bộ lọc bảng',
+        },
+        filter: {
+          all: 'Tất cả',
+          title: 'Bộ lọc',
+          reset: 'Làm lại',
+        },
+        viewColumns: {
+          title: 'Hiển thị cột',
+          titleAria: 'Ẩn/hiện bảng các cột',
+        },
+        selectedRows: {
+          text: 'cột đã được chọn',
+          delete: 'Xóa',
+          deleteAria: 'Xóa cột đã chọn',
+        },
+      },
+      customToolbar: () => (
+        <React.Fragment>
+          <Tooltip title="Xuất bản dạng PDF">
+            <IconButton
+              aria-label="Xuất bản PDF"
+              onClick={() => {
+                makePdf(columns, curData);
+              }}
+            >
+              <ArrowDownward />
+            </IconButton>
+          </Tooltip>
+          <MakeExcel
+            name="Logout_Report"
+            data={[
+              { columns: columns.map(val => val.name), data: logData.out },
+            ]}
+          />
+        </React.Fragment>
+      ),
+    };
     return (
       <Grid container spacing={24}>
         <Grid item xs={12}>
@@ -150,7 +226,7 @@ class LogTable extends Component {
             title="Thông tin logs đăng nhập"
             data={logData.in}
             columns={columns}
-            options={options}
+            options={optionsLogin}
           />
         </Grid>
         <Grid item xs={12}>
@@ -158,7 +234,7 @@ class LogTable extends Component {
             title="Thông tin Logs đăng xuất"
             data={logData.out}
             columns={columns}
-            options={options}
+            options={optionsLogout}
           />
         </Grid>
       </Grid>

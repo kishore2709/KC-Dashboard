@@ -2,15 +2,18 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const webpack = require('webpack');
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 
 const outputDirectory = 'dist';
 //
-var BrotliPlugin = require('brotli-webpack-plugin');
-var CompressionPlugin = require('compression-webpack-plugin');
+const BrotliPlugin = require('brotli-webpack-plugin');
+const CompressionPlugin = require('compression-webpack-plugin');
 //
 module.exports = (env, argv) => ({
-  entry: { app: ['@babel/polyfill', './src/client/index.js'] },
+  entry: {
+    app: ['@babel/polyfill', './src/client/index.js'],
+    vendor: ['xlsx', 'file-saver'],
+  },
   // devtool: 'inline-source-map',
   output: {
     path: path.join(__dirname, outputDirectory),
@@ -49,7 +52,7 @@ module.exports = (env, argv) => ({
     // dev
     // new BundleAnalyzerPlugin(),
     // proc
-    // new webpack.optimize.AggressiveMergingPlugin(), //Merge chunks 
+    // new webpack.optimize.AggressiveMergingPlugin(), //Merge chunks
     // new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /en/),
     // new BrotliPlugin({
     //   asset: '[path].br[query]',
@@ -73,7 +76,9 @@ module.exports = (env, argv) => ({
   },
   optimization: {
     splitChunks: {
-      chunks: 'all'
+      chunks: 'all',
     },
-  }
+  },
+  externals: [{ './cptable': 'var cptable' }, { './jszip': 'jszip' }],
+  node: { fs: 'empty' },
 });

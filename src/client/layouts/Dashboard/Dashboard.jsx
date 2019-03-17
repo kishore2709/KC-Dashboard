@@ -65,13 +65,13 @@ class App extends React.Component {
   }
   componentDidMount() {
     if (navigator.platform.indexOf("Win") > -1) {
-      const ps = new PerfectScrollbar(this.refs.mainPanel);
+      // const ps = new PerfectScrollbar(this.refs.mainPanel);
     }
     window.addEventListener("resize", this.resizeFunction);
   }
   componentDidUpdate(e) {
     if (e.history.location.pathname !== e.location.pathname) {
-      this.refs.mainPanel.scrollTop = 0;
+      // this.refs.mainPanel.scrollTop = 0;
       if (this.state.mobileOpen) {
         this.setState({ mobileOpen: false });
       }
@@ -100,7 +100,7 @@ class App extends React.Component {
           color="red"
           {...rest}
         />
-        <div className={classes.mainPanel} ref="mainPanel">
+        <div className={classes.mainPanel}>
           <ChangePasswordDialog />
           <Header
             routes={dashboardRoutes}

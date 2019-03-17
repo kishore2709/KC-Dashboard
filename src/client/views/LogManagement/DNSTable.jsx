@@ -7,7 +7,7 @@ import momentRandom from 'moment-random';
 import { connect } from 'react-redux';
 import { dateRangeActions } from '_actions';
 import moment from 'moment';
-import { makePdf } from '_helpers/Utils/';
+import { makePdf, MakeExcel } from '_helpers/Utils/';
 // icon
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
@@ -75,14 +75,19 @@ class TableDiscover extends React.Component {
     // const data = genDataTable;
     const { startDate, endDate } = this.props.dateRange.message;
     const curData = this.handleData(startDate, endDate);
-
+    console.log('dns data...');
+    console.log(curData);
     // if (startDate != '') console.log(moment(startDate));
     // console.log('test..', moment("22-Feb-2019"))
     const options = {
       filterType: 'dropdown',
       responsive: 'scroll',
       selectableRows: false,
-      filter: true,
+      filter: false,
+      print: false,
+      download: false,
+      viewColumns: false,
+      sort: false,
       textLabels: {
         body: {
           noMatch: 'Hiện tại chưa có dữ liệu',
@@ -117,16 +122,22 @@ class TableDiscover extends React.Component {
         },
       },
       customToolbar: () => (
-        <Tooltip title="Xuất bản dạng PDF">
-          <IconButton
-            aria-label="Xuất bản PDF"
-            onClick={() => {
-              makePdf(columns, curData);
-            }}
-          >
-            <ArrowDownward />
-          </IconButton>
-        </Tooltip>
+        <React.Fragment>
+          <Tooltip title="Xuất bản dạng PDF">
+            <IconButton
+              aria-label="Xuất bản PDF"
+              onClick={() => {
+                makePdf(columns, curData);
+              }}
+            >
+              <ArrowDownward />
+            </IconButton>
+          </Tooltip>
+          <MakeExcel
+            name="dnsReport"
+            data={[{ columns: columns.map(val => val.name), data: curData }]}
+          />
+        </React.Fragment>
       ),
     };
     // console.log('handle data');

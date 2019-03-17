@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 import { dateRangeActions } from '_actions';
 import moment from 'moment';
 import data from '_helpers/Utils/genChartData.js';
-import { makePdf } from '_helpers/Utils/';
+import { makePdf, MakeExcel } from '_helpers/Utils/';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import ArrowDownward from '@material-ui/icons/ArrowDownward';
@@ -87,11 +87,17 @@ class TableDiscover extends React.Component {
     const { startDate, endDate } = this.props.dateRange.message;
     // if (startDate != '') console.log(moment(startDate));
     // console.log('test..', moment("22-Feb-2019"))
+    const curData = this.handleData(startDate, endDate);
+
     const options = {
       filterType: 'dropdown',
       responsive: 'scroll',
       selectableRows: false,
-      filter: true,
+      filter: false,
+      print: false,
+      download: false,
+      viewColumns: false,
+      sort: false,
       textLabels: {
         body: {
           noMatch: 'Hiện tại chưa có dữ liệu',
@@ -126,22 +132,27 @@ class TableDiscover extends React.Component {
         },
       },
       customToolbar: () => (
-        <Tooltip title="Xuất bản dạng PDF">
-          <IconButton
-            aria-label="Xuất bản PDF"
-            onClick={() => {
-              makePdf(columns, curData);
-            }}
-          >
-            <ArrowDownward />
-          </IconButton>
-        </Tooltip>
+        <React.Fragment>
+          <Tooltip title="Xuất bản dạng PDF">
+            <IconButton
+              aria-label="Xuất bản PDF"
+              onClick={() => {
+                makePdf(columns, curData);
+              }}
+            >
+              <ArrowDownward />
+            </IconButton>
+          </Tooltip>
+          <MakeExcel
+            name="webLogReport"
+            data={[{ columns: columns.map(val => val.name), data: curData }]}
+          />
+        </React.Fragment>
       ),
     };
     // console.log('handle data');
     // console.log(this.handleData(startDate, endDate));
     // console.log(data.dnsData);
-    const curData = this.handleData(startDate, endDate);
     // console.log(curData);
     // console.log(this.state.data);
 

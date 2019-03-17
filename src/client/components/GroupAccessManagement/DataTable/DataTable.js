@@ -150,6 +150,7 @@ class DataTable extends Component {
       download: false,
       viewColumns: false,
       print: false,
+      sort: false,
       filter: true,
       selectableRows: false,
       filterType: 'dropdown',
