@@ -9,6 +9,7 @@ const jwt = require('./_helpers/jwt');
 const userService = require('./users/user.service');
 // const Model = require('./Utils/Schema');
 const ip = require('./Utils/ListIpAddress');
+
 const jsonParser = bodyParser.json();
 // Nodejs
 const urlencodedParser = bodyParser.urlencoded({ extended: false });
@@ -24,26 +25,26 @@ app.get('*.js', (req, res, next) => {
 });
 // Send mail to Gmail
 const sendEmails = async (toEmails, subject, content, html) => {
-  let credentials = {
-    user: "huanthemenk55@gmail.com",
-    pass: "policehtm9x",
-    to: toEmails
+  const credentials = {
+    user: 'huanthemenk55@gmail.com',
+    pass: 'policehtm9x',
+    to: toEmails,
   };
-  let result = false;
-  var send = require("gmail-send")({
+  const result = false;
+  let send = require('gmail-send')({
     user: credentials.user, // Your GMail account used to send emails
     pass: credentials.pass, // Application-specific password
     to: credentials.to,
     // from:    credentials.user,            // from: by default equals to user
     // replyTo: credentials.user,            // replyTo: by default undefined
     // bcc: 'some-user@mail.com',            // almost any option of `nodemailer` will be passed to it
-    subject: subject,
+    subject,
     text: content,
-    html: html
+    html,
   });
-  console.log("* [example 1.1] sending test email");
+  console.log('* [example 1.1] sending test email');
   return new Promise((resolve, reject) => {
-    send({}, function (err, res) {
+    send({}, (err, res) => {
       console.log(
         "* [example 1.1] send() callback returned: err:",
         err,
@@ -59,7 +60,7 @@ const sendEmails = async (toEmails, subject, content, html) => {
     });
   });
 };
-app.post("/api/sendEmails", jsonParser, function (req, res) {
+app.post('/api/sendEmails', jsonParser, (req, res) => {
   console.log(req.body);
 
   htmlContent = req.body.askAns
@@ -121,7 +122,6 @@ app.use((req, res, next) => {
         console.log(err);
         console.log('in recheck passwd err');
         res.status(404).send();
-
       });
   }
 });
@@ -166,93 +166,7 @@ db.on('reconnected', () => {
 
 db.on('disconnected', () => {
   console.log('MongoDB disconnected!');
-  mongoose.connect(
-    ip.db,
-    { server: { auto_reconnect: true } }
-  );
+  mongoose.connect(ip.db, { server: { auto_reconnect: true } });
 });
 
-mongoose.connect(
-  ip.db,
-  { server: { auto_reconnect: true } }
-);
-// ////////#$################
-
-// <<<<<<< HEAD
-/*
-=======
-
-// Init database = Mongodb
-
-const mongoose = require("mongoose");
-mongoose.connect("mongodb://localhost/tasksDb?replicaSet=rs");
-const db = mongoose.connection;
-db.on("error", console.error.bind(console, "Connection Error:"));
-let countAccess = 0;
-
-const malwares = {
-  Mirai: 0,
-  Bashlite: 0,
-  B2: 0,
-  B4: 0,
-  B5: 0,
-  B6: 0,
-  B7: 0,
-  B8: 0,
-  B9: 0
-};
-function getInitData(ModelLog) {
-  arr = Object.keys(malwares);
-  for (let i in arr) {
-    ModelLog.find({ malware: arr[i] })
-      .exec()
-      .then(function(res) {
-        malwares[arr[i]] = res.length;
-      });
-  }
-}
-
-// Done
-// Nhan connection tu Client
-io.on("connection", client => {
-  client.on("sub_AA", att_type => {
-    //console.log("client is subscribing ..", client);
-    setInterval(() => {
-      client.emit(att_type, Object.values(malwares));
-    }, 2000);
-  });
-
-  client.on("sub_UserAccess", att_type => {
-    //console.log("client is subscribing ..", client);
-    setInterval(() => {
-      //console.log(countAccess);
-      client.emit(att_type, {
-        newLabel: moment()
-          .format("hh:mm:ss")
-          .toString(),
-        newData: countAccess
-      });
-      console.log(countAccess + 'log');
-      countAccess = 0;
-    }, timeInterval);
-  });
-app.post('/api/users/authenticate', jsonParser, (req, res) => {
-  console.log(req.body);
-  const user = {
-    id: 'id',
-    username: req.body.username,
-    lastName: req.body.username,
-  };
-  const responseJson = {
-    id: 'user.id',
-    username: user.username,
-    firstName: user.firstName,
-    lastName: user.lastName,
-    token: 'fake-jwt-token',
-  };
-  res.status(200);
-  res.send(responseJson);
-  res.end();
->>>>>>> a11a5487451e704ef4044703f55a036a4a4f49a5
-});
-*/
+mongoose.connect(ip.db, { server: { auto_reconnect: true } });
