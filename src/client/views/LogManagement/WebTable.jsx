@@ -88,7 +88,8 @@ class TableDiscover extends React.Component {
     // if (startDate != '') console.log(moment(startDate));
     // console.log('test..', moment("22-Feb-2019"))
     const curData = this.handleData(startDate, endDate);
-
+    // console.log('web data...');
+    // console.log(curData);
     const options = {
       filterType: 'dropdown',
       responsive: 'scroll',
@@ -137,7 +138,13 @@ class TableDiscover extends React.Component {
             <IconButton
               aria-label="Xuất bản PDF"
               onClick={() => {
-                makePdf(columns, curData);
+                makePdf(
+                  `WebLog_${moment().format('DD-MM-YYYY')}`,
+                  columns,
+                  curData,
+                  'A1',
+                  'landscape'
+                );
               }}
             >
               <ArrowDownward />

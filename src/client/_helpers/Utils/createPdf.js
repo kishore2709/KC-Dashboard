@@ -2,7 +2,7 @@
 import pdfMake from 'pdfmake/build/pdfmake';
 import vfsFonts from 'pdfmake/build/vfs_fonts';
 
-const makePdf = (columns, data) => {
+const makePdf = (tableName, columns, data, pageSize, pageOrientation) => {
   const { vfs } = vfsFonts.pdfMake;
   // const {columns,data} = this.state;
   pdfMake.vfs = vfs;
@@ -12,12 +12,16 @@ const makePdf = (columns, data) => {
   };
   columns.map((value, index) => {
     titlePDF.data.push(value.name);
-    titlePDF.width.push('*');
+    titlePDF.width.push('auto');
   });
+  // console.log(titlePDF);
   const dataPDF = data;
   dataPDF.unshift(titlePDF.data);
   const docDefinition = {
+    pageOrientation: pageOrientation || 'portrait',
+    pageSize,
     content: [
+      { text: tableName, style: 'header' },
       {
         layout: 'lightHorizontalLines', // optional
         table: {
@@ -30,7 +34,7 @@ const makePdf = (columns, data) => {
       },
     ],
   };
-  pdfMake.createPdf(docDefinition).download();
+  pdfMake.createPdf(docDefinition).download(tableName);
 };
 
 export { makePdf };

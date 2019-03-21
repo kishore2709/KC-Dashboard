@@ -127,14 +127,19 @@ class TableDiscover extends React.Component {
             <IconButton
               aria-label="Xuất bản PDF"
               onClick={() => {
-                makePdf(columns, curData);
+                makePdf(
+                  `DNSLog_${moment().format('DD-MM-YYYY')}`,
+                  columns,
+                  curData,
+                  'A3'
+                );
               }}
             >
               <ArrowDownward />
             </IconButton>
           </Tooltip>
           <MakeExcel
-            name="dnsReport"
+            name="dnsLogReport"
             data={[{ columns: columns.map(val => val.name), data: curData }]}
           />
         </React.Fragment>

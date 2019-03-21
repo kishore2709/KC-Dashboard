@@ -5,6 +5,7 @@ import MUIDataTable from 'mui-datatables';
 import { Typography, Grid } from '@material-ui/core';
 import { PostApi } from '_helpers/Utils';
 import { makePdf, MakeExcel } from '_helpers/Utils/';
+import moment from 'moment';
 // icon
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
@@ -139,7 +140,12 @@ class LogTable extends Component {
             <IconButton
               aria-label="Xuất bản PDF"
               onClick={() => {
-                makePdf(columns, curData);
+                makePdf(
+                  `LoginReports_${moment().format('DD-MM-YYYY')}`,
+                  columns,
+                  logData.in,
+                  'A4',
+                );
               }}
             >
               <ArrowDownward />
@@ -204,7 +210,12 @@ class LogTable extends Component {
             <IconButton
               aria-label="Xuất bản PDF"
               onClick={() => {
-                makePdf(columns, curData);
+                makePdf(
+                  `LogoutReports_${moment().format('DD-MM-YYYY')}`,
+                  columns,
+                  logData.out,
+                  'A4',
+                );
               }}
             >
               <ArrowDownward />
