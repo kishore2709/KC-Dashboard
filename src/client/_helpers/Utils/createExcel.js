@@ -9,6 +9,7 @@ const { ExcelSheet } = ReactExport.ExcelFile;
 // const { ExcelColumn } = ReactExport.ExcelFile;
 
 const MakeExcel = props => (
+  // console.log(props);
   <ExcelFile
     filename={props.name}
     element={
@@ -27,5 +28,4 @@ const MakeExcel = props => (
     <ExcelSheet dataSet={props.data} name="Employees" />
   </ExcelFile>
 );
-
 export { MakeExcel };
