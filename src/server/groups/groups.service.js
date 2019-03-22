@@ -1,6 +1,6 @@
 const Schemas = require('../Utils/Schema');
 
-const Group = Schemas.Group;
+const { Group } = Schemas;
 // const GroupSchema = Schemas.GroupSchema;
 // #### >>>  Init Mongodb
 module.exports = {
@@ -10,70 +10,44 @@ module.exports = {
 };
 
 async function addDb(obj) {
-  let ret = 0;
+  // let ret = 0;
   // console.log(obj);
   if (!obj || !('groupname' in obj)) return 0;
   // to lowercase;
   obj.groupname = obj.groupname.toString().toLowerCase();
   // check groupname exist?
   let tmpGroups;
-  await Group.find({ groupname: obj.groupname }, (err, docs) => {
-    tmpGroups = docs;
+  // await
+  return new Promise((resolve, reject) => {
+    Group.find({ groupname: obj.groupname })
+      .exec()
+      .then(tmpGroups => {
+        if (Array.isArray(tmpGroups) && tmpGroups.length > 0) reject(0);
+        // add Group to db
+        const mGroup = new Group(obj);
+        mGroup.save((err, newGroup) => {
+          if (err) {
+            reject('add db group err');
+          } else {
+            // console.log('add group ok');
+            // ret = newGroup;/
+            resolve(newGroup);
+          }
+        });
+      });
   });
-  if (Array.isArray(tmpGroups) && tmpGroups.length > 0) return 0;
-
-  // add Group to db
-  const mGroup = new Group(obj);
-  await new Promise(resolve =>
-    mGroup.save((err, newGroup) => {
-      if (err) {
-        console.log('add db group err');
-      } else {
-        console.log('add group ok');
-        ret = newGroup;
-        resolve(ret);
-      }
-    })
-  );
-  // console.log('wtf');
-  // console.log(ret);
-  return ret;
 }
 
 async function getGroups() {
-  let ret = 'err';
-  await Group.find({}, (err, groups) => {
-    if (err) console.log('get db groups error');
-    else {
-      console.log('get db groups ok');
-      ret = [...groups];
-    }
-  });
-  // console.log('wtf');
-  // console.log(ret);
-  return ret;
+  return Group.find({}).exec();
 }
 
 async function updateDb(objArr) {
-  // console.log(objArr);
-  let ret = 1;
-  // console.log('???');
   for (const obj of objArr) {
-    // console.log(obj);
     if (!obj || !('id' in obj)) {
-      ret = 0;
       continue;
     }
     const { id, ...rest } = obj;
-    await Group.findByIdAndUpdate(id, { $set: rest }, err => {
-      if (err) {
-        console.log('Update db group error');
-        ret = 0;
-      } else {
-        console.log('update group ok');
-      }
-    });
+    await Group.findByIdAndUpdate(id, { $set: rest }).exec();
   }
-  console.log('???');
-  return ret;
 }
