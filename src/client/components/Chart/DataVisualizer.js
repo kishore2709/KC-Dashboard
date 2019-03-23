@@ -14,10 +14,10 @@ import { MuiPickersUtilsProvider, DateTimePicker } from 'material-ui-pickers';
 import Grid from '@material-ui/core/Grid';
 import LinearProgress from '@material-ui/core/LinearProgress';
 
-import randomColor from 'randomcolor';
-
 import { connect } from 'react-redux';
 import { dateRangeActions } from '_actions';
+import { chartActions } from '_actions';
+
 
 function DataVisualizer(Chart) {
   function yourFunction(...props) {
@@ -167,6 +167,11 @@ function DataVisualizer(Chart) {
         );
         */
       };
+
+      handleImageURL = dataURL => {
+        const { addChartImageURL } = this.props;
+        addChartImageURL(dataURL);
+      }
 
       handleChangeTimeRange = event => {
         const endDate = new Date();
@@ -322,6 +327,7 @@ function DataVisualizer(Chart) {
                     fireUpDateRangeChange={this.handleDateRangeChange}
                     color={_color}
                     dataShow={dataShow}
+                    fireUpImageURL={this.handleImageURL}
                   />
                 )}
               </CardContent>
@@ -343,6 +349,9 @@ function DataVisualizer(Chart) {
 const mapDispatchToProps = dispatch => ({
   opened: newStatus => {
     dispatch(dateRangeActions.changeDateRange(newStatus));
+  },
+  addChartImageURL: dataURL => {
+    dispatch(chartActions.addChartImageURL(dataURL));
   },
 });
 

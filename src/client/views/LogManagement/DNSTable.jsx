@@ -75,8 +75,9 @@ class TableDiscover extends React.Component {
     // const data = genDataTable;
     const { startDate, endDate } = this.props.dateRange.message;
     const curData = this.handleData(startDate, endDate);
-    console.log('dns data...');
-    console.log(curData);
+    //console.log('dns data...');
+    //console.log(curData);
+    //console.log(this.props.chartImageURL);
     // if (startDate != '') console.log(moment(startDate));
     // console.log('test..', moment("22-Feb-2019"))
     const options = {
@@ -84,8 +85,6 @@ class TableDiscover extends React.Component {
       responsive: 'scroll',
       selectableRows: false,
       filter: false,
-      print: false,
-      download: false,
       viewColumns: false,
       sort: false,
       textLabels: {
@@ -128,9 +127,10 @@ class TableDiscover extends React.Component {
               aria-label="Xuất bản PDF"
               onClick={() => {
                 makePdf(
-                  `DNSLog_${moment().format('DD-MM-YYYY')}`,
+                  `Báo cáo kết quả phân tích dữ liệu DNS ${startDate ? `từ ${moment(startDate).format('DD-MM-YYYY')} ` : ''} ${endDate ? `đến ${moment(endDate).format('DD-MM-YYYY')}` : ''}`,
                   columns,
                   curData,
+                  null,
                   'A3'
                 );
               }}
@@ -138,10 +138,6 @@ class TableDiscover extends React.Component {
               <ArrowDownward />
             </IconButton>
           </Tooltip>
-          <MakeExcel
-            name="dnsLogReport"
-            data={[{ columns: columns.map(val => val.name), data: curData }]}
-          />
         </React.Fragment>
       ),
     };

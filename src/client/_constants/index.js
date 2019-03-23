@@ -8,4 +8,5 @@ export * from './userTable.constants';
 export * from './groupTable.constants';
 export * from './dashboard.constants';
 export * from './mailBox.constants';
+export * from './chart.constants';
 

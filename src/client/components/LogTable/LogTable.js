@@ -94,8 +94,6 @@ class LogTable extends Component {
       responsive: 'scroll',
       selectableRows: false,
       filter: false,
-      print: false,
-      download: false,
       viewColumns: false,
       sort: false,
       rowsPerPage: 5,
@@ -144,6 +142,7 @@ class LogTable extends Component {
                   `LoginReports_${moment().format('DD-MM-YYYY')}`,
                   columns,
                   logData.in,
+                  null,
                   'A4',
                 );
               }}
@@ -151,10 +150,6 @@ class LogTable extends Component {
               <ArrowDownward />
             </IconButton>
           </Tooltip>
-          <MakeExcel
-            name="Login_Report"
-            data={[{ columns: columns.map(val => val.name), data: logData.in }]}
-          />
         </React.Fragment>
       ),
     };
@@ -164,8 +159,6 @@ class LogTable extends Component {
       responsive: 'scroll',
       selectableRows: false,
       filter: false,
-      print: false,
-      download: false,
       viewColumns: false,
       sort: false,
       rowsPerPage: 5,
@@ -214,6 +207,7 @@ class LogTable extends Component {
                   `LogoutReports_${moment().format('DD-MM-YYYY')}`,
                   columns,
                   logData.out,
+                  null,
                   'A4',
                 );
               }}
@@ -221,12 +215,6 @@ class LogTable extends Component {
               <ArrowDownward />
             </IconButton>
           </Tooltip>
-          <MakeExcel
-            name="Logout_Report"
-            data={[
-              { columns: columns.map(val => val.name), data: logData.out },
-            ]}
-          />
         </React.Fragment>
       ),
     };

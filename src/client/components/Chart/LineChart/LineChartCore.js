@@ -99,6 +99,13 @@ class LineChartCore extends Component {
             line: {
                 tension: 0, // disables bezier curves
             }
+          },
+          animation: {
+            onComplete: anim => {
+              if (typeof this.props.fireUpImageURL === 'function') {
+                this.props.fireUpImageURL(this.chart.toBase64Image())
+              }
+            },
           }
         }}
       />

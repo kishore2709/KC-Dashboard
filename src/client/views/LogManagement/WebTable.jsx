@@ -95,8 +95,6 @@ class TableDiscover extends React.Component {
       responsive: 'scroll',
       selectableRows: false,
       filter: false,
-      print: false,
-      download: false,
       viewColumns: false,
       sort: false,
       textLabels: {
@@ -139,9 +137,10 @@ class TableDiscover extends React.Component {
               aria-label="Xuất bản PDF"
               onClick={() => {
                 makePdf(
-                  `WebLog_${moment().format('DD-MM-YYYY')}`,
+                  `Báo cáo kết quả phân tích dữ liệu Web ${startDate ? `từ ${moment(startDate).format('DD-MM-YYYY')} ` : ''} ${endDate ? `đến ${moment(endDate).format('DD-MM-YYYY')}` : ''}`,
                   columns,
                   curData,
+                  null,
                   'A1',
                   'landscape'
                 );
@@ -150,10 +149,6 @@ class TableDiscover extends React.Component {
               <ArrowDownward />
             </IconButton>
           </Tooltip>
-          <MakeExcel
-            name="webLogReport"
-            data={[{ columns: columns.map(val => val.name), data: curData }]}
-          />
         </React.Fragment>
       ),
     };

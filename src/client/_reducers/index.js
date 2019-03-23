@@ -13,6 +13,7 @@ import { userTable } from './userTable.reducer';
 import { groupTable } from './groupTable.reducer';
 import { dashboard } from './dashboard.reducer';
 import { mailBox } from './mailBox.reducer';
+import { chart } from './chart.reducer';
 
 const rootReducer = combineReducers({
   dashboard,
@@ -29,6 +30,7 @@ const rootReducer = combineReducers({
   userTable,
   groupTable,
   mailBox,
+  chart,
 });
 
 export default rootReducer;
