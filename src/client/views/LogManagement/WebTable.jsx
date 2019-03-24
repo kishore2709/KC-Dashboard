@@ -38,7 +38,7 @@ const sample = {
   time_taken: '10',
 };
 
-class TableDiscover extends React.Component {
+class WebTable extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -137,7 +137,13 @@ class TableDiscover extends React.Component {
               aria-label="Xuất bản PDF"
               onClick={() => {
                 makePdf(
-                  `Báo cáo kết quả phân tích dữ liệu Web ${startDate ? `từ ${moment(startDate).format('DD-MM-YYYY')} ` : ''} ${endDate ? `đến ${moment(endDate).format('DD-MM-YYYY')}` : ''}`,
+                  `Báo cáo kết quả phân tích dữ liệu Web ${
+                    startDate
+                      ? `từ ${moment(startDate).format('DD-MM-YYYY')} `
+                      : ''
+                  } ${
+                    endDate ? `đến ${moment(endDate).format('DD-MM-YYYY')}` : ''
+                  }`,
                   columns,
                   curData,
                   null,
@@ -178,4 +184,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(TableDiscover);
+export default connect(mapStateToProps)(WebTable);
