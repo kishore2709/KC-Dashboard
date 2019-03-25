@@ -15,29 +15,26 @@ import Loadable from 'react-loadable';
 import ListLoader from 'components/ContentLoader/ListLoader.jsx';
 import Sidebar from "components/Sidebar/Sidebar.jsx";
 // import UserPermission from 'views/UserPermission/UserPermission.jsx';
-import { connect } from 'react-redux';
-import { dialogActions } from '_actions';
 import { withToastManager } from 'react-toast-notifications';
 
 import dashboardRoutes from "routes/dashboard.jsx";
 
 import dashboardStyle from "assets/jss/material-dashboard-react/layouts/dashboardStyle.jsx";
+import ChangePasswordDialog from 'components/Dialogs/ChangePasswordDialog.jsx';
 
 import image from "assets/img/sidebar-3.jpg";
 import logo from "assets/img/ptit-logo.png";
-import ChangePasswordDialog from "components/Dialogs/ChangePasswordDialog.jsx";
-import { GetUserInfo } from "_helpers/Utils/";
 const switchRoutes = (
   <Switch>
     {(dashboardRoutes.filter(val => ('subNavBar' in val))[0].subNavBar.map((prop, key) => {
       // console.log('???');
       // console.log(prop);
-      return <Route path={prop.path} component={prop.component} key={prop.id} />;
+      return <Route path={prop.path} component={props => <prop.component/> } key={prop.id} />;
     })).concat(
       dashboardRoutes.map((prop, key) => {
         if (prop.redirect)
           return <Redirect from={prop.path} to={prop.to} key={prop.id} />;
-        return <Route path={prop.path} component={prop.component} key={prop.id} />;
+        return <Route path={prop.path} component={props => <prop.component/> } key={prop.id} />;
       })
     )}
 
@@ -64,6 +61,7 @@ class App extends React.Component {
     }
   }
   componentDidMount() {
+    console.log('Dashboard mount');
     if (navigator.platform.indexOf("Win") > -1) {
       // const ps = new PerfectScrollbar(this.refs.mainPanel);
     }
@@ -78,16 +76,11 @@ class App extends React.Component {
     }
   }
   componentWillUnmount() {
+    console.log('Dashboard Unmount');
     window.removeEventListener("resize", this.resizeFunction);
   }
   render() {
-    const { classes, openDialogPwdForm, ...rest } = this.props;
-    const user = GetUserInfo();
-    // console.log('in dashboard')
-    // console.log(dashboardRoutes);
-    // console.log(switchRoutes);
-    if (!user || (!('changePwd' in user))) throw new Error('cannot get User Info');
-    openDialogPwdForm(user.changePwd);
+    const { classes, ...rest } = this.props;
     return (
       <div className={classes.wrapper}>
         <Sidebar
@@ -126,15 +119,9 @@ App.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-const mapDispatchToProps = dispatch => ({
-  openDialogPwdForm: newStatus => {
-    dispatch(dialogActions.openDialogPwdForm(newStatus));
-  },
-});
+
 
 export default withStyles(dashboardStyle)(
-  connect(
-    null,
-    mapDispatchToProps
-  )(withToastManager(App))
+ 
+  withToastManager(App)
 );

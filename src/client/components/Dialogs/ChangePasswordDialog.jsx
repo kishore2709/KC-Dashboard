@@ -16,8 +16,9 @@ import { PostApi } from '_helpers/Utils';
 import { dialogActions } from '_actions';
 import { withToastManager } from 'react-toast-notifications';
 // import { dialogConstants } from '_constants';
+import { GetUserInfo } from '_helpers/Utils/';
+
 import ChangePasswordForm from 'components/Forms/ChangePasswordForm.jsx';
-import { GetUserInfo } from "_helpers/Utils/";
 
 const styles = theme => ({
   cardCategoryWhite: {
@@ -64,15 +65,15 @@ class ChangePasswordDialog extends React.Component {
   handleSubmit(e) {
     // console.log('in handle submit change pwd form');
     // console.log(e);
-    const user = this.user;
+    const { user } = this;
     const { toastManager, closeDialogPwdForm } = this.props;
 
-    PostApi('/api/users/changePassword', {...e, id : user._id})
-      .then(ret=>{
+    PostApi('/api/users/changePassword', { ...e, id: user._id })
+      .then(ret => {
         console.log('??????????');
         console.log(ret);
-        if ( (!ret) || !('message' in ret)) throw new Error('err');
-        
+        if (!ret || !('message' in ret)) throw new Error('err');
+
         // this.props.addTable(ret);
         toastManager.add('Change password Successfully', {
           appearance: 'success',
@@ -82,20 +83,28 @@ class ChangePasswordDialog extends React.Component {
         this.user.changePwd = false;
         localStorage.setItem('user', JSON.stringify(this.user));
       })
-      .catch(err=>{
+      .catch(err => {
         console.log(err);
         toastManager.add(`Something went wrong!`, {
           appearance: 'error',
           autoDismiss: true,
         });
       })
-      .then(rett=>{
-          closeDialogPwdForm(false);
-      })
+      .then(rett => {
+        closeDialogPwdForm(false);
+      });
   }
 
+  componentDidMount(){
+    const user = GetUserInfo();
+    if (!user || !('changePwd' in user))
+      throw new Error('cannot get User Info');
+    this.props.openDialogPwdForm(user.changePwd);
+
+  }
   render() {
     const { dialog, classes } = this.props;
+   
     return (
       <div>
         <Dialog
@@ -112,12 +121,13 @@ class ChangePasswordDialog extends React.Component {
                   <CardHeader color="danger">
                     <h4 className={classes.cardTitleWhite}>Đổi mật khẩu</h4>
                     <p className={classes.cardCategoryWhite}>
-                      Mật khẩu bao gồm tối thiểu 8 ký tự, gồm ký tự viết hoa và viết thường, chữ số từ 0 -
-                      9, ký tự đặc biệt ( @, !, #, ...)
+                      Mật khẩu bao gồm tối thiểu 8 ký tự, gồm ký tự viết hoa và
+                      viết thường, chữ số từ 0 - 9, ký tự đặc biệt ( @, !, #,
+                      ...)
                     </p>
                   </CardHeader>
                   <CardBody>
-                    <ChangePasswordForm onSubmit={this.handleSubmit}/>
+                    <ChangePasswordForm onSubmit={this.handleSubmit} />
                   </CardBody>
                 </Card>
               </GridItem>
@@ -139,6 +149,9 @@ function mapStateToProps(state) {
 const mapDispatchToProps = dispatch => ({
   closeDialogPwdForm: newStatus => {
     dispatch(dialogActions.closeDialogPwdForm(newStatus));
+  },
+  openDialogPwdForm: newStatus => {
+    dispatch(dialogActions.openDialogPwdForm(newStatus));
   },
 });
 

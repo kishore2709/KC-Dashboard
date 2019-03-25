@@ -22,7 +22,7 @@ import Loading from 'components/Loading/Loading.jsx';
 import NumberMail from 'components/NumberMail/NumberMail.jsx';
 
 import sidebarStyle from 'assets/jss/material-dashboard-react/components/sidebarStyle.jsx';
-//icon
+// icon
 import PowerIcon from '@material-ui/icons/PowerOff';
 
 import Collapse from '@material-ui/core/Collapse';
@@ -36,6 +36,8 @@ import { serverStatusActions } from '_actions';
 import { Redirect } from 'react-router-dom';
 
 class Sidebar extends Component {
+  controller = new AbortController();
+
   constructor(props) {
     super(props);
     // console.log('in constructor sidebar');
@@ -59,16 +61,20 @@ class Sidebar extends Component {
           component: <Redirect to="/login" />,
         },
       ],
-      openUserManagementSubComponents: ['/userGroup', '/permission', '/manageUser'].includes(window.location.pathname),
+      openUserManagementSubComponents: [
+        '/userGroup',
+        '/permission',
+        '/manageUser',
+      ].includes(window.location.pathname),
     };
     this.handleClick = this.handleClick.bind(this);
   }
 
-  componentWillMount() {
-    // console.log('will mount ?');
+  componentDidMount() {
+    console.log('Sidebar did mount ?');
     PostApi('/api/users/getUserInfo', GetUserInfo())
       .then(res => {
-        // console.log('in then proomse');
+        console.log('in then proomse', res);
         if (!res || res === 'err') {
           // alertErr();
           this.props.error('err');
@@ -76,7 +82,8 @@ class Sidebar extends Component {
           console.log('err get user info');
         } else {
           // console.log(res);
-          if (!res || !('permissions' in res)) throw new Error('permission not found in respones');
+          if (!res || !('permissions' in res))
+            throw new Error('permission not found in respones');
           // console.log(res.permissions);
           const validKeys = Object.keys(res.permissions).filter(
             val => res.permissions[val].canAccess
@@ -109,17 +116,23 @@ class Sidebar extends Component {
       });
   }
 
+  componentWillUnmount() {
+    console.log('Sidebar unmount ??/');
+    this.controller.abort();
+  }
+
   // verifies if routeName is the one active (in browser input)
   activeRoute(routeName) {
     // return true;
     return this.props.location.pathname.indexOf(routeName) > -1;
   }
+
   numberNotSeen(arr) {
     let res = 0;
-    for (let i = 0; i < arr.length; i++)
-      if (!arr[i].seen) res++;
+    for (let i = 0; i < arr.length; i++) if (!arr[i].seen) res++;
     return res;
   }
+
   handleClick() {
     this.setState(state => ({
       openUserManagementSubComponents: !state.openUserManagementSubComponents,
@@ -127,7 +140,6 @@ class Sidebar extends Component {
   }
 
   render() {
-
     const { classes, color, logo, image, logoText, mailBox } = this.props;
     let flagMail = false;
     if (mailBox.dataMail != undefined) {
@@ -166,8 +178,8 @@ class Sidebar extends Component {
           {this.state.openUserManagementSubComponents ? (
             <ExpandLess />
           ) : (
-              <ExpandMore />
-            )}
+            <ExpandMore />
+          )}
         </ListItem>
         <Collapse
           in={openUserManagementSubComponents}
@@ -238,22 +250,19 @@ class Sidebar extends Component {
                       {typeof prop.icon === 'string' ? (
                         <Icon>{prop.icon}</Icon>
                       ) : (
-                          <prop.icon />
-                        )}
+                        <prop.icon />
+                      )}
                     </ListItemIcon>
                     <ListItemText
                       primary={prop.sidebarName}
                       className={classes.itemText + whiteFontClasses}
                       disableTypography
                     />
-                    {
-                      (flagMail
-                        && prop.path == '/mailBox'
-                      ) &&
+                    {flagMail && prop.path == '/mailBox' && (
                       <NumberMail
                         title={this.numberNotSeen(this.props.mailBox.dataMail)}
                       />
-                    }
+                    )}
                   </ListItem>
                 </NavLink>
               );
@@ -326,7 +335,7 @@ const mapDispatchToProps = dispatch => ({
 function mapStateToProps(state) {
   const { mailBox } = state;
   return {
-    mailBox
+    mailBox,
   };
 }
 const connectedSidebar = connect(

@@ -14,10 +14,11 @@ import { MuiPickersUtilsProvider, DateTimePicker } from 'material-ui-pickers';
 import Grid from '@material-ui/core/Grid';
 import LinearProgress from '@material-ui/core/LinearProgress';
 
+import Loading from 'components/Loading/Loading';
+
 import { connect } from 'react-redux';
 import { dateRangeActions } from '_actions';
 import { chartActions } from '_actions';
-
 
 function DataVisualizer(Chart) {
   function yourFunction(...props) {
@@ -57,20 +58,20 @@ function DataVisualizer(Chart) {
         // console.log(props);
 
         this.state = {
-          //startDate: null,
-          //endDate: null,
-          //data: [],
-          //loading: true,
+          // startDate: null,
+          // endDate: null,
+          // data: [],
+          // loading: true,
           useTR: true,
           dataShow: [],
-          //allDataLabel: [],
+          // allDataLabel: [],
         };
       }
 
       componentDidMount() {
         this.setState({
-          dataShow: this.props.allDataLabel
-        })
+          dataShow: this.props.allDataLabel,
+        });
         /*
         if (!Array.isArray(this.props.data)) return;
         const allDataLabel = this.props.data.filter(dataRow => dataRow.label && Array.isArray(dataRow.data)).map(dataRow => dataRow.label);
@@ -171,7 +172,7 @@ function DataVisualizer(Chart) {
       handleImageURL = dataURL => {
         const { addChartImageURL } = this.props;
         addChartImageURL(dataURL);
-      }
+      };
 
       handleChangeTimeRange = event => {
         const endDate = new Date();
@@ -195,7 +196,7 @@ function DataVisualizer(Chart) {
         this.setState(
           {
             dataShow: event.target.value,
-          },
+          }
           /*
           () => {
             this.handleDateRangeChange(
@@ -211,6 +212,7 @@ function DataVisualizer(Chart) {
         const { startDate, endDate, loading, allDataLabel } = this.props;
         const { dataShow } = this.state;
         // console.log(this.state);
+        if (loading) return <Loading />;
         const { color, height } = this.props;
         let chartHeight;
         if (height) chartHeight = height;
@@ -225,11 +227,11 @@ function DataVisualizer(Chart) {
                 color: 'white',
                 padding: '0',
                 margin: '0',
-                boxShadow: '0 3px 5px 2px #cccccc',
+                boxShadow: '0 3px 5px 2px #cccccc'
               }}
             >
               <CardActions style={{ padding: '1px 4px' }}>
-                <Grid container spacing={8} alignItems="center" >
+                <Grid container spacing={8} alignItems="center">
                   <Grid item xs={12} md={3}>
                     <FormControl>
                       <InputLabel htmlFor="time-select">Chọn nhanh</InputLabel>
@@ -265,12 +267,14 @@ function DataVisualizer(Chart) {
                   </Grid>
                   <Grid item xs={12} md={3}>
                     <FormControl>
-                      <InputLabel htmlFor='select-mutiple-checkbox'>Dữ liệu</InputLabel>
+                      <InputLabel htmlFor="select-mutiple-checkbox">
+                        Dữ liệu
+                      </InputLabel>
                       <Select
                         style={{
                           width: '180px',
                           overflow: 'auto',
-                          textOverflow: 'ellipse',
+                          textOverflow: 'ellipse'
                         }}
                         multiple
                         value={this.state.dataShow}
@@ -281,7 +285,9 @@ function DataVisualizer(Chart) {
                       >
                         {allDataLabel.map(label => (
                           <MenuItem key={label} value={label}>
-                            <Checkbox checked={this.state.dataShow.includes(label)} />
+                            <Checkbox
+                              checked={this.state.dataShow.includes(label)}
+                            />
                             <ListItemText primary={label} />
                           </MenuItem>
                         ))}
@@ -316,9 +322,10 @@ function DataVisualizer(Chart) {
                   </Grid>
                 </Grid>
               </CardActions>
-              <CardContent
-                style={{ height: chartHeight }}>
-                {loading ? (<LinearProgress />) : (
+              <CardContent style={{ height: chartHeight }}>
+                {loading ? (
+                  <LinearProgress />
+                ) : (
                   <Chart
                     disabled={loading}
                     data={this.props.data}
@@ -334,8 +341,7 @@ function DataVisualizer(Chart) {
             </Card>
           );
         }
-        return (<LinearProgress />);
-
+        return <LinearProgress />;
       }
     };
     return <SubComponent {...props[0]} />;

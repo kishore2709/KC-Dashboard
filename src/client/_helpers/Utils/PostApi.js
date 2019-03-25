@@ -1,6 +1,6 @@
 import { authHeader } from '../auth-header';
 
-export async function PostApi(url, json) {
+export async function PostApi(url, json, abortSignal) {
   const myRequest = new Request(url, {
     method: 'POST',
     headers: {
@@ -10,7 +10,7 @@ export async function PostApi(url, json) {
     },
     body: JSON.stringify(json),
   });
-  const result = fetch(myRequest)
+  const result = fetch(myRequest, { signal: abortSignal })
     .then(response => {
       // console.log(response);
       if (response.status === 200) {

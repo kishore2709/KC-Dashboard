@@ -71,10 +71,11 @@ const styles = theme => ({
   },
 });
 class Dashboard extends React.Component {
-  
   componentWillMount() {
-    const startDate = this.props.dashboard.dateRange.start || new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
-    const endDate = this.props.dashboard.dateRange.end || new Date()
+    const startDate =
+      this.props.dashboard.dateRange.start ||
+      new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+    const endDate = this.props.dashboard.dateRange.end || new Date();
     this.handleDateRangeChange(startDate, endDate);
   }
 
@@ -87,12 +88,12 @@ class Dashboard extends React.Component {
         end: endDate,
       },
     });
-  }
+  };
 
   render() {
     const { classes, dashboard } = this.props;
     // const { data } = this.state;
-    const { targetCity, data } = dashboard;
+    const {  data  } = dashboard;
     // console.log(dashboard);
     // console.log(targetCity, data);
     if (data.length === 0) return <Loading />;
@@ -111,7 +112,7 @@ class Dashboard extends React.Component {
         style={{ width: '100%', height: '100%', display: 'flex' }}
       >
         <GridItem xs={12} md={6} lg={5} style={{ margin: 'auto' }}>
-          <VnMap />
+          <VnMap/>
         </GridItem>
         <GridItem
           xs={12}
@@ -278,7 +279,7 @@ const mapDispatchToProps = dispatch => ({
   },
   changeDateRange: newStatus => {
     dispatch(dashboardActions.changeDateRange(newStatus));
-  }
+  },
 });
 
 const connectedDashboard = connect(

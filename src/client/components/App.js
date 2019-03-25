@@ -28,15 +28,16 @@ import { dateRange } from '../_reducers/dateRange.reducer';
 class App extends React.Component {
   constructor(props) {
     super(props);
-    const { dispatch } = this.props;
-    history.listen((_location, _action) => {
-      // clear alert on location change
-      dispatch(alertActions.clear());
-    });
+    // const { dispatch } = this.props;
+    // history.listen((_location, _action) => {
+    //   // clear alert on location change
+    //   dispatch(alertActions.clear());
+    // });
   }
 
-  async componentDidMount() {
-    const { dispatch } = this.props;
+  componentDidMount() {
+    console.log('App did mount ??');
+    // const { dispatch } = this.props;
     const arr = [];
     const date = new Date();
     const month =
@@ -47,13 +48,13 @@ class App extends React.Component {
       date.getDate() < 10
         ? `0${date.getDate().toString()}`
         : date.getDate().toString();
-    arr.push({
-      seen: false,
-      content: 'Mã độc Bashlite đang tấn công vào hệ thống của bạn',
-      sender: 'Admin',
-      time: `2019-${month}-${day}`,
-      location: 'Hà Nội',
-    });
+    // arr.push({
+    //   seen: false,
+    //   content: 'Mã độc Bashlite đang tấn công vào hệ thống của bạn',
+    //   sender: 'Admin',
+    //   time: `2019-${month}-${day}`,
+    //   location: 'Hà Nội',
+    // });
     // setTimeout(() => {
     //   alert('Mã độc Bashlite đang tấn công vào hệ thống');
     //   dispatch(mailActions.fixMail(arr));
@@ -106,9 +107,9 @@ class App extends React.Component {
 }
 
 App.propTypes = {
-  dispatch: PropTypes.func.isRequired,
-  alert: PropTypes.object.isRequired,
-  mailBox: PropTypes.object.isRequired,
+  // dispatch: PropTypes.func.isRequired,
+  // alert: PropTypes.object.isRequired,
+  // mailBox: PropTypes.object.isRequired,
 };
 function mapStateToProps(state) {
   const { alert, mailBox } = state;
@@ -118,5 +119,5 @@ function mapStateToProps(state) {
   };
 }
 
-const connectedApp = connect(mapStateToProps)(App);
-export { connectedApp as App };
+// const connectedApp = connect()(App);
+export { App };

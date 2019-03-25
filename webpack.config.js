@@ -12,7 +12,7 @@ const CompressionPlugin = require('compression-webpack-plugin');
 module.exports = (env, argv) => ({
   entry: {
     app: ['@babel/polyfill', './src/client/index.js'],
-    vendor: ['xlsx', 'file-saver'],
+    // vendor: ['xlsx', 'file-saver'],
   },
   // devtool: 'inline-source-map',
   output: {
@@ -79,6 +79,6 @@ module.exports = (env, argv) => ({
       chunks: 'all',
     },
   },
-  externals: [{ './cptable': 'var cptable' }, { './jszip': 'jszip' }],
-  node: { fs: 'empty' },
+  // externals: [{ './cptable': 'var cptable' }, { './jszip': 'jszip' }],
+  // node: { fs: 'empty' },
 });

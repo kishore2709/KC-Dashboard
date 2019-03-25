@@ -19,6 +19,8 @@ const styles = theme => ({
 });
 
 class LogTable extends Component {
+  controller = new AbortController();
+
   constructor(props) {
     super(props);
     this.state = {
@@ -27,7 +29,7 @@ class LogTable extends Component {
   }
 
   componentWillMount() {
-    PostApi('/api/users/getLog', {})
+    PostApi('/api/users/getLog', {}, this.controller.signal)
       .then(res => {
         if (!res || res === 'err') {
           console.log('err get log info');
@@ -39,6 +41,10 @@ class LogTable extends Component {
       .catch(err => {
         console.log('geterr get log info err');
       });
+  }
+
+  componentWillUnmount() {
+    this.controller.abort();
   }
 
   render() {
@@ -143,7 +149,7 @@ class LogTable extends Component {
                   columns,
                   logData.in,
                   null,
-                  'A4',
+                  'A4'
                 );
               }}
             >
@@ -208,7 +214,7 @@ class LogTable extends Component {
                   columns,
                   logData.out,
                   null,
-                  'A4',
+                  'A4'
                 );
               }}
             >
