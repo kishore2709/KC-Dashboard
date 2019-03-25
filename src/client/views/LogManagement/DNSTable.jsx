@@ -74,9 +74,12 @@ class DNSTable extends React.Component {
     // console.log(genDataTable);
     // const data = genDataTable;
     const { startDate, endDate } = this.props.dateRange.message;
-    const curData = this.handleData(startDate, endDate);
+    let curData = [];
+    // setTimeout(() => {
+    curData = this.handleData(startDate, endDate);
+    // }, 3000);
     // console.log('dns data...');
-    // console.log(curData);
+    console.log(curData);
     // console.log(this.props.chartImageURL);
     // if (startDate != '') console.log(moment(startDate));
     // console.log('test..', moment("22-Feb-2019"))

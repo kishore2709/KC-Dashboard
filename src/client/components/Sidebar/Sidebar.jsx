@@ -72,7 +72,7 @@ class Sidebar extends Component {
 
   componentDidMount() {
     console.log('Sidebar did mount ?');
-    PostApi('/api/users/getUserInfo', GetUserInfo())
+    PostApi('/api/users/getUserInfo', GetUserInfo(), this.controller.signal)
       .then(res => {
         console.log('in then proomse', res);
         if (!res || res === 'err') {

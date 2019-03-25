@@ -3,15 +3,16 @@ import MUIDataTable from 'mui-datatables';
 import withStyles from '@material-ui/core/styles/withStyles';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import momentRandom from 'moment-random';
+// import momentRandom from 'moment-random';
 import { connect } from 'react-redux';
 import { dateRangeActions } from '_actions';
 import moment from 'moment';
 import data from '_helpers/Utils/genChartData.js';
-import { makePdf, MakeExcel } from '_helpers/Utils/';
+import { makePdf } from '_helpers/Utils/';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import ArrowDownward from '@material-ui/icons/ArrowDownward';
+import Loading from 'components/Loading/Loading.jsx';
 
 const sample = {
   date: '2019-02-22',
@@ -38,14 +39,404 @@ const sample = {
   time_taken: '10',
 };
 
+const webData = [
+  {
+    date: '2019-02-22',
+    time: '09:16:49',
+    s_sitename: 'W3SVC1',
+    s_computername: 'WIN2008R2-TEST',
+    server_ip: '192.168.0.52',
+    cs_method: 'GET',
+    cs_uri_stem: '/',
+    cs_uri_query: '-',
+    s_port: '80',
+    cs_username: '-',
+    c_ip: '192.168.0.66',
+    cs_version: 'HTTP/1.1',
+    cs_User_Agent: 'Apache-HttpClient/4.5.5+(Java/1.8.0_191)',
+    cs_cookie: '-',
+    cs_referer: '-',
+    cs_host: '192.168.0.52',
+    sc_status: '200',
+    sc_substatus: '0',
+    sc_win32_status: '0',
+    sc_bytes: '936',
+    cs_bytes: '116',
+    time_taken: '10',
+  },
+  {
+    date: '2019-02-22',
+    time: '09:16:49',
+    s_sitename: 'W3SVC1',
+    s_computername: 'WIN2008R2-TEST',
+    server_ip: '192.168.0.52',
+    cs_method: 'GET',
+    cs_uri_stem: '/',
+    cs_uri_query: '-',
+    s_port: '80',
+    cs_username: '-',
+    c_ip: '192.168.0.66',
+    cs_version: 'HTTP/1.1',
+    cs_User_Agent: 'Apache-HttpClient/4.5.5+(Java/1.8.0_191)',
+    cs_cookie: '-',
+    cs_referer: '-',
+    cs_host: '192.168.0.52',
+    sc_status: '200',
+    sc_substatus: '0',
+    sc_win32_status: '0',
+    sc_bytes: '936',
+    cs_bytes: '116',
+    time_taken: '10',
+  },
+  {
+    date: '2019-02-22',
+    time: '09:16:49',
+    s_sitename: 'W3SVC1',
+    s_computername: 'WIN2008R2-TEST',
+    server_ip: '192.168.0.52',
+    cs_method: 'GET',
+    cs_uri_stem: '/',
+    cs_uri_query: '-',
+    s_port: '80',
+    cs_username: '-',
+    c_ip: '192.168.0.66',
+    cs_version: 'HTTP/1.1',
+    cs_User_Agent: 'Apache-HttpClient/4.5.5+(Java/1.8.0_191)',
+    cs_cookie: '-',
+    cs_referer: '-',
+    cs_host: '192.168.0.52',
+    sc_status: '200',
+    sc_substatus: '0',
+    sc_win32_status: '0',
+    sc_bytes: '936',
+    cs_bytes: '116',
+    time_taken: '11',
+  },
+  {
+    date: '2019-02-22',
+    time: '09:16:50',
+    s_sitename: 'W3SVC1',
+    s_computername: 'WIN2008R2-TEST',
+    server_ip: '192.168.0.52',
+    cs_method: 'GET',
+    cs_uri_stem: '/',
+    cs_uri_query: '-',
+    s_port: '80',
+    cs_username: '-',
+    c_ip: '192.168.0.66',
+    cs_version: 'HTTP/1.1',
+    cs_User_Agent: 'Apache-HttpClient/4.5.5+(Java/1.8.0_191)',
+    cs_cookie: '-',
+    cs_referer: '-',
+    cs_host: '192.168.0.52',
+    sc_status: '200',
+    sc_substatus: '0',
+    sc_win32_status: '0',
+    sc_bytes: '936',
+    cs_bytes: '116',
+    time_taken: '9',
+  },
+  {
+    date: '2019-02-22',
+    time: '09:16:50',
+    s_sitename: 'W3SVC1',
+    s_computername: 'WIN2008R2-TEST',
+    server_ip: '192.168.0.52',
+    cs_method: 'GET',
+    cs_uri_stem: '/',
+    cs_uri_query: '-',
+    s_port: '80',
+    cs_username: '-',
+    c_ip: '192.168.0.66',
+    cs_version: 'HTTP/1.1',
+    cs_User_Agent: 'Apache-HttpClient/4.5.5+(Java/1.8.0_191)',
+    cs_cookie: '-',
+    cs_referer: '-',
+    cs_host: '192.168.0.52',
+    sc_status: '200',
+    sc_substatus: '0',
+    sc_win32_status: '0',
+    sc_bytes: '936',
+    cs_bytes: '116',
+    time_taken: '10',
+  },
+  {
+    date: '2019-02-22',
+    time: '09:16:50',
+    s_sitename: 'W3SVC1',
+    s_computername: 'WIN2008R2-TEST',
+    server_ip: '192.168.0.52',
+    cs_method: 'GET',
+    cs_uri_stem: '/',
+    cs_uri_query: '-',
+    s_port: '80',
+    cs_username: '-',
+    c_ip: '192.168.0.66',
+    cs_version: 'HTTP/1.1',
+    cs_User_Agent: 'Apache-HttpClient/4.5.5+(Java/1.8.0_191)',
+    cs_cookie: '-',
+    cs_referer: '-',
+    cs_host: '192.168.0.52',
+    sc_status: '200',
+    sc_substatus: '0',
+    sc_win32_status: '0',
+    sc_bytes: '936',
+    cs_bytes: '116',
+    time_taken: '10',
+  },
+  {
+    date: '2019-02-22',
+    time: '09:16:50',
+    s_sitename: 'W3SVC1',
+    s_computername: 'WIN2008R2-TEST',
+    server_ip: '192.168.0.52',
+    cs_method: 'GET',
+    cs_uri_stem: '/',
+    cs_uri_query: '-',
+    s_port: '80',
+    cs_username: '-',
+    c_ip: '192.168.0.66',
+    cs_version: 'HTTP/1.1',
+    cs_User_Agent: 'Apache-HttpClient/4.5.5+(Java/1.8.0_191)',
+    cs_cookie: '-',
+    cs_referer: '-',
+    cs_host: '192.168.0.52',
+    sc_status: '200',
+    sc_substatus: '0',
+    sc_win32_status: '0',
+    sc_bytes: '936',
+    cs_bytes: '116',
+    time_taken: '10',
+  },
+  {
+    date: '2019-02-22',
+    time: '09:16:50',
+    s_sitename: 'W3SVC1',
+    s_computername: 'WIN2008R2-TEST',
+    server_ip: '192.168.0.52',
+    cs_method: 'GET',
+    cs_uri_stem: '/',
+    cs_uri_query: '-',
+    s_port: '80',
+    cs_username: '-',
+    c_ip: '192.168.0.66',
+    cs_version: 'HTTP/1.1',
+    cs_User_Agent: 'Apache-HttpClient/4.5.5+(Java/1.8.0_191)',
+    cs_cookie: '-',
+    cs_referer: '-',
+    cs_host: '192.168.0.52',
+    sc_status: '200',
+    sc_substatus: '0',
+    sc_win32_status: '0',
+    sc_bytes: '936',
+    cs_bytes: '116',
+    time_taken: '10',
+  },
+  {
+    date: '2019-02-22',
+    time: '09:16:50',
+    s_sitename: 'W3SVC1',
+    s_computername: 'WIN2008R2-TEST',
+    server_ip: '192.168.0.52',
+    cs_method: 'GET',
+    cs_uri_stem: '/',
+    cs_uri_query: '-',
+    s_port: '80',
+    cs_username: '-',
+    c_ip: '192.168.0.66',
+    cs_version: 'HTTP/1.1',
+    cs_User_Agent: 'Apache-HttpClient/4.5.5+(Java/1.8.0_191)',
+    cs_cookie: '-',
+    cs_referer: '-',
+    cs_host: '192.168.0.52',
+    sc_status: '200',
+    sc_substatus: '0',
+    sc_win32_status: '0',
+    sc_bytes: '936',
+    cs_bytes: '116',
+    time_taken: '11',
+  },
+  {
+    date: '2019-02-22',
+    time: '09:16:50',
+    s_sitename: 'W3SVC1',
+    s_computername: 'WIN2008R2-TEST',
+    server_ip: '192.168.0.52',
+    cs_method: 'GET',
+    cs_uri_stem: '/',
+    cs_uri_query: '-',
+    s_port: '80',
+    cs_username: '-',
+    c_ip: '192.168.0.66',
+    cs_version: 'HTTP/1.1',
+    cs_User_Agent: 'Apache-HttpClient/4.5.5+(Java/1.8.0_191)',
+    cs_cookie: '-',
+    cs_referer: '-',
+    cs_host: '192.168.0.52',
+    sc_status: '200',
+    sc_substatus: '0',
+    sc_win32_status: '0',
+    sc_bytes: '936',
+    cs_bytes: '116',
+    time_taken: '9',
+  },
+  {
+    date: '2019-02-22',
+    time: '09:16:50',
+    s_sitename: 'W3SVC1',
+    s_computername: 'WIN2008R2-TEST',
+    server_ip: '192.168.0.52',
+    cs_method: 'GET',
+    cs_uri_stem: '/',
+    cs_uri_query: '-',
+    s_port: '80',
+    cs_username: '-',
+    c_ip: '192.168.0.66',
+    cs_version: 'HTTP/1.1',
+    cs_User_Agent: 'Apache-HttpClient/4.5.5+(Java/1.8.0_191)',
+    cs_cookie: '-',
+    cs_referer: '-',
+    cs_host: '192.168.0.52',
+    sc_status: '200',
+    sc_substatus: '0',
+    sc_win32_status: '0',
+    sc_bytes: '936',
+    cs_bytes: '116',
+    time_taken: '10',
+  },
+  {
+    date: '2019-02-22',
+    time: '09:16:50',
+    s_sitename: 'W3SVC1',
+    s_computername: 'WIN2008R2-TEST',
+    server_ip: '192.168.0.52',
+    cs_method: 'GET',
+    cs_uri_stem: '/',
+    cs_uri_query: '-',
+    s_port: '80',
+    cs_username: '-',
+    c_ip: '192.168.0.66',
+    cs_version: 'HTTP/1.1',
+    cs_User_Agent: 'Apache-HttpClient/4.5.5+(Java/1.8.0_191)',
+    cs_cookie: '-',
+    cs_referer: '-',
+    cs_host: '192.168.0.52',
+    sc_status: '200',
+    sc_substatus: '0',
+    sc_win32_status: '0',
+    sc_bytes: '936',
+    cs_bytes: '116',
+    time_taken: '10',
+  },
+  {
+    date: '2019-02-22',
+    time: '09:16:50',
+    s_sitename: 'W3SVC1',
+    s_computername: 'WIN2008R2-TEST',
+    server_ip: '192.168.0.52',
+    cs_method: 'GET',
+    cs_uri_stem: '/',
+    cs_uri_query: '-',
+    s_port: '80',
+    cs_username: '-',
+    c_ip: '192.168.0.66',
+    cs_version: 'HTTP/1.1',
+    cs_User_Agent: 'Apache-HttpClient/4.5.5+(Java/1.8.0_191)',
+    cs_cookie: '-',
+    cs_referer: '-',
+    cs_host: '192.168.0.52',
+    sc_status: '200',
+    sc_substatus: '0',
+    sc_win32_status: '0',
+    sc_bytes: '936',
+    cs_bytes: '116',
+    time_taken: '10',
+  },
+  {
+    date: '2019-02-22',
+    time: '09:16:50',
+    s_sitename: 'W3SVC1',
+    s_computername: 'WIN2008R2-TEST',
+    server_ip: '192.168.0.52',
+    cs_method: 'GET',
+    cs_uri_stem: '/',
+    cs_uri_query: '-',
+    s_port: '80',
+    cs_username: '-',
+    c_ip: '192.168.0.66',
+    cs_version: 'HTTP/1.1',
+    cs_User_Agent: 'Apache-HttpClient/4.5.5+(Java/1.8.0_191)',
+    cs_cookie: '-',
+    cs_referer: '-',
+    cs_host: '192.168.0.52',
+    sc_status: '200',
+    sc_substatus: '0',
+    sc_win32_status: '0',
+    sc_bytes: '936',
+    cs_bytes: '116',
+    time_taken: '11',
+  },
+  {
+    date: '2019-02-22',
+    time: '09:16:50',
+    s_sitename: 'W3SVC1',
+    s_computername: 'WIN2008R2-TEST',
+    server_ip: '192.168.0.52',
+    cs_method: 'GET',
+    cs_uri_stem: '/',
+    cs_uri_query: '-',
+    s_port: '80',
+    cs_username: '-',
+    c_ip: '192.168.0.66',
+    cs_version: 'HTTP/1.1',
+    cs_User_Agent: 'Apache-HttpClient/4.5.5+(Java/1.8.0_191)',
+    cs_cookie: '-',
+    cs_referer: '-',
+    cs_host: '192.168.0.52',
+    sc_status: '200',
+    sc_substatus: '0',
+    sc_win32_status: '0',
+    sc_bytes: '936',
+    cs_bytes: '116',
+    time_taken: '16',
+  },
+].map(val => Object.values(val));
+
 class WebTable extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: data.webData,
+      data: [],
+      // data: data.webData,
     };
     this.handleData = this.handleData.bind(this);
   }
+
+  componentDidMount() {
+    // console.log('???? Dit mount Webbbb');
+    const x = new Promise(resolve => {
+      const { startDate, endDate } = this.props.dateRange.message;
+      let curData = [];
+      if (startDate != '')
+        curData = data.webData.filter(
+          val =>
+            moment(startDate) <= moment(val[0]) &&
+            moment(val[0]) <= moment(endDate)
+        );
+      else curData = data.webData;
+      // console.log('Web table wll mount..', curData);
+      resolve(curData);
+    });
+    x.then(curData => {
+      this.setState({
+        data: curData,
+      });
+    });
+  }
+
+  // componentDidMount() {
+  //   console.log('Web table did mount..');
+  // }
 
   getMuiTheme = () =>
     createMuiTheme({
@@ -85,11 +476,8 @@ class WebTable extends React.Component {
     // console.log(genDataTable);
     // const data = genDataTable;
     const { startDate, endDate } = this.props.dateRange.message;
-    // if (startDate != '') console.log(moment(startDate));
-    // console.log('test..', moment("22-Feb-2019"))
-    const curData = this.handleData(startDate, endDate);
-    // console.log('web data...');
-    // console.log(curData);
+    const { data } = this.state;
+    // console.log('in web..', data);
     const options = {
       filterType: 'dropdown',
       responsive: 'scroll',
@@ -163,12 +551,12 @@ class WebTable extends React.Component {
     // console.log(data.dnsData);
     // console.log(curData);
     // console.log(this.state.data);
-
+    // if (data.length === 0) return <Loading />;
     return (
       <MuiThemeProvider theme={this.getMuiTheme()}>
         <MUIDataTable
           title="Web Logs"
-          data={curData}
+          data={data}
           columns={columns}
           options={options}
         />

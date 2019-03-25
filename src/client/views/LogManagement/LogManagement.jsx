@@ -1,37 +1,36 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 // loader
-import Loadable from "react-loadable";
-import TableLoader from "components/ContentLoader/TableLoader.jsx";
+import Loadable from 'react-loadable';
+import TableLoader from 'components/ContentLoader/TableLoader.jsx';
 
 // import LineChart from 'components/Chart/LineChart/LineChart.js';
 // import BarLineChart from 'components/Chart/BarLineChart/BarLineChart.js';
-import { generateData } from "_helpers/Utils/genChartData.js";
+import { generateData } from '_helpers/Utils/genChartData.js';
 // import Paper from '@material-ui/core/Paper';
-import Grid from "@material-ui/core/Grid";
+import Grid from '@material-ui/core/Grid';
 //
-import { connect } from "react-redux";
-import { dashboardActions } from "_actions";
+import { connect } from 'react-redux';
+import { dashboardActions } from '_actions';
+import Loading from 'components/Loading/Loading.jsx';
 
 const LineChart = Loadable({
-  loader: () =>
-    import(/* webpackPreload: true */ "components/Chart/LineChart/LineChart.js"),
-  loading: TableLoader
+  loader: () => import('components/Chart/LineChart/LineChart.js'),
+  loading: TableLoader,
 });
 // import TableDiscover from 'components/Table/TableDiscover.jsx';
 const DNSTable = Loadable({
-  loader: () => import(/* webpackPreload: true */ "./DNSTable.jsx"),
-  loading: TableLoader
+  loader: () => import('./DNSTable.jsx'),
+  loading: TableLoader,
 });
 
 const WebTable = Loadable({
-  loader: () => import(/* webpackPreload: true */ "./WebTable.jsx"),
-  loading: TableLoader
+  loader: () => import('./WebTable.jsx'),
+  loading: TableLoader,
 });
 
 const LogTable = Loadable({
-  loader: () =>
-    import(/* webpackPreload: true */ "components/LogTable/LogTable.js"),
-  loading: TableLoader
+  loader: () => import('components/LogTable/LogTable.js'),
+  loading: TableLoader,
 });
 
 class Discover extends Component {
@@ -40,11 +39,16 @@ class Discover extends Component {
   // }
 
   componentWillMount() {
+    console.log('..log manager will mount');
     const startDate =
       this.props.dateRange.start ||
       new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
     const endDate = this.props.dateRange.end || new Date();
     this.handleDateRangeChange(startDate, endDate);
+  }
+
+  componentDidMount() {
+    console.log('component Didmount');
   }
 
   handleDateRangeChange = (startDate, endDate) => {
@@ -53,8 +57,8 @@ class Discover extends Component {
       targetCity,
       dateRange: {
         start: startDate,
-        end: endDate
-      }
+        end: endDate,
+      },
     });
   };
 
@@ -62,26 +66,28 @@ class Discover extends Component {
     const { dateRange, data, loading } = this.props;
     const chartData = [
       {
-        label: "DNS Logs",
+        label: 'DNS Logs',
         data: data.dnslogs
           .map(({ timestamp, count }) => ({
             x: new Date(timestamp),
-            y: count
+            y: count,
           }))
-          .sort((a, b) => a.x - b.x)
+          .sort((a, b) => a.x - b.x),
       },
       {
-        label: "Web Logs",
+        label: 'Web Logs',
         data: data.weblogs
           .map(({ timestamp, count }) => ({
             x: new Date(timestamp),
-            y: count
+            y: count,
           }))
-          .sort((a, b) => a.x - b.x)
-      }
+          .sort((a, b) => a.x - b.x),
+      },
     ];
     const startDate = dateRange.start;
     const endDate = dateRange.end;
+    console.log('logmanager render');
+    // if (loading) return <Loading />;
     return (
       <Grid
         container
@@ -101,7 +107,7 @@ class Discover extends Component {
             data={chartData}
             height="200px"
             fireUpDateRangeChange={this.handleDateRangeChange}
-            allDataLabel={["DNS Logs", "Web Logs"]}
+            allDataLabel={['DNS Logs', 'Web Logs']}
             startDate={startDate}
             endDate={endDate}
             loading={loading}
@@ -127,7 +133,7 @@ const mapDispatchToProps = dispatch => ({
   },
   changeDateRange: newStatus => {
     dispatch(dashboardActions.changeDateRange(newStatus));
-  }
+  },
 });
 export default connect(
   state => ({
