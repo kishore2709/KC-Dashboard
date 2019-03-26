@@ -139,7 +139,7 @@ class DNSTable extends React.Component {
                   }`,
                   columns,
                   curData,
-                  null,
+                  true,
                   'A3'
                 );
               }}

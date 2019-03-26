@@ -12,6 +12,7 @@ import Grid from '@material-ui/core/Grid';
 import { connect } from 'react-redux';
 import { dashboardActions } from '_actions';
 import Loading from 'components/Loading/Loading.jsx';
+import PieChart from 'components/Chart/PieChart/PieChart';
 
 const LineChart = Loadable({
   loader: () => import('components/Chart/LineChart/LineChart.js'),
@@ -121,6 +122,9 @@ class Discover extends Component {
         </Grid>
         <Grid item xs={12}>
           <LogTable />
+        </Grid>
+        <Grid item xs={12}>
+          <PieChart />
         </Grid>
       </Grid>
     );
