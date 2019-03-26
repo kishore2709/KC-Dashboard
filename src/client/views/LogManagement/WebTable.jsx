@@ -475,7 +475,8 @@ class WebTable extends React.Component {
 
     // console.log(genDataTable);
     // const data = genDataTable;
-    const { startDate, endDate } = this.props.dateRange.message;
+    const startDate = this.props.dateRange.start;
+    const endDate = this.props.dateRange.end;
     const { data } = this.state;
     // console.log('in web..', data);
     const options = {
@@ -566,7 +567,7 @@ class WebTable extends React.Component {
 }
 
 function mapStateToProps(state) {
-  const { dateRange } = state;
+  const { dateRange } = state.dashboard;
   return {
     dateRange,
   };

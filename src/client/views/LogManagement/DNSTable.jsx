@@ -277,7 +277,8 @@ class DNSTable extends React.Component {
 
     // console.log(genDataTable);
     // const data = genDataTable;
-    const { startDate, endDate } = this.props.dateRange.message;
+    const startDate = this.props.dateRange.start;
+    const endDate = this.props.dateRange.end;
     let curData = [];
     // setTimeout(() => {
     console.log(dnsData);
@@ -376,7 +377,7 @@ class DNSTable extends React.Component {
 }
 
 function mapStateToProps(state) {
-  const { dateRange } = state;
+  const { dateRange } = state.dashboard;
   return {
     dateRange,
   };
