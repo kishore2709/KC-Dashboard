@@ -5,26 +5,28 @@ import TableLoader from 'components/ContentLoader/TableLoader.jsx';
 
 // import LineChart from 'components/Chart/LineChart/LineChart.js';
 // import BarLineChart from 'components/Chart/BarLineChart/BarLineChart.js';
-import { generateData } from '_helpers/Utils/genChartData.js';
+// import { generateData } from '_helpers/Utils/genChartData.js';
 // import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 //
 import { connect } from 'react-redux';
 import { dashboardActions } from '_actions';
 import Loading from 'components/Loading/Loading.jsx';
-
-const LineChart = Loadable({
-  loader: () => import('components/Chart/LineChart/LineChart.js'),
-  loading: TableLoader,
-});
 // import TableDiscover from 'components/Table/TableDiscover.jsx';
+// import LineChart from 'components/Chart/LineChart/LineChart.js';
+// import DNSTable from './DNSTable';
 const DNSTable = Loadable({
   loader: () => import('./DNSTable.jsx'),
   loading: TableLoader,
 });
-
+// import WebTable from './WebTable';
 const WebTable = Loadable({
   loader: () => import('./WebTable.jsx'),
+  loading: TableLoader,
+});
+
+const LineChart = Loadable({
+  loader: () => import('components/Chart/LineChart/LineChart.js'),
   loading: TableLoader,
 });
 
