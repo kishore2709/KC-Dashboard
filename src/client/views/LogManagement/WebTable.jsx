@@ -534,7 +534,7 @@ class WebTable extends React.Component {
                   }`,
                   columns,
                   curData,
-                  null,
+                  true,
                   'A1',
                   'landscape'
                 );
