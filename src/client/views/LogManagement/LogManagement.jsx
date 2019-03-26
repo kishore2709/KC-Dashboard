@@ -31,10 +31,10 @@ const WebTable = Loadable({
   loading: TableLoader,
 });
 
-const LineChart = Loadable({
-  loader: () => import('components/Chart/LineChart/LineChart.js'),
-  loading: TableLoader,
-});
+// const LineChart = Loadable({
+//   loader: () => import('components/Chart/LineChart/LineChart.js'),
+//   loading: TableLoader,
+// });
 
 const LogTable = Loadable({
   loader: () => import('components/LogTable/LogTable.js'),

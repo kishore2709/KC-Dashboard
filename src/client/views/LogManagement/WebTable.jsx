@@ -532,8 +532,8 @@ class WebTable extends React.Component {
                   } ${
                     endDate ? `đến ${moment(endDate).format('DD-MM-YYYY')}` : ''
                   }`,
-                  columns,
-                  curData,
+                  JSON.parse(JSON.stringify(columns)),
+                  JSON.parse(JSON.stringify(data)),
                   true,
                   'A1',
                   'landscape'

@@ -14,7 +14,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import ArrowDownward from '@material-ui/icons/ArrowDownward';
 //
 
-import data from '_helpers/Utils/genChartData.js';
+// import data from '_helpers/Utils/genChartData.js';
 
 const sample = {
   date: '22-Feb-2019',
@@ -27,11 +27,214 @@ const sample = {
   query_flags: '+',
 };
 
+const dnsData = [
+  {
+    date: '22-Feb-2019',
+    time: '16:01:00.812',
+    c_ip: '192.168.0.57',
+    c_port: '47086',
+    query_name: 'ocsp.digicert.com',
+    query_class: 'IN',
+    query_type: 'AAAA',
+    query_flags: '+',
+  },
+  {
+    date: '22-Feb-2019',
+    time: '16:01:55.857',
+    c_ip: '192.168.0.57',
+    c_port: '52956',
+    query_name: 'incoming.telemetry.mozilla.org',
+    query_class: 'IN',
+    query_type: 'A',
+    query_flags: '+',
+  },
+  {
+    date: '22-Feb-2019',
+    time: '16:01:55.857',
+    c_ip: '192.168.0.57',
+    c_port: '52956',
+    query_name: 'incoming.telemetry.mozilla.org',
+    query_class: 'IN',
+    query_type: 'AAAA',
+    query_flags: '+',
+  },
+  {
+    date: '22-Feb-2019',
+    time: '16:01:56.138',
+    c_ip: '192.168.0.57',
+    c_port: '43270',
+    query_name: 'incoming.telemetry.mozilla.org',
+    query_class: 'IN',
+    query_type: 'A',
+    query_flags: '+T',
+  },
+  {
+    date: '22-Feb-2019',
+    time: '16:01:56.240',
+    c_ip: '192.168.0.57',
+    c_port: '43270',
+    query_name: 'incoming.telemetry.mozilla.org',
+    query_class: 'IN',
+    query_type: 'AAAA',
+    query_flags: '+T',
+  },
+  {
+    date: '22-Feb-2019',
+    time: '16:01:56.290',
+    c_ip: '192.168.0.57',
+    c_port: '43209',
+    query_name: 'detectportal.firefox.com',
+    query_class: 'IN',
+    query_type: 'A',
+    query_flags: '+',
+  },
+  {
+    date: '22-Feb-2019',
+    time: '16:01:56.290',
+    c_ip: '192.168.0.57',
+    c_port: '43209',
+    query_name: 'detectportal.firefox.com',
+    query_class: 'IN',
+    query_type: 'AAAA',
+    query_flags: '+',
+  },
+  {
+    date: '22-Feb-2019',
+    time: '16:09:40.007',
+    c_ip: '192.168.0.57',
+    c_port: '33671',
+    query_name: 'jmeter-plugins.org',
+    query_class: 'IN',
+    query_type: 'A',
+    query_flags: '+',
+  },
+  {
+    date: '22-Feb-2019',
+    time: '16:09:40.007',
+    c_ip: '192.168.0.57',
+    c_port: '33671',
+    query_name: 'jmeter-plugins.org',
+    query_class: 'IN',
+    query_type: 'AAAA',
+    query_flags: '+',
+  },
+  {
+    date: '22-Feb-2019',
+    time: '16:15:46.988',
+    c_ip: '192.168.0.66',
+    c_port: '48730',
+    query_name: 'api.twitter.com',
+    query_class: 'IN',
+    query_type: 'A',
+    query_flags: '-',
+  },
+  {
+    date: '22-Feb-2019',
+    time: '16:15:48.020',
+    c_ip: '192.168.0.66',
+    c_port: '48730',
+    query_name: 'api.twitter.com',
+    query_class: 'IN',
+    query_type: 'A',
+    query_flags: '-',
+  },
+  {
+    date: '22-Feb-2019',
+    time: '16:15:49.545',
+    c_ip: '192.168.0.66',
+    c_port: '48730',
+    query_name: 'api.twitter.com',
+    query_class: 'IN',
+    query_type: 'A',
+    query_flags: '-',
+  },
+  {
+    date: '22-Feb-2019',
+    time: '16:15:49.732',
+    c_ip: '192.168.0.66',
+    c_port: '36167',
+    query_name: 'api.twitter.com',
+    query_class: 'IN',
+    query_type: 'A',
+    query_flags: '-',
+  },
+  {
+    date: '22-Feb-2019',
+    time: '16:15:50.984',
+    c_ip: '192.168.0.66',
+    c_port: '48730',
+    query_name: 'api.twitter.com',
+    query_class: 'IN',
+    query_type: 'A',
+    query_flags: '-',
+  },
+  {
+    date: '22-Feb-2019',
+    time: '16:15:51.380',
+    c_ip: '192.168.0.66',
+    c_port: '40166',
+    query_name: 'api.twitter.com',
+    query_class: 'IN',
+    query_type: 'A',
+    query_flags: '-',
+  },
+  {
+    date: '22-Feb-2019',
+    time: '16:15:52.013',
+    c_ip: '192.168.0.66',
+    c_port: '48730',
+    query_name: 'api.twitter.com',
+    query_class: 'IN',
+    query_type: 'A',
+    query_flags: '-',
+  },
+  {
+    date: '22-Feb-2019',
+    time: '16:15:52.025',
+    c_ip: '192.168.0.66',
+    c_port: '40166',
+    query_name: 'api.twitter.com',
+    query_class: 'IN',
+    query_type: 'A',
+    query_flags: '-',
+  },
+  {
+    date: '22-Feb-2019',
+    time: '16:15:52.043',
+    c_ip: '192.168.0.66',
+    c_port: '35620',
+    query_name: 'api.twitter.com',
+    query_class: 'IN',
+    query_type: 'A',
+    query_flags: '-',
+  },
+  {
+    date: '22-Feb-2019',
+    time: '16:15:52.123',
+    c_ip: '192.168.0.66',
+    c_port: '36167',
+    query_name: 'api.twitter.com',
+    query_class: 'IN',
+    query_type: 'A',
+    query_flags: '-',
+  },
+  {
+    date: '22-Feb-2019',
+    time: '16:15:52.160',
+    c_ip: '192.168.0.66',
+    c_port: '35620',
+    query_name: 'api.twitter.com',
+    query_class: 'IN',
+    query_type: 'A',
+    query_flags: '-',
+  },
+].map(val => Object.values(val));
+
 class DNSTable extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: data.dnsData,
+      data: dnsData,
     };
     this.handleData = this.handleData.bind(this);
   }
@@ -64,6 +267,7 @@ class DNSTable extends React.Component {
       options: {
         filter: true,
         customBodyRender: data => (
+          // console.log(data);
           <Typography style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>
             {data}
           </Typography>
@@ -76,9 +280,11 @@ class DNSTable extends React.Component {
     const { startDate, endDate } = this.props.dateRange.message;
     let curData = [];
     // setTimeout(() => {
+    console.log(dnsData);
+    console.log(this.state.data);
     curData = this.handleData(startDate, endDate);
     // }, 3000);
-    // console.log('dns data...');
+    console.log('dns data...');
     console.log(curData);
     // console.log(this.props.chartImageURL);
     // if (startDate != '') console.log(moment(startDate));
@@ -137,8 +343,8 @@ class DNSTable extends React.Component {
                   } ${
                     endDate ? `đến ${moment(endDate).format('DD-MM-YYYY')}` : ''
                   }`,
-                  columns,
-                  curData,
+                  JSON.parse(JSON.stringify(columns)),
+                  JSON.parse(JSON.stringify(curData)),
                   true,
                   'A3'
                 );

@@ -4,10 +4,17 @@ import pdfMake from 'pdfmake/build/pdfmake';
 import vfsFonts from 'pdfmake/build/vfs_fonts';
 import { store } from '../store';
 
-const makePdf = (tableName, columns, data, chart = true, pageSize, pageOrientation) => {
+const makePdf = (
+  tableName,
+  columns,
+  data,
+  chart = true,
+  pageSize,
+  pageOrientation
+) => {
   const { vfs } = vfsFonts.pdfMake;
   // const {columns,data} = this.state;
-  console.log(store.getState())
+  // console.log(store.getState());
   let chartImageURL = null;
   let pieChartImage = null;
   if (chart) {
@@ -15,22 +22,29 @@ const makePdf = (tableName, columns, data, chart = true, pageSize, pageOrientati
     pieChartImage = store.getState().chart.pieChartImageURL || null;
   }
   pdfMake.vfs = vfs;
-  const titlePDF = columns.map(value => value.name.split("_").join(" "))
+  const titlePDF = columns.map(value => value.name.split('_').join(' '));
+  // console.log(data);
+  // console.log(JSON.parse(JSON.stringify(data)));
   const dataPDF = [titlePDF, ...data];
+  // console.log(dataPDF);
+
   const createdDate = new Date();
-  let docDefinition = {
+  const docDefinition = {
     pageOrientation: pageOrientation || 'portrait',
     pageSize,
     content: [
       { text: `${tableName}`, style: 'header' },
-      { text: `Ngày ${createdDate.getDate()} tháng ${createdDate.getMonth()} năm ${createdDate.getFullYear()}`, style: 'headerCaption'},
+      {
+        text: `Ngày ${createdDate.getDate()} tháng ${createdDate.getMonth()} năm ${createdDate.getFullYear()}`,
+        style: 'headerCaption',
+      },
       {
         layout: 'lightHorizontalLines', // optional
         table: {
           // headers are automatically repeated if the table spans over multiple pages
           // you can declare how many rows should be treated as headers
           headerRows: 1,
-          widths: columns.map(value => `${100/columns.length}%`),
+          widths: columns.map(value => `${100 / columns.length}%`),
           body: dataPDF,
         },
       },
@@ -50,28 +64,28 @@ const makePdf = (tableName, columns, data, chart = true, pageSize, pageOrientati
   };
   if (pieChartImage) {
     docDefinition.content = [
-      ...docDefinition.content.slice(0, 2),  
+      ...docDefinition.content.slice(0, 2),
       {
         // if you specify width, image will scale proportionally
         image: pieChartImage,
         width: '200',
         style: {
-			    alignment: 'center',
-			  },
+          alignment: 'center',
+        },
       },
       ...docDefinition.content.slice(2),
     ];
   }
   if (chartImageURL) {
     docDefinition.content = [
-      ...docDefinition.content.slice(0, 2),  
+      ...docDefinition.content.slice(0, 2),
       {
         // if you specify width, image will scale proportionally
         image: chartImageURL,
         width: '750',
         style: {
-			    alignment: 'center',
-			  },
+          alignment: 'center',
+        },
       },
       ...docDefinition.content.slice(2),
     ];
