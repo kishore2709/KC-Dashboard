@@ -1,12 +1,14 @@
 ﻿const jwt = require('jsonwebtoken');
 const co = require('co');
+const bcrypt = require('bcrypt');
 const config = require('../config.json');
 const Models = require('../Utils/Schema');
 // #### >>>  Init Mongodb
 const { User, Log, Group, City, DnsLog, WebLog, Report } = Models;
 const dashboardService = require('../services/dashboard.js');
 // bcrypt
-const bcrypt = require('bcrypt');
+const clientRedis = require('../redis');
+
 const defaultPassword = require('../Utils/pwd');
 
 const saltRounds = 10;
@@ -213,10 +215,39 @@ async function getAllCities() {
 
 async function getCitiesInfo(city, start, end) {
   return new Promise((resolve, reject) => {
-    getAllCities().then(cities => {
-      getDataOneCity(cities[city], start, end)
-        .then(res => resolve(res))
-        .catch(err => reject(err));
+    const currentKey = `${city.toString()}.${Math.round(
+      start / 1000000
+    ).toString()}.${Math.round(end / 1000000).toString()}`;
+    console.log(currentKey);
+    clientRedis.getAsync(currentKey).then(res => {
+      console.log('in redis');
+      console.log(res);
+      if (res === null) {
+        getAllCities().then(cities => {
+          getDataOneCity(cities[city], start, end)
+            .then(resSecond => {
+              // cache it
+              clientRedis.set(
+                currentKey,
+                JSON.stringify(resSecond),
+                'EX',
+                60 * 30
+              );
+              // clientRedis.getAsync(currentKey).then(ress => {
+              //   console.log('in redis after');
+              //   // console.log(ress);
+              //   console.log(JSON.parse(ress));
+              // });
+              // console.log(resSecond);
+              resolve(resSecond);
+            })
+            .catch(err => reject(err));
+        });
+      } else {
+        // cache
+        console.log('get from cache..');
+        resolve(JSON.parse(res));
+      }
     });
   });
 }

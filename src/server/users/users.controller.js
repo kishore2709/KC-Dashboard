@@ -96,10 +96,13 @@ function getData(req, res, next) {
 }
 
 function getCitiesInfo(req, res, next) {
-  const start = new Date(parseInt(req.query.start, 10))
-  const end = new Date(parseInt(req.query.end, 10))
-  const city = parseInt(req.query.city, 10)
-  Promise.all([userService.getCitiesInfo(city, start, end), userService.getAllCities()])
+  const start = new Date(parseInt(req.query.start, 10));
+  const end = new Date(parseInt(req.query.end, 10));
+  const city = parseInt(req.query.city, 10);
+  Promise.all([
+    userService.getCitiesInfo(city, start, end),
+    userService.getAllCities(),
+  ])
     .then(ret => {
       if (!ret || !ret[0] || !ret[1]) {
         res.status(400).json({ message: 'getCity error' });
@@ -114,7 +117,8 @@ function getCitiesInfo(req, res, next) {
 }
 
 function getCities(req, res, next) {
-  userService.getAllCities()
+  userService
+    .getAllCities()
     .then(ret => {
       if (!ret) {
         res.status(400).json({ message: 'getCity error' });

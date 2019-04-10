@@ -4,16 +4,29 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const path = require('path');
+const bluebird = require('bluebird');
+// logging
+const morgan = require('morgan');
+const redis = require('redis');
+const clientRedis = require('./redis');
+//
 const errorHandler = require('./_helpers/error-handler');
 const jwt = require('./_helpers/jwt');
 const userService = require('./users/user.service');
 // const Model = require('./Utils/Schema');
 const ip = require('./Utils/ListIpAddress');
 
+// promise for redis
+bluebird.promisifyAll(redis.RedisClient.prototype);
+bluebird.promisifyAll(redis.Multi.prototype);
+
 const jsonParser = bodyParser.json();
 // Nodejs
 const urlencodedParser = bodyParser.urlencoded({ extended: false });
 const app = express();
+// log
+app.use(morgan('combined'));
+// jsonParser
 app.use(jsonParser);
 app.use(urlencodedParser);
 app.use(express.static('dist'));
@@ -31,7 +44,7 @@ const sendEmails = async (toEmails, subject, content, html) => {
     to: toEmails,
   };
   const result = false;
-  let send = require('gmail-send')({
+  const send = require('gmail-send')({
     user: credentials.user, // Your GMail account used to send emails
     pass: credentials.pass, // Application-specific password
     to: credentials.to,
@@ -46,16 +59,16 @@ const sendEmails = async (toEmails, subject, content, html) => {
   return new Promise((resolve, reject) => {
     send({}, (err, res) => {
       console.log(
-        "* [example 1.1] send() callback returned: err:",
+        '* [example 1.1] send() callback returned: err:',
         err,
-        "; res:",
+        '; res:',
         res
       );
       if (err) {
-        reject("err");
+        reject('err');
       } else {
-        console.log("tr");
-        resolve("ok");
+        console.log('tr');
+        resolve('ok');
       }
     });
   });
@@ -64,26 +77,29 @@ app.post('/api/sendEmails', jsonParser, (req, res) => {
   console.log(req.body);
 
   htmlContent = req.body.askAns
-    .map(content => {
-      return `<h2>${content.ask}</h2><p>${content.ans}</p><br/>`;
-    })
-    .join("");
+    .map(content => `<h2>${content.ask}</h2><p>${content.ans}</p><br/>`)
+    .join('');
   console.log(htmlContent);
-  let newArrEmail = [];
+  const newArrEmail = [];
   for (let i = 0; i < req.body.emailList.length; i++)
     newArrEmail.push(req.body.emailList[i].Email);
   console.log(newArrEmail);
-  sendEmails(newArrEmail, "Cập nhật câu trả lời cho sinh viên", "etc.", htmlContent)
+  sendEmails(
+    newArrEmail,
+    'Cập nhật câu trả lời cho sinh viên',
+    'etc.',
+    htmlContent
+  )
     .then(ans => {
       res.status(200);
       console.log(ans);
-      res.send({ status: "ok" });
+      res.send({ status: 'ok' });
     })
     .catch(err => {
       res.status(400);
-      console.log("error in sendEmail");
+      console.log('error in sendEmail');
       console.log(err);
-      res.send({ status: "err" });
+      res.send({ status: 'err' });
     });
 });
 
@@ -155,8 +171,16 @@ db.on('connected', () => {
   console.log('MongoDB connected!');
 });
 
+clientRedis.on('error', err => {
+  console.log('Error redis', err);
+});
+clientRedis.on('connect', () => {
+  console.log('Redis client connected');
+});
+
 db.once('open', () => {
   console.log('MongoDB connection opened!');
+
   app.listen(8081, () => console.log('Listening on port 8081!'));
 });
 

@@ -51,6 +51,7 @@ function DataVisualizer(Chart) {
     };
     */
     const _color = ['red', 'blue', 'green', 'orange', 'black'];
+    // eslint-disable-next-line react/display-name
     const SubComponent = class extends Component {
       constructor(props) {
         super(props);
@@ -227,7 +228,7 @@ function DataVisualizer(Chart) {
                 color: 'white',
                 padding: '0',
                 margin: '0',
-                boxShadow: '0 3px 5px 2px #cccccc'
+                boxShadow: '0 3px 5px 2px #cccccc',
               }}
             >
               <CardActions style={{ padding: '1px 4px' }}>
@@ -274,7 +275,7 @@ function DataVisualizer(Chart) {
                         style={{
                           width: '180px',
                           overflow: 'auto',
-                          textOverflow: 'ellipse'
+                          textOverflow: 'ellipse',
                         }}
                         multiple
                         value={this.state.dataShow}
