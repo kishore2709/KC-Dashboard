@@ -29,6 +29,7 @@
     "bcrypt": "^3.0.4",
     "bluebird": "^3.5.4",
     "body-parser": "^1.18.3",
+    "bull": "^3.7.0",
     "canvas": "^2.4.1",
     "chance": "1.0.12",
     "chart.js": "^2.7.2",

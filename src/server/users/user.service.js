@@ -54,7 +54,7 @@ function getDataOneCity(city, start, end) {
     }
     dnsLogs = dnsLogs
       .countDocuments()
-      .exec()
+      .lean()
       .then(dnsCount => {
         let dnsQuery = DnsLog.find({ city: id });
         if (start && end) {
@@ -64,7 +64,7 @@ function getDataOneCity(city, start, end) {
             .lte(end);
         }
         if (dnsCount <= 200) {
-          return dnsQuery.exec();
+          return dnsQuery.lean();
         }
         let timestamp = 0;
         let count = 0;
@@ -110,7 +110,7 @@ function getDataOneCity(city, start, end) {
       });
     webLogs = webLogs
       .countDocuments()
-      .exec()
+      .lean()
       .then(webCount => {
         let webQuery = WebLog.find({ city: id });
         if (start && end) {
@@ -120,7 +120,7 @@ function getDataOneCity(city, start, end) {
             .lte(end);
         }
         if (webCount <= 200) {
-          return webQuery.exec();
+          return webQuery.lean();
         }
         let timestamp = 0;
         let count = 0;
@@ -165,7 +165,7 @@ function getDataOneCity(city, start, end) {
         });
       });
     const reportsQuery = Report.find({ city: id });
-    const reports = reportsQuery.exec();
+    const reports = reportsQuery.lean();
     Promise.all([dnsLogs, webLogs, reports])
       .then(values => {
         resolve({
@@ -185,7 +185,7 @@ async function forArray(arr, start, end) {
 
 async function getAllCities() {
   return new Promise((resolve, reject) => {
-    const cities = City.find({}).exec();
+    const cities = City.find({}).lean();
     cities
       .then(cities =>
         resolve(
@@ -216,12 +216,12 @@ async function getAllCities() {
 async function getCitiesInfo(city, start, end) {
   return new Promise((resolve, reject) => {
     const currentKey = `${city.toString()}.${Math.round(
-      start / 1000000
-    ).toString()}.${Math.round(end / 1000000).toString()}`;
-    console.log(currentKey);
+      start / (1000 * 60)
+    ).toString()}.${Math.round(end / (1000 * 60)).toString()}`;
+    // console.log(currentKey);
     clientRedis.getAsync(currentKey).then(res => {
-      console.log('in redis');
-      console.log(res);
+      // console.log('in redis');
+      // console.log(res);
       if (res === null) {
         getAllCities().then(cities => {
           getDataOneCity(cities[city], start, end)
@@ -351,14 +351,14 @@ async function saveLog(obj) {
 }
 
 async function getLog(obj) {
-  return Log.find({}).exec();
+  return Log.find({}).lean();
 }
 
 async function checkPwd(obj) {
   const ret = 0;
   const { sub: id, dat } = obj;
   return User.findById(id)
-    .exec()
+    .lean()
     .then(user => {
       if (!user) throw new Error(user);
       if (user.password !== dat) throw new Error('wrong pass');
@@ -372,11 +372,11 @@ async function dashboardData() {
 
 async function getUserInfo(obj) {
   const { _id, ...rest } = obj;
-  return User.findById(_id).exec();
+  return User.findById(_id).lean();
 }
 
 async function getUsers() {
-  return User.find({}).exec();
+  return User.find({}).lean();
 }
 
 async function addDb(obj) {
@@ -386,7 +386,7 @@ async function addDb(obj) {
   obj.role = obj.role.toString().toLowerCase();
 
   return User.find({ username: obj.username })
-    .exec()
+    .lean()
     .then(user => {
       console.log('in check username');
       // check Username exist?
@@ -397,7 +397,7 @@ async function addDb(obj) {
       console.log('in check groups...');
       // check role - groupname exist ? -> set Permission Group for user
       return Group.find({ groupname: obj.role })
-        .exec()
+        .lean()
         .then(docs => {
           if (docs.length === 0) throw new Error('length == 0');
           return docs[0].permissions;
@@ -423,7 +423,7 @@ async function addDb(obj) {
 async function deleteDb(obj) {
   if (!obj || !('id' in obj)) return 0;
   const { id, ...rest } = obj;
-  return User.findByIdAndRemove(id).exec();
+  return User.findByIdAndRemove(id).lean();
 }
 
 async function updateDb(objArr) {
@@ -450,7 +450,7 @@ async function updateDb(objArr) {
         }
         // console.log(rest);
         User.findByIdAndUpdate(id, { $set: rest })
-          .exec()
+          .lean()
           .then(res => {
             if (!res) throw new Error(res);
             resolve(res);
@@ -536,7 +536,7 @@ async function resetPassword(obj) {
   password = defaultPassword;
   return User.findByIdAndUpdate(id, {
     $set: { ...rest, password, changePwd: true },
-  }).exec();
+  }).lean();
 }
 
 async function changePassword(obj) {
