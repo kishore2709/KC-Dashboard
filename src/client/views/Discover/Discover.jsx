@@ -19,7 +19,6 @@ const LineChart = Loadable({
 });
 
 class Discover extends Component {
-
   constructor(props) {
     super(props);
   }
@@ -39,7 +38,7 @@ class Discover extends Component {
         end: endDate,
       },
     });
-  }
+  };
 
   render() {
     const { dashboard } = this.props;
@@ -47,21 +46,25 @@ class Discover extends Component {
     const chartData = [
       {
         label: 'DNS Logs',
-        data: data.dnslogs.map(({ timestamp, count }) => ({
-          x: new Date(timestamp),
-          y: count,
-        })).sort((a, b) => (a.x - b.x)),
+        data: data.dnslogs
+          .map(({ timestamp, count }) => ({
+            x: new Date(timestamp),
+            y: count,
+          }))
+          .sort((a, b) => a.x - b.x),
       },
       {
         label: 'Web Logs',
-        data: data.weblogs.map(({ timestamp, count }) => ({
-          x: new Date(timestamp),
-          y: count,
-        })).sort((a, b) => (a.x - b.x)),
+        data: data.weblogs
+          .map(({ timestamp, count }) => ({
+            x: new Date(timestamp),
+            y: count,
+          }))
+          .sort((a, b) => a.x - b.x),
       },
     ];
-    const startDate = dashboard.dateRange.start
-    const endDate = dashboard.dateRange.end
+    const startDate = dashboard.dateRange.start;
+    const endDate = dashboard.dateRange.end;
     return (
       <Grid
         container
@@ -71,9 +74,9 @@ class Discover extends Component {
         spacing={24}
       >
         <Grid item xs={12}>
-          <LineChart 
-            data={chartData} 
-            height='200px' 
+          <LineChart
+            data={chartData}
+            height="200px"
             fireUpDateRangeChange={this.handleDateRangeChange}
             allDataLabel={['DNS Logs', 'Web Logs']}
             startDate={startDate}
@@ -92,6 +95,9 @@ const mapDispatchToProps = dispatch => ({
   },
   changeDateRange: newStatus => {
     dispatch(dashboardActions.changeDateRange(newStatus));
-  }
+  },
 });
-export default connect(state => ({ dashboard: state.dashboard }), mapDispatchToProps)(Discover);
+export default connect(
+  state => ({ dashboard: state.dashboard }),
+  mapDispatchToProps
+)(Discover);

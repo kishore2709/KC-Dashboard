@@ -415,7 +415,8 @@ class WebTable extends React.Component {
   componentDidMount() {
     // console.log('???? Dit mount Webbbb');
     const x = new Promise(resolve => {
-      const { startDate, endDate } = this.props.dateRange.message;
+      console.log(this.props.dateRange);
+      const { start: startDate, end: endDate } = this.props.dateRange;
       let curData = [];
       if (startDate != '')
         curData = data.webData.filter(

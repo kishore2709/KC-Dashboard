@@ -93,6 +93,7 @@ function DataVisualizer(Chart) {
         if (this.state.useTR === false) return -1;
         let timeRange;
         const { startDate, endDate } = this.props;
+        // console.log(' in Data visualizer..', startDate, endDate);
         switch (endDate.getTime() - startDate.getTime()) {
           case 15 * 60 * 1000:
             timeRange = 15 * 60;
@@ -222,16 +223,17 @@ function DataVisualizer(Chart) {
           return (
             <Card
               style={{
-                width: '100%',
-                borderRadius: 10,
+                // width: '100%',
+                borderRadius: 5,
                 border: 0,
                 color: 'white',
-                padding: '0',
+                padding: '0px 10px',
                 margin: '0',
+                // marginLeft: 0,
                 boxShadow: '0 3px 5px 2px #cccccc',
               }}
             >
-              <CardActions style={{ padding: '1px 4px' }}>
+              <CardActions style={{}}>
                 <Grid container spacing={8} alignItems="center">
                   <Grid item xs={12} md={3}>
                     <FormControl>

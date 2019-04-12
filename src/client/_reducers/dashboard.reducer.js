@@ -36,18 +36,18 @@ export function dashboard(
       return {
         ...state,
         dateRange: action.message,
-      }
+      };
     case dashboardConstants.FETCH_DATA:
       return {
         ...state,
         loading: true,
-      }
+      };
     case dashboardConstants.FETCH_DATA_DONE:
       return {
         ...state,
         loading: false,
-      }
-    default: 
+      };
+    default:
       return state;
   }
 }

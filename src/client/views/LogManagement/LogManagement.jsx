@@ -41,6 +41,16 @@ const LogTable = Loadable({
   loading: TableLoader,
 });
 
+const LazyTable = Loadable({
+  loader: () => import('components/InfinitedTable/LazyTable'),
+  loading: TableLoader,
+});
+
+const InfinitedTable = Loadable({
+  loader: () => import('components/InfinitedTable'),
+  loading: TableLoader,
+});
+
 class Discover extends Component {
   // constructor(props) {
   //   super(props);
@@ -48,15 +58,15 @@ class Discover extends Component {
 
   componentWillMount() {
     console.log('..log manager will mount');
+  }
+
+  componentDidMount() {
+    console.log('component Didmount');
     const startDate =
       this.props.dateRange.start ||
       new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
     const endDate = this.props.dateRange.end || new Date();
     this.handleDateRangeChange(startDate, endDate);
-  }
-
-  componentDidMount() {
-    console.log('component Didmount');
   }
 
   handleDateRangeChange = (startDate, endDate) => {
@@ -122,6 +132,12 @@ class Discover extends Component {
           />
         </Grid>
         <Grid item xs={12}>
+          <LazyTable />
+        </Grid>
+        <Grid item xs={12}>
+          <InfinitedTable />
+        </Grid>
+        {/* <Grid item xs={12}>
           <DNSTable />
         </Grid>
         <Grid item xs={12}>
@@ -132,7 +148,7 @@ class Discover extends Component {
         </Grid>
         <Grid item xs={12}>
           <PieChart />
-        </Grid>
+        </Grid> */}
       </Grid>
     );
   }

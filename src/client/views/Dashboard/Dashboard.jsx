@@ -93,7 +93,7 @@ class Dashboard extends React.Component {
   render() {
     const { classes, dashboard } = this.props;
     // const { data } = this.state;
-    const {  data  } = dashboard;
+    const { data } = dashboard;
     // console.log(dashboard);
     // console.log(targetCity, data);
     if (data.length === 0) return <Loading />;
@@ -112,7 +112,7 @@ class Dashboard extends React.Component {
         style={{ width: '100%', height: '100%', display: 'flex' }}
       >
         <GridItem xs={12} md={6} lg={5} style={{ margin: 'auto' }}>
-          <VnMap/>
+          <VnMap />
         </GridItem>
         <GridItem
           xs={12}
