@@ -17,6 +17,7 @@ import Typography from '@material-ui/core/Typography';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 // use the component in your app!
+import faker from 'faker';
 
 const styles = theme => ({
   tableRow: {
@@ -41,45 +42,44 @@ const styles = theme => ({
   },
 });
 
-const list = [
-  {
-    date: '2019-02-22',
-    time: '09:16:49',
-    s_sitename: 'W3SVC1',
-    s_computername: 'WIN2008R2-TEST',
-    server_ip: '192.168.0.52',
-    cs_method: 'GET',
-    cs_uri_stem: '/',
-    cs_uri_query: '-',
-    s_port: '80',
-    cs_username: '-',
-    c_ip: '192.168.0.66',
-    cs_version: 'HTTP/1.1',
-    cs_User_Agent: 'Apache-HttpClient/4.5.5+(Java/1.8.0_191)',
-    cs_cookie: '-',
-    cs_referer: '-',
-    cs_host: '192.168.0.52',
-    sc_status: '200',
-    sc_substatus: '0',
-    sc_win32_status: '0',
-    sc_bytes: '936',
-    cs_bytes: '116',
-    time_taken: '10',
-  },
-];
+const sample = () => ({
+  date: faker.date.past(),
+  time: '09:16:49',
+  s_sitename: 'W3SVC1',
+  s_computername: 'WIN2008R2-TEST',
+  server_ip: '192.168.0.52',
+  cs_method: 'GET',
+  cs_uri_stem: '/',
+  cs_uri_query: '-',
+  s_port: '80',
+  cs_username: '-',
+  c_ip: '192.168.0.66',
+  cs_version: 'HTTP/1.1',
+  cs_User_Agent: 'Apache-HttpClient/4.5.5+(Java/1.8.0_191)',
+  cs_cookie: '-',
+  cs_referer: '-',
+  cs_host: '192.168.0.52',
+  sc_status: '200',
+  sc_substatus: '0',
+  sc_win32_status: '0',
+  sc_bytes: '936',
+  cs_bytes: '116',
+  time_taken: '10',
+});
 const Component = ({ classes }) => {
   const [selectedIndex, setSelectedIndex] = useState(-1);
-  const [items, setItems] = useState(list);
+  const [items, setItems] = useState([sample()]);
 
   const tableRef = useRef();
 
   const Details = ({ children, index }) => (
     <div style={{ cursor: 'pointer' }} onClick={() => setSelectedIndex(index)}>
+      {index}
       {children}
     </div>
   );
 
-  const _getDatum = index => list[index % list.length];
+  const _getDatum = index => items[index % items.length];
   const _getRowHeight = ({ index }) => (index === selectedIndex ? 800 : 48);
   const rowGetter = ({ index }) => _getDatum(index);
   const cellRenderer = ({ rowIndex }) => {
@@ -131,7 +131,7 @@ const Component = ({ classes }) => {
               alignItems: 'center',
             }}
           >
-            <ReactJson src={list[index % list.length]} />
+            <ReactJson src={items[index % items.length]} />
             {/* {rowData.details} */}
           </div>
         </div>
@@ -140,15 +140,18 @@ const Component = ({ classes }) => {
     return defaultTableRowRenderer(props);
   };
   // //
-  const loadMore = ({ startIndex, stopIndex }) =>
-    new Promise((resolve, reject) => {
+  const loadMore = ({ startIndex, stopIndex }) => {
+    console.log('in load more..', startIndex, stopIndex);
+    const addArr = [];
+    for (let i = 0; i < stopIndex - startIndex; i++) addArr.push(sample());
+    return new Promise((resolve, reject) => {
       setTimeout(() => {
-        setItems(items => items.concat(list[0]));
+        setItems(items => items.concat(addArr));
         // resolve the promise after data where fetched
         resolve();
       }, 500);
     });
-
+  };
   return (
     <Card
       style={{
@@ -160,7 +163,7 @@ const Component = ({ classes }) => {
         margin: '0',
         // marginLeft: 0,
         boxShadow: '0 3px 5px 2px #cccccc',
-        height: '70vh',
+        height: 'auto',
       }}
     >
       <Typography variant="h6" className={classes.titleHeader}>
@@ -174,8 +177,8 @@ const Component = ({ classes }) => {
         {({ onRowsRendered, registerChild }) => (
           // tableRef = registerChild;
           // console.log('in render..', tableRef);
-          <AutoSizer>
-            {({ width, height }) => (
+          <AutoSizer disableHeight>
+            {({ width }) => (
               <Table
                 ref={registerChild}
                 ref={tableRef}
@@ -183,11 +186,11 @@ const Component = ({ classes }) => {
                 headerClassName={classes.headerTable}
                 rowClassName={classes.tableRow}
                 headerHeight={56}
-                height={height}
+                height={500}
                 overscanRowCount={10}
                 rowHeight={_getRowHeight}
                 rowGetter={rowGetter}
-                rowCount={1000}
+                rowCount={items.length}
                 width={width}
                 // ref={tableRef}
                 rowRenderer={rowRenderer}
@@ -204,7 +207,7 @@ const Component = ({ classes }) => {
                   dataKey="date"
                   disableSort
                   label="Nội dung"
-                  width={width * 0.9}
+                  width={width * 0.8}
                 />
               </Table>
             )}
