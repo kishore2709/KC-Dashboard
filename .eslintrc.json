@@ -20,6 +20,8 @@
     "jest": true
   },
   "rules": {
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn",
     "linebreak-style": 0,
     "no-debugger": 0,
     "no-alert": 0,
@@ -128,6 +130,7 @@
     ]
   },
   "plugins": [
-    "prettier"
+    "prettier",
+    "react-hooks"
   ]
 }

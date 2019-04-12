@@ -3,6 +3,7 @@ import {
   AutoSizer,
   Column,
   Table,
+  InfiniteLoader,
   defaultTableRowRenderer,
 } from 'react-virtualized';
 import { withStyles } from '@material-ui/core';
@@ -40,8 +41,36 @@ const styles = theme => ({
   },
 });
 
-const Component = ({ list, classes }) => {
+const list = [
+  {
+    date: '2019-02-22',
+    time: '09:16:49',
+    s_sitename: 'W3SVC1',
+    s_computername: 'WIN2008R2-TEST',
+    server_ip: '192.168.0.52',
+    cs_method: 'GET',
+    cs_uri_stem: '/',
+    cs_uri_query: '-',
+    s_port: '80',
+    cs_username: '-',
+    c_ip: '192.168.0.66',
+    cs_version: 'HTTP/1.1',
+    cs_User_Agent: 'Apache-HttpClient/4.5.5+(Java/1.8.0_191)',
+    cs_cookie: '-',
+    cs_referer: '-',
+    cs_host: '192.168.0.52',
+    sc_status: '200',
+    sc_substatus: '0',
+    sc_win32_status: '0',
+    sc_bytes: '936',
+    cs_bytes: '116',
+    time_taken: '10',
+  },
+];
+const Component = ({ classes }) => {
   const [selectedIndex, setSelectedIndex] = useState(-1);
+  const [items, setItems] = useState(list);
+
   const tableRef = useRef();
 
   const Details = ({ children, index }) => (
@@ -69,6 +98,7 @@ const Component = ({ list, classes }) => {
   };
 
   useEffect(() => {
+    console.log('in Effect', tableRef.current);
     tableRef.current.recomputeRowHeights();
   }, [selectedIndex]);
 
@@ -101,32 +131,7 @@ const Component = ({ list, classes }) => {
               alignItems: 'center',
             }}
           >
-            <ReactJson
-              src={{
-                date: '2019-02-22',
-                time: '09:16:49',
-                s_sitename: 'W3SVC1',
-                s_computername: 'WIN2008R2-TEST',
-                server_ip: '192.168.0.52',
-                cs_method: 'GET',
-                cs_uri_stem: '/',
-                cs_uri_query: '-',
-                s_port: '80',
-                cs_username: '-',
-                c_ip: '192.168.0.66',
-                cs_version: 'HTTP/1.1',
-                cs_User_Agent: 'Apache-HttpClient/4.5.5+(Java/1.8.0_191)',
-                cs_cookie: '-',
-                cs_referer: '-',
-                cs_host: '192.168.0.52',
-                sc_status: '200',
-                sc_substatus: '0',
-                sc_win32_status: '0',
-                sc_bytes: '936',
-                cs_bytes: '116',
-                time_taken: '10',
-              }}
-            />
+            <ReactJson src={list[index % list.length]} />
             {/* {rowData.details} */}
           </div>
         </div>
@@ -134,6 +139,15 @@ const Component = ({ list, classes }) => {
     }
     return defaultTableRowRenderer(props);
   };
+  // //
+  const loadMore = ({ startIndex, stopIndex }) =>
+    new Promise((resolve, reject) => {
+      setTimeout(() => {
+        setItems(items => items.concat(list[0]));
+        // resolve the promise after data where fetched
+        resolve();
+      }, 500);
+    });
 
   return (
     <Card
@@ -152,39 +166,51 @@ const Component = ({ list, classes }) => {
       <Typography variant="h6" className={classes.titleHeader}>
         Dữ liệu log máy chủ web
       </Typography>
-      <AutoSizer>
-        {({ width, height }) => (
-          <Table
-            headerClassName={classes.headerTable}
-            rowClassName={classes.tableRow}
-            ref="Table"
-            headerHeight={56}
-            height={height}
-            overscanRowCount={10}
-            rowHeight={_getRowHeight}
-            rowGetter={rowGetter}
-            rowCount={1000}
-            width={width}
-            ref={tableRef}
-            rowRenderer={rowRenderer}
-          >
-            <Column
-              label="Chi tiết"
-              cellDataGetter={({ rowData }) => rowData.length}
-              cellRenderer={cellRenderer}
-              dataKey="index"
-              disableSort
-              width={width * 0.2}
-            />
-            <Column
-              dataKey="name"
-              disableSort
-              label="Nội dung"
-              width={width * 0.9}
-            />
-          </Table>
+      <InfiniteLoader
+        isRowLoaded={({ index }) => !!items[index]}
+        loadMoreRows={loadMore}
+        rowCount={1000000}
+      >
+        {({ onRowsRendered, registerChild }) => (
+          // tableRef = registerChild;
+          // console.log('in render..', tableRef);
+          <AutoSizer>
+            {({ width, height }) => (
+              <Table
+                ref={registerChild}
+                ref={tableRef}
+                onRowsRendered={onRowsRendered}
+                headerClassName={classes.headerTable}
+                rowClassName={classes.tableRow}
+                headerHeight={56}
+                height={height}
+                overscanRowCount={10}
+                rowHeight={_getRowHeight}
+                rowGetter={rowGetter}
+                rowCount={1000}
+                width={width}
+                // ref={tableRef}
+                rowRenderer={rowRenderer}
+              >
+                <Column
+                  label="Chi tiết"
+                  // cellDataGetter={({ rowData }) => rowData.length}
+                  cellRenderer={cellRenderer}
+                  dataKey="index"
+                  disableSort
+                  width={width * 0.2}
+                />
+                <Column
+                  dataKey="date"
+                  disableSort
+                  label="Nội dung"
+                  width={width * 0.9}
+                />
+              </Table>
+            )}
+          </AutoSizer>
         )}
-      </AutoSizer>
+      </InfiniteLoader>
     </Card>
   );
 };
