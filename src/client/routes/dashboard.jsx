@@ -4,14 +4,14 @@ import React from 'react';
 import Dashboard from '@material-ui/icons/Dashboard';
 import Person from '@material-ui/icons/Person';
 import MailOutline from '@material-ui/icons/MailOutline';
-import ExitToApp from '@material-ui/icons/ExitToApp';
+import PersonAddDisabled from '@material-ui/icons/PersonAddDisabled';
 
 // import ContentPaste from "@material-ui/icons/ContentPaste";
 import LibraryBooks from '@material-ui/icons/LibraryBooks';
-import BubbleChart from '@material-ui/icons/BubbleChart';
+import GroupIcon from '@material-ui/icons/Group';
 // import LocationOn from '@material-ui/icons/LocationOn';
 // import Notifications from '@material-ui/icons/Notifications';
-import AccessIcon from '@material-ui/icons/AccessibilityNew';
+import FormatListNumbered from '@material-ui/icons/FormatListNumbered';
 import PowerIcon from '@material-ui/icons/PowerOff';
 // import Unarchive from '@material-ui/icons/Unarchive';
 // Loadable
@@ -123,7 +123,7 @@ const dashboardRoutes = [
         path: '/userGroup',
         sidebarName: 'Nhóm người dùng',
         navbarName: 'Giao diện quản lý nhóm người dùng',
-        icon: Person,
+        icon: GroupIcon,
         component: GroupPermission,
       },
       {
@@ -131,7 +131,7 @@ const dashboardRoutes = [
         path: '/permission',
         sidebarName: 'Phân quyền người dùng',
         navbarName: 'Giao diện phân quyền người dùng',
-        icon: AccessIcon,
+        icon: PersonAddDisabled,
         component: UserPermission,
       },
       {
@@ -139,7 +139,7 @@ const dashboardRoutes = [
         path: '/manageUser',
         sidebarName: 'Danh sách người dùng',
         navbarName: 'Giao diện quản lý danh sách người dùng',
-        icon: Person,
+        icon: FormatListNumbered,
         component: UserManagement,
       },
     ],
