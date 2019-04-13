@@ -22,7 +22,7 @@ import { alertActions, mailActions } from '../_actions';
 import { PrivateRoute } from './PrivateRoute';
 import { LoginPage } from './LoginPage';
 import { PostApi } from '../_helpers/Utils/PostApi';
-import { dateRange } from '../_reducers/dateRange.reducer';
+// import { dateRange } from '../_reducers/dateRange.reducer';
 // import { RegisterPage } from './RegisterPage';
 // import connectedDrawers from './SettingManagement/Drawers';
 class App extends React.Component {

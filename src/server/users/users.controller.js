@@ -46,8 +46,74 @@ router.post('/getCitiesInfo', getCitiesInfo);
 router.post('/sendEmails', sendEmails);
 router.post('/sendSMS', sendSMS);
 router.post('/getData', getData);
+// log
+router.post('/getWebLogByTime', getWebLogByTime);
+router.post('/getDNSLogByTime', getDNSLogByTime);
+router.post('/getSessionLogByTime', getSessionLogByTime);
+
 // router.post('/saveLog', saveLog);
 module.exports = router;
+
+// log
+function getWebLogByTime(req, res, next) {
+  // console.log(req.query.start);
+  const startTime = new Date(req.query.startTime);
+  const endTime = new Date(req.query.endTime);
+  // conso
+  const startIndex = parseInt(req.query.startIndex, 10);
+  const endIndex = parseInt(req.query.endIndex, 10);
+  userService
+    .getWebLogByTime(startTime, endTime, startIndex, endIndex)
+    .then(ret => {
+      res.json({
+        status: true,
+        data: ret,
+      });
+    })
+    .catch(err => {
+      console.log(err);
+      next(err);
+    });
+}
+
+function getSessionLogByTime(req, res, next) {
+  const startTime = new Date(req.query.startTime);
+  const endTime = new Date(req.query.endTime);
+  const startIndex = parseInt(req.query.startIndex, 10);
+  const endIndex = parseInt(req.query.endIndex, 10);
+  userService
+    .getSessionLogByTime(startTime, endTime, startIndex, endIndex)
+    .then(ret => {
+      res.json({
+        status: true,
+        data: ret,
+      });
+    })
+    .catch(err => {
+      console.log(err);
+      next(err);
+    });
+}
+
+function getDNSLogByTime(req, res, next) {
+  const startTime = new Date(req.query.startTime);
+  const endTime = new Date(req.query.endTime);
+  // console.log(startTime, '??', req.query.startTime);
+  const startIndex = parseInt(req.query.startIndex, 10);
+  const endIndex = parseInt(req.query.endIndex, 10);
+  userService
+    .getDNSLogByTime(startTime, endTime, startIndex, endIndex)
+    .then(ret => {
+      res.json({
+        status: true,
+        data: ret,
+      });
+    })
+    .catch(err => {
+      console.log(err);
+      next(err);
+    });
+}
 
 function sendEmails(req, res, next) {
   userService

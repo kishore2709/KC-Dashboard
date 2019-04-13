@@ -1,5 +1,6 @@
 ﻿const jwt = require('jsonwebtoken');
 const co = require('co');
+const faker = require('faker');
 const bcrypt = require('bcrypt');
 const config = require('../config.json');
 const Models = require('../Utils/Schema');
@@ -12,6 +13,8 @@ const clientRedis = require('../redis');
 const defaultPassword = require('../Utils/pwd');
 
 const saltRounds = 10;
+
+faker.locale = 'vi';
 
 module.exports = {
   authenticate,
@@ -32,8 +35,73 @@ module.exports = {
   sendSMS,
   getAllCities,
   getData,
+  // log
+  getDNSLogByTime,
+  getWebLogByTime,
+  getSessionLogByTime,
 };
 
+async function getWebLogByTime(startTime, endTime, startIndex, endIndex) {
+  const res = [];
+  for (let i = startIndex; i <= endIndex; i++)
+    res.push({
+      date: faker.date.between(startTime, endTime).toISOString(),
+      time: '06:26:18',
+      s_sitename: 'W3SVC1',
+      s_computername: 'WIN2008R2-TEST',
+      server_ip: '192.168.0.52',
+      cs_method: 'GET',
+      cs_uri_stem: '/',
+      cs_uri_query: '-',
+      s_port: '80',
+      cs_username: '-',
+      c_ip: '192.168.0.66',
+      cs_version: 'HTTP/1.1',
+      cs_User_Agent: 'Apache-HttpClient/4.5.5+(Java/1.8.0_191)',
+      cs_cookie: '-',
+      cs_referer: '-',
+      cs_host: '192.168.0.52',
+      sc_status: '200',
+      sc_substatus: '0',
+      sc_win32_status: '0',
+      sc_bytes: '936',
+      cs_bytes: '116',
+      time_taken: '10',
+    });
+  return res;
+  // let tmp =
+}
+
+async function getDNSLogByTime(startTime, endTime, startIndex, endIndex) {
+  const res = [];
+  for (let i = startIndex; i <= endIndex; i++)
+    res.push({
+      date: faker.date.between(startTime, endTime).toISOString(),
+      time: '16:01:00.812',
+      c_ip: '192.168.0.57',
+      c_port: '47086',
+      query_name: 'ocsp.digicert.com',
+      query_class: 'IN',
+      query_type: 'AAAA',
+      query_flags: '+',
+    });
+  return res;
+  // let tmp =
+}
+
+async function getSessionLogByTime(startTime, endTime, startIndex, endIndex) {
+  const res = [];
+  for (let i = startIndex; i <= endIndex; i++)
+    res.push({
+      id: i,
+      ip: faker.internet.ip(),
+      email: faker.internet.email(),
+      date: faker.date.between(startTime, endTime).toISOString(),
+      sessionType: i % 4 === 0 ? 'Đăng xuất' : 'Đăng nhập',
+    });
+  return res;
+  // let tmp =
+}
 function getDataOneCity(city, start, end) {
   console.log(city, start, end);
   return new Promise((resolve, reject) => {

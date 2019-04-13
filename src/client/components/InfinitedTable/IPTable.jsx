@@ -9,7 +9,12 @@ import Card from '@material-ui/core/Card';
 
 import { Table, Column, AutoSizer, InfiniteLoader } from 'react-virtualized';
 import './IPTable.css';
+import AppBarAction from 'components/AppBarDownloadAction';
+import { PostApi } from '_helpers/Utils';
+import { connect } from 'react-redux';
+
 import 'react-virtualized/styles.css'; // only needs to be imported once
+// faker.setLocale("vi");
 
 const styles = theme => ({
   tableRow: {
@@ -23,8 +28,15 @@ const styles = theme => ({
     alignItems: 'center',
   },
   titleHeader: {
+    flexGrow: 1,
+    display: 'flex',
+    alignItems: 'center',
+    // textAlign: 'center',
+    // margin: '5px',
+  },
+  cardHeader: {
     borderBottom: '1px solid black',
-    margin: '5px 10px',
+    display: 'flex',
   },
   headerTable: {
     /* border: 1px slod black; */
@@ -37,45 +49,63 @@ const generateRandomItem = idx => ({
   id: idx,
   ip: faker.internet.ip(),
   email: faker.internet.email(),
-  date: faker.date.past(),
+  date: faker.date.past().toISOString(),
+  sessionType: 'Đăng nhập',
 });
+
+function getSessionLogByTime(startTime, endTime, startIndex, endIndex) {
+  return PostApi(
+    `/api/users/getSessionLogByTime?startTime=${startTime}&endTime=${endTime}&startIndex=${startIndex}&endIndex=${endIndex}`
+  )
+    .then(ret => {
+      if (ret.status) {
+        return ret.data;
+      }
+      return [];
+    })
+    .catch(err => console.log(err));
+}
 
 class IPTable extends React.Component {
   constructor() {
     super();
+    faker.locale = 'vi';
     this.loadMore = this.loadMore.bind(this);
     // fake data
-    const items = [];
-    for (let i = 0, l = 100; i < l; i++) {
-      items.push(generateRandomItem(i));
-    }
+    // const items = [];
+    // for (let i = 0, l = 100; i < l; i++) {
+    //   items.push(generateRandomItem(i));
+    // }
     this.state = {
-      items,
+      items: [],
     };
   }
 
-  loadMore() {
-    // simulate a request
-    setTimeout(() => {
-      this.actuallyLoadMore();
-    }, 500);
-    // we need to return a promise
-    return new Promise((resolve, reject) => {
-      this.promiseResolve = resolve;
+  componentDidMount() {
+    getSessionLogByTime(
+      this.props.dateRange.start.toISOString(),
+      this.props.dateRange.end.toISOString(),
+      0,
+      0
+    ).then(ret => {
+      // console.log(ret);
+      this.setState(state => ({ items: state.items.concat(ret) }));
     });
   }
 
-  actuallyLoadMore() {
-    // fake new data
-    const newItems = [];
-    const s = this.state.items.length + 1;
-    for (let i = 0, l = 100; i < l; i++) {
-      newItems.push(generateRandomItem(s + i));
-    }
-    this.setState({ items: this.state.items.concat(newItems) });
-    // resolve the promise after data where fetched
-    this.promiseResolve();
-  }
+  loadMore = ({ startIndex, stopIndex }) => {
+    console.log('in load more..', startIndex, stopIndex);
+    // console.log(dateRange.start, dateRange.end);
+    return getSessionLogByTime(
+      this.props.dateRange.start.toISOString(),
+      this.props.dateRange.end.toISOString(),
+      startIndex,
+      stopIndex
+    ).then(ret => {
+      console.log(ret);
+      this.setState(state => ({ items: state.items.concat(ret) }));
+    });
+  };
 
   render() {
     const { classes } = this.props;
@@ -93,9 +123,12 @@ class IPTable extends React.Component {
           boxShadow: '0 3px 5px 2px #cccccc',
         }}
       >
-        <Typography variant="h6" className={classes.titleHeader}>
-          Dữ liệu Log đăng nhập/đăng xuất
-        </Typography>
+        <div className={classes.cardHeader}>
+          <span className={classes.titleHeader}>
+            <Typography variant="h6">Dữ liệu log máy chủ Web</Typography>
+          </span>
+          <AppBarAction excelLink="excel" pdfLink="pdf" />
+        </div>
         <InfiniteLoader
           isRowLoaded={({ index }) => !!this.state.items[index]}
           loadMoreRows={this.loadMore}
@@ -120,11 +153,16 @@ class IPTable extends React.Component {
                   <Column
                     label="Thời gian"
                     dataKey="date"
-                    width={width * 0.3}
+                    width={width * 0.2}
                   />
 
-                  <Column label="Ip" dataKey="ip" width={width * 0.3} />
-                  <Column label="Email" dataKey="email" width={width * 0.3} />
+                  <Column label="Ip" dataKey="ip" width={width * 0.2} />
+                  <Column label="Email" dataKey="email" width={width * 0.2} />
+                  <Column
+                    label="Loại"
+                    dataKey="sessionType"
+                    width={width * 0.1}
+                  />
                 </Table>
               )}
             </AutoSizer>
@@ -135,4 +173,6 @@ class IPTable extends React.Component {
   }
 }
 
-export default withStyles(styles)(IPTable);
+export default connect(state => ({
+  dateRange: state.dashboard.dateRange,
+}))(withStyles(styles)(IPTable));

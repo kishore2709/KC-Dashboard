@@ -15,6 +15,9 @@ import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 // use the WebTable in your app!
 import faker from 'faker';
+import AppBarAction from 'components/AppBarDownloadAction';
+import { PostApi } from '_helpers/Utils';
+import { connect } from 'react-redux';
 
 const styles = theme => ({
   tableRow: {
@@ -28,8 +31,15 @@ const styles = theme => ({
     alignItems: 'center',
   },
   titleHeader: {
+    flexGrow: 1,
+    display: 'flex',
+    alignItems: 'center',
+    // textAlign: 'center',
+    // margin: '5px',
+  },
+  cardHeader: {
     borderBottom: '1px solid black',
-    margin: '5px 10px',
+    display: 'flex',
   },
   headerTable: {
     /* border: 1px slod black; */
@@ -39,34 +49,47 @@ const styles = theme => ({
   },
 });
 
-const sample = () => ({
-  date: faker.date.past(),
-  time: '09:16:49',
-  s_sitename: 'W3SVC1',
-  s_computername: 'WIN2008R2-TEST',
-  server_ip: '192.168.0.52',
-  cs_method: 'GET',
-  cs_uri_stem: '/',
-  cs_uri_query: '-',
-  s_port: '80',
-  cs_username: '-',
-  c_ip: '192.168.0.66',
-  cs_version: 'HTTP/1.1',
-  cs_User_Agent: 'Apache-HttpClient/4.5.5+(Java/1.8.0_191)',
-  cs_cookie: '-',
-  cs_referer: '-',
-  cs_host: '192.168.0.52',
-  sc_status: '200',
-  sc_substatus: '0',
-  sc_win32_status: '0',
-  sc_bytes: '936',
-  cs_bytes: '116',
-  time_taken: '10',
-});
+// const sample = () => ({
+//   date: faker.date.past().toISOString(),
+//   time: '09:16:49',
+//   s_sitename: 'W3SVC1',
+//   s_computername: 'WIN2008R2-TEST',
+//   server_ip: '192.168.0.52',
+//   cs_method: 'GET',
+//   cs_uri_stem: '/',
+//   cs_uri_query: '-',
+//   s_port: '80',
+//   cs_username: '-',
+//   c_ip: '192.168.0.66',
+//   cs_version: 'HTTP/1.1',
+//   cs_User_Agent: 'Apache-HttpClient/4.5.5+(Java/1.8.0_191)',
+//   cs_cookie: '-',
+//   cs_referer: '-',
+//   cs_host: '192.168.0.52',
+//   sc_status: '200',
+//   sc_substatus: '0',
+//   sc_win32_status: '0',
+//   sc_bytes: '936',
+//   cs_bytes: '116',
+//   time_taken: '10',
+// });
 
-const WebTable = ({ classes }) => {
+function getWebLogByTime(startTime, endTime, startIndex, endIndex) {
+  return PostApi(
+    `/api/users/getWebLogByTime?startTime=${startTime}&endTime=${endTime}&startIndex=${startIndex}&endIndex=${endIndex}`
+  )
+    .then(ret => {
+      if (ret.status) {
+        return ret.data;
+      }
+      return [];
+    })
+    .catch(err => console.log(err));
+}
+
+const WebTable = ({ classes, dateRange }) => {
   const [selectedIndex, setSelectedIndex] = useState(-1);
-  const [items, setItems] = useState([sample()]);
+  const [items, setItems] = useState([]);
 
   const tableRef = useRef();
 
@@ -118,6 +141,19 @@ const WebTable = ({ classes }) => {
     tableRef.current.recomputeRowHeights();
   }, [selectedIndex]);
 
+  // load first log
+  useEffect(() => {
+    getWebLogByTime(
+      dateRange.start.toISOString(),
+      dateRange.end.toISOString(),
+      0,
+      0
+    ).then(ret => {
+      console.log(ret);
+      setItems(items => items.concat(ret));
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const rowRenderer = props => {
     const { index, style, className, key, rowData } = props;
     if (index === selectedIndex) {
@@ -158,15 +194,25 @@ const WebTable = ({ classes }) => {
   // //
   const loadMore = ({ startIndex, stopIndex }) => {
     console.log('in load more..', startIndex, stopIndex);
-    const addArr = [];
-    for (let i = 0; i < stopIndex - startIndex; i++) addArr.push(sample());
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        setItems(items => items.concat(addArr));
-        // resolve the promise after data where fetched
-        resolve();
-      }, 500);
+    // console.log(dateRange.start, dateRange.end);
+    return getWebLogByTime(
+      dateRange.start.toISOString(),
+      dateRange.end.toISOString(),
+      startIndex,
+      stopIndex
+    ).then(ret => {
+      console.log(ret);
+      setItems(items => items.concat(ret));
     });
+    // const addArr = [];
+    // for (let i = 0; i < stopIndex - startIndex; i++) addArr.push(sample());
+    // return new Promise((resolve, reject) => {
+    //   setTimeout(() => {
+    //     setItems(items => items.concat(addArr));
+    //     // resolve the promise after data where fetched
+    //     resolve();
+    //   }, 500);
+    // });
   };
   return (
     <Card
@@ -182,9 +228,12 @@ const WebTable = ({ classes }) => {
         height: 'auto',
       }}
     >
-      <Typography variant="h6" className={classes.titleHeader}>
-        Dữ liệu log máy chủ web
-      </Typography>
+      <div className={classes.cardHeader}>
+        <span className={classes.titleHeader}>
+          <Typography variant="h6">Dữ liệu log máy chủ Web</Typography>
+        </span>
+        <AppBarAction excelLink="excel" pdfLink="pdf" />
+      </div>
       <InfiniteLoader
         isRowLoaded={({ index }) => !!items[index]}
         loadMoreRows={loadMore}
@@ -234,4 +283,6 @@ const WebTable = ({ classes }) => {
   );
 };
 
-export default withStyles(styles)(WebTable);
+export default connect(state => ({
+  dateRange: state.dashboard.dateRange,
+}))(withStyles(styles)(WebTable));
