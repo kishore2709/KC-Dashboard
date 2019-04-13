@@ -106,7 +106,9 @@ class App extends React.Component {
               <div className={classes.container}>{switchRoutes}</div>
             </div>
           ) : (
-              <div className={classes.map}>{switchRoutes}</div>
+              <div className={classes.map}>
+              <div className={classes.container}>{switchRoutes}</div>
+              </div>
             )}
           {/* {this.getRoute() ? <Footer /> : null} */}
         </div>

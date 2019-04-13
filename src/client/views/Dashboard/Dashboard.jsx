@@ -1,74 +1,78 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from "react";
+import PropTypes from "prop-types";
 // hot
 // import { hot } from 'react-hot-loader/root';
 // @material-ui/core
-import withStyles from '@material-ui/core/styles/withStyles';
-import Icon from '@material-ui/core/Icon';
-import Store from '@material-ui/icons/Store';
-import Info from '@material-ui/icons/Info';
-import FileCopy from '@material-ui/icons/FileCopy';
+import withStyles from "@material-ui/core/styles/withStyles";
+import Icon from "@material-ui/core/Icon";
+import Store from "@material-ui/icons/Store";
+import Info from "@material-ui/icons/Info";
+import FileCopy from "@material-ui/icons/FileCopy";
 
-import Warning from '@material-ui/icons/Warning';
-import DateRange from '@material-ui/icons/DateRange';
-import LocalOffer from '@material-ui/icons/LocalOffer';
-import BugReport from '@material-ui/icons/BugReport';
-import Code from '@material-ui/icons/Code';
-import Cloud from '@material-ui/icons/Cloud';
+import Warning from "@material-ui/icons/Warning";
+import DateRange from "@material-ui/icons/DateRange";
+import LocalOffer from "@material-ui/icons/LocalOffer";
+import BugReport from "@material-ui/icons/BugReport";
+import Code from "@material-ui/icons/Code";
+import Cloud from "@material-ui/icons/Cloud";
 // loader
-import Loadable from 'react-loadable';
-import TableLoader from 'components/ContentLoader/TableLoader.jsx';
+import Loadable from "react-loadable";
+import TableLoader from "components/ContentLoader/TableLoader.jsx";
 // core components
-import GridItem from 'components/Grid/GridItem.jsx';
-import GridContainer from 'components/Grid/GridContainer.jsx';
-import Tasks from 'components/Tasks/Tasks.jsx';
-import CustomTabs from 'components/CustomTabs/CustomTabs.jsx';
-import Danger from 'components/Typography/Danger.jsx';
-import Card from 'components/Card/Card.jsx';
-import CardHeader from 'components/Card/CardHeader.jsx';
-import CardIcon from 'components/Card/CardIcon.jsx';
-import CardFooter from 'components/Card/CardFooter.jsx';
-import CardBody from 'components/Card/CardBody.jsx';
-import Loading from 'components/Loading/Loading.jsx';
-import WarningStatus from 'components/Warning/Warning.jsx';
-import { withToastManager } from 'react-toast-notifications';
-import Typography from '@material-ui/core/Typography';
-import { connect } from 'react-redux';
-import { serverStatusConstants } from '_constants';
-import { dashboardActions } from '_actions';
+import GridItem from "components/Grid/GridItem.jsx";
+import GridContainer from "components/Grid/GridContainer.jsx";
+import Tasks from "components/Tasks/Tasks.jsx";
+import CustomTabs from "components/CustomTabs/CustomTabs.jsx";
+import Danger from "components/Typography/Danger.jsx";
+import Card from "components/Card/Card.jsx";
+import CardHeader from "components/Card/CardHeader.jsx";
+import CardIcon from "components/Card/CardIcon.jsx";
+import CardFooter from "components/Card/CardFooter.jsx";
+import CardBody from "components/Card/CardBody.jsx";
+import Loading from "components/Loading/Loading.jsx";
+import WarningStatus from "components/Warning/Warning.jsx";
+import { withToastManager } from "react-toast-notifications";
+import Typography from "@material-ui/core/Typography";
+import { connect } from "react-redux";
+import { serverStatusConstants } from "_constants";
+import { dashboardActions } from "_actions";
 
-import { PostApi } from '_helpers/Utils';
-import Grid from '@material-ui/core/Grid';
-import dashboardStyle from 'assets/jss/material-dashboard-react/views/dashboardStyle.jsx';
+import { PostApi } from "_helpers/Utils";
+import Grid from "@material-ui/core/Grid";
+import dashboardStyle from "assets/jss/material-dashboard-react/views/dashboardStyle.jsx";
 
 //
 // import Discover from 'views/Discover/Discover.jsx';
 const Discover = Loadable({
   loader: () =>
-    import(/* webpackPreload: true */ 'views/Discover/Discover.jsx'),
-  loading: TableLoader,
+    import(/* webpackPreload: true */ "views/Discover/Discover.jsx"),
+  loading: TableLoader
 });
 // import VnMap from 'components/Maps/Maps.jsx';
 const VnMap = Loadable({
-  loader: () => import(/* webpackPreload: true */ 'components/Maps/Maps.jsx'),
-  loading: TableLoader,
+  loader: () => import(/* webpackPreload: true */ "components/Maps/Maps.jsx"),
+  loading: TableLoader
 });
 
 const styles = theme => ({
   map: {
-    height: '100%',
-    display: 'flex',
+    height: "100%",
+    display: "flex"
   },
   parent: {
-    display: 'flex',
+    display: "flex"
   },
   discover: {
-    padding: '10px',
-    margin: '20px',
+    padding: "10px",
+    margin: "20px"
   },
   info: {
-    marginTop: '40px',
+    marginTop: "40px"
   },
+  infoGridItem: {
+    display: "flex",
+    padding: "0px 0px 0px 5px"
+  }
 });
 class Dashboard extends React.Component {
   componentWillMount() {
@@ -85,8 +89,8 @@ class Dashboard extends React.Component {
       ...dashboard,
       dateRange: {
         start: startDate,
-        end: endDate,
-      },
+        end: endDate
+      }
     });
   };
 
@@ -109,22 +113,24 @@ class Dashboard extends React.Component {
     return (
       <GridContainer
         spacing={24}
-        style={{ width: '100%', height: '100%', display: 'flex' }}
+        style={{ width: "100%", height: "100%", display: "flex" }}
       >
-        <GridItem xs={12} md={6} lg={5} style={{ margin: 'auto' }}>
+        <GridItem xs={12} md={6} lg={5} style={{ margin: "auto" }}>
           <VnMap />
         </GridItem>
         <GridItem
           xs={12}
           md={6}
           lg={7}
+          // className={classes.infoGridItem}
           style={{
             display: 'flex',
+            padding: '0px 0px 0px 5px',
           }}
         >
           <div
             style={{
-              marginTop: '80px',
+              marginTop: "80px"
             }}
           >
             <GridContainer>
@@ -213,7 +219,7 @@ class Dashboard extends React.Component {
                         headerColor="primary"
                         tabs={[
                           {
-                            tabName: 'Bugs',
+                            tabName: "Bugs",
                             tabIcon: BugReport,
                             tabContent: (
                               <Tasks
@@ -221,10 +227,10 @@ class Dashboard extends React.Component {
                                 tasksIndexes={[0, 1, 2]}
                                 tasks={bugs}
                               />
-                            ),
+                            )
                           },
                           {
-                            tabName: 'Website',
+                            tabName: "Website",
                             tabIcon: Code,
                             tabContent: (
                               <Tasks
@@ -232,10 +238,10 @@ class Dashboard extends React.Component {
                                 tasksIndexes={[0, 1, 2]}
                                 tasks={website}
                               />
-                            ),
+                            )
                           },
                           {
-                            tabName: 'Server',
+                            tabName: "Server",
                             tabIcon: Cloud,
                             tabContent: (
                               <Tasks
@@ -243,8 +249,8 @@ class Dashboard extends React.Component {
                                 tasksIndexes={[0, 1, 2]}
                                 tasks={server}
                               />
-                            ),
-                          },
+                            )
+                          }
                         ]}
                       />
                     </GridItem>
@@ -263,13 +269,13 @@ class Dashboard extends React.Component {
 }
 
 Dashboard.propTypes = {
-  classes: PropTypes.object.isRequired,
+  classes: PropTypes.object.isRequired
 };
 function mapStateToProps(state) {
   const { serverStatus, dashboard } = state;
   return {
     dashboard,
-    serverStatus,
+    serverStatus
   };
 }
 
@@ -279,7 +285,7 @@ const mapDispatchToProps = dispatch => ({
   },
   changeDateRange: newStatus => {
     dispatch(dashboardActions.changeDateRange(newStatus));
-  },
+  }
 });
 
 const connectedDashboard = connect(
