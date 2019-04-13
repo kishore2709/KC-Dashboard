@@ -10,13 +10,10 @@ import { withStyles } from '@material-ui/core';
 import Card from '@material-ui/core/Card';
 
 import ReactJson from 'react-json-view';
-import ExpansionPanel from '@material-ui/core/ExpansionPanel';
-import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
-import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import Typography from '@material-ui/core/Typography';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
-// use the component in your app!
+// use the WebTable in your app!
 import faker from 'faker';
 
 const styles = theme => ({
@@ -66,7 +63,8 @@ const sample = () => ({
   cs_bytes: '116',
   time_taken: '10',
 });
-const Component = ({ classes }) => {
+
+const WebTable = ({ classes }) => {
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [items, setItems] = useState([sample()]);
 
@@ -74,7 +72,7 @@ const Component = ({ classes }) => {
 
   const Details = ({ children, index }) => (
     <div style={{ cursor: 'pointer' }} onClick={() => setSelectedIndex(index)}>
-      {index}
+      {/* {index} */}
       {children}
     </div>
   );
@@ -86,13 +84,31 @@ const Component = ({ classes }) => {
     if (rowIndex !== selectedIndex) {
       return (
         <Details index={rowIndex}>
-          <ExpandMore />
+          <div
+            style={{
+              display: 'flex',
+              justifyItems: 'center',
+              alignItems: 'center',
+            }}
+          >
+            {rowIndex}
+            <ExpandMore titleAccess="Xem thêm" />
+          </div>
         </Details>
       );
     }
     return (
       <Details index={-1}>
-        <ExpandLess />
+        <div
+          style={{
+            display: 'flex',
+            justifyItems: 'center',
+            alignItems: 'center',
+          }}
+        >
+          {rowIndex}
+          <ExpandLess titleAccess="Thu gọn" />
+        </div>
       </Details>
     );
   };
@@ -196,7 +212,7 @@ const Component = ({ classes }) => {
                 rowRenderer={rowRenderer}
               >
                 <Column
-                  label="Chi tiết"
+                  label="ID"
                   // cellDataGetter={({ rowData }) => rowData.length}
                   cellRenderer={cellRenderer}
                   dataKey="index"
@@ -218,4 +234,4 @@ const Component = ({ classes }) => {
   );
 };
 
-export default withStyles(styles)(Component);
+export default withStyles(styles)(WebTable);

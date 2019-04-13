@@ -21,33 +21,38 @@ const LineChart = Loadable({
 // import TableDiscover from 'components/Table/TableDiscover.jsx';
 // import LineChart from 'components/Chart/LineChart/LineChart.js';
 // import DNSTable from './DNSTable';
-const DNSTable = Loadable({
-  loader: () => import('./DNSTable.jsx'),
-  loading: TableLoader,
-});
+// const DNSTable = Loadable({
+//   loader: () => import('./DNSTable.jsx'),
+//   loading: TableLoader,
+// });
 // import WebTable from './WebTable';
-const WebTable = Loadable({
-  loader: () => import('./WebTable.jsx'),
-  loading: TableLoader,
-});
+// const WebTable = Loadable({
+//   loader: () => import('./WebTable.jsx'),
+//   loading: TableLoader,
+// });
 
 // const LineChart = Loadable({
 //   loader: () => import('components/Chart/LineChart/LineChart.js'),
 //   loading: TableLoader,
 // });
 
-const LogTable = Loadable({
-  loader: () => import('components/LogTable/LogTable.js'),
+// const LogTable = Loadable({
+//   loader: () => import('components/LogTable/LogTable.js'),
+//   loading: TableLoader,
+// });
+
+const IPTable = Loadable({
+  loader: () => import('components/InfinitedTable/IPTable'),
   loading: TableLoader,
 });
 
-const LazyTable = Loadable({
-  loader: () => import('components/InfinitedTable/LazyTable'),
+const WebTable = Loadable({
+  loader: () => import('components/InfinitedTable/WebTable'),
   loading: TableLoader,
 });
 
-const InfinitedTable = Loadable({
-  loader: () => import('components/InfinitedTable'),
+const DNSTable = Loadable({
+  loader: () => import('components/InfinitedTable/DNSTable'),
   loading: TableLoader,
 });
 
@@ -56,9 +61,9 @@ class Discover extends Component {
   //   super(props);
   // }
 
-  componentWillMount() {
-    console.log('..log manager will mount');
-  }
+  // componentWillMount() {
+  //   console.log('..log manager will mount');
+  // }
 
   componentDidMount() {
     console.log('component Didmount');
@@ -132,10 +137,13 @@ class Discover extends Component {
           />
         </Grid>
         <Grid item xs={12}>
-          <LazyTable />
+          <WebTable />
         </Grid>
         <Grid item xs={12}>
-          <InfinitedTable />
+          <DNSTable />
+        </Grid>
+        <Grid item xs={12}>
+          <IPTable />
         </Grid>
         {/* <Grid item xs={12}>
           <DNSTable />

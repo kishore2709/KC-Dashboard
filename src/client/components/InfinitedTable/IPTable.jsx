@@ -8,7 +8,7 @@ import Card from '@material-ui/core/Card';
 // import CardActions from '@material-ui/core/CardActions';
 
 import { Table, Column, AutoSizer, InfiniteLoader } from 'react-virtualized';
-import './LazyTable.css';
+import './IPTable.css';
 import 'react-virtualized/styles.css'; // only needs to be imported once
 
 const styles = theme => ({
@@ -40,7 +40,7 @@ const generateRandomItem = idx => ({
   date: faker.date.past(),
 });
 
-class LazyTable extends React.Component {
+class IPTable extends React.Component {
   constructor() {
     super();
     this.loadMore = this.loadMore.bind(this);
@@ -135,4 +135,4 @@ class LazyTable extends React.Component {
   }
 }
 
-export default withStyles(styles)(LazyTable);
+export default withStyles(styles)(IPTable);
