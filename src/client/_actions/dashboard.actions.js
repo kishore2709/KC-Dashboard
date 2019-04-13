@@ -60,7 +60,11 @@ function changeCity(message) {
   return { type: dashboardConstants.CHANGE_CITY, message };
 }
 
+function setRef(message){
+  return { type: 'setRef', message};
+}
 export const dashboardActions = {
+  setRef,
   get,
   changeCity,
   changeDateRange,

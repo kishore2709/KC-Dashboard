@@ -2,6 +2,7 @@ import { dashboardConstants } from '../_constants';
 
 export function dashboard(
   state = {
+    ref: null,
     targetCity: 0,
     data: {
       dnslogs: [],
@@ -17,6 +18,11 @@ export function dashboard(
   action
 ) {
   switch (action.type) {
+    case 'setRef':
+      return {
+        ...state,
+        ref: action.message,
+      };
     case dashboardConstants.SET:
       return {
         ...state,

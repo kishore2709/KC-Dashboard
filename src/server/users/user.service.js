@@ -9,7 +9,7 @@ const { User, Log, Group, City, DnsLog, WebLog, Report } = Models;
 const dashboardService = require('../services/dashboard.js');
 // bcrypt
 const clientRedis = require('../redis');
-
+const createPdf = require('../Utils/createPdf');
 const defaultPassword = require('../Utils/pwd');
 
 const saltRounds = 10;
@@ -17,6 +17,7 @@ const saltRounds = 10;
 faker.locale = 'vi';
 
 module.exports = {
+  downloadPdf,
   authenticate,
   getAll,
   updateDb,
@@ -40,6 +41,28 @@ module.exports = {
   getWebLogByTime,
   getSessionLogByTime,
 };
+
+async function downloadPdf() {
+  const endTime = new Date();
+  const startTime = new Date(2018, 10, 30);
+  let webLog = await getWebLogByTime(startTime, endTime, 1, 10);
+  const headerWebLog = Object.keys(webLog[0]);
+  webLog = webLog.map(val => Object.values(val));
+  webLog.unshift(headerWebLog);
+
+  let dnsLog = await getDNSLogByTime(startTime, endTime, 1, 12);
+
+  const headerDNSLog = Object.keys(dnsLog[0]);
+  dnsLog = dnsLog.map(val => Object.values(val));
+  dnsLog.unshift(headerDNSLog);
+
+  let sessionLog = await getSessionLogByTime(startTime, endTime, 1, 20);
+  const headerSessionLog = Object.keys(sessionLog[0]);
+  sessionLog = sessionLog.map(val => Object.values(val));
+  sessionLog.unshift(headerSessionLog);
+  // console.log(webLog, dnsLog, sessionLog);
+  return createPdf('Báo cáo dữ liệu', webLog, dnsLog, sessionLog);
+}
 
 async function getWebLogByTime(startTime, endTime, startIndex, endIndex) {
   const res = [];

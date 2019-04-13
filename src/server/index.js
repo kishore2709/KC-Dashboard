@@ -112,35 +112,35 @@ app.get('/*', (req, res) => {
     }
   });
 });
-app.use(jwt());
-// for ReCheck PassWd when Change passwd
-app.use((req, res, next) => {
-  if (
-    req.url === '/api/users/authenticate' ||
-    req.url === '/authenticate' ||
-    req.url === '/api/users/saveLog'
-  )
-    next();
-  else {
-    userService
-      .checkPwd(req.user)
-      .then(ret => {
-        if (ret === 0 || !ret) {
-          console.log('in recheck passwd has ret', ret);
-          res.status(404).send();
-        } else {
-          // console.log(ret);
-          console.log('ok in recheck');
-          next();
-        }
-      })
-      .catch(err => {
-        console.log(err);
-        console.log('in recheck passwd err');
-        res.status(404).send();
-      });
-  }
-});
+// app.use(jwt());
+// // for ReCheck PassWd when Change passwd
+// app.use((req, res, next) => {
+//   if (
+//     req.url === '/api/users/authenticate' ||
+//     req.url === '/authenticate' ||
+//     req.url === '/api/users/saveLog'
+//   )
+//     next();
+//   else {
+//     userService
+//       .checkPwd(req.user)
+//       .then(ret => {
+//         if (ret === 0 || !ret) {
+//           console.log('in recheck passwd has ret', ret);
+//           res.status(404).send();
+//         } else {
+//           // console.log(ret);
+//           console.log('ok in recheck');
+//           next();
+//         }
+//       })
+//       .catch(err => {
+//         console.log(err);
+//         console.log('in recheck passwd err');
+//         res.status(404).send();
+//       });
+//   }
+// });
 // get ip addr
 app.use((req, res, next) => {
   const xForwardedFor = (req.headers['x-forwarded-for'] || '').replace(

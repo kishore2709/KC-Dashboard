@@ -1,11 +1,3 @@
-var co = require('co');
-co(function* () {
-    var result = yield new Promise(resolve => {
-        setTimeout(() => { resolve(1) }, 3000);
-    });
-    return result;
-}).then(function (value) {
-    console.log(value);
-}, function (err) {
-    console.error(err.stack);
-});
+const createPdf = require('./createPdf');
+
+createPdf('Web Log', [['ID', 'Name'], [1, 'abc'], [2, 'abvas']]);

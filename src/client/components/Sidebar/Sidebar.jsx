@@ -90,8 +90,9 @@ class Sidebar extends Component {
           );
           // / console.log(validKeys);
           const curRoutes = this.props.routes;
-          // console.log(curRoutes);
-          // console.log(validKeys);
+          console.log(curRoutes);
+          console.log(res.permissions);
+          console.log(validKeys);
           const desRoutes = curRoutes.filter(
             val => validKeys.indexOf(val.id) !== -1
           );

@@ -43,6 +43,7 @@ router.post('/dashboardData', dashboardData);
 router.post('/resetPassword', resetPassword);
 router.post('/changePassword', changePassword);
 router.post('/getCitiesInfo', getCitiesInfo);
+router.post('/getCities', getCities);
 router.post('/sendEmails', sendEmails);
 router.post('/sendSMS', sendSMS);
 router.post('/getData', getData);
@@ -50,10 +51,23 @@ router.post('/getData', getData);
 router.post('/getWebLogByTime', getWebLogByTime);
 router.post('/getDNSLogByTime', getDNSLogByTime);
 router.post('/getSessionLogByTime', getSessionLogByTime);
-
+router.post('/downloadPdf', downloadPdf);
 // router.post('/saveLog', saveLog);
 module.exports = router;
-
+// download pdf
+function downloadPdf(req, res, next) {
+  // console.log('download ..');
+  userService
+    .downloadPdf()
+    .then(binary => {
+      res.contentType('application/pdf');
+      res.send(binary);
+    })
+    .catch(err => {
+      console.log(err);
+      next(err);
+    });
+}
 // log
 function getWebLogByTime(req, res, next) {
   // console.log(req.query.start);
@@ -382,21 +396,21 @@ function getAll(req, res, next) {
     });
 }
 
-// routes
-router.post('/authenticate', authenticate);
-router.get('/getAll', getAll);
-router.post('/updateDb', updateDb);
-router.post('/getUsers', getUsers);
-router.post('/deleteDb', deleteDb);
-router.post('/addDb', addDb);
-router.post('/getUserInfo', getUserInfo);
-router.post('/dashboardData', dashboardData);
-router.post('/resetPassword', resetPassword);
-router.post('/changePassword', changePassword);
-router.post('/getCitiesInfo', getCitiesInfo);
-router.post('/sendEmails', sendEmails);
-router.post('/getLog', getLog);
-router.post('/saveLog', saveLog);
-router.post('/getCities', getCities);
+// // routes
+// router.post('/authenticate', authenticate);
+// router.get('/getAll', getAll);
+// router.post('/updateDb', updateDb);
+// router.post('/getUsers', getUsers);
+// router.post('/deleteDb', deleteDb);
+// router.post('/addDb', addDb);
+// router.post('/getUserInfo', getUserInfo);
+// router.post('/dashboardData', dashboardData);
+// router.post('/resetPassword', resetPassword);
+// router.post('/changePassword', changePassword);
+// router.post('/getCitiesInfo', getCitiesInfo);
+// router.post('/sendEmails', sendEmails);
+// router.post('/getLog', getLog);
 // router.post('/saveLog', saveLog);
-module.exports = router;
+// router.post('/getCities', getCities);
+// // router.post('/saveLog', saveLog);
+// module.exports = router;

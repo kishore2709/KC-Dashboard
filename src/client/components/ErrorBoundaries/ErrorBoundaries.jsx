@@ -32,12 +32,12 @@ class ErrorBoundary extends React.Component {
       */
       return (
         <div>
-          <h2>Something went wrong.</h2>
-          <details style={{ whiteSpace: 'pre-wrap' }}>
+          <h2>Gặp lỗi, bạn hãy thử Refresh lại trang web</h2>
+          {/* <details style={{ whiteSpace: 'pre-wrap' }}>
             {this.state.error && this.state.error.toString()}
             <br />
             {this.state.errorInfo.componentStack}
-          </details>
+          </details> */}
         </div>
       );
     }

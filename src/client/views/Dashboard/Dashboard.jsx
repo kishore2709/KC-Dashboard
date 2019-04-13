@@ -30,15 +30,14 @@ import CardIcon from "components/Card/CardIcon.jsx";
 import CardFooter from "components/Card/CardFooter.jsx";
 import CardBody from "components/Card/CardBody.jsx";
 import Loading from "components/Loading/Loading.jsx";
-import WarningStatus from "components/Warning/Warning.jsx";
+// import WarningStatus from "components/Warning/Warning.jsx";
 import { withToastManager } from "react-toast-notifications";
 import Typography from "@material-ui/core/Typography";
 import { connect } from "react-redux";
-import { serverStatusConstants } from "_constants";
+// import { serverStatusConstants } from "_constants";
 import { dashboardActions } from "_actions";
-
-import { PostApi } from "_helpers/Utils";
-import Grid from "@material-ui/core/Grid";
+// import { PostApi } from "_helpers/Utils";
+// import Grid from "@material-ui/core/Grid";
 import dashboardStyle from "assets/jss/material-dashboard-react/views/dashboardStyle.jsx";
 
 //
@@ -75,7 +74,8 @@ const styles = theme => ({
   }
 });
 class Dashboard extends React.Component {
-  componentWillMount() {
+  pdfExportComponent;
+  componentDidMount() {
     const startDate =
       this.props.dashboard.dateRange.start ||
       new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
@@ -83,6 +83,9 @@ class Dashboard extends React.Component {
     this.handleDateRangeChange(startDate, endDate);
   }
 
+  componentWillUnmount() {
+    console.log("Dashboard unmount..");
+  }
   handleDateRangeChange = (startDate, endDate) => {
     const { getDashboardData, dashboard } = this.props;
     getDashboardData({
@@ -111,159 +114,163 @@ class Dashboard extends React.Component {
     // const { attacks, logs, pcaps, bugs, server, website } = reports[0];
 
     return (
-      <GridContainer
-        spacing={24}
-        style={{ width: "100%", height: "100%", display: "flex" }}
-      >
-        <GridItem xs={12} md={6} lg={5} style={{ margin: "auto" }}>
-          <VnMap />
-        </GridItem>
-        <GridItem
-          xs={12}
-          md={6}
-          lg={7}
-          // className={classes.infoGridItem}
-          style={{
-            display: 'flex',
-            padding: '0px 0px 0px 5px',
-          }}
+        <GridContainer
+          // ref={this.setRef}
+          spacing={24}
+          style={{ width: "100%", height: "100%", display: "flex" }}
         >
-          <div
+          <GridItem xs={12} md={6} lg={5} style={{ margin: "auto" }}>
+            <VnMap />
+          </GridItem>
+          <GridItem
+            xs={12}
+            md={6}
+            lg={7}
+            // className={classes.infoGridItem}
             style={{
-              marginTop: "80px"
+              display: "flex",
+              padding: "0px 0px 0px 5px"
             }}
           >
-            <GridContainer>
-              <React.Fragment>
-                <GridItem xs={12}>
-                  <GridContainer
-                    direction="row"
-                    justify="center"
-                    alignItems="stretch"
-                  >
-                    <GridItem xs={12} sm={6} lg={4}>
-                      <Card>
-                        <CardHeader color="warning" stats icon>
-                          <CardIcon color="danger">
-                            <Info />
-                          </CardIcon>
-                          <Typography
-                            component="span"
-                            className={classes.cardCategory}
-                          >
-                            Số tấn công
-                          </Typography>
-                          <CardBody>
-                            <h3 className={classes.cardTitle}>{attacks}</h3>
-                          </CardBody>
-                        </CardHeader>
-                        <CardFooter stats>
-                          <div className={classes.stats}>
-                            <Danger>
-                              <Warning />
-                            </Danger>
-                            <a href="#pablo" onClick={e => e.preventDefault()}>
-                              Chi tiết
-                            </a>
-                          </div>
-                        </CardFooter>
-                      </Card>
-                    </GridItem>
-                    <GridItem xs={12} sm={6} lg={4}>
-                      <Card>
-                        <CardHeader color="success" stats icon>
-                          <CardIcon color="success">
-                            <Store />
-                          </CardIcon>
-                          <Typography
-                            component="span"
-                            className={classes.cardCategory}
-                          >
-                            Số gói Pcap
-                          </Typography>
-                          <h3 className={classes.cardTitle}>{pcaps}</h3>
-                        </CardHeader>
-                        <CardFooter stats>
-                          <div className={classes.stats}>
-                            <DateRange />
-                            24 giờ gần nhất
-                          </div>
-                        </CardFooter>
-                      </Card>
-                    </GridItem>
-                    <GridItem xs={12} sm={6} lg={4}>
-                      <Card>
-                        <CardHeader color="danger" stats icon>
-                          <CardIcon color="warning">
-                            <FileCopy />
-                          </CardIcon>
-                          <Typography
-                            component="span"
-                            className={classes.cardCategory}
-                          >
-                            Số dòng Log
-                          </Typography>
-                          <h3 className={classes.cardTitle}>{logs}</h3>
-                        </CardHeader>
-                        <CardFooter stats>
-                          <div className={classes.stats}>
-                            <LocalOffer />
-                            Mongodb
-                          </div>
-                        </CardFooter>
-                      </Card>
-                    </GridItem>
-                    <GridItem xs={12} sm={12} md={12}>
-                      <CustomTabs
-                        title="Thông tin lỗi:"
-                        headerColor="primary"
-                        tabs={[
-                          {
-                            tabName: "Bugs",
-                            tabIcon: BugReport,
-                            tabContent: (
-                              <Tasks
-                                checkedIndexes={[0, 3]}
-                                tasksIndexes={[0, 1, 2]}
-                                tasks={bugs}
-                              />
-                            )
-                          },
-                          {
-                            tabName: "Website",
-                            tabIcon: Code,
-                            tabContent: (
-                              <Tasks
-                                checkedIndexes={[0]}
-                                tasksIndexes={[0, 1, 2]}
-                                tasks={website}
-                              />
-                            )
-                          },
-                          {
-                            tabName: "Server",
-                            tabIcon: Cloud,
-                            tabContent: (
-                              <Tasks
-                                checkedIndexes={[1]}
-                                tasksIndexes={[0, 1, 2]}
-                                tasks={server}
-                              />
-                            )
-                          }
-                        ]}
-                      />
-                    </GridItem>
-                  </GridContainer>
-                </GridItem>
-              </React.Fragment>
-            </GridContainer>
-          </div>
-        </GridItem>
-        <GridItem xs={12}>
-          <Discover />
-        </GridItem>
-      </GridContainer>
+            <div
+              style={{
+                marginTop: "80px"
+              }}
+            >
+              <GridContainer>
+                <React.Fragment>
+                  <GridItem xs={12}>
+                    <GridContainer
+                      direction="row"
+                      justify="center"
+                      alignItems="stretch"
+                    >
+                      <GridItem xs={12} sm={6} lg={4}>
+                        <Card>
+                          <CardHeader color="warning" stats icon>
+                            <CardIcon color="danger">
+                              <Info />
+                            </CardIcon>
+                            <Typography
+                              component="span"
+                              className={classes.cardCategory}
+                            >
+                              Số tấn công
+                            </Typography>
+                            <CardBody>
+                              <h3 className={classes.cardTitle}>{attacks}</h3>
+                            </CardBody>
+                          </CardHeader>
+                          <CardFooter stats>
+                            <div className={classes.stats}>
+                              <Danger>
+                                <Warning />
+                              </Danger>
+                              <a
+                                href="#pablo"
+                                onClick={e => e.preventDefault()}
+                              >
+                                Chi tiết
+                              </a>
+                            </div>
+                          </CardFooter>
+                        </Card>
+                      </GridItem>
+                      <GridItem xs={12} sm={6} lg={4}>
+                        <Card>
+                          <CardHeader color="success" stats icon>
+                            <CardIcon color="success">
+                              <Store />
+                            </CardIcon>
+                            <Typography
+                              component="span"
+                              className={classes.cardCategory}
+                            >
+                              Số gói Pcap
+                            </Typography>
+                            <h3 className={classes.cardTitle}>{pcaps}</h3>
+                          </CardHeader>
+                          <CardFooter stats>
+                            <div className={classes.stats}>
+                              <DateRange />
+                              24 giờ gần nhất
+                            </div>
+                          </CardFooter>
+                        </Card>
+                      </GridItem>
+                      <GridItem xs={12} sm={6} lg={4}>
+                        <Card>
+                          <CardHeader color="danger" stats icon>
+                            <CardIcon color="warning">
+                              <FileCopy />
+                            </CardIcon>
+                            <Typography
+                              component="span"
+                              className={classes.cardCategory}
+                            >
+                              Số dòng Log
+                            </Typography>
+                            <h3 className={classes.cardTitle}>{logs}</h3>
+                          </CardHeader>
+                          <CardFooter stats>
+                            <div className={classes.stats}>
+                              <LocalOffer />
+                              Mongodb
+                            </div>
+                          </CardFooter>
+                        </Card>
+                      </GridItem>
+                      <GridItem xs={12} sm={12} md={12}>
+                        <CustomTabs
+                          title="Thông tin lỗi:"
+                          headerColor="primary"
+                          tabs={[
+                            {
+                              tabName: "Bugs",
+                              tabIcon: BugReport,
+                              tabContent: (
+                                <Tasks
+                                  checkedIndexes={[0, 3]}
+                                  tasksIndexes={[0, 1, 2]}
+                                  tasks={bugs}
+                                />
+                              )
+                            },
+                            {
+                              tabName: "Website",
+                              tabIcon: Code,
+                              tabContent: (
+                                <Tasks
+                                  checkedIndexes={[0]}
+                                  tasksIndexes={[0, 1, 2]}
+                                  tasks={website}
+                                />
+                              )
+                            },
+                            {
+                              tabName: "Server",
+                              tabIcon: Cloud,
+                              tabContent: (
+                                <Tasks
+                                  checkedIndexes={[1]}
+                                  tasksIndexes={[0, 1, 2]}
+                                  tasks={server}
+                                />
+                              )
+                            }
+                          ]}
+                        />
+                      </GridItem>
+                    </GridContainer>
+                  </GridItem>
+                </React.Fragment>
+              </GridContainer>
+            </div>
+          </GridItem>
+          <GridItem xs={12}>
+            <Discover />
+          </GridItem>
+        </GridContainer>
     );
   }
 }
@@ -285,6 +292,9 @@ const mapDispatchToProps = dispatch => ({
   },
   changeDateRange: newStatus => {
     dispatch(dashboardActions.changeDateRange(newStatus));
+  },
+  setRef: newStatus => {
+    dispatch(dashboardActions.setRef(newStatus));
   }
 });
 

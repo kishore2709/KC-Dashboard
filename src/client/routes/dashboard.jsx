@@ -8,6 +8,7 @@ import PersonAddDisabled from '@material-ui/icons/PersonAddDisabled';
 
 // import ContentPaste from "@material-ui/icons/ContentPaste";
 import LibraryBooks from '@material-ui/icons/LibraryBooks';
+import CloudDownload from '@material-ui/icons/CloudDownload';
 import GroupIcon from '@material-ui/icons/Group';
 // import LocationOn from '@material-ui/icons/LocationOn';
 // import Notifications from '@material-ui/icons/Notifications';
@@ -34,18 +35,18 @@ const GroupPermission = Loadable({
     import(/* webpackPrefetch: true */ 'views/GroupPermission/GroupPermission.jsx'),
   loading: TableLoader,
 });
-// import DashboardPage from 'views/Dashboard/Dashboard.jsx';
+import DashboardPage from 'views/Dashboard/Dashboard.jsx';
 
 // const DashboardLoader = <div style={{ marginTop: '100px' }}><TableLoader /></div>;
-const DashboardPage = Loadable({
-  loader: () =>
-    import(/* webpackPrefetch: true */ 'views/Dashboard/Dashboard.jsx'),
-  loading: () => (
-    <div style={{ marginTop: '100px' }}>
-      <TableLoader />
-    </div>
-  ),
-});
+// const DashboardPage = Loadable({
+//   loader: () =>
+//     import(/* webpackPrefetch: true */ 'views/Dashboard/Dashboard.jsx'),
+//   loading: () => (
+//     <div style={{ marginTop: '100px' }}>
+//       <TableLoader />
+//     </div>
+//   ),
+// });
 // import UserManagement from 'views/UserManagement/UserManagement.jsx';
 const UserManagement = Loadable({
   loader: () =>
@@ -86,6 +87,11 @@ const Discover = Loadable({
 // import MailBox from 'views/MailBox/MailBox.jsx';
 const MailBox = Loadable({
   loader: () => import(/* webpackPrefetch: true */ 'views/MailBox/MailBox.jsx'),
+  loading: TableLoader,
+});
+
+const Exports = Loadable({
+  loader: () => import(/* webpackPrefetch: true */ 'views/Exports/Exports.jsx'),
   loading: TableLoader,
 });
 
@@ -157,7 +163,7 @@ const dashboardRoutes = [
   //   path: '/exportData',
   //   sidebarName: 'Xuất dữ liệu',
   //   navbarName: 'Giao diện xuất dữ liệu',
-  //   icon: ExitToApp,
+  //   icon: MailOutline,
   //   component: ExportData,
   // },
   {
@@ -168,14 +174,14 @@ const dashboardRoutes = [
     icon: LibraryBooks,
     component: LogManagement,
   },
-  // {
-  //   id: 'serviceManager',
-  //   path: '/serviceManager',
-  //   sidebarName: 'Quản lý dịch vụ',
-  //   navbarName: 'Giao diện quản lý dịch vụ truy cập',
-  //   icon: LibraryBooks,
-  //   component: ServiceManager,
-  // },
+  {
+    id: 'exportData',
+    path: '/exportData',
+    sidebarName: 'Xuất dữ liệu',
+    navbarName: 'Xuất dữ liệu',
+    icon: CloudDownload,
+    component: Exports,
+  },
   // {
   //   id: 'attackReport',
   //   path: '/attackReport',
