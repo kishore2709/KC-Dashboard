@@ -4,10 +4,10 @@
   "description": "KCDashboard PTIT",
   "main": "src/server/index.js",
   "scripts": {
-    "pack": "webpack --config webpack.config.js --mode=production",
+    "pack": "webpack --config webpack.prod.js",
     "build": "npm run pack",
     "server": "nodemon src/server/index.js",
-    "client": "webpack-dev-server -d --mode development",
+    "client": "webpack-dev-server --open --config webpack.dev.js",
     "start": "npm run build && node --max-old-space-size=4096 src/server/index.js",
     "dev": "npx concurrently \"npm run server\" \"npm run client\"",
     "eslint": "eslint --fix --ext .js,.vue src/client"
@@ -88,6 +88,7 @@
     "redux-thunk": "^2.3.0",
     "reselect": "^4.0.0",
     "rootpath": "^0.1.2",
+    "terser-webpack-plugin": "^1.2.3",
     "xlsx": "^0.14.2"
   },
   "devDependencies": {
@@ -124,6 +125,7 @@
     "webpack": "^4.5.0",
     "webpack-bundle-analyzer": "^3.0.4",
     "webpack-cli": "^3.0.8",
-    "webpack-dev-server": "^3.2.1"
+    "webpack-dev-server": "^3.2.1",
+    "webpack-merge": "^4.2.1"
   }
 }

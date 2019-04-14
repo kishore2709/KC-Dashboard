@@ -69,7 +69,7 @@ function downloadExcel(req, res, next) {
 }
 // download pdf
 function downloadPdf(req, res, next) {
-  // console.log('download ..');
+  console.log('download ..');
   userService
     .downloadPdf()
     .then(binary => {

@@ -11,7 +11,7 @@ const CompressionPlugin = require('compression-webpack-plugin');
 //
 module.exports = (env, argv) => ({
   entry: {
-    app: ['@babel/polyfill', './src/client/index.js'],
+    app: ['@babel/polyfill', 'src/client/index.js'],
     // vendor: ['xlsx', 'file-saver'],
   },
   // devtool: 'inline-source-map',

@@ -19,6 +19,7 @@ import Card from 'components/Card/Card.jsx';
 import CardHeader from 'components/Card/CardHeader.jsx';
 import CardAvatar from 'components/Card/CardAvatar.jsx';
 import CardBody from 'components/Card/CardBody.jsx';
+import { authHeader } from '_helpers';
 
 const styles = theme => ({
   card: {
@@ -69,6 +70,7 @@ class Exports extends React.Component {
         {
           responseType: 'arraybuffer',
           headers: {
+            ...authHeader(),
             Accept: 'application/pdf',
           },
         }
@@ -91,6 +93,7 @@ class Exports extends React.Component {
         '/api/users/downloadExcel',
         {},
         {
+          headers: authHeader(),
           responseType: 'arraybuffer',
         }
       )

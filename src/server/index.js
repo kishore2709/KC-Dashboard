@@ -29,13 +29,18 @@ app.use(morgan('combined'));
 // jsonParser
 app.use(jsonParser);
 app.use(urlencodedParser);
-app.use(express.static('dist'));
 // gzip compress
-app.get('*.js', (req, res, next) => {
-  req.url += '.br';
-  res.set('Content-Encoding', 'br');
-  next();
-});
+if (process.env.NODE_ENV === 'production')
+  app.get(/\.js$|\.css$|\.html$/, (req, res, next) => {
+    // console.log('gzip..');
+    // console.log('=====================');
+    req.url += '.gz';
+    res.set('Content-Encoding', 'gzip');
+    next();
+  });
+
+app.use(express.static(path.join(__dirname, '../../dist')));
+
 // Send mail to Gmail
 const sendEmails = async (toEmails, subject, content, html) => {
   const credentials = {
@@ -106,13 +111,16 @@ app.post('/api/sendEmails', jsonParser, (req, res) => {
 app.use(cors());
 // for f5 deploy..
 app.get('/*', (req, res) => {
+  console.log('in f5');
   res.sendFile(path.join(__dirname, '../../dist/index.html'), err => {
     if (err) {
       res.status(500).send(err);
     }
   });
 });
+
 app.use(jwt());
+
 // for ReCheck PassWd when Change passwd
 app.use((req, res, next) => {
   if (
