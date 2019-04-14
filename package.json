@@ -87,7 +87,8 @@
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0",
     "reselect": "^4.0.0",
-    "rootpath": "^0.1.2"
+    "rootpath": "^0.1.2",
+    "xlsx": "^0.14.2"
   },
   "devDependencies": {
     "@babel/cli": "^7.1.2",

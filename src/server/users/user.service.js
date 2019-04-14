@@ -10,6 +10,7 @@ const dashboardService = require('../services/dashboard.js');
 // bcrypt
 const clientRedis = require('../redis');
 const createPdf = require('../Utils/createPdf');
+const createExcel = require('../Utils/createExcel');
 const defaultPassword = require('../Utils/pwd');
 
 const saltRounds = 10;
@@ -17,6 +18,7 @@ const saltRounds = 10;
 faker.locale = 'vi';
 
 module.exports = {
+  downloadExcel,
   downloadPdf,
   authenticate,
   getAll,
@@ -41,6 +43,15 @@ module.exports = {
   getWebLogByTime,
   getSessionLogByTime,
 };
+
+async function downloadExcel() {
+  const endTime = new Date();
+  const startTime = new Date(2018, 10, 30);
+  const webLog = await getWebLogByTime(startTime, endTime, 1, 10);
+  const dnsLog = await getDNSLogByTime(startTime, endTime, 1, 12);
+  const sessionLog = await getSessionLogByTime(startTime, endTime, 1, 20);
+  return createExcel(webLog, dnsLog, sessionLog);
+}
 
 async function downloadPdf() {
   const endTime = new Date();

@@ -52,8 +52,21 @@ router.post('/getWebLogByTime', getWebLogByTime);
 router.post('/getDNSLogByTime', getDNSLogByTime);
 router.post('/getSessionLogByTime', getSessionLogByTime);
 router.post('/downloadPdf', downloadPdf);
+router.post('/downloadExcel', downloadExcel);
 // router.post('/saveLog', saveLog);
 module.exports = router;
+
+function downloadExcel(req, res, next) {
+  userService
+    .downloadExcel()
+    .then(binary => {
+      res.send(binary);
+    })
+    .catch(err => {
+      console.log(err);
+      next(err);
+    });
+}
 // download pdf
 function downloadPdf(req, res, next) {
   // console.log('download ..');
