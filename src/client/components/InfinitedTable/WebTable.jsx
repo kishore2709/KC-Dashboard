@@ -14,8 +14,8 @@ import Typography from '@material-ui/core/Typography';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 // use the WebTable in your app!
-import faker from 'faker';
-import AppBarAction from 'components/AppBarDownloadAction';
+// import faker from 'faker';
+// import AppBarAction from 'components/AppBarDownloadAction';
 import { PostApi } from '_helpers/Utils';
 import { connect } from 'react-redux';
 
@@ -232,7 +232,7 @@ const WebTable = ({ classes, dateRange }) => {
         <span className={classes.titleHeader}>
           <Typography variant="h6">Dữ liệu log máy chủ Web</Typography>
         </span>
-        <AppBarAction excelLink="excel" pdfLink="pdf" />
+        {/* <AppBarAction excelLink="excel" pdfLink="pdf" /> */}
       </div>
       <InfiniteLoader
         isRowLoaded={({ index }) => !!items[index]}

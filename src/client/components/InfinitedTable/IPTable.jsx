@@ -9,7 +9,7 @@ import Card from '@material-ui/core/Card';
 
 import { Table, Column, AutoSizer, InfiniteLoader } from 'react-virtualized';
 import './IPTable.css';
-import AppBarAction from 'components/AppBarDownloadAction';
+// import AppBarAction from 'components/AppBarDownloadAction';
 import { PostApi } from '_helpers/Utils';
 import { connect } from 'react-redux';
 
@@ -127,7 +127,7 @@ class IPTable extends React.Component {
           <span className={classes.titleHeader}>
             <Typography variant="h6">Dữ liệu log máy chủ Web</Typography>
           </span>
-          <AppBarAction excelLink="excel" pdfLink="pdf" />
+          {/* <AppBarAction excelLink="excel" pdfLink="pdf" /> */}
         </div>
         <InfiniteLoader
           isRowLoaded={({ index }) => !!this.state.items[index]}

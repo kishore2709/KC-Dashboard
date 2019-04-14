@@ -37,6 +37,7 @@ const styles = theme => ({
   },
   cardTitle: {
     background: '#F34636',
+    fontWeight: 'bold',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -68,7 +69,7 @@ class Exports extends React.Component {
         {
           responseType: 'arraybuffer',
           headers: {
-            Accept: 'application/pdf'
+            Accept: 'application/pdf',
           },
         }
       )
@@ -76,7 +77,7 @@ class Exports extends React.Component {
         console.log(response);
         // response.data is an empty object
         const blob = new Blob([response.data], {
-          type: 'application/pdf'
+          type: 'application/pdf',
         });
         this.setState({ loadingPdf: false });
         FileSaver.saveAs(blob, 'Thống kê dữ liệu.pdf');
@@ -90,7 +91,7 @@ class Exports extends React.Component {
         '/api/users/downloadExcel',
         {},
         {
-          responseType: 'arraybuffer'
+          responseType: 'arraybuffer',
         }
       )
       .then(response => {
