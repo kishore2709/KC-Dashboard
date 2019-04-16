@@ -14,7 +14,7 @@ const styles = theme => ({
   typo: {
     minWidth: '100px',
     fontWeight: 'bold',
-    zIndex: 2000,
+    zIndex: 0,
   },
   OKFab: {
     padding: 10,
@@ -24,7 +24,7 @@ const styles = theme => ({
     borderRadius: '50%',
     width: 6,
     height: 6,
-    zIndex: 2,
+    zIndex: 0,
   },
   RedFab: {
     padding: 10,
@@ -34,7 +34,7 @@ const styles = theme => ({
     borderRadius: '50%',
     width: 6,
     height: 6,
-    zIndex: 2,
+    zIndex: 0,
   },
 });
 

@@ -18,6 +18,16 @@ import HeaderLinks from './HeaderLinks.jsx';
 
 function Header({ ...props }) {
   const { classes, color } = props;
+  function makeBrand() {
+    var name;
+    props.routes.map((prop, key) => {
+      if (prop.path === props.location.pathname) {
+        name = prop.navbarName;
+      }
+      return null;
+    });
+    return name;
+  }
   const appBarClasses = classNames({
     [` ${classes[color]}`]: color,
   });
@@ -26,7 +36,11 @@ function Header({ ...props }) {
     <React.Fragment>
       <AppBar className={classes.appBar + appBarClasses}>
         <Toolbar className={classes.container}>
-          <div className={classes.flex} />
+          <div className={classes.flex}>
+           {/* Here we create navbar brand, based on route name */}
+           <Button color="transparent" href="#" className={classes.title}>
+            {makeBrand()}
+          </Button></div>
           <Hidden smDown implementation="css">
             <HeaderLinks />
           </Hidden>

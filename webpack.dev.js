@@ -1,6 +1,6 @@
 const merge = require('webpack-merge');
 const webpack = require('webpack');
-const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+// const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const path = require('path');
 const common = require('./webpack.common.js');
 
@@ -9,7 +9,7 @@ module.exports = merge(common, {
   devtool: 'inline-source-map',
   output: {
     path: path.join(__dirname, 'dist'),
-    filename: '[name].[hash].js',
+    filename: 'bundle.js',
   },
   devServer: {
     historyApiFallback: true,
@@ -26,6 +26,6 @@ module.exports = merge(common, {
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
-    new BundleAnalyzerPlugin(),
+    // new BundleAnalyzerPlugin(),
   ],
 });
