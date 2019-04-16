@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 // import { hot } from 'react-hot-loader/root';
 // @material-ui/core
 import withStyles from "@material-ui/core/styles/withStyles";
-import Icon from "@material-ui/core/Icon";
+import Grid from "@material-ui/core/Grid";
 import Store from "@material-ui/icons/Store";
 import Info from "@material-ui/icons/Info";
 import FileCopy from "@material-ui/icons/FileCopy";
@@ -53,7 +53,7 @@ const VnMap = Loadable({
   loading: TableLoader
 });
 
-const styles = theme => ({
+const styles = {
   map: {
     height: "100%",
     display: "flex"
@@ -68,13 +68,14 @@ const styles = theme => ({
   info: {
     marginTop: "40px"
   },
-  infoGridItem: {
+  customGrid: {
     display: "flex",
-    padding: "0px 0px 0px 5px"
-  }
-});
+    justifyContent: "space-between",
+    flexWrap: "wrap",
+    padding: "0 0 !important"
+  },
+};
 class Dashboard extends React.Component {
-  pdfExportComponent;
   componentDidMount() {
     const startDate =
       this.props.dashboard.dateRange.start ||
@@ -86,6 +87,7 @@ class Dashboard extends React.Component {
   componentWillUnmount() {
     console.log("Dashboard unmount..");
   }
+
   handleDateRangeChange = (startDate, endDate) => {
     const { getDashboardData, dashboard } = this.props;
     getDashboardData({
@@ -114,163 +116,139 @@ class Dashboard extends React.Component {
     // const { attacks, logs, pcaps, bugs, server, website } = reports[0];
 
     return (
-        <GridContainer
-          // ref={this.setRef}
-          spacing={24}
-          style={{ width: "100%", height: "100%", display: "flex" }}
+      <GridContainer
+        // ref={this.setRef}
+        spacing={24}
+        style={{ width: "100%", height: "100%", display: "flex" }}
+      >
+        <GridItem
+          xs={12}
+          md={6}
+          lg={5}
+          // style={{ margin: 'auto' }}
         >
-          <GridItem xs={12} md={6} lg={5} style={{ margin: "auto" }}>
-            <VnMap />
-          </GridItem>
-          <GridItem
-            xs={12}
-            md={6}
-            lg={7}
-            // className={classes.infoGridItem}
-            style={{
-              display: "flex",
-              padding: "0px 0px 0px 5px"
-            }}
+          <VnMap />
+        </GridItem>
+        <Grid item xs={12} md={6} lg={7} className={classes.customGrid}>
+          <Grid
+            container
+            direction="row"
+            alignItems="baseline"
+            justify="space-between"
+            // alignItems="stretch"
           >
-            <div
-              style={{
-                marginTop: "80px"
-              }}
-            >
-              <GridContainer>
-                <React.Fragment>
-                  <GridItem xs={12}>
-                    <GridContainer
-                      direction="row"
-                      justify="center"
-                      alignItems="stretch"
-                    >
-                      <GridItem xs={12} sm={6} lg={4}>
-                        <Card>
-                          <CardHeader color="warning" stats icon>
-                            <CardIcon color="danger">
-                              <Info />
-                            </CardIcon>
-                            <Typography
-                              component="span"
-                              className={classes.cardCategory}
-                            >
-                              Số tấn công
-                            </Typography>
-                            <CardBody>
-                              <h3 className={classes.cardTitle}>{attacks}</h3>
-                            </CardBody>
-                          </CardHeader>
-                          <CardFooter stats>
-                            <div className={classes.stats}>
-                              <Danger>
-                                <Warning />
-                              </Danger>
-                              <a
-                                href="#pablo"
-                                onClick={e => e.preventDefault()}
-                              >
-                                Chi tiết
-                              </a>
-                            </div>
-                          </CardFooter>
-                        </Card>
-                      </GridItem>
-                      <GridItem xs={12} sm={6} lg={4}>
-                        <Card>
-                          <CardHeader color="success" stats icon>
-                            <CardIcon color="success">
-                              <Store />
-                            </CardIcon>
-                            <Typography
-                              component="span"
-                              className={classes.cardCategory}
-                            >
-                              Số gói Pcap
-                            </Typography>
-                            <h3 className={classes.cardTitle}>{pcaps}</h3>
-                          </CardHeader>
-                          <CardFooter stats>
-                            <div className={classes.stats}>
-                              <DateRange />
-                              24 giờ gần nhất
-                            </div>
-                          </CardFooter>
-                        </Card>
-                      </GridItem>
-                      <GridItem xs={12} sm={6} lg={4}>
-                        <Card>
-                          <CardHeader color="danger" stats icon>
-                            <CardIcon color="warning">
-                              <FileCopy />
-                            </CardIcon>
-                            <Typography
-                              component="span"
-                              className={classes.cardCategory}
-                            >
-                              Số dòng Log
-                            </Typography>
-                            <h3 className={classes.cardTitle}>{logs}</h3>
-                          </CardHeader>
-                          <CardFooter stats>
-                            <div className={classes.stats}>
-                              <LocalOffer />
-                              Mongodb
-                            </div>
-                          </CardFooter>
-                        </Card>
-                      </GridItem>
-                      <GridItem xs={12} sm={12} md={12}>
-                        <CustomTabs
-                          title="Thông tin lỗi:"
-                          headerColor="primary"
-                          tabs={[
-                            {
-                              tabName: "Bugs",
-                              tabIcon: BugReport,
-                              tabContent: (
-                                <Tasks
-                                  checkedIndexes={[0, 3]}
-                                  tasksIndexes={[0, 1, 2]}
-                                  tasks={bugs}
-                                />
-                              )
-                            },
-                            {
-                              tabName: "Website",
-                              tabIcon: Code,
-                              tabContent: (
-                                <Tasks
-                                  checkedIndexes={[0]}
-                                  tasksIndexes={[0, 1, 2]}
-                                  tasks={website}
-                                />
-                              )
-                            },
-                            {
-                              tabName: "Server",
-                              tabIcon: Cloud,
-                              tabContent: (
-                                <Tasks
-                                  checkedIndexes={[1]}
-                                  tasksIndexes={[0, 1, 2]}
-                                  tasks={server}
-                                />
-                              )
-                            }
-                          ]}
-                        />
-                      </GridItem>
-                    </GridContainer>
-                  </GridItem>
-                </React.Fragment>
-              </GridContainer>
-            </div>
+            <GridItem xs={12} sm={6} lg={4}>
+              <Card>
+                <CardHeader color="warning" stats icon>
+                  <CardIcon color="danger">
+                    <Info />
+                  </CardIcon>
+                  <Typography component="span" className={classes.cardCategory}>
+                    Số tấn công
+                  </Typography>
+                  <CardBody>
+                    <h3 className={classes.cardTitle}>{attacks}</h3>
+                  </CardBody>
+                </CardHeader>
+                <CardFooter stats>
+                  <div className={classes.stats}>
+                    <Danger>
+                      <Warning />
+                    </Danger>
+                    <a href="#pablo" onClick={e => e.preventDefault()}>
+                      Chi tiết
+                    </a>
+                  </div>
+                </CardFooter>
+              </Card>
+            </GridItem>
+            <GridItem xs={12} sm={6} lg={4}>
+              <Card>
+                <CardHeader color="success" stats icon>
+                  <CardIcon color="success">
+                    <Store />
+                  </CardIcon>
+                  <Typography component="span" className={classes.cardCategory}>
+                    Số gói Pcap
+                  </Typography>
+                  <h3 className={classes.cardTitle}>{pcaps}</h3>
+                </CardHeader>
+                <CardFooter stats>
+                  <div className={classes.stats}>
+                    <DateRange />
+                    24 giờ gần nhất
+                  </div>
+                </CardFooter>
+              </Card>
+            </GridItem>
+            <GridItem xs={12} sm={6} lg={4}>
+              <Card>
+                <CardHeader color="danger" stats icon>
+                  <CardIcon color="warning">
+                    <FileCopy />
+                  </CardIcon>
+                  <Typography component="span" className={classes.cardCategory}>
+                    Số dòng Log
+                  </Typography>
+                  <h3 className={classes.cardTitle}>{logs}</h3>
+                </CardHeader>
+                <CardFooter stats>
+                  <div className={classes.stats}>
+                    <LocalOffer />
+                    Mongodb
+                  </div>
+                </CardFooter>
+              </Card>
+            </GridItem>
+          </Grid>
+
+          <GridItem xs={12} sm={12} md={12}
+          style={{height: '100%'}}>
+            <CustomTabs
+              title="Thông tin lỗi:"
+              headerColor="primary"
+              tabs={[
+                {
+                  tabName: "Bugs",
+                  tabIcon: BugReport,
+                  tabContent: (
+                    <Tasks
+                      checkedIndexes={[0, 3]}
+                      tasksIndexes={[0, 1, 2]}
+                      tasks={bugs}
+                    />
+                  )
+                },
+                {
+                  tabName: "Website",
+                  tabIcon: Code,
+                  tabContent: (
+                    <Tasks
+                      checkedIndexes={[0]}
+                      tasksIndexes={[0, 1, 2]}
+                      tasks={website}
+                    />
+                  )
+                },
+                {
+                  tabName: "Server",
+                  tabIcon: Cloud,
+                  tabContent: (
+                    <Tasks
+                      checkedIndexes={[1]}
+                      tasksIndexes={[0, 1, 2]}
+                      tasks={server}
+                    />
+                  )
+                }
+              ]}
+            />
           </GridItem>
-          <GridItem xs={12}>
-            <Discover />
-          </GridItem>
-        </GridContainer>
+        </Grid>
+        <Grid item xs={12} style={{ padding: '15px 15px'}}>
+          <Discover />
+        </Grid>
+      </GridContainer>
     );
   }
 }

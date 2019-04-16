@@ -38,16 +38,4 @@ module.exports = {
       favicon: './public/favicon.ico',
     }),
   ],
-  optimization: {
-    splitChunks: {
-      cacheGroups: {
-        vendor: {
-          chunks: 'initial',
-          test: 'vendor',
-          name: 'vendor',
-          enforce: true,
-        },
-      },
-    },
-  },
 };

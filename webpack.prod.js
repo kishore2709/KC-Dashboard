@@ -24,5 +24,15 @@ module.exports = merge(common, {
   optimization: {
     minimize: true,
     nodeEnv: 'production',
+    splitChunks: {
+      cacheGroups: {
+        vendor: {
+          chunks: 'initial',
+          test: 'vendor',
+          name: 'vendor',
+          enforce: true,
+        },
+      },
+    },
   },
 });
