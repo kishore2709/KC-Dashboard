@@ -93,37 +93,37 @@ class UserTable extends React.Component {
     // console.log(userTable);
     const columns = [
       {
-        name: 'Fullname',
+        name: 'Tên đầy đủ',
         options: {
           filter: true,
         },
       },
       {
-        name: 'Username',
+        name: 'Tài khoản',
         options: {
           filter: true,
         },
       },
       {
-        name: 'Role',
+        name: 'Chức vụ',
         options: {
           filter: true,
         },
       },
       {
-        name: 'Status',
+        name: 'Trạng thái',
         options: {
           filter: true,
           customBodyRender: (value, tableMeta, updateValue) =>
             value ? (
-              <Typography color="primary">Active</Typography>
+              <Typography color="primary">Hoạt động</Typography>
             ) : (
-              <Typography color="error">Inactive</Typography>
+              <Typography color="error">Ngưng hoạt động</Typography>
             ),
         },
       },
       {
-        name: 'Options',
+        name: 'Tùy chọn',
         options: {
           filter: true,
           customBodyRender: (value, tableMeta, updateValue) => (
@@ -174,6 +174,32 @@ class UserTable extends React.Component {
       sort: false,
       filterType: 'dropdown',
       responsive: 'stacked',
+      textLabels: {
+        body: {
+          noMatch: "Không có dữ liệu phù hợp",
+          toolTip: "Sắp xếp",
+        },
+        pagination: {
+          next: "Trang sau",
+          previous: "Trang trước",
+          rowsPerPage: "Dòng/Trang",
+          displayRows: "trên",
+        },
+        toolbar: {
+          search: "Tìm kiếm",
+          filterTable: "Lọc",
+        },
+        filter: {
+          all: "Tất cả",
+          title: "LỌC",
+          reset: "Khôi phục",
+        },
+        selectedRows: {
+          text: "dòng đã chọn",
+          delete: "Xóa",
+          deleteAria: "Xóa các dòng đã chọn",
+        },
+      },
       customToolbar: () => (
         <Tooltip title="Thêm người dùng">
           <IconButton

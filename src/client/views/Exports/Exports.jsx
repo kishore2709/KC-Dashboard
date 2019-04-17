@@ -1,6 +1,5 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import { connect } from 'react-redux';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Button from 'components/CustomButtons/Button.jsx';
@@ -19,7 +18,14 @@ import Card from 'components/Card/Card.jsx';
 import CardHeader from 'components/Card/CardHeader.jsx';
 import CardAvatar from 'components/Card/CardAvatar.jsx';
 import CardBody from 'components/Card/CardBody.jsx';
+
+import Loading from 'components/Loading/Loading.jsx';
 import { authHeader } from '_helpers';
+
+import { MuiPickersUtilsProvider, DateTimePicker } from 'material-ui-pickers';
+import { connect } from 'react-redux';
+import DateFnsUtils from '@date-io/date-fns';
+import { dashboardActions } from '_actions';
 
 const styles = theme => ({
   card: {
@@ -60,6 +66,15 @@ class Exports extends React.Component {
     loadingPdf: false,
     loadingExcel: false,
   };
+
+  componentDidMount() {
+    console.log('component Didmount');
+    const startDate =
+      this.props.dateRange.start ||
+      new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+    const endDate = this.props.dateRange.end || new Date();
+    this.handleDateRangeChange(startDate, endDate);
+  }
 
   exportPdf = () => {
     this.setState({ loadingPdf: true });
@@ -105,9 +120,37 @@ class Exports extends React.Component {
       });
   };
 
+  handleDateChange = type => date => {
+    const { dateRange } = this.props;
+    let startDate = dateRange.start;
+    let endDate = dateRange.end;
+    if (type === 'startDate') {
+      startDate = date > endDate ? endDate : date;
+    } else {
+      endDate = date < startDate ? startDate : date;
+    }
+    this.handleDateRangeChange(startDate, endDate);
+  };
+
+  handleDateRangeChange = (startDate, endDate) => {
+    const { getDashboardData, targetCity } = this.props;
+    console.log(startDate, endDate)
+    getDashboardData({
+      targetCity,
+      dateRange: {
+        start: startDate,
+        end: endDate,
+      },
+    });
+  };
+
   render() {
-    const { classes } = this.props;
+    const { classes, dateRange, loading } = this.props;
     const { loadingExcel, loadingPdf } = this.state;
+    const startDate = dateRange.start;
+    const endDate = dateRange.end;
+
+    if (loading) return <Loading />;
 
     return (
       <Grid
@@ -117,6 +160,32 @@ class Exports extends React.Component {
         justify="center"
         alignItems="center"
       >
+        <Grid item md={3} xs={12} />
+        <Grid item style={{ textAlign: 'center' }} md={6} xs={12}>
+          <MuiPickersUtilsProvider utils={DateFnsUtils}>
+            <Grid container spacing={8}>
+              <Grid item xs={6}>
+                <DateTimePicker
+                  margin="normal"
+                  label="Ngày bắt đầu"
+                  value={startDate}
+                  format="dd/MM/yyyy, HH:mm"
+                  onChange={this.handleDateChange('startDate')}
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <DateTimePicker
+                  margin="normal"
+                  label="Ngày kết thúc"
+                  value={endDate}
+                  format="dd/MM/yyyy, HH:mm"
+                  onChange={this.handleDateChange('endDate')}
+                />
+              </Grid>
+            </Grid>
+          </MuiPickersUtilsProvider>
+        </Grid>
+        <Grid item md={3} xs={12} />
         <Grid item style={{ textAlign: 'center' }}>
           <Paper className={classes.card}>
             <Grid
@@ -202,4 +271,18 @@ class Exports extends React.Component {
   }
 }
 
-export default withStyles(styles)(Exports);
+export default withStyles(styles)(connect(
+  state => ({
+    dateRange: state.dashboard.dateRange,
+    targetCity: state.dashboard.targetCity,
+    loading: state.dashboard.loading,
+  }),
+  dispatch => ({
+    getDashboardData: newStatus => {
+      dispatch(dashboardActions.get(newStatus));
+    },
+    changeDateRange: newStatus => {
+      dispatch(dashboardActions.changeDateRange(newStatus));
+    },
+  })
+)(Exports));
