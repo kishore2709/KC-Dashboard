@@ -306,7 +306,7 @@ function DataVisualizer(Chart) {
                             margin="normal"
                             label="Ngày bắt đầu"
                             value={startDate}
-                            format="MMMM, dd, yyyy, HH:mm"
+                            format="dd/MM/yyyy, HH:mm"
                             onChange={this.handleDateChange('startDate')}
                           />
                         </Grid>
@@ -316,7 +316,7 @@ function DataVisualizer(Chart) {
                             margin="normal"
                             label="Ngày kết thúc"
                             value={endDate}
-                            format="MMMM, dd, yyyy, HH:mm"
+                            format="dd/MM/yyyy, HH:mm"
                             onChange={this.handleDateChange('endDate')}
                           />
                         </Grid>

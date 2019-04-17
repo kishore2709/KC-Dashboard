@@ -61,7 +61,25 @@ class AccessManagement extends React.Component {
           );
         }
         return accumulator;
-      }, []);
+      }, []).map(permission => {
+        console.log(permission)
+        switch (permission) {
+          case 'dashboard':
+            return "Trang chủ";
+          case "user":
+            return "Người dùng";
+          case "permission":
+            return "Phân quyền";
+          case "logmanager":
+            return "Quản lý log";
+          case "serivcemanager":
+            return "Quản lý dịch vụ";
+          case "attackreport":
+            return "Cảnh báo tấn công";
+          default:
+            return permission;  
+        }
+      });
       resolve(result);
     });
 

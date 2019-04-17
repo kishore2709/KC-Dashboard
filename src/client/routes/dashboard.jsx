@@ -177,8 +177,8 @@ const dashboardRoutes = [
   {
     id: 'exportData',
     path: '/exportData',
-    sidebarName: 'Xuất dữ liệu',
-    navbarName: 'Xuất dữ liệu',
+    sidebarName: 'Xuất báo cáo',
+    navbarName: 'Xuất báo cáo',
     icon: CloudDownload,
     component: Exports,
   },

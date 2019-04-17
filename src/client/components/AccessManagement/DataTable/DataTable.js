@@ -47,6 +47,8 @@ class DataTable extends Component {
         permissions.logManager,
         permissions.serviceManager,
         permissions.attackReport,
+        permissions.mailBox,
+        permissions.exportData,
       ];
       return result;
     });
@@ -62,6 +64,8 @@ class DataTable extends Component {
         logManager: data[index][5],
         serviceManager: data[index][6],
         attackReport: data[index][7],
+        mailBox: data[index][8],
+        exportData: data[index][9],
       };
     }
     this.props.fireUpSubmit(newUsers);
@@ -70,20 +74,20 @@ class DataTable extends Component {
   render() {
     const columns = [
       {
-        name: 'Username',
+        name: 'Tài khoản',
         options: {
           filter: false,
         },
       },
       {
-        name: 'Role',
+        name: 'Chức vụ',
         options: {
           display: 'false',
           sort: false,
         },
       },
       {
-        name: 'Dashboard',
+        name: 'Trang chủ',
         options: {
           filter: false,
           sort: false,
@@ -91,7 +95,7 @@ class DataTable extends Component {
         },
       },
       {
-        name: 'User',
+        name: 'Người dùng',
         options: {
           filter: false,
           sort: false,
@@ -99,7 +103,7 @@ class DataTable extends Component {
         },
       },
       {
-        name: 'Permission',
+        name: 'Quyền hạn',
         options: {
           filter: false,
           sort: false,
@@ -107,7 +111,7 @@ class DataTable extends Component {
         },
       },
       {
-        name: 'Log Manager',
+        name: 'Quản lý Log',
         options: {
           filter: false,
           sort: false,
@@ -115,7 +119,7 @@ class DataTable extends Component {
         },
       },
       {
-        name: 'Service Manager',
+        name: 'Quản lý dịch vụ',
         options: {
           filter: false,
           sort: false,
@@ -123,7 +127,23 @@ class DataTable extends Component {
         },
       },
       {
-        name: 'Attack Report',
+        name: 'Báo cáo tấn công',
+        options: {
+          filter: false,
+          sort: false,
+          customBodyRender: this.MultiselectCheckboxRender,
+        },
+      },
+      {
+        name: 'Hòm thư',
+        options: {
+          filter: false,
+          sort: false,
+          customBodyRender: this.MultiselectCheckboxRender,
+        },
+      },
+      {
+        name: 'Trích xuất dữ liệu',
         options: {
           filter: false,
           sort: false,
@@ -140,10 +160,31 @@ class DataTable extends Component {
       filter: true,
       selectableRows: false,
       filterType: 'dropdown',
-      responsive: 'stacked',
+      responsive: 'scroll',
       rowsPerPage: 5,
       rowsPerPageOptions: [5, 10, 20],
       page: 0,
+      textLabels: {
+        body: {
+          noMatch: "Không có dữ liệu phù hợp",
+          toolTip: "Sắp xếp",
+        },
+        pagination: {
+          next: "Trang sau",
+          previous: "Trang trước",
+          rowsPerPage: "Dòng/Trang",
+          displayRows: "trên",
+        },
+        toolbar: {
+          search: "Tìm kiếm",
+          filterTable: "Lọc",
+        },
+        filter: {
+          all: "Tất cả",
+          title: "LỌC",
+          reset: "Khôi phục",
+        },
+      }
     };
 
     return (
