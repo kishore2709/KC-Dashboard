@@ -25,6 +25,10 @@ import { PostApi } from '../_helpers/Utils/PostApi';
 // import { dateRange } from '../_reducers/dateRange.reducer';
 // import { RegisterPage } from './RegisterPage';
 // import connectedDrawers from './SettingManagement/Drawers';
+if (process.env.NODE_ENV !== 'production') {
+  const { whyDidYouUpdate } = require('why-did-you-update');
+  whyDidYouUpdate(React);
+}
 class App extends React.Component {
   constructor(props) {
     super(props);

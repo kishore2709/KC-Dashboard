@@ -20,19 +20,12 @@ module.exports = merge(common, {
   output: {
     path: path.join(__dirname, 'dist'),
     filename: '[name].[hash].min.js',
+    chunkFilename: '[name].bundle.js',
   },
   optimization: {
-    minimize: true,
-    nodeEnv: 'production',
     splitChunks: {
-      cacheGroups: {
-        vendor: {
-          chunks: 'initial',
-          test: 'vendor',
-          name: 'vendor',
-          enforce: true,
-        },
-      },
+      // include all types of chunks
+      chunks: 'all',
     },
   },
 });
