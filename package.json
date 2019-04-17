@@ -23,6 +23,7 @@
     "@date-io/date-fns": "^1.0.1",
     "@material-ui/core": "^3.9.1",
     "@material-ui/icons": "^3.0.1",
+    "@welldone-software/why-did-you-render": "^3.0.6",
     "axios": "^0.18.0",
     "babel-plugin-css-modules-transform": "^1.6.1",
     "babel-plugin-import": "^1.10.0",
@@ -90,7 +91,6 @@
     "reselect": "^4.0.0",
     "rootpath": "^0.1.2",
     "terser-webpack-plugin": "^1.2.3",
-    "why-did-you-update": "^1.0.6",
     "xlsx": "^0.14.2"
   },
   "devDependencies": {
