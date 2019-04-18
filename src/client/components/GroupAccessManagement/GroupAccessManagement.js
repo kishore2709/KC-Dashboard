@@ -5,9 +5,9 @@ import { withToastManager } from 'react-toast-notifications';
 import PropTypes from 'prop-types';
 import Loading from 'components/Loading/Loading.jsx';
 import { dialogActions } from '_actions';
+import { connect } from 'react-redux';
 import { GetUserInfo, PostApi } from '../../_helpers/Utils';
 import DataTable from './DataTable/DataTable';
-import { connect } from 'react-redux';
 
 const styles = theme => ({});
 
@@ -79,7 +79,7 @@ class GroupAccessManagement extends React.Component {
     PostApi('/api/groups/updateDb', dataUpdate)
       .then(res => {
         if (res === 'err') {
-          this.props.toastManager.add(`Something went wrong: `, {
+          this.props.toastManager.add(`Thao tác gặp lỗi!: `, {
             appearance: 'error',
             autoDismiss: true,
           });
@@ -87,7 +87,7 @@ class GroupAccessManagement extends React.Component {
 
           // ret = 'err';
         } else {
-          this.props.toastManager.add('Updated group Successfully', {
+          this.props.toastManager.add('Cập nhật thành công!', {
             appearance: 'success',
             autoDismiss: true,
           });
@@ -96,7 +96,7 @@ class GroupAccessManagement extends React.Component {
       })
       .catch(err => {
         // ret = 'err';
-        this.props.toastManager.add(`Something went wrong: `, {
+        this.props.toastManager.add(`Thao tác gặp lỗi!: `, {
           appearance: 'error',
           autoDismiss: true,
         });
@@ -109,7 +109,7 @@ class GroupAccessManagement extends React.Component {
     PostApi('/api/groups/addDb', { groupname: newGroup })
       .then(res => {
         if (res === 'err' || !res || 'message' in res) {
-          this.props.toastManager.add(`Something went wrong: `, {
+          this.props.toastManager.add(`Thao tác gặp lỗi!: `, {
             appearance: 'error',
             autoDismiss: true,
           });
@@ -117,7 +117,7 @@ class GroupAccessManagement extends React.Component {
 
           // ret = 'err';
         } else {
-          this.props.toastManager.add('Add group Successfully', {
+          this.props.toastManager.add('Thêm nhóm người dùng thành công', {
             appearance: 'success',
             autoDismiss: true,
           });
@@ -145,18 +145,19 @@ class GroupAccessManagement extends React.Component {
       })
       .catch(err => {
         // ret = 'err';
-        this.props.toastManager.add(`Something went wrong: `, {
+        this.props.toastManager.add(`Thêm nhóm người dùng bị lỗi: `, {
           appearance: 'error',
           autoDismiss: true,
         });
         // console.log('update data from database err in AcessManagement');
-      }).then(rettt => {
+      })
+      .then(rettt => {
         this.props.closeDialogGroup(false);
       });
   };
   // =================
 
-  HandleSubmit = () => { };
+  HandleSubmit = () => {};
 
   GetAllUsers = () =>
     PostApi('/api/groups/getGroups', {})

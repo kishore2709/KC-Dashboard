@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 // const bcrypt = require('bcrypt');
-const defaultPassword = require('./pwd');
+const defaultPassword = require('./pwd')('1');
 
-const ObjectId = mongoose.Schema.Types.ObjectId;
+const { ObjectId } = mongoose.Schema.Types;
 
 // mongoose.connect('mongodb://localhost/usermanager');
 const CitySchema = new mongoose.Schema({
@@ -33,6 +33,41 @@ const webLogSchema = new mongoose.Schema({
   count: Number,
 });
 
+const defaultPermission = {
+  mailBox: {
+    canAccess: true,
+    subArr: [true, true, true],
+  },
+  exportData: {
+    canAccess: true,
+    subArr: [true, true, true],
+  },
+  dashboard: {
+    canAccess: true,
+    subArr: [true, true, true],
+  },
+  user: {
+    canAccess: true,
+    subArr: [true, false],
+  },
+  permission: {
+    canAccess: false,
+    subArr: [true, false],
+  },
+  logManager: {
+    canAccess: true,
+    subArr: [true, false],
+  },
+  serviceManager: {
+    canAccess: true,
+    subArr: [true, false],
+  },
+  attackReport: {
+    canAccess: true,
+    subArr: [true, false],
+  },
+};
+
 const UserSchema = new mongoose.Schema({
   username: String,
   password: { type: String, default: defaultPassword },
@@ -47,40 +82,7 @@ const UserSchema = new mongoose.Schema({
   },
   permissions: {
     type: Object,
-    default: {
-      mailBox: {
-        canAccess: true,
-        subArr: [true, true, true],
-      },
-      exportData: {
-        canAccess: true,
-        subArr: [true, true, true],
-      },
-      dashboard: {
-        canAccess: true,
-        subArr: [true, true, true],
-      },
-      user: {
-        canAccess: true,
-        subArr: [true, false],
-      },
-      permission: {
-        canAccess: false,
-        subArr: [true, false],
-      },
-      logManager: {
-        canAccess: true,
-        subArr: [true, false],
-      },
-      serviceManager: {
-        canAccess: true,
-        subArr: [true, false],
-      },
-      attackReport: {
-        canAccess: true,
-        subArr: [true, false],
-      },
-    },
+    default: defaultPermission,
   },
 });
 
@@ -88,40 +90,7 @@ const GroupSchema = new mongoose.Schema({
   groupname: String,
   permissions: {
     type: Object,
-    default: {
-      mailBox: {
-        canAccess: true,
-        subArr: [true, true, true],
-      },
-      exportData: {
-        canAccess: true,
-        subArr: [true, true, true],
-      },
-      dashboard: {
-        canAccess: true,
-        subArr: [true, true, true],
-      },
-      user: {
-        canAccess: true,
-        subArr: [true, false],
-      },
-      permission: {
-        canAccess: false,
-        subArr: [true, false],
-      },
-      logManager: {
-        canAccess: true,
-        subArr: [true, false],
-      },
-      serviceManager: {
-        canAccess: true,
-        subArr: [true, false],
-      },
-      attackReport: {
-        canAccess: true,
-        subArr: [true, false],
-      },
-    },
+    default: defaultPermission,
   },
 });
 

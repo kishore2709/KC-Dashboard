@@ -39,17 +39,11 @@ const styles = {
 function UserProfile(props) {
   const { classes } = props;
   return (
-      <Grid
-        container
-        spacing={24}  
-      >
-        <Grid
-          item
-          xs={12}
-        >
-          <UserTable />
-        </Grid>
+    <Grid container spacing={24}>
+      <Grid item xs={12}>
+        <UserTable />
       </Grid>
+    </Grid>
   );
 }
 

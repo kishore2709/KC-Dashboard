@@ -58,7 +58,7 @@ class UserProfile extends React.Component {
           console.log(ret);
           if (!ret || !('message' in ret)) throw new Error('err');
           // this.props.addTable(ret);
-          toastManager.add('Change password Successfully', {
+          toastManager.add('Đổi mật khẩu thành công', {
             appearance: 'success',
             autoDismiss: true,
           });

@@ -11,14 +11,12 @@ import Card from 'components/Card/Card.jsx';
 import CardHeader from 'components/Card/CardHeader.jsx';
 import CardBody from 'components/Card/CardBody.jsx';
 import { connect } from 'react-redux';
-// import { load as loadAccount } from '_reducers/AIO/userData.reducer.js';
+import { load as loadAccount } from '_reducers/AIO/userData.reducer.js';
 import { PostApi } from '_helpers/Utils';
-import { dialogActions } from '_actions';
+import { userTableActions, dialogActions } from '_actions';
 import { withToastManager } from 'react-toast-notifications';
-// import { dialogConstants } from '_constants';
-import { GetUserInfo } from '_helpers/Utils/';
-
-import ChangePasswordForm from 'components/Forms/ChangePasswordForm.jsx';
+import { dialogConstants } from '_constants';
+import AddUserForm from './AddUserForm';
 
 const styles = theme => ({
   cardCategoryWhite: {
@@ -47,15 +45,16 @@ const styles = theme => ({
   },
 });
 
-class ChangePasswordDialog extends React.Component {
+class FormDialog extends React.Component {
   constructor(props) {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.user = GetUserInfo();
   }
 
   handleClose = () => {
-    this.props.closeDialogPwdForm(false);
+    // this.setState({ open: false });
+    // this.props.onClose();
+    this.props.closeDialog({ type: 'addUserDialog', message: { open: false } });
   };
 
   handleChange = event => {
@@ -63,53 +62,38 @@ class ChangePasswordDialog extends React.Component {
   };
 
   handleSubmit(e) {
-    // console.log('in handle submit change pwd form');
-    // console.log(e);
-    const { user } = this;
-    const { toastManager, closeDialogPwdForm } = this.props;
+    console.log('in handle submit');
 
-    PostApi('/api/users/changePassword', { ...e, id: user._id })
+    const { toastManager } = this.props;
+
+    PostApi('/api/users/addDb', e)
       .then(ret => {
-        console.log('??????????');
-        console.log(ret);
-        if (!ret || !('message' in ret)) throw new Error('err');
-
-        // this.props.addTable(ret);
-        toastManager.add('Đổi mật khẩu thành công', {
+        this.props.addTable(ret);
+        toastManager.add('Thêm thành công', {
           appearance: 'success',
           autoDismiss: true,
         });
-        this.user.token = ret.message;
-        this.user.changePwd = false;
-        localStorage.setItem('user', JSON.stringify(this.user));
       })
       .catch(err => {
-        console.log(err);
+        console.log('err');
         toastManager.add(`Thao tác gặp lỗi!!`, {
           appearance: 'error',
           autoDismiss: true,
         });
       })
-      .then(rett => {
-        closeDialogPwdForm(false);
+      .then(ret => {
+        this.handleClose();
       });
   }
 
-  componentDidMount(){
-    const user = GetUserInfo();
-    if (!user || !('changePwd' in user))
-      throw new Error('cannot get User Info');
-    this.props.openDialogPwdForm(user.changePwd);
-
-  }
   render() {
-    const { dialog, classes } = this.props;
-   
+    const { classes, addUserDialog } = this.props;
+
     return (
       <div>
         <Dialog
           fullWidth
-          open={dialog.openPwdForm}
+          open={addUserDialog.open}
           onClose={this.handleClose}
           aria-labelledby="form-dialog-title"
           disableBackdropClick
@@ -119,15 +103,16 @@ class ChangePasswordDialog extends React.Component {
               <GridItem xs={12} sm={12} md={12}>
                 <Card>
                   <CardHeader color="danger">
-                    <h4 className={classes.cardTitleWhite}>Đổi mật khẩu</h4>
+                    <h4 className={classes.cardTitleWhite}>Thêm người dùng</h4>
                     <p className={classes.cardCategoryWhite}>
-                      Mật khẩu bao gồm tối thiểu 8 ký tự, gồm ký tự viết hoa và
-                      viết thường, chữ số từ 0 - 9, ký tự đặc biệt ( @, !, #,
-                      ...)
+                      Điền các thông tin cơ bản
                     </p>
                   </CardHeader>
                   <CardBody>
-                    <ChangePasswordForm onSubmit={this.handleSubmit} />
+                    <AddUserForm
+                      onSubmit={this.handleSubmit}
+                      onCancel={this.handleClose}
+                    />
                   </CardBody>
                 </Card>
               </GridItem>
@@ -139,25 +124,21 @@ class ChangePasswordDialog extends React.Component {
   }
 }
 
-function mapStateToProps(state) {
-  const { dialog } = state;
-  return {
-    dialog,
-  };
-}
-
 const mapDispatchToProps = dispatch => ({
-  closeDialogPwdForm: newStatus => {
-    dispatch(dialogActions.closeDialogPwdForm(newStatus));
+  updateTable: newStatus => {
+    dispatch(userTableActions.update(newStatus));
   },
-  openDialogPwdForm: newStatus => {
-    dispatch(dialogActions.openDialogPwdForm(newStatus));
+  addTable: newStatus => {
+    dispatch(userTableActions.add(newStatus));
+  },
+  closeDialog: newStatus => {
+    dispatch(newStatus);
   },
 });
 
 export default withStyles(styles)(
   connect(
-    mapStateToProps,
+    state => ({ addUserDialog: state.addUserDialog }),
     mapDispatchToProps
-  )(withToastManager(ChangePasswordDialog))
+  )(withToastManager(FormDialog))
 );
