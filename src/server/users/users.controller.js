@@ -369,13 +369,17 @@ function getUsers(req, res, next) {
 }
 
 function updateDb(req, res, next) {
+  console.log('in updateDb sv');
   userService
     .updateDb(req.body)
     .then(ret => {
+      console.log('in updatedb', ret);
       if (!ret) {
         res.status(400).json({ message: 'update db error' });
       } else {
-        res.json({ message: 'ok' });
+        // ret[1] jwt info user
+        console.log('res okkkkk');
+        res.json({ message: ret });
       }
     })
     .catch(err => {

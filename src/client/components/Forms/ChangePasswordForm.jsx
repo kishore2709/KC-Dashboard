@@ -2,7 +2,7 @@ import React from 'react';
 import { Field, reduxForm } from 'redux-form';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
-
+import { history } from '_helpers';
 import { connect } from 'react-redux';
 import { checkPassStrength } from '_helpers/Utils';
 // import { getNormalizedScrollLeft } from 'normalize-scroll-left';
@@ -91,7 +91,7 @@ let ChangePasswordForm = props => {
                 type="submit"
                 disabled={pristine || submitting}
               >
-                {props.dialog.new ? 'Add' : 'Submit'}
+                Cập nhật
               </button>
             </Grid>
             <Grid item>
@@ -99,10 +99,10 @@ let ChangePasswordForm = props => {
                 className="blue button"
                 type="button"
                 onClick={() => {
-                  props.onCancel();
+                  history.push('/login');
                 }}
               >
-                Cancel
+                Đăng xuất
               </button>
             </Grid>
           </Grid>

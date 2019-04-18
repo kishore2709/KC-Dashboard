@@ -138,7 +138,7 @@ function PermanentDrawerLeft(props) {
             color="secondary"
             className={classes.button}
             onClick={() => {
-              toastManager.add('Saved Successfully', { appearance: 'success' });
+              toastManager.add('Cập nhật thành công', { appearance: 'success' });
             }}
           >
             Cập nhật lên cơ sở dữ liệu

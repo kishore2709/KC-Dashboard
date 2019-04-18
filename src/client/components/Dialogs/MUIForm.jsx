@@ -22,14 +22,23 @@ const validate = values => {
   // console.log(values);
   requiredFields.forEach(field => {
     if (!values[field]) {
-      errors[field] = 'Required';
+      errors[field] = 'Yêu cầu nhập';
     }
   });
   if (
     values.email &&
     !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)
   ) {
-    errors.email = 'Invalid email address';
+    errors.email = 'Định dạng Email không đúng';
+  }
+  if (values.oldPassword || values.newPassword || values.confirmNewPassword) {
+    if (!values.oldPassword) errors.oldPassword = 'Yêu cầu nhập';
+    if (!values.newPassword) errors.newPassword = 'Yêu cầu nhập';
+    if (!values.confirmNewPassword) errors.confirmNewPassword = 'Yêu cầu nhập';
+    if (values.newPassword !== values.confirmNewPassword) {
+      errors.confirmNewPassword =
+        'Xác nhận mật khẩu mới phải trùng với mật khẩu mới';
+    }
   }
   return errors;
 };
@@ -51,22 +60,27 @@ const renderTextField = ({
   />
 );
 
-const renderCheckbox = ({ input, label }) => (
-  <div>
-    <FormControlLabel
-      control={<Checkbox checked={!!input.value} onChange={input.onChange} />}
-      label={label}
-    />
-  </div>
-);
-
-const radioButton = ({ input, ...rest }) => (
-  <FormControl>
-    <RadioGroup {...input} {...rest}>
-      <FormControlLabel value="female" control={<Radio />} label="Female" />
-      <FormControlLabel value="male" control={<Radio />} label="Male" />
-    </RadioGroup>
-  </FormControl>
+const renderPasswordField = ({
+  label,
+  input,
+  meta: { touched, invalid, error, warning },
+  ...custom
+}) => (
+  <TextField
+    label={label}
+    placeholder={label}
+    error={touched && invalid}
+    helperText={touched && (error || warning)}
+    variant="outlined"
+    type="password"
+    autoComplete="current-password"
+    InputLabelProps={{
+      shrink: true,
+    }}
+    fullWidth
+    {...input}
+    {...custom}
+  />
 );
 
 const renderFromHelper = ({ touched, error }) => {
@@ -102,33 +116,66 @@ const renderSelectField = ({
   </FormControl>
 );
 
+// eslint-disable-next-line import/no-mutable-exports
 let MaterialUiForm = props => {
-  const { handleSubmit, pristine, reset, submitting, classes, groupTable } = props;
+  const {
+    handleSubmit,
+    pristine,
+    reset,
+    submitting,
+    classes,
+    groupTable,
+  } = props;
   // console.log(groupTable);
   return (
     <form onSubmit={handleSubmit}>
       <Grid container spacing={24}>
         <Grid item xs={12} sm={6}>
-          <Field name="username" component={renderTextField} label="Username" />
+          <Field
+            name="username"
+            component={renderTextField}
+            label="Tên đăng nhập"
+          />
         </Grid>
         <Grid item xs={12} sm={6}>
           <Field
             name="fullname"
             component={renderTextField}
-            label="Full Name"
+            label="Tên đầy đủ"
           />
         </Grid>
         <Grid item xs={12} sm={6}>
           <Field
             name="phonenumber"
             component={renderTextField}
-            label="Phonenumber"
+            label="Số điện thoại"
           />
         </Grid>
         <Grid item xs={12} sm={6}>
           <Field name="email" component={renderTextField} label="Email" />
         </Grid>
-
+        {/* pwd */}
+        <Grid item xs={12} sm={12} md={12}>
+          <Field
+            name="oldPassword"
+            component={renderPasswordField}
+            label="Mật khẩu cũ"
+          />
+        </Grid>
+        <Grid item xs={12} sm={12} md={12}>
+          <Field
+            name="newPassword"
+            component={renderPasswordField}
+            label="Mật khẩu mới"
+          />
+        </Grid>
+        <Grid item xs={12} sm={12} md={12}>
+          <Field
+            name="confirmNewPassword"
+            component={renderPasswordField}
+            label="Nhập lại mật khẩu mới"
+          />
+        </Grid>
         <Grid item xs={12}>
           <Grid
             container
@@ -141,12 +188,12 @@ let MaterialUiForm = props => {
                 classes={classes}
                 name="role"
                 component={renderSelectField}
-                label="role"
+                label="Vai trò"
               >
                 <option value="" />
-                {groupTable.map(val => {
-                  return (<option value={val.groupname}>{val.groupname}</option>);
-                })}
+                {groupTable.map(val => (
+                  <option value={val.groupname}>{val.groupname}</option>
+                ))}
               </Field>
             </Grid>
 
@@ -155,11 +202,11 @@ let MaterialUiForm = props => {
                 classes={classes}
                 name="status"
                 component={renderSelectField}
-                label="status"
+                label="Trạng thái"
               >
                 <option value="" />
-                <option value>Active</option>
-                <option value={false}>Inactive</option>
+                <option value>Hoạt động</option>
+                <option value={false}>Không hoạt động</option>
               </Field>
             </Grid>
           </Grid>
@@ -178,7 +225,7 @@ let MaterialUiForm = props => {
                 onClick={handleSubmit(data => {
                   props.onResetPassword(data);
                 })}
-                disabled={props.dialog.new ? true : false}
+                disabled={!!props.dialog.new}
               >
                 Khôi phục mật khẩu
               </button>

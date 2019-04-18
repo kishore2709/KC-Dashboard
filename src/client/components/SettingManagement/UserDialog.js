@@ -84,10 +84,10 @@ class UserDialog extends Component {
           </DialogContent>
           <DialogActions>
             <Button onClick={this.handleClose} color="primary">
-              Cancel
+              Hủy
             </Button>
             <Button onClick={this.handleClose} color="primary">
-              Save
+              Cập nhật
             </Button>
           </DialogActions>
         </Dialog>

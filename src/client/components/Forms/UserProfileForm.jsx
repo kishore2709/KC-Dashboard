@@ -21,21 +21,21 @@ const validate = values => {
   // console.log(values);
   requiredFields.forEach(field => {
     if (!values[field]) {
-      errors[field] = 'Required';
+      errors[field] = 'Yêu cầu nhập';
     }
   });
   if (
     values.email &&
     !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)
   ) {
-    errors.email = 'Invalid email address';
+    errors.email = 'Định dạng Email không đúng';
   }
   if (values.oldPassword || values.newPassword || values.confirmNewPassword) {
-    if (!values.oldPassword) errors.oldPassword = 'Required';
-    if (!values.newPassword) errors.newPassword = 'Required';
-    if (!values.confirmNewPassword) errors.confirmNewPassword = 'Required';
+    if (!values.oldPassword) errors.oldPassword = 'Yêu cầu nhập';
+    if (!values.newPassword) errors.newPassword = 'Yêu cầu nhập';
+    if (!values.confirmNewPassword) errors.confirmNewPassword = 'Yêu cầu nhập';
     if (values.newPassword !== values.confirmNewPassword) {
-      errors.confirmNewPassword = 'newPassword must match';
+      errors.confirmNewPassword = 'Xác nhận mật khẩu mới phải trùng với mật khẩu mới';
     }
   }
   return errors;
@@ -151,11 +151,7 @@ let UserProfileForm = props => {
           />
         </Grid>
         <Grid item xs={12} sm={4}>
-          <Field
-            name="fullname"
-            component={renderTextField}
-            label="Tên"
-          />
+          <Field name="fullname" component={renderTextField} label="Tên" />
         </Grid>
         <Grid item xs={12} sm={4}>
           <Field
@@ -201,7 +197,7 @@ let UserProfileForm = props => {
                 type="submit"
                 disabled={pristine || submitting}
               >
-                {props.dialog.new ? 'Add' : 'Submit'}
+                {props.dialog.new ? 'Thêm' : 'Cập nhật'}
               </button>
             </Grid>
             <Grid item>
@@ -212,7 +208,7 @@ let UserProfileForm = props => {
                   props.onCancel();
                 }}
               >
-                Cancel
+                Hủy
               </button>
             </Grid>
           </Grid>

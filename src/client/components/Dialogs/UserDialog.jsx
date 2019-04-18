@@ -1,48 +1,48 @@
-import React from 'react';
+import React from "react";
 // import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogContent from '@material-ui/core/DialogContent';
-import withStyles from '@material-ui/core/styles/withStyles';
+import Dialog from "@material-ui/core/Dialog";
+import DialogContent from "@material-ui/core/DialogContent";
+import withStyles from "@material-ui/core/styles/withStyles";
 
 // /
-import GridItem from 'components/Grid/GridItem.jsx';
-import GridContainer from 'components/Grid/GridContainer.jsx';
-import Card from 'components/Card/Card.jsx';
-import CardHeader from 'components/Card/CardHeader.jsx';
-import CardBody from 'components/Card/CardBody.jsx';
-import { connect } from 'react-redux';
-import { load as loadAccount } from '_reducers/AIO/userData.reducer.js';
-import { PostApi } from '_helpers/Utils';
-import { userTableActions, dialogActions } from '_actions';
-import { withToastManager } from 'react-toast-notifications';
-import { dialogConstants } from '_constants';
-import MUIForm from './MUIForm';
+import GridItem from "components/Grid/GridItem.jsx";
+import GridContainer from "components/Grid/GridContainer.jsx";
+import Card from "components/Card/Card.jsx";
+import CardHeader from "components/Card/CardHeader.jsx";
+import CardBody from "components/Card/CardBody.jsx";
+import { connect } from "react-redux";
+import { load as loadAccount } from "_reducers/AIO/userData.reducer.js";
+import { PostApi } from "_helpers/Utils";
+import { userTableActions, dialogActions } from "_actions";
+import { withToastManager } from "react-toast-notifications";
+import { dialogConstants } from "_constants";
+import MUIForm from "./MUIForm";
 
 const styles = theme => ({
   cardCategoryWhite: {
-    color: 'rgba(255,255,255,.62)',
-    margin: '0',
-    fontSize: '14px',
-    marginTop: '0',
-    marginBottom: '0',
-    width: '100%',
+    color: "rgba(255,255,255,.62)",
+    margin: "0",
+    fontSize: "14px",
+    marginTop: "0",
+    marginBottom: "0",
+    width: "100%"
   },
   cardTitleWhite: {
-    color: '#FFFFFF',
-    marginTop: '0px',
-    minHeight: 'auto',
-    fontWeight: '300',
+    color: "#FFFFFF",
+    marginTop: "0px",
+    minHeight: "auto",
+    fontWeight: "300",
     fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif",
-    marginBottom: '3px',
-    textDecoration: 'none',
-    width: '100%',
+    marginBottom: "3px",
+    textDecoration: "none",
+    width: "100%"
   },
   formControl: {
     margin: theme.spacing.unit,
     minWidth: 120,
-    display: 'flex',
-    flexWrap: 'wrap',
-  },
+    display: "flex",
+    flexWrap: "wrap"
+  }
 });
 
 class FormDialog extends React.Component {
@@ -53,7 +53,7 @@ class FormDialog extends React.Component {
   }
 
   componentWillReceiveProps(props) {
-    if ('open' in props && props.open) this.setState({ open: true });
+    if ("open" in props && props.open) this.setState({ open: true });
   }
 
   handleClose = () => {
@@ -67,98 +67,61 @@ class FormDialog extends React.Component {
   };
 
   handleSubmit(e) {
-    console.log('in handle submit')
-    // console.log(e);
+    // const { user } = this;
     const { toastManager } = this.props;
-    if (this.props.dialog.new){
-      PostApi('/api/users/addDb', e)
-      .then(ret=>{
-        // console.log('in response');
-        // console.log(ret);
-        this.props.addTable(ret);
-        toastManager.add('Added Successfully', {
-          appearance: 'success',
-          autoDismiss: true,
-        });
-      })
-      .catch(err=>{
-        console.log('err');
-        toastManager.add(`Thao tác gặp lỗi!!`, {
-          appearance: 'error',
-          autoDismiss: true,
-        });
-      })
-      .then(ret=>{
-
-        this.handleClose()
-        
-      });
-    }
-    else 
-    PostApi('/api/users/updateDb', [e])
-      .then(res => {
-        // console.log('in then proomse');
-        if (res === 'err') {
-          // alertErr();
-          console.log('errr in user dialog');
-          toastManager.add(`Thao tác gặp lỗi!!`, {
-            appearance: 'error',
-            autoDismiss: true,
+    console.log(e);
+    if (
+      // "oldPassword" in e &&
+      // "newPassword" in e &&
+      "fullname" in e &&
+      "phonenumber" in e &&
+      "email" in e &&
+      "username" in e
+    )
+      PostApi("/api/users/updateDb", e )
+        .then(ret => {
+          console.log("in updatedb res..");
+          console.log(ret);
+          if (!ret || !("message" in ret) || !Array.isArray(ret.message))
+            throw new Error("err");
+          // this.props.addTable(ret);
+          toastManager.add("Cập nhật thông tin thành công", {
+            appearance: "success",
+            autoDismiss: true
           });
-          // ret.push(row);
-          // ret = 'err';
-        } else {
-          // ret.push(newRow);
-          // toastManager.add('Cập nhật thành công', {
-          //   appearance: 'success',
-          //   autoDismiss: true,
-          // });
           this.props.updateTable(e);
-          toastManager.add('Saved Successfully', {
-            appearance: 'success',
-            autoDismiss: true,
+        })
+        .catch(err => {
+          console.log(err);
+          toastManager.add(`Cập nhật thông tin bị lỗi!`, {
+            appearance: "error",
+            autoDismiss: true
           });
-          console.log('ok in dialog');
-        }
-      })
-      .catch(err => {
-        // ret = 'err';
-        // ret.push(row);
-        toastManager.add(`Thao tác gặp lỗi!!`, {
-          appearance: 'error',
-          autoDismiss: true,
-        });
-        console.log('update data from database err');
-        // alertErr();
-      })
-      .then(ret=>{
-        this.handleClose()
-      });
-    //setTimeout(()=>{this.handleClose()}, 300);
+        }).then(() => {this.handleClose()});
   }
 
-  handleOnResetPassword(e){
+  handleOnResetPassword(e) {
     const { toastManager } = this.props;
-    console.log(' on ResetPassword');
-    PostApi('/api/users/resetPassword', e)
-      .then(ret=>{
+    console.log(" on ResetPassword");
+    PostApi("/api/users/resetPassword", e)
+      .then(ret => {
         // console.log('in response');
         // console.log(ret);
         // this.props.addTable(ret);
-        toastManager.add('Đặt lại mật khẩu ngẫu nhiên thành công', {
-          appearance: 'success',
-          autoDismiss: true,
+        toastManager.add("Đặt lại mật khẩu ngẫu nhiên thành công", {
+          appearance: "success",
+          autoDismiss: true
         });
       })
-      .catch(err=>{
-        console.log('err');
+      .catch(err => {
+        console.log("err");
         toastManager.add(`Thao tác gặp lỗi!!`, {
-          appearance: 'error',
-          autoDismiss: true,
+          appearance: "error",
+          autoDismiss: true
         });
       })
-      .then(ret=>{
-        this.handleClose()
+      .then(ret => {
+        this.handleClose();
       });
     // this.handleClose();
   }
@@ -173,7 +136,7 @@ class FormDialog extends React.Component {
         role,
         status,
         username,
-        id,
+        id
       } = dialog.message;
       // load initial data to Dialog
       load({
@@ -183,7 +146,7 @@ class FormDialog extends React.Component {
         role,
         status,
         username,
-        id,
+        id
       });
     }
     // console.log('??? in UserDialog');
@@ -227,7 +190,7 @@ class FormDialog extends React.Component {
 function mapStateToProps(state) {
   const { dialog } = state;
   return {
-    dialog,
+    dialog
   };
 }
 
@@ -243,7 +206,7 @@ const mapDispatchToProps = dispatch => ({
   },
   closeDialog: newStatus => {
     dispatch(dialogActions.closeDialog(newStatus));
-  },
+  }
 });
 
 export default withStyles(styles)(
