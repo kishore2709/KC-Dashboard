@@ -9,6 +9,8 @@ import EditIcon from '@material-ui/icons/BorderColor';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import UserDialog from 'components/Dialogs/UserDialog.jsx';
+import AddUserDialog from 'components/Dialogs/AddUserDialog.jsx';
+
 import { PostApi } from '_helpers/Utils';
 import { dialogActions, userTableActions, groupTableActions } from '_actions';
 import { connect } from 'react-redux';
@@ -36,9 +38,10 @@ class UserTable extends React.Component {
     rows: [],
     loading: true,
     groups: [],
+    addUserDialog: false,
   };
 
-  componentWillMount() {
+  componentDidMount() {
     PostApi('/api/users/getUsers', {})
       .then(res => {
         // console.log(res);
@@ -176,28 +179,28 @@ class UserTable extends React.Component {
       responsive: 'stacked',
       textLabels: {
         body: {
-          noMatch: "Không có dữ liệu phù hợp",
-          toolTip: "Sắp xếp",
+          noMatch: 'Không có dữ liệu phù hợp',
+          toolTip: 'Sắp xếp',
         },
         pagination: {
-          next: "Trang sau",
-          previous: "Trang trước",
-          rowsPerPage: "Dòng/Trang",
-          displayRows: "trên",
+          next: 'Trang sau',
+          previous: 'Trang trước',
+          rowsPerPage: 'Dòng/Trang',
+          displayRows: 'trên',
         },
         toolbar: {
-          search: "Tìm kiếm",
-          filterTable: "Lọc",
+          search: 'Tìm kiếm',
+          filterTable: 'Lọc',
         },
         filter: {
-          all: "Tất cả",
-          title: "LỌC",
-          reset: "Khôi phục",
+          all: 'Tất cả',
+          title: 'LỌC',
+          reset: 'Khôi phục',
         },
         selectedRows: {
-          text: "dòng đã chọn",
-          delete: "Xóa",
-          deleteAria: "Xóa các dòng đã chọn",
+          text: 'dòng đã chọn',
+          delete: 'Xóa',
+          deleteAria: 'Xóa các dòng đã chọn',
         },
       },
       customToolbar: () => (
@@ -206,8 +209,13 @@ class UserTable extends React.Component {
             aria-label="Add User"
             onClick={() => {
               // truong hop them nguoi dung moi
-              this.props.openDialog(true);
-              this.props.add();
+              // this.props.openDialog(true);
+              // this.props.add();
+              console.log(this.props);
+              this.props.addUserDialog({
+                type: 'addUserDialog',
+                message: { open: true },
+              });
             }}
           >
             <PersonAddIcon />
@@ -227,7 +235,7 @@ class UserTable extends React.Component {
                     // alertErr();
                     // ret.push(row);
                     // return 'err';
-                    toastManager.add(`Something went wrong!`, {
+                    toastManager.add(`Thao tác gặp lỗi!!`, {
                       appearance: 'error',
                       autoDismiss: true,
                     });
@@ -235,19 +243,19 @@ class UserTable extends React.Component {
                   } else {
                     console.log('del ok');
                     // status = false;
-                    toastManager.add('Deleted Successfully', {
+                    toastManager.add('Xóa thành công', {
                       appearance: 'success',
                       autoDismiss: true,
                     });
                   }
-                  // toastManager.add('Deleted Successfully', {
+                  // toastManager.add('Xóa thành công', {
                   //   appearance: 'success',
                   //   autoDismiss: true,
                   // });
                 })
                 .catch(err => {
                   console.log('delete data from database err');
-                  toastManager.add(`Something went wrong!`, {
+                  toastManager.add(`Thao tác gặp lỗi!!`, {
                     appearance: 'error',
                     autoDismiss: true,
                   });
@@ -263,6 +271,7 @@ class UserTable extends React.Component {
 
     return (
       <React.Fragment>
+        <AddUserDialog />
         <UserDialog groups={this.state.groups} />
         <MUIDataTable
           title="Danh sách người dùng"
@@ -299,6 +308,9 @@ const mapDispatchToProps = dispatch => ({
   },
   openDialog: newStatus => {
     dispatch(dialogActions.openDialog(newStatus));
+  },
+  addUserDialog: newStatus => {
+    dispatch(newStatus);
   },
 });
 

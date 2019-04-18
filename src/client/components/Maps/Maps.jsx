@@ -53,7 +53,8 @@ class SimpleMarkers extends Component {
     const { classes, cities } = this.props;
     // console.log(dashboard);
     const markers = cities;
-    // console.log('in render..');
+    console.log('Map..in render..');
+    console.log(cities);
     // console.log('Map will rerender????', markers);
     // console.log(dispatch);
     return (

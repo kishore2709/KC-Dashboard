@@ -14,9 +14,11 @@ import { groupTable } from './groupTable.reducer';
 import { dashboard } from './dashboard.reducer';
 import { mailBox } from './mailBox.reducer';
 import { chart } from './chart.reducer';
+import { addUserDialog } from './addUserDialog.reducer';
 
 const rootReducer = combineReducers({
   dashboard,
+  addUserDialog,
   dialog,
   dateRange,
   authentication,

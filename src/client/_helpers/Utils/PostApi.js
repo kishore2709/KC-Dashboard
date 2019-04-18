@@ -20,7 +20,7 @@ export async function PostApi(url, json, abortSignal) {
       console.log('err');
       return 'err';
       // return Promise.reject(new Error('err status != 200'));
-      // console.log('Something went wrong on api server!');
+      // console.log('Thao tác gặp lỗi! on api server!');
     })
     .then(response => response)
     .catch(error => {

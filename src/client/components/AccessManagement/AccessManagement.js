@@ -88,7 +88,7 @@ class AccessManagement extends React.Component {
     PostApi('/api/users/updateDb', newUsers)
       .then(res => {
         if (res === 'err') {
-          this.props.toastManager.add(`Something went wrong: `, {
+          this.props.toastManager.add(`Thao tác gặp lỗi!: `, {
             appearance: 'error',
             autoDismiss: true,
           });
@@ -96,7 +96,7 @@ class AccessManagement extends React.Component {
 
           // ret = 'err';
         } else {
-          this.props.toastManager.add('Updated Successfully', {
+          this.props.toastManager.add('Cập nhật thành công', {
             appearance: 'success',
             autoDismiss: true,
           });
@@ -105,7 +105,7 @@ class AccessManagement extends React.Component {
       })
       .catch(err => {
         // ret = 'err';
-        this.props.toastManager.add(`Something went wrong: `, {
+        this.props.toastManager.add(`Thao tác gặp lỗi!: `, {
           appearance: 'error',
           autoDismiss: true,
         });
@@ -121,7 +121,7 @@ class AccessManagement extends React.Component {
 
     console.log(result);
     const alertErr = () => {
-      toastManager.add(`Something went wrong: `, {
+      toastManager.add(`Thao tác gặp lỗi!: `, {
         appearance: 'error',
         autoDismiss: true,
       });
@@ -134,7 +134,7 @@ class AccessManagement extends React.Component {
               if (res === 'err') {
                 alertErr();
               } else {
-                toastManager.add('Updated Successfully', {
+                toastManager.add('Cập nhật thành công', {
                   appearance: 'success',
                   autoDismiss: true,
                 });

@@ -100,7 +100,7 @@ class Demo extends React.PureComponent {
     this.commitChanges = ({ added, changed, deleted }) => {
       let { rows } = this.state;
       const alertErr = () => {
-        toastManager.add(`Something went wrong: `, {
+        toastManager.add(`Thao tác gặp lỗi!: `, {
           appearance: 'error',
           autoDismiss: true,
         });
@@ -190,7 +190,7 @@ class Demo extends React.PureComponent {
                       // ret = 'err';
                     } else {
                       ret.push(newRow);
-                      toastManager.add('Updated Successfully', {
+                      toastManager.add('Cập nhật thành công', {
                         appearance: 'success',
                         autoDismiss: true,
                       });
@@ -234,7 +234,7 @@ class Demo extends React.PureComponent {
                       return 'err';
                     }
                     // status = false;
-                    toastManager.add('Deleted Successfully', {
+                    toastManager.add('Xóa thành công', {
                       appearance: 'success',
                       autoDismiss: true,
                     });

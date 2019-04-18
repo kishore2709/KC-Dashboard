@@ -41,6 +41,7 @@ class Discover extends Component {
   };
 
   render() {
+    // console.log('Discover...........');
     const { dashboard } = this.props;
     const { data } = dashboard;
     const chartData = [

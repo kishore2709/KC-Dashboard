@@ -83,7 +83,7 @@ class FormDialog extends React.Component {
       })
       .catch(err=>{
         console.log('err');
-        toastManager.add(`Something went wrong!`, {
+        toastManager.add(`Thao tác gặp lỗi!!`, {
           appearance: 'error',
           autoDismiss: true,
         });
@@ -101,7 +101,7 @@ class FormDialog extends React.Component {
         if (res === 'err') {
           // alertErr();
           console.log('errr in user dialog');
-          toastManager.add(`Something went wrong!`, {
+          toastManager.add(`Thao tác gặp lỗi!!`, {
             appearance: 'error',
             autoDismiss: true,
           });
@@ -109,7 +109,7 @@ class FormDialog extends React.Component {
           // ret = 'err';
         } else {
           // ret.push(newRow);
-          // toastManager.add('Updated Successfully', {
+          // toastManager.add('Cập nhật thành công', {
           //   appearance: 'success',
           //   autoDismiss: true,
           // });
@@ -124,7 +124,7 @@ class FormDialog extends React.Component {
       .catch(err => {
         // ret = 'err';
         // ret.push(row);
-        toastManager.add(`Something went wrong!`, {
+        toastManager.add(`Thao tác gặp lỗi!!`, {
           appearance: 'error',
           autoDismiss: true,
         });
@@ -145,14 +145,14 @@ class FormDialog extends React.Component {
         // console.log('in response');
         // console.log(ret);
         // this.props.addTable(ret);
-        toastManager.add('Reset Password Successfully', {
+        toastManager.add('Đặt lại mật khẩu ngẫu nhiên thành công', {
           appearance: 'success',
           autoDismiss: true,
         });
       })
       .catch(err=>{
         console.log('err');
-        toastManager.add(`Something went wrong!`, {
+        toastManager.add(`Thao tác gặp lỗi!!`, {
           appearance: 'error',
           autoDismiss: true,
         });

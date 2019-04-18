@@ -26,17 +26,20 @@ class DataTable extends Component {
     }
   }
 
-  MultiselectCheckboxRender = (value, tableMeta, updateValue) => (
-    <MultiselectCheckbox
-      classes={this.props.classes}
-      mainBool={value.canAccess}
-      subBools={value.subArr}
-      fireUpAccessChange={this.handleAccessChange(
-        tableMeta.rowIndex,
-        tableMeta.columnIndex
-      )}
-    />
-  );
+  MultiselectCheckboxRender = (value, tableMeta, updateValue) => {
+    console.log(value, tableMeta);
+    return (
+      <MultiselectCheckbox
+        classes={this.props.classes}
+        mainBool={value.canAccess}
+        subBools={value.subArr}
+        fireUpAccessChange={this.handleAccessChange(
+          tableMeta.rowIndex,
+          tableMeta.columnIndex
+        )}
+      />
+    );
+  };
 
   handleAccessChange = (rowIndex, columnIndex) => (mainBool, subBools) => {
     const newData = this.state.data;
@@ -49,7 +52,8 @@ class DataTable extends Component {
     });
   };
 
-  DataParser = data => data.map(curData => {
+  DataParser = data =>
+    data.map(curData => {
       const { username, role, permissions } = curData;
       const result = [
         username,
@@ -63,6 +67,7 @@ class DataTable extends Component {
         permissions.mailBox,
         permissions.exportData,
       ];
+      console.log('in DataTable Groupp..', result);
       return result;
     });
 
@@ -179,23 +184,23 @@ class DataTable extends Component {
       page: 0,
       textLabels: {
         body: {
-          noMatch: "Không có dữ liệu phù hợp",
-          toolTip: "Sắp xếp",
+          noMatch: 'Không có dữ liệu phù hợp',
+          toolTip: 'Sắp xếp',
         },
         pagination: {
-          next: "Trang sau",
-          previous: "Trang trước",
-          rowsPerPage: "Dòng/Trang",
-          displayRows: "trên",
+          next: 'Trang sau',
+          previous: 'Trang trước',
+          rowsPerPage: 'Dòng/Trang',
+          displayRows: 'trên',
         },
         toolbar: {
-          search: "Tìm kiếm",
-          filterTable: "Lọc",
+          search: 'Tìm kiếm',
+          filterTable: 'Lọc',
         },
         filter: {
-          all: "Tất cả",
-          title: "LỌC",
-          reset: "Khôi phục",
+          all: 'Tất cả',
+          title: 'LỌC',
+          reset: 'Khôi phục',
         },
       },
       customToolbar: () => (
@@ -234,7 +239,7 @@ class DataTable extends Component {
               fullWidth
               onClick={this.handleSubmit}
             >
-              Gửi
+              Cập nhật
             </Button>
           </Grid>
           <Grid item xs={false} sm={4} />

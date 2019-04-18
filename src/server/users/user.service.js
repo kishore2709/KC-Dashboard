@@ -1,5 +1,5 @@
 ﻿const jwt = require('jsonwebtoken');
-const co = require('co');
+// const co = require('co');
 const faker = require('faker');
 const bcrypt = require('bcrypt');
 const config = require('../config.json');
@@ -11,7 +11,8 @@ const dashboardService = require('../services/dashboard.js');
 const clientRedis = require('../redis');
 const createPdf = require('../Utils/createPdf');
 const createExcel = require('../Utils/createExcel');
-const defaultPassword = require('../Utils/pwd');
+const hashPwd = require('../Utils/pwd');
+const randomPwd = require('../Utils/randomPwd');
 
 const saltRounds = 10;
 
@@ -482,15 +483,16 @@ async function getUsers() {
 }
 
 async function addDb(obj) {
-  if (!obj || !('username' in obj) || !('role' in obj)) return 0;
+  if (!obj || !('username' in obj) || !('role' in obj) || !('password' in obj))
+    return 0;
   // to lowercase;
   obj.username = obj.username.toString().toLowerCase();
   obj.role = obj.role.toString().toLowerCase();
-
+  obj.password = hashPwd(obj.password);
   return User.find({ username: obj.username })
     .lean()
     .then(user => {
-      console.log('in check username');
+      // console.log('in check username');
       // check Username exist?
       if (Array.isArray(user) && user.length > 0) throw new Error('user exist');
       return user;
@@ -635,7 +637,9 @@ async function getAll() {
 
 async function resetPassword(obj) {
   let { id, password, ...rest } = obj;
-  password = defaultPassword;
+  const newPwd = randomPwd();
+  console.log(newPwd);
+  password = hashPwd(newPwd);
   return User.findByIdAndUpdate(id, {
     $set: { ...rest, password, changePwd: true },
   }).lean();
