@@ -42,71 +42,36 @@ if (process.env.NODE_ENV === 'production')
 app.use(express.static(path.join(__dirname, '../../dist')));
 
 // Send mail to Gmail
-const sendEmails = async (toEmails, subject, content, html) => {
-  const credentials = {
-    user: 'huanthemenk55@gmail.com',
-    pass: 'policehtm9x',
-    to: toEmails,
-  };
-  const result = false;
-  const send = require('gmail-send')({
-    user: credentials.user, // Your GMail account used to send emails
-    pass: credentials.pass, // Application-specific password
-    to: credentials.to,
-    // from:    credentials.user,            // from: by default equals to user
-    // replyTo: credentials.user,            // replyTo: by default undefined
-    // bcc: 'some-user@mail.com',            // almost any option of `nodemailer` will be passed to it
-    subject,
-    text: content,
-    html,
-  });
-  console.log('* [example 1.1] sending test email');
-  return new Promise((resolve, reject) => {
-    send({}, (err, res) => {
-      console.log(
-        '* [example 1.1] send() callback returned: err:',
-        err,
-        '; res:',
-        res
-      );
-      if (err) {
-        reject('err');
-      } else {
-        console.log('tr');
-        resolve('ok');
-      }
-    });
-  });
-};
-app.post('/api/sendEmails', jsonParser, (req, res) => {
-  console.log(req.body);
 
-  htmlContent = req.body.askAns
-    .map(content => `<h2>${content.ask}</h2><p>${content.ans}</p><br/>`)
-    .join('');
-  console.log(htmlContent);
-  const newArrEmail = [];
-  for (let i = 0; i < req.body.emailList.length; i++)
-    newArrEmail.push(req.body.emailList[i].Email);
-  console.log(newArrEmail);
-  sendEmails(
-    newArrEmail,
-    'Cập nhật câu trả lời cho sinh viên',
-    'etc.',
-    htmlContent
-  )
-    .then(ans => {
-      res.status(200);
-      console.log(ans);
-      res.send({ status: 'ok' });
-    })
-    .catch(err => {
-      res.status(400);
-      console.log('error in sendEmail');
-      console.log(err);
-      res.send({ status: 'err' });
-    });
-});
+// app.post('/api/sendEmails', jsonParser, (req, res) => {
+//   console.log(req.body);
+
+//   htmlContent = req.body.askAns
+//     .map(content => `<h2>${content.ask}</h2><p>${content.ans}</p><br/>`)
+//     .join('');
+//   console.log(htmlContent);
+//   const newArrEmail = [];
+//   for (let i = 0; i < req.body.emailList.length; i++)
+//     newArrEmail.push(req.body.emailList[i].Email);
+//   console.log(newArrEmail);
+//   sendEmails(
+//     newArrEmail,
+//     'Cập nhật câu trả lời cho sinh viên',
+//     'etc.',
+//     htmlContent
+//   )
+//     .then(ans => {
+//       res.status(200);
+//       console.log(ans);
+//       res.send({ status: 'ok' });
+//     })
+//     .catch(err => {
+//       res.status(400);
+//       console.log('error in sendEmail');
+//       console.log(err);
+//       res.send({ status: 'err' });
+//     });
+// });
 
 app.use(cors());
 // for f5 deploy..
