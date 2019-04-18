@@ -30,7 +30,6 @@ class LineChartCore extends Component {
   handleElementsClick = elems => {
     if (elems[0] != null && elems[0]._index != null) {
       const curElem = this.chart.data.datasets[0].data[elems[0]._index];
-      console.log(curElem);
       const startDate = new Date(curElem.x.getTime() - 1000 * 60 * 60 * 4);
       const endDate = new Date(curElem.x.getTime() + 1000 * 60 * 60 * 4);
       this.props.fireUpDateRangeChange(startDate, endDate);
@@ -45,24 +44,13 @@ class LineChartCore extends Component {
   };
 
   render() {
-    const { data, dataShow, startDate, endDate, classes, color } = this.props;
-
-    const datasets = data
-    .filter(dataRow => dataShow.includes(dataRow.label))
-    .map((dataRow, key) => ({
-      label: dataRow.label,
-      data: dataRow.data,
-      borderColor: color[key],
-      backgroundColor: 'rgba(0, 0, 0, 0.0)',
-    }));
+    const { datasets, startDate, endDate, classes, color } = this.props;
+    
+    console.log(datasets)
 
     return (
       <Line
         ref={reference => (this.chartReference = reference)}
-        data={{
-          datasets: datasets,
-        }}
-        onElementsClick={this.handleElementsClick}
         options={{
           maintainAspectRatio: false,
           responsive: true,
@@ -108,6 +96,10 @@ class LineChartCore extends Component {
             },
           }
         }}
+        data={{
+          datasets: datasets,
+        }}
+        onElementsClick={this.handleElementsClick}
       />
     );
   }

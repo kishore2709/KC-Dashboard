@@ -216,6 +216,13 @@ function DataVisualizer(Chart) {
         // console.log(this.state);
         if (loading) return <Loading />;
         const { color, height } = this.props;
+        const datasets = this.props.data
+                      .map((dataRow, key) => ({
+                        label: dataRow.label,
+                        data: dataRow.data,
+                        borderColor: _color[key],
+                        backgroundColor: 'rgba(0, 0, 0, 0.0)',
+                      }));
         let chartHeight;
         if (height) chartHeight = height;
         else chartHeight = 'auto';
@@ -235,7 +242,7 @@ function DataVisualizer(Chart) {
             >
               <CardActions style={{}}>
                 <Grid container spacing={8} alignItems="center">
-                  <Grid item xs={12} md={3}>
+                  <Grid item xs={12} md={6}>
                     <FormControl>
                       <InputLabel htmlFor="time-select">Chọn nhanh</InputLabel>
                       <Select
@@ -265,35 +272,6 @@ function DataVisualizer(Chart) {
                         <MenuItem value={60 * 24 * 60 * 60}>
                           60 ngày trước
                         </MenuItem>
-                      </Select>
-                    </FormControl>
-                  </Grid>
-                  <Grid item xs={12} md={3}>
-                    <FormControl>
-                      <InputLabel htmlFor="select-mutiple-checkbox">
-                        Dữ liệu
-                      </InputLabel>
-                      <Select
-                        style={{
-                          width: '180px',
-                          overflow: 'auto',
-                          textOverflow: 'ellipse',
-                        }}
-                        multiple
-                        value={this.state.dataShow}
-                        onChange={this.handleDataShowChange}
-                        input={<Input id="select-multiple-checkbox" />}
-                        renderValue={selected => selected.join(', ')}
-                        disabled={loading}
-                      >
-                        {allDataLabel.map(label => (
-                          <MenuItem key={label} value={label}>
-                            <Checkbox
-                              checked={this.state.dataShow.includes(label)}
-                            />
-                            <ListItemText primary={label} />
-                          </MenuItem>
-                        ))}
                       </Select>
                     </FormControl>
                   </Grid>
@@ -331,12 +309,10 @@ function DataVisualizer(Chart) {
                 ) : (
                   <Chart
                     disabled={loading}
-                    data={this.props.data}
+                    datasets={datasets}
                     startDate={startDate}
                     endDate={endDate}
                     fireUpDateRangeChange={this.handleDateRangeChange}
-                    color={_color}
-                    dataShow={dataShow}
                     fireUpImageURL={this.handleImageURL}
                   />
                 )}
