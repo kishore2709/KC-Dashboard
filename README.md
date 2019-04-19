@@ -1,4 +1,4 @@
-﻿KC-Dashboard v2.0
+﻿KC-Dashboard v2.0 - 
 ﻿A data visualization and management Dashboard
 ### Requirement
 - Mongodb
