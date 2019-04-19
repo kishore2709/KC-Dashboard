@@ -9,4 +9,5 @@ export * from './groupTable.constants';
 export * from './dashboard.constants';
 export * from './mailBox.constants';
 export * from './chart.constants';
-
+export * from './locationTable.constants';
+export * from './locationDialog.constants';

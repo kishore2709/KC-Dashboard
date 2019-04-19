@@ -22,7 +22,7 @@ const validate = values => {
   // console.log(values);
   requiredFields.forEach(field => {
     if (!values[field]) {
-      errors[field] = 'Bắt buộc';
+      errors[field] = 'Yêu cầu nhập';
     }
   });
   if (
@@ -30,6 +30,15 @@ const validate = values => {
     !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)
   ) {
     errors.email = 'Định dạng Email không đúng';
+  }
+  if (values.oldPassword || values.newPassword || values.confirmNewPassword) {
+    if (!values.oldPassword) errors.oldPassword = 'Yêu cầu nhập';
+    if (!values.newPassword) errors.newPassword = 'Yêu cầu nhập';
+    if (!values.confirmNewPassword) errors.confirmNewPassword = 'Yêu cầu nhập';
+    if (values.newPassword !== values.confirmNewPassword) {
+      errors.confirmNewPassword =
+        'Xác nhận mật khẩu mới phải trùng với mật khẩu mới';
+    }
   }
   return errors;
 };
@@ -54,38 +63,24 @@ const renderTextField = ({
 const renderPasswordField = ({
   label,
   input,
-  meta: { touched, invalid, error },
+  meta: { touched, invalid, error, warning },
   ...custom
 }) => (
   <TextField
     label={label}
     placeholder={label}
     error={touched && invalid}
-    helperText={touched && error}
-    type="password"
+    helperText={touched && (error || warning)}
     variant="outlined"
+    type="password"
+    autoComplete="current-password"
+    InputLabelProps={{
+      shrink: true,
+    }}
     fullWidth
     {...input}
     {...custom}
   />
-);
-
-const renderCheckbox = ({ input, label }) => (
-  <div>
-    <FormControlLabel
-      control={<Checkbox checked={!!input.value} onChange={input.onChange} />}
-      label={label}
-    />
-  </div>
-);
-
-const radioButton = ({ input, ...rest }) => (
-  <FormControl>
-    <RadioGroup {...input} {...rest}>
-      <FormControlLabel value="female" control={<Radio />} label="Female" />
-      <FormControlLabel value="male" control={<Radio />} label="Male" />
-    </RadioGroup>
-  </FormControl>
 );
 
 const renderFromHelper = ({ touched, error }) => {
@@ -122,7 +117,7 @@ const renderSelectField = ({
 );
 
 // eslint-disable-next-line import/no-mutable-exports
-let AddUserForm = props => {
+let MaterialUiForm = props => {
   const {
     handleSubmit,
     pristine,
@@ -139,7 +134,7 @@ let AddUserForm = props => {
           <Field
             name="username"
             component={renderTextField}
-            label="Tài khoản"
+            label="Tên đăng nhập"
           />
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -159,11 +154,26 @@ let AddUserForm = props => {
         <Grid item xs={12} sm={6}>
           <Field name="email" component={renderTextField} label="Email" />
         </Grid>
-        <Grid item xs={12}>
+        {/* pwd */}
+        <Grid item xs={12} sm={12} md={12}>
           <Field
-            name="password"
+            name="oldPassword"
             component={renderPasswordField}
-            label="Mật khẩu"
+            label="Mật khẩu cũ"
+          />
+        </Grid>
+        <Grid item xs={12} sm={12} md={12}>
+          <Field
+            name="newPassword"
+            component={renderPasswordField}
+            label="Mật khẩu mới"
+          />
+        </Grid>
+        <Grid item xs={12} sm={12} md={12}>
+          <Field
+            name="confirmNewPassword"
+            component={renderPasswordField}
+            label="Nhập lại mật khẩu mới"
           />
         </Grid>
         <Grid item xs={12}>
@@ -192,7 +202,7 @@ let AddUserForm = props => {
                 classes={classes}
                 name="status"
                 component={renderSelectField}
-                label="status"
+                label="Trạng thái"
               >
                 <option value="" />
                 <option value>Hoạt động</option>
@@ -210,11 +220,32 @@ let AddUserForm = props => {
           >
             <Grid item>
               <button
+                className="red button"
+                type="submit"
+                onClick={handleSubmit(data => {
+                  props.onResetPassword(data);
+                })}
+                disabled={!!props.dialog.new}
+              >
+                Khôi phục mật khẩu
+              </button>
+            </Grid>
+          </Grid>
+        </Grid>
+        <Grid item xs={12}>
+          <Grid
+            container
+            direction="row"
+            justify="space-evenly"
+            alignItems="center"
+          >
+            <Grid item>
+              <button
                 className="blue button"
                 type="submit"
                 disabled={pristine || submitting}
               >
-                Thêm
+                {props.dialog.new ? 'Thêm' : 'Lưu'}
               </button>
             </Grid>
             <Grid item>
@@ -235,16 +266,16 @@ let AddUserForm = props => {
   );
 };
 
-AddUserForm = reduxForm({
-  form: 'AddUserForm', // a unique identifier for this form
+MaterialUiForm = reduxForm({
+  form: 'MaterialUiForm', // a unique identifier for this form
   validate,
   asyncValidate,
-})(AddUserForm);
+})(MaterialUiForm);
 
-AddUserForm = connect(state => ({
+MaterialUiForm = connect(state => ({
   initialValues: state.userDialogData.data, // pull initial values from account reducer
   dialog: state.dialog,
   groupTable: state.groupTable,
-}))(AddUserForm);
+}))(MaterialUiForm);
 
-export default AddUserForm;
+export default MaterialUiForm;

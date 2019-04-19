@@ -147,8 +147,8 @@ class Sidebar extends Component {
       if (this.numberNotSeen(mailBox.dataMail) > 0) flagMail = true;
     }
     const { routes, openUserManagementSubComponents } = this.state;
-    // console.log('??');
-    // console.log(routes);
+    console.log('??');
+    console.log(routes);
     const listItemClasses = path =>
       classNames({
         [` ${classes[color]}`]: this.activeRoute(path),

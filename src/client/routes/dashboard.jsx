@@ -4,6 +4,7 @@ import React from 'react';
 import Dashboard from '@material-ui/icons/Dashboard';
 import Person from '@material-ui/icons/Person';
 import MailOutline from '@material-ui/icons/MailOutline';
+import MyLocation from '@material-ui/icons/MyLocation';
 import PersonAddDisabled from '@material-ui/icons/PersonAddDisabled';
 
 // import ContentPaste from "@material-ui/icons/ContentPaste";
@@ -102,6 +103,11 @@ const DetailsMail = Loadable({
   loading: TableLoader,
 });
 
+const LocationManager = Loadable({
+  loader: () => import(/* webpackPrefetch: true */ 'views/LocationManager/LocationManager.jsx'),
+  loading: TableLoader,
+})
+
 // // import ExportData from 'views/ExportData/ExportData.jsx';
 // const ExportData = Loadable({
 //   loader: () => import(/* webpackPrefetch: true */ '../views/ExportData/ExportData.jsx'),
@@ -149,6 +155,14 @@ const dashboardRoutes = [
         component: UserManagement,
       },
     ],
+  },
+  {
+    id: 'locManager',
+    path: '/locManager',
+    sidebarName: 'Quản trị vị trí',
+    navbarName: 'Giao diện quản trị vị trí',
+    icon: MyLocation,
+    component: LocationManager,
   },
   {
     id: 'mailBox',

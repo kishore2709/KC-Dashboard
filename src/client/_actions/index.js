@@ -9,3 +9,5 @@ export * from './groupTable.actions';
 export * from './dashboard.actions';
 export * from './mailBox.actions';
 export * from './chart.actions';
+export * from './locationTable.actions';
+export * from './locationDialog.actions';
