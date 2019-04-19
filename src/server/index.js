@@ -1,5 +1,7 @@
 require('rootpath')();
 const express = require('express');
+const status = require('http-status');
+
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const mongoose = require('mongoose');
@@ -100,7 +102,7 @@ app.use((req, res, next) => {
       .then(ret => {
         if (ret === 0 || !ret) {
           console.log('in recheck passwd has ret', ret);
-          res.status(404).send();
+          res.status(401).send({ status: false, message: 'wrong pwd' });
         } else {
           // console.log(ret);
           console.log('ok in recheck');
@@ -110,7 +112,7 @@ app.use((req, res, next) => {
       .catch(err => {
         console.log(err);
         console.log('in recheck passwd err');
-        res.status(404).send();
+        res.status(401).send({ status: false, message: 'wrong pwd' });
       });
   }
 });

@@ -1,3 +1,4 @@
+import { history } from '_helpers';
 import { authHeader } from '../auth-header';
 
 export async function PostApi(url, json, abortSignal) {
@@ -10,23 +11,12 @@ export async function PostApi(url, json, abortSignal) {
     },
     body: JSON.stringify(json),
   });
-  const result = fetch(myRequest, { signal: abortSignal })
-    .then(response => {
-      // console.log(response);
-      if (response.status === 200) {
-        return response.json();
-      }
-      if (response.status === 404) throw new Error('Need logout');
-      console.log('err');
-      return 'err';
-      // return Promise.reject(new Error('err status != 200'));
-      // console.log('Thao tác gặp lỗi! on api server!');
-    })
-    .then(response => response)
-    .catch(error => {
-      console.log(`Stm went wronggggg${error}`);
-      // console.log(error.message);
-      // if (error.message == 'Need logout') throw new Error('Goout');
-    });
-  return result;
+  const rawResponse = await fetch(myRequest, { signal: abortSignal });
+  const res = await rawResponse.json();
+  if (rawResponse.status === 200) return res;
+  if (rawResponse.status === 401) {
+    // Unauthorized
+    history.push('/login');
+  }
+  return res;
 }
